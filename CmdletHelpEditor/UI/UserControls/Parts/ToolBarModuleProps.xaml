@@ -1,0 +1,22 @@
+﻿<ToolBar x:Class="CmdletHelpEditor.UI.UserControls.Parts.ToolBarModuleProps"
+		 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		 xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+		 mc:Ignorable="d"
+		 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}"
+		 Background="{StaticResource NormalBlueGradientBrush}"
+		 BorderThickness="1"
+		 BorderBrush="#C4D1DE">
+	<Button ToolTip="Module Properties"
+			Command="{Binding Source={x:Static viewModel:UIManager.ModulePropsCommand}}"
+			CommandParameter="{Binding SelectedTab}">
+		<Image Width="16" Source="/Images/Menu/properties_16x16.png"/>
+	</Button>
+	<Button ToolTip="Publish All"
+			Command="{x:Static viewModel:MetaWeblogCommands.PublishAllCommand}"
+			CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+		<Image Width="16" Source="/Images/Menu/web_16x16.png"/>
+	</Button>
+</ToolBar>

@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="CmdletHelpEditor.UI.UserControls.SupportInfoControl"
+			 x:Name="Support"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+             mc:Ignorable="d"
+			 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}"
+             Width="740" BorderThickness="1" BorderBrush="Navy">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+	<StackPanel>
+		<TextBlock Text="Active Directory requirement"
+                   HorizontalAlignment="Left"
+                   Margin="5,10,0,0"
+                   VerticalAlignment="Top"
+                   FontWeight="ExtraBlack"
+                   FontSize="18"/>
+		<CheckBox Content="Requires Active Directory"
+                  Margin="5,0,0,0"
+                  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.ADChecked}"/>
+		<TextBlock Text="RSAT requirement"
+                   Margin="5,10,0,0"
+                   FontSize="18"
+                   FontWeight="ExtraBlack"/>
+		<CheckBox Content="Requires Remote Server Administration Tools"
+                  Margin="5,0,0,0"
+                  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RsatChecked}" />
+		<TextBlock Text="Minimum PowerShell version requirement"
+                   Margin="5,10,0,0"
+                   FontSize="18"
+                   FontWeight="ExtraBlack"/>
+		<RadioButton GroupName="PS"
+                     Margin="5,0,0,0"
+                     Content="PowerShell 2.0"
+                     IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps2Checked}"/>
+		<RadioButton GroupName="PS"
+                     Margin="5,5,0,0"
+                     Content="PowerShell 3.0"
+                     IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps3Checked}"/>
+		<RadioButton GroupName="PS"
+                     Margin="5,5,0,0"
+                     Content="PowerShell 4.0"
+                     IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps4Checked}"/>
+		<RadioButton GroupName="PS"
+                     Margin="5,5,0,0"
+                     Content="PowerShell 5.0"
+                     IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps5Checked}"/>
+		<TextBlock Text="Operating system support"
+                   Margin="5,10,0,0"
+                   FontSize="18"
+                   FontWeight="ExtraBlack"/>
+			<StackPanel>
+				<CheckBox Content="Windows XP Professional"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.WinXpChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Server 2003 Family"
+                          Margin="5,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003Checked}" />
+				<CheckBox Content="Windows Server 2003 Standard"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003StdChecked}" />
+				<CheckBox Content="Windows Server 2003 Enterprise"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003EEChecked}" />
+				<CheckBox Content="Windows Server 2003 Datacenter"
+                          Margin="25,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003DCChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Vista Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.WinVistaChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Server 2008 Family"
+                          Margin="5,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008Checked}" />
+				<CheckBox Content="Windows Server 2008 Standard"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008StdChecked}" />
+				<CheckBox Content="Windows Server 2008 Enterprise"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008EEChecked}" />
+				<CheckBox Content="Windows Server 2008 Datacenter"
+                          Margin="25,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008DCChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows 7 Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win7Checked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Server 2008 R2 Family"
+                          Margin="5,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2Checked}" />
+				<CheckBox Content="Windows Server 2008 R2 Standard"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2StdChecked}" />
+				<CheckBox Content="Windows Server 2008 R2 Enterprise"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2EEChecked}" />
+				<CheckBox Content="Windows Server 2008 R2 Datacenter"
+                          Margin="25,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2DCChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows 8 Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win8Checked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Server 2012 Family"
+                          Margin="5,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012Checked}" />
+				<CheckBox Content="Windows Server 2012 Standard"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012StdChecked}" />
+				<CheckBox Content="Windows Server 2012 Datacenter"
+                          Margin="25,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012DCChecked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows 8.1 Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
+			</StackPanel>
+			<StackPanel>
+				<CheckBox Content="Windows Server 2012 R2 Family"
+                          Margin="5,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2Checked}" />
+				<CheckBox Content="Windows Server 2012 R2 Standard"
+                          Margin="25,5,0,0"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2StdChecked}" />
+				<CheckBox Content="Windows Server 2012 R2 Datacenter"
+                          Margin="25,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2DCChecked}" />
+			</StackPanel>
+            <StackPanel>
+                <CheckBox Content="Windows 8.1 Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
+            </StackPanel>
+            <StackPanel>
+                <CheckBox Content="Windows 10 Family"
+                          Margin="5,5,0,5"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win10Checked}" />
+            </StackPanel>
+    </StackPanel>
+</UserControl>

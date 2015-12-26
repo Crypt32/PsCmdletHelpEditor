@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="CmdletHelpEditor.UI.UserControls.GeneralControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+             mc:Ignorable="d"
+             d:DesignWidth="740" d:DesignHeight="915"
+			 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}">
+    <StackPanel Margin="10">
+		<!--<Border Name="anchor" Grid.Row="0" Grid.Column="1"/>
+		<Border Name="anchor2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"/>-->
+		<TextBlock Text="Synopsis:"/>
+        <TextBox MaxLines="6"
+                 MinLines="6"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Synopsis}"
+                 Tag="AllowFormat"/>
+        
+        <TextBlock Text="Detailed description:"/>
+        <TextBox MaxLines="11"
+                 MinLines="11"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Description}"
+                 Tag="AllowFormat"/>
+
+        <TextBlock Text="Notes:"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Notes}"
+                 Tag="AllowFormat"/>
+        
+        <TextBlock Text="Input types (semicolon-separated):"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputType}"
+                 Tag="AllowFormat"/>
+        
+        <TextBlock Text="Input type URLs (semicolon-separated):"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputUrl}"
+                 Tag="AllowFormat"/>
+        
+        <TextBlock Text="Input type description (semicolon-separated):"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputTypeDescription}"
+                 Tag="AllowFormat"/>
+        
+        <TextBlock Text="Return type (semicolon-separated):"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnType}"
+                 Tag="AllowFormat"/>
+
+        <TextBlock Text="Return type URLs (semicolon-separated):"/>
+        <TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnUrl}"
+                 Tag="AllowFormat"/>
+
+        <TextBlock Text="Return type description (semicolon-separated):"/>
+		<TextBox MaxLines="4"
+                 MinLines="4"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnTypeDescription}"
+                 Tag="AllowFormat"/>
+    </StackPanel>
+</UserControl>

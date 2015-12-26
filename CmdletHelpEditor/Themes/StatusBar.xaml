@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style TargetType="StatusBar">
+		<Setter Property="Foreground" Value="DarkBlue"/>
+		<Setter Property="Background">
+			<Setter.Value>
+				<LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+					<GradientStop Color="#FFD6E5F9" Offset="0"/>
+					<GradientStop Color="#FFC8DCF8" Offset="0.3"/>
+					<GradientStop Color="#FFBAD4F6" Offset="0.3"/>
+					<GradientStop Color="#FFCADEF6" Offset="0.7"/>
+					<GradientStop Color="#FFD6E4F7" Offset="0.95"/>
+					<GradientStop Color="#FFCEE0F7" Offset="0.95"/>
+					<GradientStop Color="#FFC1D8F7" Offset="1"/>
+				</LinearGradientBrush>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

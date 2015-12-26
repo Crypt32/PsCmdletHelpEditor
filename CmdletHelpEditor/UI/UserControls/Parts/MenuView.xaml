@@ -1,0 +1,21 @@
+﻿<MenuItem x:Class="CmdletHelpEditor.UI.UserControls.Parts.MenuView"
+		  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		  xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+		  xmlns:properties="clr-namespace:CmdletHelpEditor.Properties"
+		  mc:Ignorable="d"
+		  d:DataContext="{d:DesignInstance viewModel:MainWindowVM}"
+		  Header="_View">
+	<MenuItem Header="Toolbars"
+			  IsCheckable="True"
+			  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarChecked}"
+			  Command="{x:Static viewModel:UIManager.ShowToolBarCommand}"
+			  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+	<MenuItem Header="Statusbar"
+			  IsCheckable="True"
+			  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=StatusbarChecked}"
+			  Command="{x:Static viewModel:UIManager.ShowStatusBarCommand}"
+			  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+</MenuItem>
