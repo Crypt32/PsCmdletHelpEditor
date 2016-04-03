@@ -6,9 +6,8 @@
                     xmlns:themes1="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="ClosableTabItem.xaml"/>
-		<ResourceDictionary Source="Colors.xaml"/>
-		<ResourceDictionary Source="MenuItem.xaml"/>
-	</ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Wpf.OfficeTheme;component/OfficeTheme.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 	<Color x:Key="TabPanelBackgroundColorBase">Transparent</Color>
 	<Color x:Key="LineButtonBackgroundColorBright">LightGoldenrodYellow</Color>
 	<Color x:Key="LineButtonBackgroundColorDark">#FAEEB1</Color>

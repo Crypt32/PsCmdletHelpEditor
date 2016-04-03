@@ -20,6 +20,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
 			metaWeblogProvider = (IMetaWeblogProvider)XmlRpcProxyGen.Create(typeof(IMetaWeblogProvider));
 			clientProtocol = (XmlRpcClientProtocol)metaWeblogProvider;
 			clientProtocol.Url = url;
+            clientProtocol.UserAgent = "PS Cmdlet Help Editor";
 			clientProtocol.NonStandard = XmlRpcNonStandard.All;
 		}
 
@@ -38,7 +39,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
 			try {
 				return new List<Post>(metaWeblogProvider.GetRecentPosts(_blogId, _userName, Crypt.SecureStringToString(_password), postCount));
 			} catch (Exception e) {
-				Utils.MsgBox("Error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error", e.Message);
 			}
 			return null;
 		}
@@ -46,27 +47,16 @@ namespace CmdletHelpEditor.API.MetaWeblog {
 			try {
 				return metaWeblogProvider.GetPost(postId, _userName, Crypt.SecureStringToString(_password));
 			} catch (Exception e) {
-				Utils.MsgBox("Error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error", e.Message);
 			}
 			return null;
 		}
 		public String AddPost(Post post, Boolean publish = true) {
-			try {
-				return metaWeblogProvider.AddPost(_blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
-			} catch (Exception e) {
-				Utils.MsgBox("Error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
-			}
-			return null;
-		}
-		public Int32 UpdatePost(Post post, Boolean publish = true) {
-			try {
-				metaWeblogProvider.UpdatePost(post.postid, _userName, Crypt.SecureStringToString(_password), post, publish);
-				return 0;
-			} catch (Exception e) {
-				Utils.MsgBox("Error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
-				return e.HResult;
-			}
-		}
+            return metaWeblogProvider.AddPost(_blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
+        }
+        public Boolean UpdatePost(Post post, Boolean publish = true) {
+            return metaWeblogProvider.UpdatePost(post.PostId, _userName, Crypt.SecureStringToString(_password), post, publish);
+        }
 		public Boolean DeletePost(String postId, Boolean publish = false) {
 			try {
 				return metaWeblogProvider.DeletePost(String.Empty, postId, _userName, Crypt.SecureStringToString(_password), publish);

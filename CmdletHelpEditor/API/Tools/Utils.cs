@@ -24,7 +24,7 @@ namespace CmdletHelpEditor.API.Tools {
 				}
 			};
 		}
-		public static MessageBoxResult MsgBox(String header, String message, MessageBoxButton buttons, MessageBoxImage icon) {
+		public static MessageBoxResult MsgBox(String header, String message, MessageBoxButton buttons = MessageBoxButton.OK, MessageBoxImage icon = MessageBoxImage.Error) {
 			return MessageBox.Show(message, header, buttons, icon);
 		}
 		public static String GetCommandTypes() {

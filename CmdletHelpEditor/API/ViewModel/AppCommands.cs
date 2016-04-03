@@ -32,6 +32,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 			OpenCommand = new RelayCommand(OpenProject, CanOpen);
 			SaveCommand = new RelayCommand(SaveProjectFile, CanSave);
 			CloseAppCommand = new RelayCommand<CancelEventArgs>(CloseApp);
+            PublishOnlineCommand = new RelayCommand(publishOnline, canPublishOnline);
 		}
 
 		public ICommand AddTabCommand { get; set; }
@@ -49,6 +50,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 		public static ICommand CopyToClipCommand {
 			get { return new RelayCommand(CopyToClipboard, CanCopyClipboard); }
 		}
+        public ICommand PublishOnlineCommand { get; set; }
 
 		static void CopyToClipboard(Object obj) {
 			if (obj == null) { return; }
@@ -177,6 +179,10 @@ namespace CmdletHelpEditor.API.ViewModel {
 				}
 			}
 		}
+        void publishOnline(Object obj) {
+            OnlinePublishProgressWindow dlg = new OnlinePublishProgressWindow(_mwvm.SelectedTab.Module);
+            dlg.Show();
+        }
 
 		public async void LoadCmdlets(Object helpPath, Boolean importCBH) {
 			ClosableTabItem previousTab = _mwvm.SelectedTab;
@@ -300,6 +306,9 @@ namespace CmdletHelpEditor.API.ViewModel {
 				   ((ClosableTabItem)param[0]).Module != null &&
 				   ((ClosableTabItem)param[0]).Module.Cmdlets.Count > 0;
 		}
+        Boolean canPublishOnline(Object obj) {
+            return _mwvm.SelectedTab != null && _mwvm.SelectedTab.Module != null && _mwvm.SelectedTab.Module.Provider != null;
+        }
 
 		// utility
 		Boolean testSaved(ClosableTabItem tab) {

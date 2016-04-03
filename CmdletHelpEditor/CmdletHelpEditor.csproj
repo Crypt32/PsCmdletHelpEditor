@@ -129,6 +129,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\WpfTheme\WpfTheme\bin\Release\Wpf.OfficeTheme.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -137,6 +141,8 @@
     </ApplicationDefinition>
     <Compile Include="API\BaseClasses\CommandParameterInfo2.cs" />
     <Compile Include="API\BaseClasses\CommandParameterSetInfo2.cs" />
+    <Compile Include="API\BaseClasses\OnlinePublishEntry.cs" />
+    <Compile Include="API\BaseClasses\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
     <Compile Include="API\ViewModel\AppCommands.cs" />
@@ -148,8 +154,10 @@
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
     <Compile Include="API\ViewModel\MetaWeblogCommands.cs" />
+    <Compile Include="API\ViewModel\OnlinePublishProgressVM.cs" />
     <Compile Include="API\ViewModel\UIManager.cs" />
     <Compile Include="API\ViewModel\FormatCommands.cs" />
+    <Compile Include="Controls\ListViewExtenders.cs" />
     <Compile Include="Controls\ClosableTabItem.cs" />
     <Compile Include="Controls\ClosableTabControl.cs" />
     <Compile Include="Themes\ScrollableTabPanel.cs" />
@@ -199,7 +207,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Themes\ScrollChrome.cs" />
     <Compile Include="UI\Dialogs\ModuleProperties.xaml.cs">
       <DependentUpon>ModuleProperties.xaml</DependentUpon>
     </Compile>
@@ -272,6 +279,9 @@
     <Compile Include="UI\UserControls\SupportInfoControl.xaml.cs">
       <DependentUpon>SupportInfoControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Windows\OnlinePublishProgressWindow.xaml.cs">
+      <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Themes\ClosableTabItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -284,33 +294,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Menu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\MenuItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ProgressBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\RadioButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Themes\ScrollableTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\ToolBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ToolBarTray.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Dialogs\AboutBox.xaml">
       <SubType>Designer</SubType>
@@ -384,38 +370,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Themes\Button.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\CheckBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Image.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\ScrollBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\StatusBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\TabItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\TextBlock.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\TextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\Dialogs\ModuleProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -457,6 +411,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\UserControls\SupportInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Windows\OnlinePublishProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -592,6 +550,9 @@
       <Progid>pshproj</Progid>
       <DefaultIcon>icon.ico</DefaultIcon>
     </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="_ExternalLibraries\Wpf.OfficeTheme.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,22 +8,22 @@
 		<ResourceDictionary>
 			<!--External themes-->
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="Themes/Button.xaml"/>
-				<ResourceDictionary Source="Themes/CheckBox.xaml"/>
-				<ResourceDictionary Source="Themes/Colors.xaml"/>
-				<ResourceDictionary Source="Themes/Image.xaml"/>
-				<ResourceDictionary Source="Themes/Menu.xaml"/>
-				<ResourceDictionary Source="Themes/MenuItem.xaml"/>
-				<ResourceDictionary Source="Themes/ProgressBar.xaml"/>
-				<ResourceDictionary Source="Themes/RadioButton.xaml"/>
-				<ResourceDictionary Source="Themes/ScrollBar.xaml"/>
-				<ResourceDictionary Source="Themes/StatusBar.xaml"/>
-				<ResourceDictionary Source="Themes/TextBox.xaml"/>
+				<!--<ResourceDictionary Source="Themes/Button.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/CheckBox.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/Colors.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/Image.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/Menu.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/MenuItem.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/ProgressBar.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/RadioButton.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/ScrollBar.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/StatusBar.xaml"/>-->
 				<ResourceDictionary Source="Themes/ScrollableTabControl.xaml"/>
-				<ResourceDictionary Source="Themes/TabItem.xaml"/>
-				<ResourceDictionary Source="Themes/ToolBar.xaml"/>
-				<ResourceDictionary Source="Themes/ToolBarTray.xaml"/>
+				<!--<ResourceDictionary Source="Themes/TabItem.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/ToolBar.xaml"/>-->
+				<!--<ResourceDictionary Source="Themes/ToolBarTray.xaml"/>-->
 				<ResourceDictionary Source="Themes/ClosableTabItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Wpf.OfficeTheme;component/OfficeTheme.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 	<!--MainWindow styles-->
 			<!--Text boxes-->
@@ -43,6 +43,9 @@
 					</Trigger>
 				</ControlTemplate.Triggers>
 			</ControlTemplate>
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
 			<!--About-->
 			<Style x:Key="AboutDialogStyle" TargetType="Window">
 				<Setter Property="Height" Value="Auto" />

@@ -81,7 +81,7 @@
 							<Style.Triggers>
 								<MultiDataTrigger>
 									<MultiDataTrigger.Conditions>
-										<Condition Binding="{Binding Path=SelectedTab.Module.UseSupports}" Value="True" />
+										<Condition Binding="{Binding Path=Module.UseSupports}" Value="True" />
 										<Condition Binding="{Binding Path=EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}" Value="True" />
 									</MultiDataTrigger.Conditions>
 									<Setter Property="IsEnabled" Value="True" />

@@ -15,8 +15,13 @@ namespace CmdletHelpEditor.API.BaseClasses {
 	public class CmdletObject : INotifyPropertyChanged {
 		String extraHeader, extraFooter, url, articleID;
 		Boolean publish;
+        readonly List<String> _excludedParams = new List<String> {
+                "verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
+                "warningvariable", "warningaction", "pipelinevariable", "informationaction",
+                "informationvariable"
+            };
 
-		public CmdletObject() {
+        public CmdletObject() {
 			Init();
 		}
 		public CmdletObject(PSObject cmdlet, Boolean cbh) {
@@ -272,13 +277,9 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		void get_parameters() {
 			Parameters = new ObservableCollection<ParameterDescription>();
 			if (ParameterSets.Count == 0) { return; }
-			List<String> exclude = new List<String> {
-				"verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
-				"warningvariable", "warningaction", "pipelinevariable"
-			};
 			foreach (CommandParameterSetInfo paramset in ParameterSets) {
 				if (paramset.Parameters.Count == 0) { return; }
-				foreach (CommandParameterInfo param in from param in paramset.Parameters where !exclude.Contains(param.Name.ToLower()) let para = new ParameterDescription(param) where !Parameters.Contains(para) select param) {
+				foreach (CommandParameterInfo param in from param in paramset.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new ParameterDescription(param) where !Parameters.Contains(para) select param) {
 					Parameters.Add(new ParameterDescription(param));
 				}
 			}
@@ -298,14 +299,10 @@ namespace CmdletHelpEditor.API.BaseClasses {
 
         void get_syntax(PSObject cmdlet) {
 			Syntax = new List<String>();
-			String[] exclude = {
-				"verbose","debug","erroraction","warningaction","errorvariable","warningvariable",
-				"outvariable","outbuffer", "pipelinevariable"
-			};
 			foreach (CommandParameterSetInfo paraset in ParameterSets) {
 				String syntaxItem = Convert.ToString(cmdlet.Members["name"].Value);
 				foreach (CommandParameterInfo item in paraset.Parameters) {
-					if (exclude.Contains(item.Name.ToLower())) { continue; }
+					if (_excludedParams.Contains(item.Name.ToLower())) { continue; }
 					Boolean named = item.Position < 0;
 					// fetch param type
 					String paramType = String.Empty;

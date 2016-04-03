@@ -16,11 +16,17 @@ namespace CmdletHelpEditor.API.ViewModel {
 			get { return new RelayCommand(PublishAll, CanPublish); }
 		}
 
-		async static void PublishSingle(Object obj) {
+		static async void PublishSingle(Object obj) {
 			if (obj == null) { return; }
 			working = true;
 			MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-			await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null, false);
+		    try {
+                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null, false);
+                Utils.MsgBox("Success", "The operation completed successfully.", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+		    catch (Exception e) {
+                Utils.MsgBox("Error", e.Message);
+            }
 			working = false;
 		}
 		static void PublishAll(Object obj) {

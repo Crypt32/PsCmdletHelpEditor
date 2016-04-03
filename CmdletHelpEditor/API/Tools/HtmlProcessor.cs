@@ -75,9 +75,15 @@ namespace CmdletHelpEditor.API.Tools {
 			HtmlGenerateExamples(rules, SB, cmdlet);
 			HtmlGenerateRelatedLinks(rules, SB, cmdlets, cmdlet);
 			if (useSupports) { HtmlGenerateSupports(cmdlet, ref SB); }
+            if (!String.IsNullOrEmpty(cmdlet.ExtraFooter)) {
+                SB.Append(cmdlet.ExtraFooter);
+            }
 			return SB.ToString();
 		}
 		static void HtmlgenerateName(StringBuilder SB, CmdletObject cmdlet) {
+            if (!String.IsNullOrEmpty(cmdlet.ExtraHeader)) {
+                SB.Append(cmdlet.ExtraHeader);
+            }
 			//SB.Append("<h2>NAME</h2>" + n);
 			SB.Append("<h1 style=\"text-align: center;\"><strong>" + SecurityElement.Escape(cmdlet.Name) + "</strong></h1>" + n);
 		}
@@ -155,9 +161,9 @@ namespace CmdletHelpEditor.API.Tools {
 			// Common parameters
 			SB.Append("<h3>&lt;CommonParameters&gt;</h3>" + n);
 			SB.Append("<p style=\"margin-left: 40px;\">This cmdlet supports the common parameters: Verbose, Debug,<br />" + n);
-			SB.Append("ErrorAction, ErrorVariable, WarningAction, WarningVariable,<br />" + n);
-			SB.Append("OutBuffer, PipelineVariable, and OutVariable. For more information, see<br />" + n);
-			SB.Append("about_CommonParameters (<a href=\"http://go.microsoft.com/fwlink/?LinkID=113216\">http://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>" + n);
+			SB.Append("ErrorAction, ErrorVariable, InformationAction, InformationVariable,<br />" + n);
+			SB.Append("WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.<br />" + n);
+			SB.Append("For more information, see about_CommonParameters (<a href=\"http://go.microsoft.com/fwlink/?LinkID=113216\">http://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>" + n);
 		}
 		static void HtmlGenerateInputTypes(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
 			SB.Append("<h2><strong>Inputs</strong></h2>" + n);
