@@ -1,8 +1,8 @@
 ﻿using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModel;
 using CmdletHelpEditor.Properties;
 using System;
 using System.ComponentModel;
+using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor.UI.Windows {
 	/// <summary>

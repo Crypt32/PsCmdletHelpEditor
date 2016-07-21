@@ -1,15 +1,15 @@
 ﻿using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModel;
+using CmdletHelpEditor.API.Utility;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Management.Automation;
-using System.Windows;
 using System.Xml.Serialization;
 
-namespace CmdletHelpEditor.API.BaseClasses {
-	[XmlInclude(typeof(CmdletObject))]
+namespace CmdletHelpEditor.API.Models {
+    [XmlInclude(typeof(CmdletObject))]
 	//[XmlRoot("")]
 	public class ModuleObject : INotifyPropertyChanged {
 		Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
@@ -17,13 +17,35 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		Int32? fetchPostCount;
 		Double formatVersion;
 		ProviderInformation provider;
-		MainWindowVM mwvm;
+        ObservableCollection<CmdletObject> cmdlets;
 
-		public ModuleObject() {
+	    public ModuleObject() {
 			Cmdlets = new ObservableCollection<CmdletObject>();
 		}
 
-		[XmlAttribute("fVersion")]
+	    void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
+	        switch (e.Action) {
+                case NotifyCollectionChangedAction.Add:
+                    ((INotifyPropertyChanged)e.NewItems[0]).PropertyChanged += OnPropertyChanged;
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    ((INotifyPropertyChanged)e.OldItems[0]).PropertyChanged -= OnPropertyChanged;
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    if (e.OldItems == null) { break; }
+                    foreach (INotifyPropertyChanged itemToRemove in e.OldItems) {
+                        itemToRemove.PropertyChanged -= OnPropertyChanged;
+                    }
+                    break;
+            }
+            OnPropertyChanged("Blah", true);
+	    }
+
+	    void OnPropertyChanged(Object Sender, PropertyChangedEventArgs ChangedEventArgs) {
+	        OnPropertyChanged("blah", true);
+	    }
+
+	    [XmlAttribute("fVersion")]
 		public Double FormatVersion {
 			get { return formatVersion; }
 			set {
@@ -125,20 +147,19 @@ namespace CmdletHelpEditor.API.BaseClasses {
 			}
 		}
 		// editor
-		public ObservableCollection<CmdletObject> Cmdlets { get; set; }
+	    public ObservableCollection<CmdletObject> Cmdlets {
+	        get { return cmdlets; }
+            set {
+                if (cmdlets != null) {
+                    cmdlets.CollectionChanged -= cmdletsOnCollectionChanged;
+                }
+                cmdlets = value;
+                if (cmdlets != null) {
+                    cmdlets.CollectionChanged += cmdletsOnCollectionChanged;
+                }
+            }
+	    }
 
-		void OnPropertyChanged(String name, Boolean markUnsaved) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (handler != null) {
-				if (markUnsaved) {
-					try {
-						mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-						mwvm.SelectedTab.IsSaved = false;
-					} catch { }
-				}
-				handler(this, new PropertyChangedEventArgs(name));
-			}
-		}
 		protected Boolean Equals(ModuleObject other) {
 			return String.Equals(Name, other.Name) && String.Equals(Version, other.Version);
 		}
@@ -148,7 +169,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		}
 		public override Int32 GetHashCode() {
 			unchecked {
-				Int32 hashCode = (Name != null ? Name.GetHashCode() : 0);
+				Int32 hashCode = Name != null ? Name.GetHashCode() : 0;
 				hashCode = (hashCode * 397) ^ (Version != null ? Version.GetHashCode() : 0);
 				return hashCode;
 			}
@@ -159,6 +180,19 @@ namespace CmdletHelpEditor.API.BaseClasses {
 			return obj.GetType() == GetType() && Equals((ModuleObject) obj);
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged(String name, Boolean markUnsaved) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                if (markUnsaved) {
+                    SavePendingEventHandler handler2 = PendingSave;
+                    if (handler2 != null) {
+                        handler2(this, new SavePendingEventArgs());
+                    }
+                }
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event SavePendingEventHandler PendingSave;
 	}
 }

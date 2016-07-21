@@ -3,14 +3,11 @@
 		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		 xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+		 xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
 		 mc:Ignorable="d"
-		 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}"
-		 Background="{StaticResource NormalBlueGradientBrush}"
-		 BorderThickness="1"
-		 BorderBrush="#C4D1DE">
+		 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
 	<Button ToolTip="Module Properties"
-			Command="{Binding Source={x:Static viewModel:UIManager.ModulePropsCommand}}"
+			Command="{Binding Source={x:Static viewModels:UIManager.ModulePropsCommand}}"
 			CommandParameter="{Binding SelectedTab}">
 		<Image Width="16" Source="/Images/Menu/properties_16x16.png"/>
 	</Button>

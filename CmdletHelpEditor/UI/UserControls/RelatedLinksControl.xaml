@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
-             d:DataContext="{d:DesignInstance c:ClosableTabItem}"
+             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
+             d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
              mc:Ignorable="d">
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top"
@@ -13,20 +14,20 @@
                     Margin="10">
 			<TextBlock Text="Related link:"/>
             <TextBox MaxLines="1"
-                     Text="{Binding EditorContext.RelatedLinkContext.CurrentRelink.LinkText}"/>
+                     Text="{Binding EditorContext.RelatedLinkContext.CurrentRelink.LinkText, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="URL (optional):"/>
             <TextBox MinLines="3"
                      MaxLines="3"
                      AcceptsReturn="False"
                      AcceptsTab="False"
-                     Text="{Binding EditorContext.RelatedLinkContext.CurrentRelink.LinkUrl}"/>
+                     Text="{Binding EditorContext.RelatedLinkContext.CurrentRelink.LinkUrl, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
 			<ListView x:Name="lvLinks"
 					  Margin="10,0,10,0"
-					  SelectedIndex="{Binding EditorContext.RelatedLinkContext.CurrentLinkIndex}"
-					  SelectedItem="{Binding EditorContext.RelatedLinkContext.CurrentRelink}"
+                      SelectedItem="{Binding EditorContext.RelatedLinkContext.CurrentRelink}"
 					  ItemsSource="{Binding EditorContext.CurrentCmdlet.RelatedLinks}"
+                      SelectionMode="Single"
 					  Width="670"
 					  Height="150">
 				<ListView.View>
@@ -49,7 +50,6 @@
 				<Button Grid.Row="0"
                         VerticalAlignment="Bottom"
                         Width="24"
-                        IsEnabled="{Binding EditorContext.RelatedLinkContext.UpLinkEnabled}"
                         Command="{Binding EditorContext.RelatedLinkContext.UpLinkCommand}"
                         ToolTip="Move related link up">
 					<Image Source="/Images/up_32x32.png"/>
@@ -57,7 +57,6 @@
 				<Button Grid.Row="2"
                         VerticalAlignment="Top"
                         Width="24"
-                        IsEnabled="{Binding EditorContext.RelatedLinkContext.DownLinkEnabled}"
                         Command="{Binding EditorContext.RelatedLinkContext.DownLinkCommad}"
                         ToolTip="Move related link down">
 					<Image Source="/Images/down_32x32.png"/>
@@ -70,7 +69,6 @@
                     Command="{Binding EditorContext.RelatedLinkContext.NewLinkCommand}"/>
 			<Button Content="Remove"
                     Width="75"
-                    IsEnabled="{Binding EditorContext.RelatedLinkContext.RemoveLinkEnabled}"
                     Command="{Binding EditorContext.RelatedLinkContext.RemoveLinkCommand}" Margin="10,0,0,0"/>
 		</StackPanel>
 	</DockPanel>

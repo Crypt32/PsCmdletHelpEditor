@@ -1,24 +1,16 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using System;
+﻿using System;
 using System.ComponentModel;
+using CmdletHelpEditor.API.Models;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class ParamVM : INotifyPropertyChanged {
 		ParameterDescription paramDescription;
-		Boolean paramTextEnabled;
 
-		public ParameterDescription CurrentParam {
+	    public ParameterDescription CurrentParam {
 			get { return paramDescription; }
 			set {
 				paramDescription = value;
 				OnPropertyChanged("CurrentParam");
-			}
-		}
-		public Boolean ParamTextBoxEnabled {
-			get { return paramTextEnabled; }
-			set {
-				paramTextEnabled = value;
-				OnPropertyChanged("ParamTextBoxEnabled");
 			}
 		}
 		

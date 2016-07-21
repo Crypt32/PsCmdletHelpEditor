@@ -1,9 +1,9 @@
-﻿using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.Tools;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
 	public class GeneralDescription : INotifyPropertyChanged {
 		String synopsis, description, notes, inputType, inputUrl, inputDescritpion, returnType, returnUrl, returnDescription;
 		ItemStatus status = ItemStatus.New;
@@ -33,50 +33,64 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		public String Notes {
 			get { return notes ?? String.Empty; }
 			set {
-				notes = value;
-				OnPropertyChanged("Notes");
+                if (notes != value) {
+                    notes = value;
+                    OnPropertyChanged("Notes");
+                }
 			}
 		}
 		public String InputType {
 			get { return inputType ?? String.Empty; }
 			set {
-				inputType = value;
-				OnPropertyChanged("InputType");
+                if (inputType != value) {
+                    inputType = value;
+                    OnPropertyChanged("InputType");
+                }
 			}
 		}
 		public String InputUrl {
 			get { return inputUrl ?? String.Empty; }
 			set {
-				inputUrl = value;
-				OnPropertyChanged("InputUrl");
+                if (inputUrl != value) {
+                    inputUrl = value;
+                    OnPropertyChanged("InputUrl");
+                }
 			}
 		}
 		public String InputTypeDescription {
 			get { return inputDescritpion ?? String.Empty; }
 			set {
-				inputDescritpion = value;
-				OnPropertyChanged("InputTypeDescription");
+                if (inputDescritpion != value) {
+                    inputDescritpion = value;
+                    OnPropertyChanged("InputTypeDescription");
+                }
 			}
 		}
 		public String ReturnType {
 			get { return returnType ?? String.Empty; }
 			set {
-				returnType = value;
-				OnPropertyChanged("ReturnType");
+                if (returnType != value) {
+                    returnType = value;
+                    OnPropertyChanged("ReturnType");
+                }
 			}
 		}
 		public String ReturnUrl {
 			get { return returnUrl ?? String.Empty; }
 			set {
-				returnUrl = value;
-				OnPropertyChanged("ReturnUrl");
+                if (returnUrl != value) {
+                    returnUrl = value;
+                    OnPropertyChanged("ReturnUrl");
+                }
 			}
 		}
 		public String ReturnTypeDescription {
 			get { return returnDescription ?? String.Empty; }
 			set {
-				returnDescription = value;
-				OnPropertyChanged("ReturnTypeDescription");
+                if (returnDescription != value) {
+                    returnDescription = value;
+                    OnPropertyChanged("ReturnTypeDescription");
+                }
 			}
 		}
 		[XmlIgnore]
@@ -96,7 +110,6 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		void OnPropertyChanged(String name) {
 			PropertyChangedEventHandler handler = PropertyChanged;
 			if (handler != null) {
-				Utils.MarkUnsaved();
 				handler(this, new PropertyChangedEventArgs(name));
 			}
 		}

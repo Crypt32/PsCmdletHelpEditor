@@ -3,23 +3,20 @@
 		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		 xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
-		 xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-		 mc:Ignorable="d"
-		 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}"
+         xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
+         xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+         mc:Ignorable="d"
+		 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
 		 FontWeight="Bold"
 		 FontFamily="Times New Roman"
-		 FontSize="14" 
-		 Background="{StaticResource NormalBlueGradientBrush}"
-		 BorderThickness="1"
-		 BorderBrush="#C4D1DE">
+		 FontSize="14">
 	<ToolBar.Resources>
 		<converters:MultiParamConverter x:Key="MultiParamConverter" />
 	</ToolBar.Resources>
 	<Button x:Name="Bold"
 			ToolTip="Bold (Ctrl + B)"
 			MinWidth="21"
-			Command="{x:Static viewModel:FormatCommands.SetCommonFormatCommand}">
+			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
 		<Button.CommandParameter>
 			<MultiBinding Converter="{StaticResource MultiParamConverter}">
 				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
@@ -31,7 +28,7 @@
 	<Button x:Name="Italic"
 			ToolTip="Italic (Ctrl + I)"
 			MinWidth="21"
-			Command="{x:Static viewModel:FormatCommands.SetCommonFormatCommand}">
+			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
 		<Button.CommandParameter>
 			<MultiBinding Converter="{StaticResource MultiParamConverter}">
 				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
@@ -43,7 +40,7 @@
 	<Button x:Name="Underline"
 			ToolTip="Underline (Ctrl + U)"
 			MinWidth="21"
-			Command="{x:Static viewModel:FormatCommands.SetCommonFormatCommand}">
+			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
 		<Button.CommandParameter>
 			<MultiBinding Converter="{StaticResource MultiParamConverter}">
 				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
@@ -55,7 +52,7 @@
 	<Button x:Name="Strike"
 			ToolTip="Strikethrough (Ctrl + H)"
 			MinWidth="21"
-			Command="{x:Static viewModel:FormatCommands.SetCommonFormatCommand}">
+			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
 		<Button.CommandParameter>
 			<MultiBinding Converter="{StaticResource MultiParamConverter}">
 				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>

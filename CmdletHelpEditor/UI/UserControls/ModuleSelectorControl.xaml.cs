@@ -1,7 +1,6 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.ViewModel;
-using System;
+﻿using System;
 using System.Windows.Input;
+using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor.UI.UserControls {
 	/// <summary>

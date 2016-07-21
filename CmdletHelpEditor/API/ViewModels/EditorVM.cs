@@ -1,40 +1,32 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using System;
+﻿using System;
 using System.ComponentModel;
-using CmdletHelpEditor.Controls;
+using CmdletHelpEditor.API.Models;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class EditorVM : INotifyPropertyChanged {
 		Int32 paramIndex = -1;
-		Boolean editorEnabled;
-		CmdletObject currentCmdlet;
+	    CmdletObject currentCmdlet;
 
-		public EditorVM(ClosableTabItem parent) {
+		public EditorVM(ClosableModuleItem parent) {
 			ParamContext = new ParamVM();
-			RelatedLinkContext = new RelatedLinkVM(this);
-			ExampleContext = new ExampleVM(this);
+			RelatedLinkContext = new RelatedLinkVM();
+			ExampleContext = new ExampleVM();
 			OutputContext = new OutputVM(parent);
 		}
+
 		public ParamVM ParamContext { get; set; }
 		public RelatedLinkVM RelatedLinkContext { get; set; }
 		public ExampleVM ExampleContext { get; set; }
 		public OutputVM OutputContext { get; private set; }
-
-		public Boolean GeneralTextBoxEnabled {
-			get { return editorEnabled; }
-			set {
-				editorEnabled = value;
-				OnPropertyChanged("GeneralTextBoxEnabled");
-			}
-		}
 		public CmdletObject CurrentCmdlet {
 			get { return currentCmdlet; }
 			set {
 				currentCmdlet = value;
-				GeneralTextBoxEnabled = value != null;
 				ParamIndex = -1;
 				OnPropertyChanged("CurrentCmdlet");
-			}
+                ExampleContext.SetCmdlet(currentCmdlet);
+                RelatedLinkContext.SetCmdlet(currentCmdlet);
+            }
 		}
 		public Int32 ParamIndex {
 			get { return paramIndex; }

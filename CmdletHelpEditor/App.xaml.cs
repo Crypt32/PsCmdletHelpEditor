@@ -1,7 +1,7 @@
-﻿using CmdletHelpEditor.API.ViewModel;
-using CmdletHelpEditor.UI.Windows;
+﻿using CmdletHelpEditor.UI.Windows;
 using System;
 using System.Windows;
+using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor {
 	/// <summary>

@@ -1,4 +1,4 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
+﻿using CmdletHelpEditor.API.Models;
 using System;
 using System.IO;
 using System.Linq;
@@ -7,10 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Serialization;
-using CmdletHelpEditor.Controls;
 
 namespace CmdletHelpEditor.API.Tools {
-	static class FileProcessor {
+    static class FileProcessor {
 		public static ModuleObject ReadProjectFile(String path) {
 			FileStream fs = null;
 			ModuleObject module;
@@ -29,14 +28,20 @@ namespace CmdletHelpEditor.API.Tools {
 			}
 			return module;
 		}
-		public static void SaveProjectFile(ClosableTabItem tab, String path) {
+		public static void SaveProjectFile(ClosableModuleItem tab, String path) {
 			FileStream fs = new FileStream(path, FileMode.Create);
 			tab.Module.ProjectPath = path;
 			Double oldVersion = tab.Module.FormatVersion;
 			if (!tab.Module.IsOffline) {
-				foreach (CmdletObject cmdlet in tab.Module.Cmdlets.ToArray().Where(cmdlet => cmdlet.GeneralHelp.Status == ItemStatus.Missing)) {
-					tab.Module.Cmdlets.Remove(cmdlet);
-				}
+			    foreach (CmdletObject cmdlet in tab.Module.Cmdlets.ToArray()) {
+			        if (cmdlet.GeneralHelp.Status == ItemStatus.Missing) {
+                        tab.Module.Cmdlets.Remove(cmdlet);
+			        } else {
+			            foreach (ParameterDescription parameter in cmdlet.Parameters.ToArray().Where(x => x.Status == ItemStatus.Missing)) {
+                            cmdlet.Parameters.Remove(parameter);
+			            }
+			        }
+			    }
 			}
 			tab.Module.FormatVersion = Utils.CurrentFormatVersion;
 			XmlSerializer serializer = new XmlSerializer(typeof(ModuleObject));
@@ -57,10 +62,11 @@ namespace CmdletHelpEditor.API.Tools {
 			return modulePaths
 				.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries)
 				.Select(path => new DirectoryInfo(path))
+                .Where(x => x.Exists)
 				.Any(dir => dir.EnumerateDirectories(moduleName).Any());
 		}
 
-		public async static void PublishHelpFile(String path, ModuleObject module, ProgressBar pb) {
+		public static async void PublishHelpFile(String path, ModuleObject module, ProgressBar pb) {
 			XmlWriter writer = null;
 			StringBuilder SB = new StringBuilder();
 			if (module.Cmdlets.Count == 0) { return; }

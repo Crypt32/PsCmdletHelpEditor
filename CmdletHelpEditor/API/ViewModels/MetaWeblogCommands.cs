@@ -1,11 +1,11 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.UI.Windows;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.UI.Windows;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public static class MetaWeblogCommands {
 		static Boolean working;
 

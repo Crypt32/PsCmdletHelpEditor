@@ -4,6 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        Background="{StaticResource PanelBackgroundBrush}"
         Title="Module Properties"
 		SizeToContent="Height"
 		Width="500"
@@ -15,10 +16,7 @@
 	<StackPanel Margin="10">
 		<GroupBox Header="General settings">
 			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition/>
-				</Grid.RowDefinitions>
-				<CheckBox Content="Use support information" IsChecked="{Binding UseSupports}"/>
+			    <CheckBox Content="Use support information" IsChecked="{Binding UseSupports}"/>
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Online publishing provider" VerticalAlignment="Top">
@@ -68,11 +66,6 @@
 								 Grid.Column="1"
 								 Grid.Row="3"
 								 Margin="0,4,0,0"/>
-					<!--<CheckBox Content="Remember password"
-									  Grid.Column="1"
-									  Grid.Row="4"
-									  IsEnabled="{Binding UserEditable}"
-									  Margin="-1,2,2,2"/>-->
 					<Button Content="Connect"
 							Click="ConnectClick"
 							IsEnabled="{Binding UserEditable}"
@@ -93,7 +86,6 @@
 					<TextBlock Text="Fetch post count: " VerticalAlignment="Center" Grid.Column="0" Grid.Row="8" Margin="0,5,0,0"/>
 					<ComboBox SelectedValuePath="Content"
 							  SelectedValue="{Binding ProviderInfo.FetchPostCount}"
-							  IsEnabled="{Binding BlogsLoaded}"
 							  Grid.Column="1"
 							  Grid.Row="8"
 							  Margin="0,5,0,0">
@@ -129,7 +121,7 @@
 				</Grid>
 			</StackPanel>
 		</GroupBox>
-		<DockPanel Margin="-10,10,-10,-10" Background="Gainsboro">
+		<DockPanel Margin="-10,10,-10,-10" Background="{StaticResource PanelHeaderBackground}">
 			<Button Content="Close"
 					Click="CloseClick"
 					HorizontalAlignment="Right"

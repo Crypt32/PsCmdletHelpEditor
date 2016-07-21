@@ -1,11 +1,10 @@
-﻿using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Management.Automation;
 using System.Xml.Serialization;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
 	public class ParameterDescription : INotifyPropertyChanged {
 		String description, defaultValue;
 		Boolean globbing;
@@ -55,8 +54,10 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		public String DefaultValue {
 			get { return defaultValue ?? String.Empty; }
 			set {
-				defaultValue = value;
-				OnPropertyChanged("DefaultValue");
+                if (defaultValue != value) {
+                    defaultValue = value;
+                    OnPropertyChanged("DefaultValue");
+                }
 			}
 		}
 		[XmlAttribute("globbing")]
@@ -84,7 +85,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 			status = ItemStatus.New;
 			Name = param.Name;
 			// get type
-			get_type(param);
+			getType(param);
 			// get parameter parameters
 			Mandatory = param.IsMandatory;
 			Dynamic = param.IsDynamic;
@@ -115,7 +116,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 			}
 			
 		}
-		void get_type(CommandParameterInfo param) {
+		void getType(CommandParameterInfo param) {
 			String underlyingType = param.ParameterType.ToString();
 			String genericType = String.Empty;
 			String[] tokens;
@@ -134,29 +135,28 @@ namespace CmdletHelpEditor.API.BaseClasses {
 			}
 		}
 
-		void OnPropertyChanged(String name) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (handler != null) {
-				Utils.MarkUnsaved();
-				handler(this, new PropertyChangedEventArgs(name));
-			}
-		}
-		Boolean Equals(ParameterDescription other) {
-			return String.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
-				String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
-		}
-		public override Int32 GetHashCode() {
-			unchecked {
-				return (Name.GetHashCode() * 397) ^ Type.GetHashCode();
-			}
-		}
-		public override Boolean Equals(Object obj) {
-			if (ReferenceEquals(null, obj)) { return false; }
-			if (ReferenceEquals(this, obj)) { return true; }
-			ParameterDescription other = obj as ParameterDescription;
-			return other != null && Equals(other);
-		}
+        Boolean Equals(ParameterDescription other) {
+            return String.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
+        }
+        public override Int32 GetHashCode() {
+            unchecked {
+                return (Name.GetHashCode() * 397) ^ Type.GetHashCode();
+            }
+        }
+        public override Boolean Equals(Object obj) {
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            ParameterDescription other = obj as ParameterDescription;
+            return other != null && Equals(other);
+        }
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged(String name) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

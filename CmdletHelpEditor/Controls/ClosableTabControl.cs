@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.Controls {
 	public class ClosableTabControl : TabControl {
@@ -56,11 +57,11 @@ namespace CmdletHelpEditor.Controls {
 			}
 		}
 		[ContentProperty("ItemsSource")]
-		public class TabItems : ObservableCollection<ClosableTabItem> {
-			public IList<ClosableTabItem> MyItems {
+		public class TabItems : ObservableCollection<ClosableModuleItem> {
+			public IList<ClosableModuleItem> MyItems {
 				get { return Items; }
 				set {
-					foreach (ClosableTabItem item in value) {
+					foreach (ClosableModuleItem item in value) {
 						Items.Add(item);
 					}
 				}

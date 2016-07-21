@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:CmdletHelpEditor.Controls"
              xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
+             xmlns:baseClasses="clr-namespace:CmdletHelpEditor.API.Models"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
@@ -149,10 +150,10 @@
 		</Style>
 
 		<!-- The Style for TabItems (strips). -->
-		<Style TargetType="{x:Type controls:ClosableTabItem}">
+		<Style TargetType="{x:Type baseClasses:ClosableModuleItem}">
 			<Setter Property="Template">
 				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type controls:ClosableTabItem}">
+					<ControlTemplate TargetType="{x:Type baseClasses:ClosableModuleItem}">
 						<!-- The Grid helps defining the general height of TabItems. -->
 						<Grid VerticalAlignment="Bottom">
 							<!-- 
@@ -183,7 +184,7 @@
 											   FontWeight="Bold">
 										<TextBlock.Visibility>
 											<Binding Path="IsSaved"
-													 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableTabItem}}"
+													 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type baseClasses:ClosableModuleItem}}"
 													 Converter="{StaticResource BooleanToVisibilityConverter}"/>
 										</TextBlock.Visibility>
 									</TextBlock>
@@ -191,7 +192,7 @@
 											Content="x"
 											Visibility="Hidden"
 											Command="{Binding Path=CloseTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableTabControl}}}"
-											CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableTabItem}}}"
+											CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type baseClasses:ClosableModuleItem}}}"
 											VerticalAlignment="Center"/>
 								</DockPanel>
 							</Border>
@@ -237,7 +238,7 @@
 									<Condition Property="IsClosable" Value="True"/>
 								</MultiTrigger.Conditions>
 								<Setter Property="Visibility" TargetName="PART_Close" Value="Visible"/>
-								<Setter TargetName="ContentSite" Property="TextBlock.ToolTip" Value="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableTabItem}}}"/>
+								<Setter TargetName="ContentSite" Property="TextBlock.ToolTip" Value="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type baseClasses:ClosableModuleItem}}}"/>
 							</MultiTrigger>
 							<MultiTrigger>
 								<MultiTrigger.Conditions>
@@ -265,15 +266,30 @@
 
 	</UserControl.Resources>
     <controls:ClosableTabControl CloseTabCommand="{Binding OpenCommand}">
-		<controls:ClosableTabItem Header="one" IsClosable="True">
-			</controls:ClosableTabItem>
-			<controls:ClosableTabItem Header="two" IsSaved="False" IsClosable="True">
+		<baseClasses:ClosableModuleItem Header="one" IsClosable="True">
+			</baseClasses:ClosableModuleItem>
+			<baseClasses:ClosableModuleItem Header="two" IsSaved="False" IsClosable="True">
 				456
-			</controls:ClosableTabItem>
-		<controls:ClosableTabItem Style="{StaticResource {x:Type TabItem}}">
-			<controls:ClosableTabItem.Header>
+			</baseClasses:ClosableModuleItem>
+		<baseClasses:ClosableModuleItem Style="{StaticResource {x:Type TabItem}}">
+			<baseClasses:ClosableModuleItem.Header>
 				<Button Content="new" Margin="-14"/>
-			</controls:ClosableTabItem.Header>
-		</controls:ClosableTabItem>
+			</baseClasses:ClosableModuleItem.Header>
+		</baseClasses:ClosableModuleItem>
     </controls:ClosableTabControl>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,30 +1,31 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.Controls;
-using CmdletHelpEditor.Properties;
-using CmdletHelpEditor.UI.UserControls;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.Properties;
+using CmdletHelpEditor.UI.UserControls;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class MainWindowVM : DependencyObject, INotifyPropertyChanged {
-		// private fields
-		Int32? psversion;
-		ClosableTabItem selectedTab;
+        Visibility pbVisible;
+        Double pbProgress;
+        String busyControlText;
+        Int32? psversion;
+		ClosableModuleItem selectedTab;
 
-		public MainWindowVM() {
+        public MainWindowVM() {
 			//Settings.Default.Reload();
 			Modules = new ObservableCollection<ModuleObject>();
-			Tabs = new ObservableCollection<ClosableTabItem>();
+			Tabs = new ObservableCollection<ClosableModuleItem>();
 			CommandManager = new AppCommands(this);
 			ConfigContext = new ConfigVM();
-			Initialize();
+			initialize();
 		}
-		void Initialize() {
+		void initialize() {
 			Panel content = new Grid();
-			ClosableTabItem cti = new ClosableTabItem {
+			ClosableModuleItem cti = new ClosableModuleItem {
 				Header = "untitled",
 				IsSaved = true,
 				IsClosable = true,
@@ -49,7 +50,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 
 		// data definitions
 		public ObservableCollection<ModuleObject> Modules { get; set; }
-		public ObservableCollection<ClosableTabItem> Tabs { get; set; }
+		public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
 		
 		// must be dependency property.
 		public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
@@ -85,18 +86,27 @@ namespace CmdletHelpEditor.API.ViewModel {
 			}
 		}
 		public Visibility PbVisible {
-			get { return (Visibility)GetValue(PbVisibleProperty); }
-			set { SetValue(PbVisibleProperty, value); }
+			get { return pbVisible; }
+			set {
+                pbVisible = value;
+                OnPropertyChanged("PbVisible");
+			}
 		}
 		public Double PbProgress {
-			get { return (Double)GetValue(PbProgressProperty); }
-			set { SetValue(PbProgressProperty, value); }
+			get { return pbProgress; }
+			set {
+                pbProgress = value;
+                OnPropertyChanged("PbProgress");
+			}
 		}
 		public String BusyControlText {
-			get { return (String)GetValue(BusyControlTextProperty); }
-			set { SetValue(BusyControlTextProperty, value); }
+			get { return busyControlText; }
+			set {
+                busyControlText = value;
+                OnPropertyChanged("BusyControlText");
+			}
 		}
-		public ClosableTabItem SelectedTab {
+		public ClosableModuleItem SelectedTab {
 			get { return selectedTab; }
 			set {
 				selectedTab = value;

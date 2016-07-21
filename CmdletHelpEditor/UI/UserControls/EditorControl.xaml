@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
-			 xmlns:UserControls="clr-namespace:CmdletHelpEditor.UI.UserControls"
+             xmlns:UserControls="clr-namespace:CmdletHelpEditor.UI.UserControls"
 			 xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-			 xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
+			 xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
+			 xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModels"
 			 mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance c:ClosableTabItem}">
+			 d:DataContext="{d:DesignInstance models:ClosableModuleItem}">
 	<UserControl.Resources>
 		<converters:NullToBooleanConverter x:Key="ToBooleanConverter"/>
 		<Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
@@ -51,11 +51,18 @@
 					</ContextMenu>
 			</ListView.ContextMenu>
 		</ListView>
-		<GridSplitter Grid.Column="1" Width="5" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns"/>
+		<GridSplitter Grid.Column="1"
+                      Width="5"
+                      ResizeBehavior="PreviousAndNext"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Stretch"
+                      ResizeDirection="Columns"/>
 		<TabControl Grid.Column="2" Background="#9FBEF4">
 			<TabItem Header="General">
 				<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-					<UserControls:GeneralControl VerticalAlignment="Top" HorizontalAlignment="Stretch" IsEnabled="{Binding EditorContext.GeneralTextBoxEnabled}"/>
+					<UserControls:GeneralControl VerticalAlignment="Top"
+                                                 HorizontalAlignment="Stretch"
+                                                 IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem Header="Parameters">
@@ -89,15 +96,20 @@
 							</Style.Triggers>
 						</Style>
 					</ScrollViewer.Style>
-					<UserControls:SupportInfoControl  VerticalAlignment="Top" HorizontalAlignment="Center"/>
+					<UserControls:SupportInfoControl VerticalAlignment="Top"
+                                                     HorizontalAlignment="Center"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem Header="Output">
-				<UserControls:DisplayOutputControl IsEnabled="{Binding EditorContext.GeneralTextBoxEnabled}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+				<UserControls:DisplayOutputControl IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"
+                                                   VerticalAlignment="Stretch"
+                                                   HorizontalAlignment="Stretch"/>
 			</TabItem>
 			<TabItem Header="Advanced">
 				<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-					<UserControls:AdvancedCmdletUC IsEnabled="{Binding EditorContext.GeneralTextBoxEnabled}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+					<UserControls:AdvancedCmdletUC IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"
+                                                   VerticalAlignment="Stretch"
+                                                   HorizontalAlignment="Stretch"/>
 				</ScrollViewer>
 			</TabItem>
 		</TabControl>

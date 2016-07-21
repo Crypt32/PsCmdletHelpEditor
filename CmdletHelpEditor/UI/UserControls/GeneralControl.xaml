@@ -3,65 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+             xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
              mc:Ignorable="d"
              d:DesignWidth="740" d:DesignHeight="915"
-			 d:DataContext="{d:DesignInstance viewModel:MainWindowVM}">
+			 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
     <StackPanel Margin="10">
 		<!--<Border Name="anchor" Grid.Row="0" Grid.Column="1"/>
 		<Border Name="anchor2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"/>-->
 		<TextBlock Text="Synopsis:"/>
         <TextBox MaxLines="6"
                  MinLines="6"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Synopsis}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Synopsis, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
         
         <TextBlock Text="Detailed description:"/>
         <TextBox MaxLines="11"
                  MinLines="11"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Description}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Description, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
 
         <TextBlock Text="Notes:"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Notes}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.Notes, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
         
         <TextBlock Text="Input types (semicolon-separated):"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputType}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputType, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
         
         <TextBlock Text="Input type URLs (semicolon-separated):"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputUrl}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputUrl, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
         
         <TextBlock Text="Input type description (semicolon-separated):"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputTypeDescription}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.InputTypeDescription, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
         
         <TextBlock Text="Return type (semicolon-separated):"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnType}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnType, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
 
         <TextBlock Text="Return type URLs (semicolon-separated):"/>
         <TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnUrl}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnUrl, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
 
         <TextBlock Text="Return type description (semicolon-separated):"/>
 		<TextBox MaxLines="4"
                  MinLines="4"
-                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnTypeDescription}"
+                 Text="{Binding EditorContext.CurrentCmdlet.GeneralHelp.ReturnTypeDescription, UpdateSourceTrigger=PropertyChanged}"
                  Tag="AllowFormat"/>
     </StackPanel>
 </UserControl>

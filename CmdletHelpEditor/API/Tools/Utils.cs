@@ -1,11 +1,10 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.MetaWeblog;
-using CmdletHelpEditor.API.ViewModel;
+﻿using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
 	static class Utils {
@@ -54,11 +53,6 @@ namespace CmdletHelpEditor.API.Tools {
 				blogger.SetBlog(provInfo.Blog.blogid);
 			}
 			return blogger;
-		}
-		public static void MarkUnsaved() {
-			MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-			if (mwvm.SelectedTab == null) { return; }
-			mwvm.SelectedTab.IsSaved = false;
 		}
 	}
 }

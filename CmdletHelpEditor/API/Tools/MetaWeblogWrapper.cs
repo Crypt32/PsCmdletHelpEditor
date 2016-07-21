@@ -1,5 +1,4 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.MetaWeblog;
+﻿using CmdletHelpEditor.API.MetaWeblog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
 	static class MetaWeblogWrapper {
@@ -31,7 +31,7 @@ namespace CmdletHelpEditor.API.Tools {
                     // assuming that article does not exist
                     cmdlet.ArticleIDString = blogger.AddPost(post);
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString) && !quiet) {
-                        Utils.MsgBox("Success", (new Win32Exception(0)).Message, MessageBoxButton.OK, MessageBoxImage.Information);
+                        Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     // get post URL once published
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString)) {

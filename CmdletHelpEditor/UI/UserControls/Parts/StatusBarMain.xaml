@@ -3,9 +3,10 @@
 		   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		   xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
+		   xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
 		   mc:Ignorable="d"
-		   d:DataContext="{d:DesignInstance viewModel:MainWindowVM}">
+           Style="{StaticResource {x:Type StatusBar}}"
+		   d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
 	<StatusBar.Resources>
 		<Style x:Key="StatusBarTextBlock" TargetType="{x:Type TextBlock}">
 			<Setter Property="TextWrapping" Value="NoWrap"/>

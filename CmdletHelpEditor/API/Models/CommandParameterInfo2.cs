@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
 	public class CommandParameterInfo2 {
 		String typeString;
 		public String Name { get; set; }

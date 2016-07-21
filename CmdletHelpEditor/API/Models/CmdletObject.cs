@@ -1,20 +1,25 @@
-﻿using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Xml.Serialization;
 
-namespace CmdletHelpEditor.API.BaseClasses {
-	[XmlInclude(typeof(ParameterDescription))]
+namespace CmdletHelpEditor.API.Models {
+    [XmlInclude(typeof(ParameterDescription))]
 	[XmlInclude(typeof(Example))]
 	[XmlInclude(typeof(RelatedLink))]
 	[XmlInclude(typeof(CommandParameterSetInfo2))]
 	public class CmdletObject : INotifyPropertyChanged {
 		String extraHeader, extraFooter, url, articleID;
 		Boolean publish;
+        SupportInfo supportInfo;
+        GeneralDescription generalHelp;
+        BindingList<ParameterDescription> parameters;
+        ObservableCollection<Example> exampleList;
+        ObservableCollection<RelatedLink> linkList;
         readonly List<String> _excludedParams = new List<String> {
                 "verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
                 "warningvariable", "warningaction", "pipelinevariable", "informationaction",
@@ -22,36 +27,95 @@ namespace CmdletHelpEditor.API.BaseClasses {
             };
 
         public CmdletObject() {
-			Init();
+			initialize();
 		}
-		public CmdletObject(PSObject cmdlet, Boolean cbh) {
-			Init();
+
+	    void OnBindingListChanged(object Sender, ListChangedEventArgs ChangedEventArgs) {
+		    OnPropertyChanged("nested2");
+	    }
+
+	    public CmdletObject(PSObject cmdlet, Boolean cbh) : this() {
 			if (cmdlet == null) { return; }
-			m_initialize(cmdlet);
+			initializeFromCmdlet(cmdlet);
 			if (cbh) {
 				initializeFromHelp(cmdlet);
 			}
 		}
-		public CmdletObject(String name) {
+		public CmdletObject(String name) : this() {
 			Name = name;
-			Init();
 			GeneralHelp = new GeneralDescription { Status = ItemStatus.Missing };
 		}
 
-		public String Name { get; set; }
+        public String Name { get; set; }
 		[XmlAttribute("verb")]
 		public String Verb { get; set; }
 		[XmlAttribute("noun")]
 		public String Noun { get; set; }
-		public GeneralDescription GeneralHelp { get; set; }
+        public List<String> Syntax { get; set; }
+        public GeneralDescription GeneralHelp {
+	        get { return generalHelp; }
+            set {
+                if (generalHelp != null) {
+                    generalHelp.PropertyChanged -= childOnPropertyChanged;
+                }
+                generalHelp = value;
+                if (generalHelp != null) {
+                    generalHelp.PropertyChanged += childOnPropertyChanged;
+                }
+            }
+	    }
 		[XmlIgnore]
 		public List<CommandParameterSetInfo> ParameterSets { get; set; }
 		public List<CommandParameterSetInfo2> ParamSets { get; set; }
-		public List<String> Syntax { get; set; }
-		public ObservableCollection<ParameterDescription> Parameters { get; set; }
-		public ObservableCollection<Example> Examples { get; set; }
-		public ObservableCollection<RelatedLink> RelatedLinks { get; set; }
-		public SupportInfo SupportInformation { get; set; }
+	    public BindingList<ParameterDescription> Parameters {
+	        get { return parameters; }
+			set {
+				if (parameters != null) {
+					parameters.ListChanged -= OnBindingListChanged;
+				}
+				parameters = value;
+				if (parameters != null) {
+					parameters.RaiseListChangedEvents = true;
+					parameters.ListChanged += OnBindingListChanged;
+				}
+			}
+	    }
+	    public ObservableCollection<Example> Examples {
+	        get { return exampleList; }
+            set {
+                if (exampleList != null) {
+                    exampleList.CollectionChanged -= childOnCollectionChanged;
+                }
+                exampleList = value;
+                if (exampleList != null) {
+                    exampleList.CollectionChanged += childOnCollectionChanged;
+                }
+            }
+	    }
+	    public ObservableCollection<RelatedLink> RelatedLinks {
+	        get { return linkList; }
+            set {
+                if (linkList != null) {
+                    linkList.CollectionChanged -= childOnCollectionChanged;
+                }
+                linkList = value;
+                if (linkList != null) {
+                    linkList.CollectionChanged += childOnCollectionChanged;
+                }
+            }
+	    }
+	    public SupportInfo SupportInformation {
+	        get { return supportInfo; }
+            set {
+                if (supportInfo != null) {
+                    supportInfo.PropertyChanged -= childOnPropertyChanged;
+                }
+                supportInfo = value;
+                if (supportInfo != null) {
+                    supportInfo.PropertyChanged += childOnPropertyChanged;
+                }
+            }
+	    }
 		// advanced
 		public String ExtraHeader {
 			get { return extraHeader; }
@@ -89,22 +153,46 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				OnPropertyChanged("ArticleIDString");
 			}
 		}
-		void Init() {
+		void initialize() {
 			ParamSets = new List<CommandParameterSetInfo2>();
-			Parameters = new ObservableCollection<ParameterDescription>();
+			Parameters = new BindingList<ParameterDescription>();
 			Examples = new ObservableCollection<Example>();
 			RelatedLinks = new ObservableCollection<RelatedLink>();
 		}
-		void m_initialize(PSObject cmdlet) {
+
+        #region nested object event handlers
+        void childOnCollectionChanged(Object sender, NotifyCollectionChangedEventArgs e) {
+	        switch (e.Action) {
+                case NotifyCollectionChangedAction.Add:
+                    ((INotifyPropertyChanged)e.NewItems[0]).PropertyChanged += childOnPropertyChanged;
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    ((INotifyPropertyChanged)e.OldItems[0]).PropertyChanged -= childOnPropertyChanged;
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    if (e.OldItems == null) { break; }
+	                foreach (INotifyPropertyChanged itemToRemove in e.OldItems) {
+                        itemToRemove.PropertyChanged -= childOnPropertyChanged;
+	                }
+                    break;
+	        }
+	    }
+	    void childOnPropertyChanged(Object sender, PropertyChangedEventArgs e) {
+	        OnPropertyChanged("nested");
+	    }
+        #endregion
+
+        void initializeFromCmdlet(PSObject cmdlet) {
 			Name = (String)cmdlet.Members["Name"].Value;
 			Verb = (String)cmdlet.Members["Verb"].Value;
 			Noun = (String)cmdlet.Members["Noun"].Value;
 			GeneralHelp = new GeneralDescription {Status = ItemStatus.New};
-			ParamSets = new List<CommandParameterSetInfo2>();
-			get_parametersets(cmdlet);
-			get_parameters();
-            get_outputtypes(cmdlet);
-            get_syntax(cmdlet);
+            Parameters = new BindingList<ParameterDescription>();
+            ParamSets = new List<CommandParameterSetInfo2>();
+			getParameterSets(cmdlet);
+			getParameters();
+            getOutputtypes(cmdlet);
+            getSyntax(cmdlet);
 			RelatedLinks = new ObservableCollection<RelatedLink>();
 			Examples = new ObservableCollection<Example>();
 			SupportInformation = new SupportInfo();
@@ -194,7 +282,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				if (descriptionBase != null) {
 					String description = (descriptionBase)
 						.Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-					descs.Add(String.IsNullOrEmpty((String)description)
+					descs.Add(String.IsNullOrEmpty(description)
 						? String.Empty
 						: description.TrimEnd());
 				}
@@ -209,12 +297,12 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				GeneralHelp.ReturnTypeDescription = String.Join(";", descs);
 			}
 		}
-		void importParamHelp(PSObject parameters) {
+		void importParamHelp(PSObject helpParameters) {
 			List<PSObject> paras = new List<PSObject>();
-			if (parameters.Members["parameter"].Value as PSObject == null) {
-				paras = new List<PSObject>((PSObject[])parameters.Members["parameter"].Value);
+			if (!(helpParameters.Members["parameter"].Value is PSObject)) {
+				paras = new List<PSObject>((PSObject[])helpParameters.Members["parameter"].Value);
 			} else {
-				paras.Add((PSObject)parameters.Members["parameter"].Value);
+				paras.Add((PSObject)helpParameters.Members["parameter"].Value);
 			}
 			foreach (PSObject param in paras) {
 				String name = (String)((PSObject)param.Members["name"].Value).BaseObject;
@@ -228,7 +316,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		}
 		void importExamples(PSObject example) {
 			List<PSObject> examples = new List<PSObject>();
-			if (example.Members["example"].Value as PSObject == null) {
+			if (!(example.Members["example"].Value is PSObject)) {
 				examples = new List<PSObject>((PSObject[])example.Members["example"].Value);
 			} else {
 				examples.Add((PSObject)example.Members["example"].Value);
@@ -247,7 +335,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		}
 		void importRelinks(PSObject relink) {
 			List<PSObject> relinks = new List<PSObject>();
-			if (relink.Members["navigationLink"].Value as PSObject == null) {
+			if (!(relink.Members["navigationLink"].Value is PSObject)) {
 				relinks = new List<PSObject>((PSObject[])relink.Members["navigationLink"].Value);
 			} else {
 				relinks.Add((PSObject)relink.Members["navigationLink"].Value);
@@ -261,7 +349,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				});
 			}
 		}
-		void get_parametersets(PSObject cmdlet) {
+		void getParameterSets(PSObject cmdlet) {
 			ParameterSets = new List<CommandParameterSetInfo>();
 			if (cmdlet.Members["ParameterSets"].Value != null) {
 				ParameterSets = new List<CommandParameterSetInfo>((ReadOnlyCollection<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value);
@@ -274,8 +362,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				}
 			}
 		}
-		void get_parameters() {
-			Parameters = new ObservableCollection<ParameterDescription>();
+		void getParameters() {
 			if (ParameterSets.Count == 0) { return; }
 			foreach (CommandParameterSetInfo paramset in ParameterSets) {
 				if (paramset.Parameters.Count == 0) { return; }
@@ -284,7 +371,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				}
 			}
 		}
-        void get_outputtypes(PSObject cmdlet) {
+        void getOutputtypes(PSObject cmdlet) {
             var outputTypeMember = cmdlet.Members["OutputType"];
             if (outputTypeMember == null) {
                 return;
@@ -296,8 +383,7 @@ namespace CmdletHelpEditor.API.BaseClasses {
             string joined = String.Join(";", outputTypeNames.Select(tn => tn.Name));
             GeneralHelp.ReturnType = joined;
         }
-
-        void get_syntax(PSObject cmdlet) {
+        void getSyntax(PSObject cmdlet) {
 			Syntax = new List<String>();
 			foreach (CommandParameterSetInfo paraset in ParameterSets) {
 				String syntaxItem = Convert.ToString(cmdlet.Members["name"].Value);
@@ -340,16 +426,6 @@ namespace CmdletHelpEditor.API.BaseClasses {
 				Syntax.Add(syntaxItem);
 			}
 		}
-		void OnPropertyChanged(String name) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (handler != null) {
-				Utils.MarkUnsaved();
-				handler(this, new PropertyChangedEventArgs(name));
-			}
-		}
-		protected Boolean Equals(CmdletObject other) {
-			return String.Equals(Name, other.Name);
-		}
 
 		public void UpdateParamSets() {
 			if (ParameterSets == null) { return; }
@@ -365,15 +441,27 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		public override String ToString() {
 			return Name;
 		}
-		public override Int32 GetHashCode() {
-			return (Name != null ? Name.GetHashCode() : 0);
-		}
 		public override Boolean Equals(object obj) {
-			if (ReferenceEquals(null, obj)) { return false; }
-			if (ReferenceEquals(this, obj)) { return true; }
-			return obj.GetType() == GetType() && Equals((CmdletObject) obj);
+		    if (ReferenceEquals(null, obj)) return false;
+		    if (ReferenceEquals(this, obj)) return true;
+		    if (obj.GetType() != this.GetType()) return false;
+		    return Equals((CmdletObject) obj);
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        protected bool Equals(CmdletObject other) {
+            return string.Equals(Name, other.Name);
+        }
+
+        public override int GetHashCode() {
+            return Name != null ? Name.GetHashCode() : 0;
+        }
+
+        void OnPropertyChanged(String name) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

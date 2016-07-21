@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	sealed class RelayCommand : ICommand {
 		readonly Predicate<Object> _canExecute;
 		readonly Action<Object> _execute;

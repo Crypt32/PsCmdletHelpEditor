@@ -1,9 +1,9 @@
-﻿using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.Tools;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
 	public class SupportInfo : INotifyPropertyChanged {
         Boolean ADChecked1, RsatChecked1, Ps2Checked1, Ps3Checked1, Ps4Checked1, Ps5Checked1, WinXpChecked1,
             WinVistaChecked1, Win7Checked1, Win8Checked1, Win81Checked1, win10Checked, Win2003Checked1,
@@ -422,7 +422,6 @@ namespace CmdletHelpEditor.API.BaseClasses {
 		void OnPropertyChanged(String name) {
 			PropertyChangedEventHandler handler = PropertyChanged;
 			if (handler != null) {
-				Utils.MarkUnsaved();
 				handler(this, new PropertyChangedEventArgs(name));
 			}
 		}

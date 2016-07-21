@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
     class OnlinePublishEntry : INotifyPropertyChanged {
         CmdletObject cmdlet;
         OnlinePublishStatusEnum status = OnlinePublishStatusEnum.Pending;

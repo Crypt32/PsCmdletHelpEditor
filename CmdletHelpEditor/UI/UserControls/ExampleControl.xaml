@@ -4,9 +4,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
+             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
              mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance c:ClosableTabItem}">
+			 d:DataContext="{d:DesignInstance models:ClosableModuleItem}">
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top"
                     IsEnabled="{Binding EditorContext.ExampleContext.ExampleTextBoxEnabled}"
@@ -15,24 +15,24 @@
                 <Run Text="Example name:"/>
                 <Run Text="*"
                      Foreground="Red"
-                     FontWeight="Bold"></Run>
+                     FontWeight="Bold"/>
             </TextBlock>
 			<TextBox MinLines="1"
                      MaxLines="1"
-                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Name}"/>
+                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Name, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Example command:"/>
             <TextBox MinLines="10"
                      MaxLines="10"
-                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Cmd}"/>
+                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Example description:"/>
             <TextBox MinLines="10"
                      MaxLines="10"
-                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Description}"
+                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Description, UpdateSourceTrigger=PropertyChanged}"
                      Tag="AllowFormat"/>
             <TextBlock Text="Example output:"/>
 			<TextBox MinLines="10"
                      MaxLines="10"
-                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Output}"/>
+                     Text="{Binding EditorContext.ExampleContext.CurrentExample.Output, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
 		<ListBox Margin="10,0,10,0"
@@ -41,7 +41,6 @@
 				 Height="150"
 				 VerticalAlignment="Top"
 				 Width="350"
-				 SelectedIndex="{Binding EditorContext.ExampleContext.CurrentExampleIndex}"
 				 SelectedItem="{Binding EditorContext.ExampleContext.CurrentExample}"
 				 ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
 				 DisplayMemberPath="Name"
@@ -55,7 +54,6 @@
 				<Button Grid.Row="0"
                         VerticalAlignment="Bottom"
                         Width="24"
-                        IsEnabled="{Binding EditorContext.ExampleContext.UpExampleEnabled}"
                         Command="{Binding EditorContext.ExampleContext.UpExampleCommand}"
                         ToolTip="Move example up">
 					<Image Source="/Images/up_32x32.png"/>
@@ -63,7 +61,6 @@
 				<Button Grid.Row="2"
                         VerticalAlignment="Top"
                         Width="24"
-                        IsEnabled="{Binding EditorContext.ExampleContext.DownExampleEnabled}"
                         Command="{Binding EditorContext.ExampleContext.DownExampleCommad}"
                         ToolTip="Move example down">
 					<Image Source="/Images/down_32x32.png"/>
@@ -78,7 +75,6 @@
                     Command="{Binding EditorContext.ExampleContext.NewExampleCommand}"/>
 			<Button Content="Remove"
                     Width="75"
-                    IsEnabled="{Binding EditorContext.ExampleContext.RemoveExampleEnabled}"
                     Command="{Binding EditorContext.ExampleContext.RemoveExampleCommand}"
                     Margin="10,0,0,0"/>
 		</StackPanel>

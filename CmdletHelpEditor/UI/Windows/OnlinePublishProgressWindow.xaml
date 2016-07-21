@@ -3,15 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModel="clr-namespace:CmdletHelpEditor.API.ViewModel"
         xmlns:controls="clr-namespace:CmdletHelpEditor.Controls"
+        xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
         Background="{StaticResource PanelBackgroundBrush}"
         mc:Ignorable="d"
         Title="Publish Cmdlet Help Online" Height="500" Width="500">
     <Window.DataContext>
-        <viewModel:OnlinePublishProgressVM/>
+        <viewModels:OnlinePublishProgressVM/>
     </Window.DataContext>
     <DockPanel>
+        <!--TODO-->
+        <!--<StatusBar DockPanel.Dock="Bottom"
+                   Height="25">
+            <StatusBarItem>
+                <TextBlock Text="blablabla"></TextBlock>
+            </StatusBarItem>
+        </StatusBar>-->
         <DockPanel DockPanel.Dock="Bottom" Background="{StaticResource PanelHeaderBackground}">
             <Border BorderThickness="0,1,0,0" BorderBrush="#FF7C9EBC" DockPanel.Dock="Top"/>
             <Button Content="Close"
@@ -44,8 +51,7 @@
                   Margin="5"
                   ItemsSource="{Binding Cmdlets}"
                   SelectedItem="{Binding SelectedEntry}"
-                  SelectionMode="Single"
-                  controls:ListViewExtenders.AutoScrollToEnd="True">
+                  SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="360">

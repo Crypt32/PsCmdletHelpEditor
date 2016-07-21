@@ -1,22 +1,21 @@
-﻿using System.Text;
-using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using CmdletHelpEditor.Controls;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class OutputVM : DependencyObject, INotifyPropertyChanged {
 		FlowDocument document;
 		Boolean xmlChecked = true, htmlSourceChecked, htmlChecked, textChecked;
 		Visibility busyControlVisible, rtbVisible, webBrowserVisible;
 
-		public OutputVM(ClosableTabItem parent) {
+		public OutputVM(ClosableModuleItem parent) {
 			BusyControlVisible = Visibility.Collapsed;
 			RtbVisible = Visibility.Collapsed;
 			WebBrowserVisible = Visibility.Collapsed;
@@ -26,7 +25,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 
 		public ICommand GenerateOutputCommand { get; set; }
 
-		public ClosableTabItem Tab { get; set; }
+		public ClosableModuleItem Tab { get; set; }
 
 		// dependency property is required for HtmlText property
 		public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register("HtmlText", typeof(String), typeof(OutputVM), new PropertyMetadata("<br />"));

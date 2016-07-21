@@ -1,12 +1,12 @@
-﻿using CmdletHelpEditor.API.MetaWeblog;
-using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Security;
 using System.Windows;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.MetaWeblog;
+using CmdletHelpEditor.API.Tools;
 
-namespace CmdletHelpEditor.API.BaseClasses {
+namespace CmdletHelpEditor.API.Models {
 	public class ProviderInformation : INotifyPropertyChanged {
 		String provName, url, userName, password;
 		Int32 postCount = 50;

@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using CmdletHelpEditor.API.BaseClasses;
 using System;
 using System.Xml;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
 	static class XmlFormatConverter {

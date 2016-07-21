@@ -8,7 +8,7 @@
 		<ResourceDictionary Source="ClosableTabItem.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Wpf.OfficeTheme;component/OfficeTheme.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-	<Color x:Key="TabPanelBackgroundColorBase">Transparent</Color>
+    <Color x:Key="TabPanelBackgroundColorBase">#BEDAFE</Color>
 	<Color x:Key="LineButtonBackgroundColorBright">LightGoldenrodYellow</Color>
 	<Color x:Key="LineButtonBackgroundColorDark">#FAEEB1</Color>
 	<Color x:Key="LineButtonBackgroundColorDisabledBright">#EEE</Color>

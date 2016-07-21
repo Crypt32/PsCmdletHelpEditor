@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using CmdletHelpEditor.API.BaseClasses;
 using CodeKicker.BBCode;
 using System;
 using System.Collections;
@@ -13,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
 	static class XmlProcessor {

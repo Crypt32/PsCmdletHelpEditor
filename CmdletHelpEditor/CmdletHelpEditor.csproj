@@ -139,39 +139,44 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="API\BaseClasses\CommandParameterInfo2.cs" />
-    <Compile Include="API\BaseClasses\CommandParameterSetInfo2.cs" />
-    <Compile Include="API\BaseClasses\OnlinePublishEntry.cs" />
-    <Compile Include="API\BaseClasses\OnlinePublishStatusEnum.cs" />
+    <Compile Include="API\MetaWeblog\BloggerClient.cs" />
+    <Compile Include="API\Models\CommandParameterInfo2.cs" />
+    <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
+    <Compile Include="API\Models\OnlinePublishEntry.cs" />
+    <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
-    <Compile Include="API\ViewModel\AppCommands.cs" />
-    <Compile Include="API\BaseClasses\ProviderInformation.cs" />
+    <Compile Include="API\Utility\SavePendingEventArgs.cs" />
+    <Compile Include="API\Utility\SavePendingEventHandler.cs" />
+    <Compile Include="API\ViewModels\AppCommands.cs" />
+    <Compile Include="API\Models\ProviderInformation.cs" />
     <Compile Include="API\Converters\MultiParamConverter.cs" />
     <Compile Include="API\Tools\ParserType.cs" />
     <Compile Include="API\Tools\Strings.cs" />
     <Compile Include="API\Tools\Crypt.cs" />
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
-    <Compile Include="API\ViewModel\MetaWeblogCommands.cs" />
-    <Compile Include="API\ViewModel\OnlinePublishProgressVM.cs" />
-    <Compile Include="API\ViewModel\UIManager.cs" />
-    <Compile Include="API\ViewModel\FormatCommands.cs" />
+    <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
+    <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
+    <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
+    <Compile Include="API\ViewModels\UIManager.cs" />
+    <Compile Include="API\ViewModels\FormatCommands.cs" />
+    <Compile Include="API\ViewModels\ViewModelBase.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
-    <Compile Include="Controls\ClosableTabItem.cs" />
+    <Compile Include="API\Models\ClosableModuleItem.cs" />
     <Compile Include="Controls\ClosableTabControl.cs" />
     <Compile Include="Themes\ScrollableTabPanel.cs" />
     <Compile Include="UI\Dialogs\AboutBox.xaml.cs">
       <DependentUpon>AboutBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="API\BaseClasses\CmdletObject.cs" />
-    <Compile Include="API\BaseClasses\Example.cs" />
-    <Compile Include="API\BaseClasses\GeneralDescription.cs" />
-    <Compile Include="API\BaseClasses\ItemStatus.cs" />
-    <Compile Include="API\BaseClasses\ModuleObject.cs" />
-    <Compile Include="API\BaseClasses\ParameterDescription.cs" />
-    <Compile Include="API\BaseClasses\RelatedLinks.cs" />
-    <Compile Include="API\BaseClasses\SupportInfo.cs" />
+    <Compile Include="API\Models\CmdletObject.cs" />
+    <Compile Include="API\Models\Example.cs" />
+    <Compile Include="API\Models\GeneralDescription.cs" />
+    <Compile Include="API\Models\ItemStatus.cs" />
+    <Compile Include="API\Models\ModuleObject.cs" />
+    <Compile Include="API\Models\ParameterDescription.cs" />
+    <Compile Include="API\Models\RelatedLink.cs" />
+    <Compile Include="API\Models\SupportInfo.cs" />
     <Compile Include="API\Tools\HtmlProcessor.cs" />
     <Compile Include="API\Converters\NullToBooleanConverter.cs" />
     <Compile Include="API\Tools\PowerShellProcessor.cs" />
@@ -189,14 +194,14 @@
     <Compile Include="API\MetaWeblog\Post.cs" />
     <Compile Include="API\MetaWeblog\UserInfo.cs" />
     <Compile Include="API\MetaWeblog\XmlRpcFaultInfo.cs" />
-    <Compile Include="API\ViewModel\ParamVM.cs" />
-    <Compile Include="API\ViewModel\ExampleVM.cs" />
-    <Compile Include="API\ViewModel\RelatedLinkVM.cs" />
-    <Compile Include="API\ViewModel\ConfigVM.cs" />
-    <Compile Include="API\ViewModel\EditorVM.cs" />
-    <Compile Include="API\ViewModel\MainWindowVM.cs" />
-    <Compile Include="API\ViewModel\OutputVM.cs" />
-    <Compile Include="API\ViewModel\RelayCommand.cs" />
+    <Compile Include="API\ViewModels\ParamVM.cs" />
+    <Compile Include="API\ViewModels\ExampleVM.cs" />
+    <Compile Include="API\ViewModels\RelatedLinkVM.cs" />
+    <Compile Include="API\ViewModels\ConfigVM.cs" />
+    <Compile Include="API\ViewModels\EditorVM.cs" />
+    <Compile Include="API\ViewModels\MainWindowVM.cs" />
+    <Compile Include="API\ViewModels\OutputVM.cs" />
+    <Compile Include="API\ViewModels\RelayCommand.cs" />
     <Compile Include="UI\Dialogs\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>

@@ -1,15 +1,14 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.MetaWeblog;
+﻿using CmdletHelpEditor.API.MetaWeblog;
+using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace CmdletHelpEditor.API.ViewModel {
-    class OnlinePublishProgressVM : INotifyPropertyChanged {
+namespace CmdletHelpEditor.API.ViewModels {
+    class OnlinePublishProgressVM : ViewModelBase {
         ModuleObject module;
         Double pbValue;
         OnlinePublishEntry selectedEntry;
@@ -81,13 +80,5 @@ namespace CmdletHelpEditor.API.ViewModel {
                 Cmdlets.Add(new OnlinePublishEntry { Cmdlet = cmdlet });
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

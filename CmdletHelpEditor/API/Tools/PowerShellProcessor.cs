@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using CmdletHelpEditor.API.BaseClasses;
 using CmdletHelpEditor.Properties;
 using System;
 using System.Collections.Generic;
@@ -7,10 +6,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Threading.Tasks;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
 	static class PowerShellProcessor {
-		public static Int32? PsVersion;
+		public static Int32? PsVersion { get; set; }
 		static List<ModuleObject> ModuleList { get; set; }
 
 		static String getInvocationString(ModuleObject module, String cmds) {

@@ -1,9 +1,9 @@
-﻿using CmdletHelpEditor.Properties;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using CmdletHelpEditor.Properties;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class ConfigVM : DependencyObject {
 		public ConfigVM() {
 			SaveConfigCommand = new RelayCommand(SaveConfig);

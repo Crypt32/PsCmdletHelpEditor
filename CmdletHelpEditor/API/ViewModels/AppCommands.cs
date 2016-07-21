@@ -1,10 +1,4 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.Controls;
-using CmdletHelpEditor.UI.UserControls;
-using CmdletHelpEditor.UI.Windows;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,8 +7,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.UI.UserControls;
+using CmdletHelpEditor.UI.Windows;
+using Microsoft.Win32;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public class AppCommands {
 		readonly MainWindowVM _mwvm;
 		Boolean alreadyRaised;
@@ -60,17 +59,17 @@ namespace CmdletHelpEditor.API.ViewModel {
 			return obj != null;
 		}
 		void AddTab(Object obj) {
-			ClosableTabItem tab = UIManager.GenerateTab();
+			ClosableModuleItem tab = UIManager.GenerateTab();
 			_mwvm.Tabs.Add(tab);
 			tab.Focus();
 		}
 		void CloseTab(Object obj) {
-			if (obj as ClosableTabItem == null) { return; }
+			if (!(obj is ClosableModuleItem)) { return; }
 			if (_mwvm.SelectedTab.IsSaved) {
-				_mwvm.Tabs.Remove((ClosableTabItem)obj);
+				_mwvm.Tabs.Remove((ClosableModuleItem)obj);
 			} else {
-				if (testSaved((ClosableTabItem)obj)) {
-					_mwvm.Tabs.Remove((ClosableTabItem)obj);
+				if (testSaved((ClosableModuleItem)obj)) {
+					_mwvm.Tabs.Remove((ClosableModuleItem)obj);
 				}
 			}
 		}
@@ -78,7 +77,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 		void NewProject(Object obj) {
 			if (!testSaved(_mwvm.SelectedTab)) { return; }
 			if (_mwvm.SelectedTab == null) { AddTab(null); }
-			ClosableTabItem tab = _mwvm.SelectedTab;
+			ClosableModuleItem tab = _mwvm.SelectedTab;
 			Debug.Assert(tab != null, "tab != null");
 			tab.Module = null;
 			LoadModules(true);
@@ -100,7 +99,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 				fileName = (String)obj;
 			}
 			AddTab(null);
-			ClosableTabItem tab = _mwvm.SelectedTab;
+			ClosableModuleItem tab = _mwvm.SelectedTab;
 			UIManager.ShowBusy(tab, Strings.InfoCmdletsLoading);
 			try {
 				ModuleObject module = FileProcessor.ReadProjectFile(fileName);
@@ -108,7 +107,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 				tab.Module = module;
 				LoadCmdletsForProject(tab);
 			} catch (Exception e) {
-				Utils.MsgBox("Read error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Read error", e.Message);
 				
 			}
 		}
@@ -129,7 +128,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 			try {
 				FileProcessor.SaveProjectFile(_mwvm.SelectedTab, path);
 			} catch (Exception e) {
-				Utils.MsgBox("Save error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Save error", e.Message);
 				_mwvm.SelectedTab.ErrorInfo = e.Message;
 			}
 		}
@@ -163,7 +162,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 		}
 		void PublishHelpFile(Object obj) {
 			Object[] param = (Object[])obj;
-			ModuleObject module = ((ClosableTabItem)param[0]).Module;
+			ModuleObject module = ((ClosableModuleItem)param[0]).Module;
 			ProgressBar pb = ((MainWindow)param[1]).sb.pb;
 			SaveFileDialog dlg = new SaveFileDialog {
 				FileName = _mwvm.SelectedTab.Module.Name + ".Help.xml",
@@ -175,7 +174,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 				try {
 					FileProcessor.PublishHelpFile(dlg.FileName, module, pb);
 				} catch (Exception e) {
-					Utils.MsgBox("XML Write error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+					Utils.MsgBox("XML Write error", e.Message);
 				}
 			}
 		}
@@ -185,11 +184,11 @@ namespace CmdletHelpEditor.API.ViewModel {
         }
 
 		public async void LoadCmdlets(Object helpPath, Boolean importCBH) {
-			ClosableTabItem previousTab = _mwvm.SelectedTab;
+			ClosableModuleItem previousTab = _mwvm.SelectedTab;
 			UIElement previousElement = ((Grid)previousTab.Content).Children[0];
 			String cmd = Utils.GetCommandTypes();
 			if (String.IsNullOrEmpty(cmd)) {
-				Utils.MsgBox("Error", Strings.E_EmptyCmds, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error", Strings.E_EmptyCmds);
 				return;
 			}
 			UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
@@ -207,7 +206,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 				_mwvm.SelectedModule = null;
 				UIManager.ShowEditor(previousTab);
 			} catch (Exception e) {
-				Utils.MsgBox("Error while loading cmdlets", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error while loading cmdlets", e.Message);
 				_mwvm.SelectedTab.ErrorInfo = e.Message;
 				UIManager.RestoreControl(previousTab, previousElement);
 			}
@@ -215,7 +214,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 		async void LoadModules(Object obj) {
 			// method call from ICommand is allowed only when module selector is active
 			// so skip checks.
-			ClosableTabItem previousTab = _mwvm.SelectedTab;
+			ClosableModuleItem previousTab = _mwvm.SelectedTab;
 			UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
 			_mwvm.Modules.Clear();
 			try {
@@ -226,7 +225,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 					_mwvm.Modules.Add(item);
 				}
 			} catch (Exception e) {
-				Utils.MsgBox("Error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error", e.Message);
 				previousTab.ErrorInfo = e.Message;
 			}
 			UIManager.ShowModuleList(previousTab);
@@ -234,7 +233,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 		async void LoadModuleFromFile(Object obj) {
 			// method call from ICommand is allowed only when module selector is active
 			// so skip checks.
-			ClosableTabItem previousTab = _mwvm.SelectedTab;
+			ClosableModuleItem previousTab = _mwvm.SelectedTab;
 			OpenFileDialog dlg = new OpenFileDialog {
 				DefaultExt = ".psm1",
 				Filter = "PowerShell module files (*.psm1, *.psd1)|*.psm1;*.psd1"
@@ -249,15 +248,15 @@ namespace CmdletHelpEditor.API.ViewModel {
 					module.ModulePath = dlg.FileName;
 				}
 			} catch (Exception e) {
-				Utils.MsgBox("Import error", e.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Import error", e.Message);
 				previousTab.ErrorInfo = e.Message;
 			}
 			UIManager.ShowModuleList(previousTab);
 		}
-		async void LoadCmdletsForProject(ClosableTabItem tab) {
+		async void LoadCmdletsForProject(ClosableModuleItem tab) {
 			String cmd = Utils.GetCommandTypes();
 			if (String.IsNullOrEmpty(cmd)) {
-				Utils.MsgBox("Error", Strings.E_EmptyCmds, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error", Strings.E_EmptyCmds);
 				return;
 			}
 			if (FileProcessor.FindModule(tab.Module.Name)) {
@@ -273,7 +272,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 			} catch (Exception e) {
 				String message = e.Message + "\n\nYou still can use the module project in offline mode";
 				message += "\nHowever certain functionality may not be available.";
-				Utils.MsgBox("Error while loading cmdlets", message, MessageBoxButton.OK, MessageBoxImage.Error);
+				Utils.MsgBox("Error while loading cmdlets", message);
 				tab.ErrorInfo = e.Message;
 				foreach (CmdletObject cmdlet in tab.Module.Cmdlets) {
 					cmdlet.GeneralHelp.Status = ItemStatus.Missing;
@@ -303,15 +302,15 @@ namespace CmdletHelpEditor.API.ViewModel {
 		Boolean CanPublish(Object obj) {
 			Object[] param = (object[]) obj;
 			return param[0] != null &&
-				   ((ClosableTabItem)param[0]).Module != null &&
-				   ((ClosableTabItem)param[0]).Module.Cmdlets.Count > 0;
+				   ((ClosableModuleItem)param[0]).Module != null &&
+				   ((ClosableModuleItem)param[0]).Module.Cmdlets.Count > 0;
 		}
         Boolean canPublishOnline(Object obj) {
             return _mwvm.SelectedTab != null && _mwvm.SelectedTab.Module != null && _mwvm.SelectedTab.Module.Provider != null;
         }
 
 		// utility
-		Boolean testSaved(ClosableTabItem tab) {
+		Boolean testSaved(ClosableModuleItem tab) {
 			if (tab == null || tab.IsSaved || tab.Module == null) { return true; }
 			tab.Focus();
 			MessageBoxResult mbxResult = Utils.MsgBox("PS Cmdlet Help Editor", Strings.InfoSaveRequired, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);

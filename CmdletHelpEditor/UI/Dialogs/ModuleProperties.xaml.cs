@@ -1,7 +1,5 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.MetaWeblog;
+﻿using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +7,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor.UI.Dialogs {
 	/// <summary>
@@ -123,7 +123,11 @@ namespace CmdletHelpEditor.UI.Dialogs {
 					cmdlet.URL = _mwvm.SelectedTab.Module.Provider.ProviderName.ToLower() == "codeplex"
 						? _mwvm.SelectedTab.Module.Provider.Blog.url + "wikipage?title=" + cmdlet.Name
 						: posts[index].Permalink;
-				}
+                    if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
+                        var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
+                        cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);
+                    }
+                }
 			}
 		}
 		void SaveClick(object Sender, RoutedEventArgs e) {

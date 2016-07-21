@@ -1,8 +1,8 @@
-﻿using CmdletHelpEditor.API.BaseClasses;
-using CmdletHelpEditor.API.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor.UI.Windows {
     /// <summary>

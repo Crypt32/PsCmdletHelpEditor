@@ -1,10 +1,10 @@
-﻿using System.Windows;
-using CmdletHelpEditor.UI.Windows;
-using System;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.UI.Windows;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public static class FormatCommands {
 		static FormatCommands() {
 			SetCommonFormatCommand = new RelayCommand<Object>(SetFormat, CanFormat);
@@ -36,11 +36,16 @@ namespace CmdletHelpEditor.API.ViewModel {
 		}
 		static Boolean CanFormat(Object obj) {
 			//return true;
-			if (obj == null) { return false; }
-			Object[] param = (Object[])obj;
-			var felement = FocusManager.GetFocusedElement((MainWindow)param[0]);
-			if (felement == null) { return false; }
-			return felement is TextBox && (String)((TextBox)felement).Tag == "AllowFormat";
+		    try {
+		        if (obj == null) { return false; }
+		        Object[] param = (Object[])obj;
+		        var felement = FocusManager.GetFocusedElement((MainWindow)param[0]);
+		        if (felement == null) { return false; }
+		        return felement is TextBox && (String)((TextBox)felement).Tag == "AllowFormat";
+		    }
+		    catch (Exception e) {
+		        return false;
+		    }
 		}
 	}
 }

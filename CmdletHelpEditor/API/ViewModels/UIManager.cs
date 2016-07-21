@@ -1,15 +1,15 @@
-﻿using CmdletHelpEditor.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.UI.Dialogs;
 using CmdletHelpEditor.UI.UserControls;
 using CmdletHelpEditor.UI.UserControls.Parts;
 using CmdletHelpEditor.UI.Windows;
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace CmdletHelpEditor.API.ViewModel {
+namespace CmdletHelpEditor.API.ViewModels {
 	public static class UIManager {
 		public static ICommand AboutCommand {
 			get { return new RelayCommand(ShowAbout); }
@@ -57,11 +57,11 @@ namespace CmdletHelpEditor.API.ViewModel {
 		}
 
 		static Boolean CanShowModuleProperties(Object obj) {
-			if (!(obj is ClosableTabItem)) { return false; }
-			return ((ClosableTabItem)obj).Module != null;
+			if (!(obj is ClosableModuleItem)) { return false; }
+			return ((ClosableModuleItem)obj).Module != null;
 		}
-		public static ClosableTabItem GenerateTab() {
-			ClosableTabItem cti = new ClosableTabItem {
+		public static ClosableModuleItem GenerateTab() {
+			ClosableModuleItem cti = new ClosableModuleItem {
 				Header = "untitled",
 				IsSaved = true,
 				IsClosable = true,
@@ -80,7 +80,7 @@ namespace CmdletHelpEditor.API.ViewModel {
 			((Grid)tab.Content).Children.Clear();
 			((Grid)tab.Content).Children.Add(new ModuleSelectorControl());
 		}
-		public static void ShowEditor(ClosableTabItem tab) {
+		public static void ShowEditor(ClosableModuleItem tab) {
 			MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
 			mwvm.SelectedModule = null;
 			((Grid)tab.Content).Children.Clear();

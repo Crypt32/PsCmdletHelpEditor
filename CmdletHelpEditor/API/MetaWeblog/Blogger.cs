@@ -3,6 +3,7 @@ using System.Security;
 using CmdletHelpEditor.API.Tools;
 using CookComputing.XmlRpc;
 using System;
+using System.Reflection;
 using System.Windows;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
@@ -20,7 +21,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
 			metaWeblogProvider = (IMetaWeblogProvider)XmlRpcProxyGen.Create(typeof(IMetaWeblogProvider));
 			clientProtocol = (XmlRpcClientProtocol)metaWeblogProvider;
 			clientProtocol.Url = url;
-            clientProtocol.UserAgent = "PS Cmdlet Help Editor";
+            clientProtocol.UserAgent = "PS Cmdlet Help Editor/" + Assembly.GetExecutingAssembly().GetName().Version;
 			clientProtocol.NonStandard = XmlRpcNonStandard.All;
 		}
 

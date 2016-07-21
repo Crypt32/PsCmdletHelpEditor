@@ -6,8 +6,9 @@
              xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
              xmlns:UserControls="clr-namespace:CmdletHelpEditor.UI.UserControls"
              xmlns:tools="clr-namespace:CmdletHelpEditor.API.Tools"
+             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
              mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance c:ClosableTabItem}"
+			 d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
 			 Name="docuc">
 	<DockPanel>
 		<Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="Navy">

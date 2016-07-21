@@ -1,4 +1,4 @@
-﻿namespace CmdletHelpEditor.API.BaseClasses {
+﻿namespace CmdletHelpEditor.API.Models {
     enum OnlinePublishStatusEnum {
         Pending = 0,
         Succeed,
