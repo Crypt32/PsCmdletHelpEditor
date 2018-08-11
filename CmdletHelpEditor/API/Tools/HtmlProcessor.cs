@@ -311,6 +311,16 @@ namespace CmdletHelpEditor.API.Tools {
 				if (cmdlet.SupportInformation.Win2012R2StdChecked) { SB.Append("	<li>Windows Server 2012 R2 Standard</li>" + _nl); }
 				if (cmdlet.SupportInformation.Win2012R2DCChecked) { SB.Append("	<li>Windows Server 2012 R2 Datacenter</li>" + _nl); }
 			}
+			if (cmdlet.SupportInformation.Win2016Checked) {
+				SB.Append("	<li>Windows Server 2016 all editions</li>" + _nl);
+			} else {
+				if (cmdlet.SupportInformation.Win2016StdChecked) {
+					SB.Append("	<li>Windows Server 2016 Standard</li>" + _nl);
+				}
+				if (cmdlet.SupportInformation.Win2016DCChecked) {
+					SB.Append("	<li>Windows Server 2016 Datacenter</li>" + _nl);
+				}
+			}
 			SB.Append("</ul>");
 		}
 
