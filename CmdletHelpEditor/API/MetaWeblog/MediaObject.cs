@@ -1,9 +1,13 @@
 ﻿using System;
+using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
-	public class MediaObject {
-		public String name { get; set; }
-		public String type { get; set; }
-		public Byte[] bits { get; set; }
-	}
+    public class MediaObject {
+        [XmlRpcMember("name")]
+        public String Name { get; set; }
+        [XmlRpcMember("type")]
+        public String Type { get; set; }
+        [XmlRpcMember("bits")]
+        public Byte[] Bits { get; set; }
+    }
 }

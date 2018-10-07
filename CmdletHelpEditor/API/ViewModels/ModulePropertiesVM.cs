@@ -21,49 +21,49 @@ namespace CmdletHelpEditor.API.ViewModels {
         public ObservableCollection<BlogInfo> WebSites { get; set; }
 
         public Boolean UseSupports {
-            get { return useSupports; }
+            get => useSupports;
             set {
                 useSupports = value;
                 OnPropertyChanged("UseSupports");
             }
         }
         public Boolean UseProvider {
-            get { return useProvider; }
+            get => useProvider;
             set {
                 useProvider = value;
                 OnPropertyChanged("UseProvider");
             }
         }
         public Boolean ProvSelected {
-            get { return provSelected; }
+            get => provSelected;
             set {
                 provSelected = value;
                 OnPropertyChanged("ProvSelected");
             }
         }
         public Boolean UrlEditable {
-            get { return urlEditable; }
+            get => urlEditable;
             set {
                 urlEditable = value;
                 OnPropertyChanged("UrlEditable");
             }
         }
         public Boolean UserEditable {
-            get { return userEditable; }
+            get => userEditable;
             set {
                 userEditable = value;
                 OnPropertyChanged("UserEditable");
             }
         }
         public Boolean BlogsLoaded {
-            get { return blogsLoaded; }
+            get => blogsLoaded;
             set {
                 blogsLoaded = value;
                 OnPropertyChanged("BlogsLoaded");
             }
         }
         public Boolean BlogSelected {
-            get { return blogSelected; }
+            get => blogSelected;
             set {
                 blogSelected = value;
                 OnPropertyChanged("BlogSelected");

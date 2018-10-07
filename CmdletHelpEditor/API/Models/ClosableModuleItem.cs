@@ -7,40 +7,44 @@ using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.API.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
-	public class ClosableModuleItem : TabItem, INotifyPropertyChanged {
+    public class ClosableModuleItem : TabItem, INotifyPropertyChanged {
         ModuleObject module;
         Boolean isSaved;
         String errorInfo;
 
         // must be DependencyProperty
-        public static readonly DependencyProperty IsClosableProperty = DependencyProperty.Register("IsClosable", typeof(Boolean), typeof(ClosableModuleItem), new FrameworkPropertyMetadata(false));
+        public static readonly DependencyProperty IsClosableProperty = DependencyProperty.Register(
+            nameof(IsClosable),
+            typeof(Boolean),
+            typeof(ClosableModuleItem),
+            new FrameworkPropertyMetadata(false));
 
-	    void ModuleOnPendingSave(Object source, SavePendingEventArgs e) {
+        void ModuleOnPendingSave(Object source, SavePendingEventArgs e) {
             IsSaved = false;
-	    }
+        }
 
         public Boolean IsClosable { 
- 			get { return (Boolean)GetValue(IsClosableProperty); } 
-			set { SetValue(IsClosableProperty, value); } 
- 		}
+            get => (Boolean)GetValue(IsClosableProperty);
+            set => SetValue(IsClosableProperty, value);
+        }
 
         public Boolean IsSaved {
-			get { return isSaved; }
-			set {
+            get => isSaved;
+            set {
                 if (isSaved != value) {
                     isSaved = value;
                     Header = isSaved
                         ? Header.ToString().Replace("*", String.Empty)
                         : Header + "*";
-                    OnPropertyChanged("IsSaved");
+                    OnPropertyChanged(nameof(IsSaved));
                 }
             }
-		}
-		public ModuleObject Module {
-	        get { return module; }
+        }
+        public ModuleObject Module {
+            get => module;
             set {
                 module = value;
-                OnPropertyChanged("Module");
+                OnPropertyChanged(nameof(Module));
                 if (value != null) {
                     module.PendingSave += ModuleOnPendingSave;
                     if (!String.IsNullOrEmpty(value.ProjectPath)) {
@@ -49,20 +53,18 @@ namespace CmdletHelpEditor.API.Models {
                     }
                 }
             }
-	    }
-		public String ErrorInfo {
-			get { return errorInfo; }
-			set {
+        }
+        public String ErrorInfo {
+            get => errorInfo;
+            set {
                 errorInfo = value;
-                OnPropertyChanged("ErrorInfo");
-			}
-		}
-		public EditorVM EditorContext { get; set; }
+                OnPropertyChanged(nameof(ErrorInfo));
+            }
+        }
+        public EditorVM EditorContext { get; set; }
         void OnPropertyChanged(String name) {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         public event PropertyChangedEventHandler PropertyChanged;
     }

@@ -9,8 +9,8 @@ namespace CmdletHelpEditor.API.Models {
 		[XmlIgnore]
 		public Type ParameterType { get; set; }
 		public String TypeString {
-			get { return typeString; }
-			set {
+			get => typeString;
+		    set {
 				typeString = value;
 				ParameterType = Type.GetType(typeString);
 			}

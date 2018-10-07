@@ -1,11 +1,18 @@
 ﻿using System;
+using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
-	public class CategoryInfo {
-		public Int32 categoryid { get; set; }
-		public String title { get; set; }
-		public String description { get; set; }
-		public String htmlUrl { get; set; }
-		public String rssUrl { get; set; }
-	}
+    public class CategoryInfo {
+        [XmlRpcMember("categoryid")]
+        public Int32 CategoryID { get; set; }
+        [XmlRpcMember("title")]
+        public String Title { get; set; }
+        [XmlRpcMember("description")]
+        public String Description { get; set; }
+        [XmlRpcMember("htmlUrl")]
+        public String HtmlUrl { get; set; }
+
+        [XmlRpcMember("rssUrl")]
+        public String RssUrl { get; set; } = String.Empty;
+    }
 }

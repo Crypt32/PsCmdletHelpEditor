@@ -140,6 +140,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="API\MetaWeblog\BloggerClient.cs" />
+    <Compile Include="API\MetaWeblog\MediaObject.cs" />
+    <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
@@ -190,8 +192,6 @@
     <Compile Include="API\MetaWeblog\CategoryInfo.cs" />
     <Compile Include="API\MetaWeblog\IMetaWeblogProvider.cs" />
     <Compile Include="API\MetaWeblog\BlogInfo.cs" />
-    <Compile Include="API\MetaWeblog\MediaObject.cs" />
-    <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
     <Compile Include="API\MetaWeblog\Post.cs" />
     <Compile Include="API\MetaWeblog\UserInfo.cs" />
     <Compile Include="API\MetaWeblog\XmlRpcFaultInfo.cs" />
@@ -202,7 +202,6 @@
     <Compile Include="API\ViewModels\EditorVM.cs" />
     <Compile Include="API\ViewModels\MainWindowVM.cs" />
     <Compile Include="API\ViewModels\OutputVM.cs" />
-    <Compile Include="API\ViewModels\RelayCommand.cs" />
     <Compile Include="UI\Dialogs\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>

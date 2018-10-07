@@ -17,7 +17,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         public BloggerClient(ProviderInformation provider) {
             _userName = provider.UserName;
             _password = Crypt.DecryptPassword(provider.Password);
-            _blogId = provider.Blog.blogid;
+            _blogId = provider.Blog.BlogID;
 
             _metaWeblogProvider = (IMetaWeblogProvider)XmlRpcProxyGen.Create(typeof(IMetaWeblogProvider));
             XmlRpcClientProtocol clientProtocol = (XmlRpcClientProtocol)_metaWeblogProvider;

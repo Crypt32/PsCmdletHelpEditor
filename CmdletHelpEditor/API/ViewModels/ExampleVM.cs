@@ -1,36 +1,37 @@
-﻿using CmdletHelpEditor.API.Models;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public class ExampleVM : INotifyPropertyChanged {
         CmdletObject cmdlet;
-		Example currentExample;
+        Example currentExample;
 
-	    public ExampleVM() {
-			NewExampleCommand = new RelayCommand(newExample, canNewExample);
-			RemoveExampleCommand = new RelayCommand(removeExample, canRemoveExample);
-			UpExampleCommand = new RelayCommand(upExample, canUpExample);
-			DownExampleCommad = new RelayCommand(downExample, canDownExample);
-		}
+        public ExampleVM() {
+            NewExampleCommand = new RelayCommand(newExample, canNewExample);
+            RemoveExampleCommand = new RelayCommand(removeExample, canRemoveExample);
+            UpExampleCommand = new RelayCommand(upExample, canUpExample);
+            DownExampleCommad = new RelayCommand(downExample, canDownExample);
+        }
         
-		public ICommand NewExampleCommand { get; set; }
-		public ICommand RemoveExampleCommand { get; set; }
-		public ICommand UpExampleCommand { get; set; }
-		public ICommand DownExampleCommad { get; set; }
-		public Boolean ExampleTextBoxEnabled { get; set; }
-	    public Example CurrentExample {
-			get { return currentExample; }
-			set {
-				currentExample = value;
+        public ICommand NewExampleCommand { get; set; }
+        public ICommand RemoveExampleCommand { get; set; }
+        public ICommand UpExampleCommand { get; set; }
+        public ICommand DownExampleCommad { get; set; }
+        public Boolean ExampleTextBoxEnabled { get; set; }
+        public Example CurrentExample {
+            get => currentExample;
+            set {
+                currentExample = value;
                 ExampleTextBoxEnabled = currentExample != null;
                 OnPropertyChanged("CurrentExample");
                 OnPropertyChanged("ExampleTextBoxEnabled");
-			}
-		}
-		
-		void newExample(Object obj) {
+            }
+        }
+        
+        void newExample(Object obj) {
             var example = new Example();
             cmdlet.Examples.Add(example);
             CurrentExample = example;
@@ -38,7 +39,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean canNewExample(Object obj) {
             return cmdlet != null;
         }
-		void removeExample(Object obj) {
+        void removeExample(Object obj) {
             Int32 index = cmdlet.Examples.IndexOf(CurrentExample);
             cmdlet.Examples.Remove(CurrentExample);
             if (index > 0) {
@@ -48,7 +49,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean canRemoveExample(Object obj) {
             return CurrentExample != null;
         }
-		void upExample(Object obj) {
+        void upExample(Object obj) {
             Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
             Example temp = cmdlet.Examples[old - 1];
             cmdlet.Examples[old - 1] = CurrentExample;
@@ -58,7 +59,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean canUpExample(Object obj) {
             return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) > 0;
         }
-		void downExample(Object obj) {
+        void downExample(Object obj) {
             Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
             Example temp = cmdlet.Examples[old + 1];
             cmdlet.Examples[old + 1] = CurrentExample;
@@ -77,11 +78,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         }
 
         void OnPropertyChanged(String name) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (handler != null) {
-				handler(this, new PropertyChangedEventArgs(name));
-			}
-		}
-		public event PropertyChangedEventHandler PropertyChanged;
-	}
+            PropertyChangedEventHandler handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
 }

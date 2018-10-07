@@ -5,13 +5,6 @@
     x:Uid="idAboutBox"
     Style="{StaticResource AboutDialogStyle}" WindowStartupLocation="CenterOwner" x:ClassModifier="internal">
     <Window.Resources>
-        <XmlDataProvider x:Key="AboutProvider" XPath="ApplicationInfo" IsAsynchronous="False" IsInitialLoadEnabled="True">
-            <x:XData>
-                <ApplicationInfo xmlns="">
-					<Link Uri="https://pscmdlethelpeditor.codeplex.com/">More Info</Link>
-                </ApplicationInfo>
-            </x:XData>
-        </XmlDataProvider>
         <Image x:Key="AboutLogo" Height="96" Width="96" Source="/Images/logo.png" />
         
         <Style x:Key="DisplayAreaStyle" TargetType="{x:Type StackPanel}">
@@ -39,19 +32,19 @@
             <Setter Property="Control.Padding" Value="0" />
             <Setter Property="Control.VerticalAlignment" Value="Center" />
         </Style>
-		<Style x:Key="ReadOnlyDescStyle" TargetType="{x:Type TextBox}">
-			<Setter Property="MinLines" Value="6" />
-			<Setter Property="MaxLines" Value="6" />
-			<Setter Property="IsReadOnly" Value="True" />
-			<Setter Property="TextWrapping" Value="WrapWithOverflow" />
-			<Setter Property="VerticalScrollBarVisibility" Value="Visible" />
-		</Style>
-	</Window.Resources>
+        <Style x:Key="ReadOnlyDescStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="MinLines" Value="6" />
+            <Setter Property="MaxLines" Value="6" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Visible" />
+        </Style>
+    </Window.Resources>
     <StackPanel x:Uid="clientArea" Style="{StaticResource BackgroundStyle}">
-		<DockPanel Background="#FF2570BE">
-			<StaticResource ResourceKey="AboutLogo" />
-			<TextBlock Text="PS Cmdlet Help Editor" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="GhostWhite" FontSize="36" FontWeight="Bold"/>
-		</DockPanel>
+        <DockPanel Background="#FF2570BE">
+            <StaticResource ResourceKey="AboutLogo" />
+            <TextBlock Text="PS Cmdlet Help Editor" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="GhostWhite" FontSize="36" FontWeight="Bold"/>
+        </DockPanel>
         <StackPanel x:Uid="displayArea" Style="{StaticResource DisplayAreaStyle}" 
                     DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=OneTime}">
             <Label x:Name="productName" x:Uid="productName" 
@@ -68,8 +61,8 @@
             <TextBox x:Name="description" x:Uid="description" Text="{Binding Mode=OneTime, Path=Description}"
                      Style="{StaticResource ReadOnlyDescStyle}" />
             <DockPanel x:Uid="buttonArea">
-				<Button x:Name="okButton" x:Uid="okButton" Content="OK" MinWidth="75" DockPanel.Dock="Right" Margin="0,5" IsCancel="True" IsDefault="True" Click="OkButton_OnClick"/>
-				<Label x:Name="productLink" x:Uid="productLink" Style="{StaticResource LinkLabelStyle}" >
+                <Button x:Name="okButton" x:Uid="okButton" Content="OK" MinWidth="75" DockPanel.Dock="Right" Margin="0,5" IsCancel="True" IsDefault="True" Click="OkButton_OnClick"/>
+                <Label x:Name="productLink" x:Uid="productLink" Style="{StaticResource LinkLabelStyle}" >
                     <Hyperlink x:Name="hyperlink" x:Uid="hyperlink" NavigateUri="{Binding Mode=OneTime, Path=LinkUri}"  Style="{StaticResource LinkLabelStyle}"
                                RequestNavigate="HyperlinkRequestNavigate">
                         <TextBlock Text="{Binding Mode=OneTime, Path=LinkText}" />

@@ -44,7 +44,7 @@ namespace CmdletHelpEditor.Controls {
             var scrollToEndHandler = new NotifyCollectionChangedEventHandler((s1, e1) => {
                 if (listView.Items.Count > 0)
                         {
-                    object lastItem = listView.Items[listView.Items.Count - 1];
+                    Object lastItem = listView.Items[listView.Items.Count - 1];
                     listViewItems.MoveCurrentTo(lastItem);
                     listView.ScrollIntoView(lastItem);
                 }

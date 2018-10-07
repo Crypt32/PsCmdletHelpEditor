@@ -3,73 +3,71 @@ using System.ComponentModel;
 
 namespace CmdletHelpEditor.API.Models {
     public class Example : INotifyPropertyChanged {
-		String ename, cmd, description, output;
+        String ename, cmd, description, output;
         readonly Int32 _uid;
 
         public Example() {
             _uid = Guid.NewGuid().GetHashCode();
         }
         public String Name {
-			get { return ename ?? String.Empty; }
-			set {
+            get => ename ?? String.Empty;
+            set {
                 if (ename != value) {
                     ename = value;
-                    OnPropertyChanged("Name");
+                    OnPropertyChanged(nameof(Name));
                 }
-			}
-		}
-		public String Cmd {
-			get { return cmd ?? String.Empty; }
-			set {
+            }
+        }
+        public String Cmd {
+            get => cmd ?? String.Empty;
+            set {
                 if (cmd != value) {
                     cmd = value;
-                    OnPropertyChanged("Cmd");
+                    OnPropertyChanged(nameof(Name));
                 }
-			}
-		}
-		public String Description {
-			get { return description ?? String.Empty; }
-			set {
+            }
+        }
+        public String Description {
+            get => description ?? String.Empty;
+            set {
                 if (description != value) {
                     description = value;
-                    OnPropertyChanged("Description");
+                    OnPropertyChanged(nameof(Description));
                 }
-			}
-		}
-		public String Output {
-			get { return output ?? String.Empty; }
-			set {
+            }
+        }
+        public String Output {
+            get => output ?? String.Empty;
+            set {
                 if (output != value) {
                     output = value;
-                    OnPropertyChanged("Output");
+                    OnPropertyChanged(nameof(Output));
                 }
-			}
-		}
+            }
+        }
 
-        public override Boolean Equals(object obj) {
+        public override Boolean Equals(Object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((Example)obj);
         }
 
-        protected bool Equals(Example other) {
+        protected Boolean Equals(Example other) {
             return _uid == other._uid;
         }
 
-        public override int GetHashCode() {
+        public override Int32 GetHashCode() {
             unchecked {
                 return _uid.GetHashCode() * 397;
             }
         }
 
         void OnPropertyChanged(String name) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (handler != null) {
-				handler(this, new PropertyChangedEventArgs(name));
-			}
-		}
+            PropertyChangedEventHandler handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
-		public event PropertyChangedEventHandler PropertyChanged;
-	}
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
 }

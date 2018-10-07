@@ -8,32 +8,30 @@ namespace CmdletHelpEditor.API.Models {
         String statusText = "Pending";
 
         public CmdletObject Cmdlet {
-            get { return cmdlet; }
+            get => cmdlet;
             set {
                 cmdlet = value;
-                OnPropertyChanged("Cmdlet");
+                OnPropertyChanged(nameof(Cmdlet));
             }
         }
         public OnlinePublishStatusEnum Status {
-            get { return status; }
+            get => status;
             set {
                 status = value;
-                OnPropertyChanged("Status");
+                OnPropertyChanged(nameof(Status));
             }
         }
         public String StatusText {
-            get { return statusText; }
+            get => statusText;
             set {
                 statusText = value;
-                OnPropertyChanged("StatusText");
+                OnPropertyChanged(nameof(StatusText));
             }
         }
 
         void OnPropertyChanged(String name) {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         public event PropertyChangedEventHandler PropertyChanged;
     }

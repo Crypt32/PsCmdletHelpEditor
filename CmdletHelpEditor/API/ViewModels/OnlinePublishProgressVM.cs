@@ -1,11 +1,12 @@
-﻿using CmdletHelpEditor.API.MetaWeblog;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.API.MetaWeblog;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
     class OnlinePublishProgressVM : ViewModelBase {
@@ -23,17 +24,17 @@ namespace CmdletHelpEditor.API.ViewModels {
         public ObservableCollection<OnlinePublishEntry> Cmdlets { get; set; }
 
         public OnlinePublishEntry SelectedEntry {
-            get { return selectedEntry; }
+            get => selectedEntry;
             set {
                 selectedEntry = value;
-                OnPropertyChanged("SelectedEntry");
+                OnPropertyChanged(nameof(SelectedEntry));
             }
         }
         public Double PbValue {
-            get { return pbValue; }
+            get => pbValue;
             set {
                 pbValue = value;
-                OnPropertyChanged("PbValue");
+                OnPropertyChanged(nameof(PbValue));
             }
         }
 
