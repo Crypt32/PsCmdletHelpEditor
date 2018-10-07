@@ -1,32 +1,32 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<SolidColorBrush x:Key="MenuBackgroundNormal" Color="#9FBEF4"/>
-	<SolidColorBrush x:Key="LightBorderBrush" Color="#f2f8ff"/>
-	<SolidColorBrush x:Key="NormalBorderBrush" Color="#add1ff"/>
-	<SolidColorBrush x:Key="DisabledTextBlockOpacityMask" Color="#A0FFFFFF"/>
-	<SolidColorBrush x:Key="PanelBackgroundBrush" Color="#d6e8ff"/>
-	<LinearGradientBrush x:Key="NormalBlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Color="#DCEBFD" Offset="0" />
-			<GradientStop Color="#80A8E1" Offset="1" />
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="PressedBlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Color="#FFED91" Offset="0" />
-			<GradientStop Color="#FED22B" Offset="0.5" />
-			<GradientStop Color="#FCA301" Offset="1" />
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabHover" EndPoint="0,1" StartPoint="0,0">
-		<GradientStop Color="#FEFBEC" Offset="0" />
-		<GradientStop Color="#FEDC5D" Offset="0.5" />
-		<GradientStop Color="#FEECA8" Offset="1" />
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="SubmenuHover" EndPoint="0,1" StartPoint="0,0">
-		<GradientStop Color="#FEFEF9" Offset="0" />
-		<GradientStop Color="#FEEA9F" Offset="0.49" />
-		<GradientStop Color="#FEDC5D" Offset="0.5" />
-		<GradientStop Color="#FEECA8" Offset="1" />
-	</LinearGradientBrush>
+    <SolidColorBrush x:Key="MenuBackgroundNormal" Color="#9FBEF4"/>
+    <SolidColorBrush x:Key="LightBorderBrush" Color="#f2f8ff"/>
+    <SolidColorBrush x:Key="NormalBorderBrush" Color="#add1ff"/>
+    <SolidColorBrush x:Key="DisabledTextBlockOpacityMask" Color="#A0FFFFFF"/>
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#d6e8ff"/>
+    <LinearGradientBrush x:Key="NormalBlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#DCEBFD" Offset="0" />
+            <GradientStop Color="#80A8E1" Offset="1" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PressedBlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FFED91" Offset="0" />
+            <GradientStop Color="#FED22B" Offset="0.5" />
+            <GradientStop Color="#FCA301" Offset="1" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabHover" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FEFBEC" Offset="0" />
+        <GradientStop Color="#FEDC5D" Offset="0.5" />
+        <GradientStop Color="#FEECA8" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SubmenuHover" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FEFEF9" Offset="0" />
+        <GradientStop Color="#FEEA9F" Offset="0.49" />
+        <GradientStop Color="#FEDC5D" Offset="0.5" />
+        <GradientStop Color="#FEECA8" Offset="1" />
+    </LinearGradientBrush>
 </ResourceDictionary>

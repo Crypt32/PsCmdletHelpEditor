@@ -333,7 +333,7 @@ namespace CmdletHelpEditor.API.Tools {
         }
 
         // writer
-        async public static Task XmlGenerateHelp(StringBuilder SB, IEnumerable<CmdletObject> cmdlets, ProgressBar pb, Boolean isOffline) {
+        public static async Task XmlGenerateHelp(StringBuilder SB, IEnumerable<CmdletObject> cmdlets, ProgressBar pb, Boolean isOffline) {
             List<CmdletObject> cmdletsToProcess = isOffline
                 ? new List<CmdletObject>(cmdlets)
                 : new List<CmdletObject>(cmdlets.Where(x => x.GeneralHelp.Status != ItemStatus.Missing));

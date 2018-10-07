@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.UI.Windows;
+using CmdletHelpEditor.Views.Windows;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {

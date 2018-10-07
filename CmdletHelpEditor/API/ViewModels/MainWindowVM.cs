@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
-using CmdletHelpEditor.UI.UserControls;
+using CmdletHelpEditor.Views.UserControls;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public class MainWindowVM : DependencyObject, INotifyPropertyChanged {

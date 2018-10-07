@@ -1,0 +1,16 @@
+﻿<MenuItem x:Class="CmdletHelpEditor.Views.UserControls.Parts.MenuTools"
+		  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		  xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+		  mc:Ignorable="d"
+		  d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
+		  Header="_Tools">
+	<MenuItem Header="_Options"
+			  Command="{Binding Source={x:Static viewModels:UIManager.ConfigureCommand}}">
+		<MenuItem.Icon>
+			<Image Source="/Images/Menu/settings_16x16.png"/>
+		</MenuItem.Icon>
+	</MenuItem>
+</MenuItem>

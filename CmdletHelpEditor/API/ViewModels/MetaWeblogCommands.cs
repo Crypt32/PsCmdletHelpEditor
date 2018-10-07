@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.UI.Windows;
+using CmdletHelpEditor.Views.Windows;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {

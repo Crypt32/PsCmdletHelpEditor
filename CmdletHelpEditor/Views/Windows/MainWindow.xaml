@@ -1,0 +1,106 @@
+﻿<Window x:Class="CmdletHelpEditor.Views.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:properties="clr-namespace:CmdletHelpEditor.Properties"
+        xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
+        xmlns:controls="clr-namespace:CmdletHelpEditor.Controls"
+        xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+        xmlns:parts="clr-namespace:CmdletHelpEditor.Views.UserControls.Parts"
+        x:Name="Window"
+        Title="PowerShell Cmdlet Help Editor"
+        Height="600"
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="ThreeDBorderWindow"
+        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+        ScrollViewer.CanContentScroll="True"
+        Initialized="WindowInitialized"
+        Closing="WindowClosing">
+    <Window.DataContext>
+        <viewModels:MainWindowVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:MultiParamConverter x:Key="MultiParamConverter" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding CommandManager.NewCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding CommandManager.SaveCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding CommandManager.OpenCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding CommandManager.AddTabCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedTab}"/>
+        <!--Formatting-->
+        <KeyBinding Modifiers="Ctrl" Key="B" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                    <Binding ElementName="Window"/>
+                    <Binding ElementName="Bold"/>
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="I" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                    <Binding ElementName="Window"/>
+                    <Binding ElementName="Italic"/>
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="U" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                    <Binding ElementName="Window"/>
+                    <Binding ElementName="Underline"/>
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="H" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                    <Binding ElementName="Window"/>
+                    <Binding ElementName="Strike"/>
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="F5" Command="{Binding CommandManager.LoadModulesCommand}"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <!-- stub buttons, do not remove -->
+        <Button x:Name="Bold" Style="{x:Null}" Visibility="Collapsed"/>
+        <Button x:Name="Italic" Style="{x:Null}" Visibility="Collapsed"/>
+        <Button x:Name="Underline" Style="{x:Null}" Visibility="Collapsed"/>
+        <Button x:Name="Strike" Style="{x:Null}" Visibility="Collapsed"/>
+        <!-- end stub buttons -->
+        <Menu MinHeight="25" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <parts:MenuFile Style="{StaticResource {x:Type MenuItem}}"/>
+            <parts:MenuEdit Style="{StaticResource {x:Type MenuItem}}"/>
+            <parts:MenuView Style="{StaticResource {x:Type MenuItem}}"/>
+            <parts:MenuActions Style="{StaticResource {x:Type MenuItem}}"/>
+            <parts:MenuTools Style="{StaticResource {x:Type MenuItem}}"/>
+            <parts:MenuHelp Style="{StaticResource {x:Type MenuItem}}"/>
+        </Menu>
+        <ToolBarTray x:Name="tbt"
+                     DockPanel.Dock="Top"
+                     IsLocked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarLocked}">
+            <ToolBarTray.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Lock toolbars"
+                              IsCheckable="True"
+                              IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarLocked}"
+                              Template="{StaticResource MenuItemControlSubmenuTemplate}"/>
+                </ContextMenu>
+            </ToolBarTray.ContextMenu>
+            <parts:ToolBarStd Style="{StaticResource {x:Type ToolBar}}"/>
+            <parts:ToolBarModuleProps Style="{StaticResource {x:Type ToolBar}}"/>
+            <parts:ToolBarFormat Style="{StaticResource {x:Type ToolBar}}"/>
+            <parts:ToolBarEdit Style="{StaticResource {x:Type ToolBar}}"/>
+        </ToolBarTray>
+        <parts:StatusBarMain x:Name="sb"
+                             DockPanel.Dock="Bottom"/>
+        
+        <controls:ClosableTabControl ItemsSource="{Binding Tabs}"
+                                     SelectedItem="{Binding SelectedTab}"
+                                     CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
+                                     AddTabCommand="{Binding CommandManager.AddTabCommand}"
+                                     Style="{StaticResource ScrollableTabControl}"/>
+    </DockPanel>
+</Window>

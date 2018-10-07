@@ -169,7 +169,7 @@
     <Compile Include="API\Models\ClosableModuleItem.cs" />
     <Compile Include="Controls\ClosableTabControl.cs" />
     <Compile Include="Themes\ScrollableTabPanel.cs" />
-    <Compile Include="UI\Dialogs\AboutBox.xaml.cs">
+    <Compile Include="Views\Dialogs\AboutBox.xaml.cs">
       <DependentUpon>AboutBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="API\Models\CmdletObject.cs" />
@@ -202,7 +202,7 @@
     <Compile Include="API\ViewModels\EditorVM.cs" />
     <Compile Include="API\ViewModels\MainWindowVM.cs" />
     <Compile Include="API\ViewModels\OutputVM.cs" />
-    <Compile Include="UI\Dialogs\Options.xaml.cs">
+    <Compile Include="Views\Dialogs\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BindableRichTextBox.cs" />
@@ -212,79 +212,79 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\ModuleProperties.xaml.cs">
+    <Compile Include="Views\Dialogs\ModuleProperties.xaml.cs">
       <DependentUpon>ModuleProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\AdvancedCmdletUC.xaml.cs">
+    <Compile Include="Views\UserControls\AdvancedCmdletUC.xaml.cs">
       <DependentUpon>AdvancedCmdletUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\BusyUC.xaml.cs">
+    <Compile Include="Views\UserControls\BusyUC.xaml.cs">
       <DependentUpon>BusyUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\DisplayOutputControl.xaml.cs">
+    <Compile Include="Views\UserControls\DisplayOutputControl.xaml.cs">
       <DependentUpon>DisplayOutputControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\EditorControl.xaml.cs">
+    <Compile Include="Views\UserControls\EditorControl.xaml.cs">
       <DependentUpon>EditorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\ExampleControl.xaml.cs">
+    <Compile Include="Views\UserControls\ExampleControl.xaml.cs">
       <DependentUpon>ExampleControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\GeneralControl.xaml.cs">
+    <Compile Include="Views\UserControls\GeneralControl.xaml.cs">
       <DependentUpon>GeneralControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\MainTabViewUC.xaml.cs">
+    <Compile Include="Views\UserControls\MainTabViewUC.xaml.cs">
       <DependentUpon>MainTabViewUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\ModuleSelectorControl.xaml.cs">
+    <Compile Include="Views\UserControls\ModuleSelectorControl.xaml.cs">
       <DependentUpon>ModuleSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\ParameterDescriptionControl.xaml.cs">
+    <Compile Include="Views\UserControls\ParameterDescriptionControl.xaml.cs">
       <DependentUpon>ParameterDescriptionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuActions.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuActions.xaml.cs">
       <DependentUpon>MenuActions.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuEdit.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuEdit.xaml.cs">
       <DependentUpon>MenuEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuFile.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuFile.xaml.cs">
       <DependentUpon>MenuFile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuHelp.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuHelp.xaml.cs">
       <DependentUpon>MenuHelp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuTools.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuTools.xaml.cs">
       <DependentUpon>MenuTools.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\MenuView.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\StatusBarMain.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\StatusBarMain.xaml.cs">
       <DependentUpon>StatusBarMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\ToolBarEdit.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\ToolBarEdit.xaml.cs">
       <DependentUpon>ToolBarEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\ToolBarFormat.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\ToolBarFormat.xaml.cs">
       <DependentUpon>ToolBarFormat.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\ToolBarModuleProps.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\ToolBarModuleProps.xaml.cs">
       <DependentUpon>ToolBarModuleProps.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Parts\ToolBarStd.xaml.cs">
+    <Compile Include="Views\UserControls\Parts\ToolBarStd.xaml.cs">
       <DependentUpon>ToolBarStd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\RelatedLinksControl.xaml.cs">
+    <Compile Include="Views\UserControls\RelatedLinksControl.xaml.cs">
       <DependentUpon>RelatedLinksControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\StartUserControl.xaml.cs">
+    <Compile Include="Views\UserControls\StartUserControl.xaml.cs">
       <DependentUpon>StartUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\SupportInfoControl.xaml.cs">
+    <Compile Include="Views\UserControls\SupportInfoControl.xaml.cs">
       <DependentUpon>SupportInfoControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Windows\OnlinePublishProgressWindow.xaml.cs">
+    <Compile Include="Views\Windows\OnlinePublishProgressWindow.xaml.cs">
       <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Themes\ClosableTabItem.xaml">
@@ -303,67 +303,67 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Dialogs\AboutBox.xaml">
+    <Page Include="Views\Dialogs\AboutBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Dialogs\Options.xaml">
+    <Page Include="Views\Dialogs\Options.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\AdvancedCmdletUC.xaml">
+    <Page Include="Views\UserControls\AdvancedCmdletUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\MainTabViewUC.xaml">
+    <Page Include="Views\UserControls\MainTabViewUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuActions.xaml">
+    <Page Include="Views\UserControls\Parts\MenuActions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuEdit.xaml">
+    <Page Include="Views\UserControls\Parts\MenuEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuFile.xaml">
+    <Page Include="Views\UserControls\Parts\MenuFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuHelp.xaml">
+    <Page Include="Views\UserControls\Parts\MenuHelp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuTools.xaml">
+    <Page Include="Views\UserControls\Parts\MenuTools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\MenuView.xaml">
+    <Page Include="Views\UserControls\Parts\MenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\StatusBarMain.xaml">
+    <Page Include="Views\UserControls\Parts\StatusBarMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\ToolBarEdit.xaml">
+    <Page Include="Views\UserControls\Parts\ToolBarEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\ToolBarFormat.xaml">
+    <Page Include="Views\UserControls\Parts\ToolBarFormat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\ToolBarModuleProps.xaml">
+    <Page Include="Views\UserControls\Parts\ToolBarModuleProps.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\Parts\ToolBarStd.xaml">
+    <Page Include="Views\UserControls\Parts\ToolBarStd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Windows\MainWindow.xaml">
+    <Page Include="Views\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -371,55 +371,55 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UI\Windows\MainWindow.xaml.cs">
+    <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\Dialogs\ModuleProperties.xaml">
+    <Page Include="Views\Dialogs\ModuleProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\BusyUC.xaml">
+    <Page Include="Views\UserControls\BusyUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\DisplayOutputControl.xaml">
+    <Page Include="Views\UserControls\DisplayOutputControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\EditorControl.xaml">
+    <Page Include="Views\UserControls\EditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\ExampleControl.xaml">
+    <Page Include="Views\UserControls\ExampleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\GeneralControl.xaml">
+    <Page Include="Views\UserControls\GeneralControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\ModuleSelectorControl.xaml">
+    <Page Include="Views\UserControls\ModuleSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\ParameterDescriptionControl.xaml">
+    <Page Include="Views\UserControls\ParameterDescriptionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\RelatedLinksControl.xaml">
+    <Page Include="Views\UserControls\RelatedLinksControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\StartUserControl.xaml">
+    <Page Include="Views\UserControls\StartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\SupportInfoControl.xaml">
+    <Page Include="Views\UserControls\SupportInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Windows\OnlinePublishProgressWindow.xaml">
+    <Page Include="Views\Windows\OnlinePublishProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

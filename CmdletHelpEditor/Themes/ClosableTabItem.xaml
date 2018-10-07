@@ -3,193 +3,193 @@
                     xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
                     xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
                     xmlns:controls="clr-namespace:CmdletHelpEditor.API.Models">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="CloseTabButton.xaml"/>
-	</ResourceDictionary.MergedDictionaries>
-	<converters:BooleanToVisibilityReverse x:Key="BooleanToVisibilityConverter" />
-	<Thickness x:Key="TabItemMarginBase">0,4,0,0</Thickness>
-	<Thickness x:Key="TabItemPanelPadding">0,0,0,0</Thickness>
-	<Color x:Key="BorderColorBase">#888</Color>
-	<Color x:Key="TabControlBackgroundColorBase">#EEF7FF</Color>
-	<SolidColorBrush x:Key="TabItemTextBrushUnselected" Color="#4971A3" />
-	<SolidColorBrush x:Key="TabItemTextBrushDisabled" Color="#888" />
-	<SolidColorBrush x:Key="TabItemTextBrushHover" Color="Indigo" />
-	<SolidColorBrush x:Key="TabItemTextBrushSelected" Color="DarkBlue" />
-	<SolidColorBrush x:Key="TabItemBorderBrushSelected" Color="{StaticResource BorderColorBase}" />
-	<SolidColorBrush x:Key="TabControlBackgroundBrushBase" Color="{StaticResource TabControlBackgroundColorBase}"/>
-	<SolidColorBrush x:Key="TabPageInnerBorderBrushDark" Color="#FF8DB2E3"/>
-	<!--<LinearGradientBrush x:Key="TabItemPanelBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Offset="0.98" Color="Transparent"/>
-			<GradientStop Offset="0.99" 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="CloseTabButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <converters:BooleanToVisibilityReverse x:Key="BooleanToVisibilityConverter" />
+    <Thickness x:Key="TabItemMarginBase">0,4,0,0</Thickness>
+    <Thickness x:Key="TabItemPanelPadding">0,0,0,0</Thickness>
+    <Color x:Key="BorderColorBase">#888</Color>
+    <Color x:Key="TabControlBackgroundColorBase">#EEF7FF</Color>
+    <SolidColorBrush x:Key="TabItemTextBrushUnselected" Color="#4971A3" />
+    <SolidColorBrush x:Key="TabItemTextBrushDisabled" Color="#888" />
+    <SolidColorBrush x:Key="TabItemTextBrushHover" Color="Indigo" />
+    <SolidColorBrush x:Key="TabItemTextBrushSelected" Color="DarkBlue" />
+    <SolidColorBrush x:Key="TabItemBorderBrushSelected" Color="{StaticResource BorderColorBase}" />
+    <SolidColorBrush x:Key="TabControlBackgroundBrushBase" Color="{StaticResource TabControlBackgroundColorBase}"/>
+    <SolidColorBrush x:Key="TabPageInnerBorderBrushDark" Color="#FF8DB2E3"/>
+    <!--<LinearGradientBrush x:Key="TabItemPanelBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.98" Color="Transparent"/>
+            <GradientStop Offset="0.99" 
                Color="{StaticResource BorderColorBase}"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>-->
-	<!--<LinearGradientBrush x:Key="TabPageInnerBorderBrushBright" StartPoint="0,0" EndPoint="1,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Offset="0" Color="Transparent"/>
-			<GradientStop Offset="1" Color="#FFC0F9FF"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>-->
-	<LinearGradientBrush x:Key="TabItemBackgroundBrushSelected" 
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>-->
+    <!--<LinearGradientBrush x:Key="TabPageInnerBorderBrushBright" StartPoint="0,0" EndPoint="1,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0" Color="Transparent"/>
+            <GradientStop Offset="1" Color="#FFC0F9FF"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>-->
+    <LinearGradientBrush x:Key="TabItemBackgroundBrushSelected" 
                            StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Color="#FFFFC14A" Offset="0.1" />
-			<GradientStop Color="{StaticResource TabControlBackgroundColorBase}" Offset="0.15"/>
-			<GradientStop Color="#C5DBF6" Offset="0.8"/>
-			<GradientStop Color="{StaticResource TabControlBackgroundColorBase}" Offset="1.0"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemBackgroundBrushUnselected" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Color="#E8F2FF" Offset="0.0"/>
-			<GradientStop Color="#DFE9F6" Offset="0.3"/>
-			<GradientStop Color="#C7D8EE" Offset="0.7"/>
-			<GradientStop Color="#B9CADE" Offset="0.98"/>
-			<!-- See the TabItemPanel_BackgroundBrush comment. -->
-			<GradientStop Color="{StaticResource BorderColorBase}" Offset="0.99"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemHoverBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
-		<GradientStop Color="#FFFFD5A0" Offset="0.3" />
-		<GradientStop Color="#FFFFA335" Offset="0.51" />
-		<GradientStop Color="#FFFFC14A" Offset="0.98" />
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemBorderUnselected" StartPoint="0,0" EndPoint="0,1">
-		<GradientStop Color="#AAA" Offset="0"/>
-		<GradientStop Color="{StaticResource BorderColorBase}" Offset="0.8"/>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemDisabledBorderBrush" StartPoint="0,0" EndPoint="0,1">
-		<GradientStop Color="#CCC" Offset="0"/>
-		<GradientStop Color="{StaticResource BorderColorBase}" Offset="0.8"/>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemBackgroundBrushDisabled" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Color="#EEE" Offset="0"/>
-			<GradientStop Color="#BBB" Offset="0.98"/>
-			<!-- 
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FFFFC14A" Offset="0.1" />
+            <GradientStop Color="{StaticResource TabControlBackgroundColorBase}" Offset="0.15"/>
+            <GradientStop Color="#C5DBF6" Offset="0.8"/>
+            <GradientStop Color="{StaticResource TabControlBackgroundColorBase}" Offset="1.0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemBackgroundBrushUnselected" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#E8F2FF" Offset="0.0"/>
+            <GradientStop Color="#DFE9F6" Offset="0.3"/>
+            <GradientStop Color="#C7D8EE" Offset="0.7"/>
+            <GradientStop Color="#B9CADE" Offset="0.98"/>
+            <!-- See the TabItemPanel_BackgroundBrush comment. -->
+            <GradientStop Color="{StaticResource BorderColorBase}" Offset="0.99"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemHoverBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FFFFD5A0" Offset="0.3" />
+        <GradientStop Color="#FFFFA335" Offset="0.51" />
+        <GradientStop Color="#FFFFC14A" Offset="0.98" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemBorderUnselected" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#AAA" Offset="0"/>
+        <GradientStop Color="{StaticResource BorderColorBase}" Offset="0.8"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemDisabledBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#CCC" Offset="0"/>
+        <GradientStop Color="{StaticResource BorderColorBase}" Offset="0.8"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemBackgroundBrushDisabled" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#EEE" Offset="0"/>
+            <GradientStop Color="#BBB" Offset="0.98"/>
+            <!-- 
                This is the same trick as with the TabItemPanel_BackgroundBrush (see there).
             -->
-			<GradientStop Color="{StaticResource BorderColorBase}" Offset="0.99"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="TabItemHoverBorderBrush" StartPoint="0,0" EndPoint="0,1">
-		<LinearGradientBrush.GradientStops>
-			<GradientStop Offset="0.98" Color="DarkOrange"/>
-			<!-- See the TabItemPanel_BackgroundBrush comment. -->
-			<GradientStop Offset="0.99" Color="{StaticResource BorderColorBase}"/>
-		</LinearGradientBrush.GradientStops>
-	</LinearGradientBrush>
-	<!--<Style x:Key="TabItemFocusVisual">
-		<Setter Property="Control.Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Rectangle Stroke="#555" StrokeDashArray="1 2" 
+            <GradientStop Color="{StaticResource BorderColorBase}" Offset="0.99"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TabItemHoverBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.98" Color="DarkOrange"/>
+            <!-- See the TabItemPanel_BackgroundBrush comment. -->
+            <GradientStop Offset="0.99" Color="{StaticResource BorderColorBase}"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <!--<Style x:Key="TabItemFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Stroke="#555" StrokeDashArray="1 2" 
                              StrokeThickness="1" 
                              Margin="0,8,3,6" 
                              SnapsToDevicePixels="true"/>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>-->
-	<Style TargetType="{x:Type controls:ClosableModuleItem}">
-		<!--<Setter Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}"/>-->
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type controls:ClosableModuleItem}">
-					<!-- The Grid helps defining the general height of TabItems. -->
-					<Grid VerticalAlignment="Bottom">
-						<!-- 
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+    <Style TargetType="{x:Type controls:ClosableModuleItem}">
+        <!--<Setter Property="FocusVisualStyle" Value="{StaticResource TabItemFocusVisual}"/>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ClosableModuleItem}">
+                    <!-- The Grid helps defining the general height of TabItems. -->
+                    <Grid VerticalAlignment="Bottom">
+                        <!-- 
                         The important aspect here is that the bottom of the Border is 0px thick,
                         helping the TabItem/strip to blend into the TabPage.
                      -->
-						<Border Name="Border"
-									Background="{StaticResource TabItemBackgroundBrushUnselected}"
-									BorderBrush="{StaticResource TabItemBorderBrushSelected}"
-									BorderThickness="2,1,1,0"
-									CornerRadius="3,3,0,0"
+                        <Border Name="Border"
+                                    Background="{StaticResource TabItemBackgroundBrushUnselected}"
+                                    BorderBrush="{StaticResource TabItemBorderBrushSelected}"
+                                    BorderThickness="2,1,1,0"
+                                    CornerRadius="3,3,0,0"
                              >
-							<DockPanel Name="Contents">
-								<!-- This is where the Content of the TabItem will be rendered. -->
-								<ContentPresenter x:Name="ContentSite"
-													  VerticalAlignment="Center"
-													  HorizontalAlignment="Center"
-													  ContentSource="Header"
-													  Margin="7,2,12,2"
-													  RecognizesAccessKey="True">
-								</ContentPresenter>
-								<Button x:Name="PART_Close"
-										Visibility="Hidden"
-										Style="{StaticResource TabItemCloseButtonStyle}"
-										Command="{Binding Path=CloseTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type c:ClosableTabControl}}}"
-										CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableModuleItem}}}"
-								        Margin="-5,3,5,3"/>
-							</DockPanel>
-						</Border>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsClosable" Value="False">
-							<Setter TargetName="PART_Close" Property="Visibility" Value="Collapsed"/>
-						</Trigger>
-						<!-- The appearance of a TabItem when it's inactive/unselected -->
-						<Trigger Property="IsSelected" Value="False">
-							<Setter Property="Panel.ZIndex" Value="90" />
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource TabItemBorderUnselected}" />
-							<Setter Property="Foreground" Value="{StaticResource TabItemTextBrushUnselected}" />
-							<!-- Except for the selected TabItem, tabs are to appear smaller in height. -->
-							<Setter TargetName="Border" Property="Margin" Value="{StaticResource TabItemMarginBase}"/>
-						</Trigger>
-						<!-- The appearance of a TabItem when it's active/selected -->
-						<Trigger Property="IsSelected" Value="True">
-							<!-- We want the selected TabItem to always be on top. -->
-							<Setter Property="Panel.ZIndex" Value="100" />
-							<Setter TargetName="ContentSite" Property="TextBlock.FontWeight" Value="Bold"/>
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource TabItemBorderBrushSelected}" />
-							<Setter TargetName="Border" Property="Background" Value="{StaticResource TabItemBackgroundBrushSelected}" />
-							<Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0" />
-							<Setter Property="Foreground" Value="{StaticResource TabItemTextBrushSelected}"/>
-							<Setter TargetName="Contents" Property="Margin" Value="{StaticResource TabItemMarginBase}"/>
-						</Trigger>
-						<!-- The appearance of a TabItem when it's disabled (in addition to Selected=False) -->
-						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="Panel.ZIndex" Value="80" />
-							<Setter TargetName="Border" Property="BorderBrush"
+                            <DockPanel Name="Contents">
+                                <!-- This is where the Content of the TabItem will be rendered. -->
+                                <ContentPresenter x:Name="ContentSite"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"
+                                                      ContentSource="Header"
+                                                      Margin="7,2,12,2"
+                                                      RecognizesAccessKey="True">
+                                </ContentPresenter>
+                                <Button x:Name="PART_Close"
+                                        Visibility="Hidden"
+                                        Style="{StaticResource TabItemCloseButtonStyle}"
+                                        Command="{Binding Path=CloseTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type c:ClosableTabControl}}}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableModuleItem}}}"
+                                        Margin="-5,3,5,3"/>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsClosable" Value="False">
+                            <Setter TargetName="PART_Close" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <!-- The appearance of a TabItem when it's inactive/unselected -->
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Panel.ZIndex" Value="90" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource TabItemBorderUnselected}" />
+                            <Setter Property="Foreground" Value="{StaticResource TabItemTextBrushUnselected}" />
+                            <!-- Except for the selected TabItem, tabs are to appear smaller in height. -->
+                            <Setter TargetName="Border" Property="Margin" Value="{StaticResource TabItemMarginBase}"/>
+                        </Trigger>
+                        <!-- The appearance of a TabItem when it's active/selected -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <!-- We want the selected TabItem to always be on top. -->
+                            <Setter Property="Panel.ZIndex" Value="100" />
+                            <Setter TargetName="ContentSite" Property="TextBlock.FontWeight" Value="Bold"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource TabItemBorderBrushSelected}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource TabItemBackgroundBrushSelected}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter Property="Foreground" Value="{StaticResource TabItemTextBrushSelected}"/>
+                            <Setter TargetName="Contents" Property="Margin" Value="{StaticResource TabItemMarginBase}"/>
+                        </Trigger>
+                        <!-- The appearance of a TabItem when it's disabled (in addition to Selected=False) -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Panel.ZIndex" Value="80" />
+                            <Setter TargetName="Border" Property="BorderBrush"
                                 Value="{StaticResource TabItemDisabledBorderBrush}" />
-							<Setter TargetName="Border" Property="Background" 
+                            <Setter TargetName="Border" Property="Background" 
                                 Value="{StaticResource TabItemBackgroundBrushDisabled}" />
-							<Setter Property="Foreground" 
+                            <Setter Property="Foreground" 
                                 Value="{StaticResource TabItemTextBrushDisabled}" />
-						</Trigger>
-						<!-- The appearance of a TabItem when the mouse hovers over it -->
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsMouseOver" Value="True"/>
-								<Condition Property="IsClosable" Value="True"/>
-							</MultiTrigger.Conditions>
-							<Setter Property="Visibility" TargetName="PART_Close" Value="Visible"/>
-							<Setter TargetName="ContentSite" Property="TextBlock.ToolTip" Value="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableModuleItem}}}"/>
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsSelected" Value="True"/>
-								<Condition Property="IsClosable" Value="True"/>
-							</MultiTrigger.Conditions>
-							<Setter Property="Visibility" TargetName="PART_Close" Value="Visible"/>
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="Border.IsMouseOver" Value="True"/>
-								<Condition Property="IsSelected" Value="False"/>
-							</MultiTrigger.Conditions>
-							<Setter Property="Panel.ZIndex" Value="99" />
-							<Setter Property="Foreground" Value="{StaticResource TabItemTextBrushHover}" />
-							<Setter Property="BorderBrush" TargetName="Border" Value="{StaticResource TabItemHoverBorderBrush}" />
-							<Setter TargetName="Border" Property="BorderThickness" Value="2,1,1,0" />
-							<Setter Property="Background" TargetName="Border" Value="{StaticResource TabItemHoverBackgroundBrush}"/>
-						</MultiTrigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                        </Trigger>
+                        <!-- The appearance of a TabItem when the mouse hovers over it -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsClosable" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="PART_Close" Value="Visible"/>
+                            <Setter TargetName="ContentSite" Property="TextBlock.ToolTip" Value="{Binding Path=Header, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ClosableModuleItem}}}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True"/>
+                                <Condition Property="IsClosable" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="PART_Close" Value="Visible"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Border.IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Panel.ZIndex" Value="99" />
+                            <Setter Property="Foreground" Value="{StaticResource TabItemTextBrushHover}" />
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{StaticResource TabItemHoverBorderBrush}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2,1,1,0" />
+                            <Setter Property="Background" TargetName="Border" Value="{StaticResource TabItemHoverBackgroundBrush}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

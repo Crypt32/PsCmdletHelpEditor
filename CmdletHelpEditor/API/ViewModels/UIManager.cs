@@ -4,10 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
-using CmdletHelpEditor.UI.Dialogs;
-using CmdletHelpEditor.UI.UserControls;
-using CmdletHelpEditor.UI.UserControls.Parts;
-using CmdletHelpEditor.UI.Windows;
+using CmdletHelpEditor.Views.Dialogs;
+using CmdletHelpEditor.Views.UserControls;
+using CmdletHelpEditor.Views.UserControls.Parts;
+using CmdletHelpEditor.Views.Windows;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {

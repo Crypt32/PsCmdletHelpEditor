@@ -1,0 +1,177 @@
+﻿<UserControl x:Class="CmdletHelpEditor.Views.UserControls.ParameterDescriptionControl"
+             x:Name="ParameterDescription"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
+             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
+             d:DesignWidth="740">
+    <UserControl.Resources>
+        <converters:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+        <Style x:Key="ParamItemContStyle" TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Missing">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="New">
+                    <Setter Property="Foreground" Value="Blue"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Valid">
+                    <Setter Property="Foreground" Value="Green"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top"
+              IsEnabled="{Binding EditorContext.ParamContext.CurrentParam, Converter={StaticResource NullToBooleanConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="200"/>
+                <ColumnDefinition MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <HeaderedContentControl Grid.Row="0"
+                                    Grid.Column="0"
+                                    Header="Parameter name:">
+                <TextBox MaxLines="1"
+                         IsReadOnly="True"
+                         Text="{Binding EditorContext.ParamContext.CurrentParam.Name}"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Grid.Row="0"
+                                    Grid.Column="1"
+                                    Header="Type:">
+                <TextBox MaxLines="1"
+                         IsReadOnly="True"
+                         Text="{Binding EditorContext.ParamContext.CurrentParam.Type}"/>
+            </HeaderedContentControl>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="10, 5, 0, 0">
+                <CheckBox Content="Mandatory"
+                          IsEnabled="False"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Mandatory}"/>
+                <CheckBox Content="Dynamic"
+                          IsEnabled="False"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Dynamic}"/>
+                <CheckBox Content="Value from remaining arguments"
+                          IsEnabled="False"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.RemainingArgs}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="10, 5, 0, 0">
+                <CheckBox Content="Value from pipeline"
+                          IsEnabled="False"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Pipeline}"/>
+                <CheckBox Content="Value from pipeline by property name"
+                          IsEnabled="False"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.PipelinePropertyName}"/>
+                <Grid>
+                    <CheckBox Content="Positional"
+                              IsEnabled="False"
+                              IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Positional}"/>
+                    <TextBox MaxLines="1"
+                             HorizontalAlignment="Center"
+                             TextWrapping="Wrap"
+                             Width="50"
+                             IsEnabled="False"
+                             Text="{Binding EditorContext.ParamContext.CurrentParam.Position}"/>
+                </Grid>
+            </StackPanel>
+            <HeaderedContentControl Grid.Row="2"
+                                    Grid.Column="0"
+                                    Header="Parameter attributes:">
+                <ListBox Background="#FAFAFA"
+                         ItemsSource="{Binding EditorContext.ParamContext.CurrentParam.Attributes}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </HeaderedContentControl>
+            <HeaderedContentControl Grid.Row="2"
+                                    Grid.Column="1"
+                                    Header="Aliases:">
+                <ListBox Background="#FAFAFA"
+                         ItemsSource="{Binding EditorContext.ParamContext.CurrentParam.Aliases}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </HeaderedContentControl>
+            <HeaderedContentControl Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Header="Parameter description:">
+                <TextBox MinLines="11"
+                         MaxLines="11"
+                         Text="{Binding EditorContext.ParamContext.CurrentParam.Description, UpdateSourceTrigger=PropertyChanged}"
+                         Tag="AllowFormat"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Header="Default value:">
+                <TextBox MaxLines="1"
+                         ToolTip="Specifies the default value for the parameter"
+                         Text="{Binding EditorContext.ParamContext.CurrentParam.DefaultValue, UpdateSourceTrigger=PropertyChanged}"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Grid.Row="5"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Header="Wildcard support:">
+                <CheckBox Margin="10" ToolTip="Indicates whether the parameter accepts wildcards"
+                          IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Globbing}"/>
+            </HeaderedContentControl>
+        </Grid>
+        <HeaderedContentControl DockPanel.Dock="Bottom">
+            <ListView DockPanel.Dock="Bottom"
+                      IsTabStop="True"
+                      ItemsSource="{Binding EditorContext.CurrentCmdlet.Parameters}"
+                      SelectedItem="{Binding EditorContext.ParamContext.CurrentParam}"
+                      SelectedIndex="{Binding EditorContext.ParamIndex}"
+                      ItemContainerStyle="{StaticResource ParamItemContStyle}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" Width="200">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               HorizontalAlignment="Stretch"
+                                               ToolTip="{Binding Name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Description" Width="300">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Height="16"
+                                               Text="{Binding Description}"
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               HorizontalAlignment="Stretch"
+                                               ToolTip="{Binding Description}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </HeaderedContentControl>
+    </DockPanel>
+</UserControl>

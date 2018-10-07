@@ -9,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.UI.UserControls;
-using CmdletHelpEditor.UI.Windows;
+using CmdletHelpEditor.Views.UserControls;
+using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
