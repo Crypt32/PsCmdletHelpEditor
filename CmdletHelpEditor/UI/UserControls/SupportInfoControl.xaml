@@ -133,26 +133,32 @@
                           Margin="5,5,0,5"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
 			</StackPanel>
-			<StackPanel>
-				<CheckBox Content="Windows Server 2012 R2 Family"
-                          Margin="5,5,0,0"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2Checked}" />
-				<CheckBox Content="Windows Server 2012 R2 Standard"
-                          Margin="25,5,0,0"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2StdChecked}" />
-				<CheckBox Content="Windows Server 2012 R2 Datacenter"
-                          Margin="25,5,0,5"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2DCChecked}" />
-			</StackPanel>
-            <StackPanel>
-                <CheckBox Content="Windows 8.1 Family"
-                          Margin="5,5,0,5"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
-            </StackPanel>
-            <StackPanel>
-                <CheckBox Content="Windows 10 Family"
-                          Margin="5,5,0,5"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win10Checked}" />
-            </StackPanel>
+		<StackPanel>
+			<CheckBox Content="Windows Server 2012 R2 Family"
+					  Margin="5,5,0,0"
+					  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2Checked}" />
+			<CheckBox Content="Windows Server 2012 R2 Standard"
+					  Margin="25,5,0,0"
+					  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2StdChecked}" />
+			<CheckBox Content="Windows Server 2012 R2 Datacenter"
+					  Margin="25,5,0,5"
+					  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2DCChecked}" />
+		</StackPanel>
+		<StackPanel>
+			<CheckBox Content="Windows 10 Family"
+					  Margin="5,5,0,5"
+					  IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win10Checked}" />
+         </StackPanel>
+		<StackPanel>
+			<CheckBox Content="Windows Server 2016 Family"
+			          Margin="5,5,0,0"
+			          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2016Checked}" />
+			<CheckBox Content="Windows Server 2016 Standard"
+			          Margin="25,5,0,0"
+			          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2016StdChecked}" />
+			<CheckBox Content="Windows Server 2016 Datacenter"
+			          Margin="25,5,0,5"
+			          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2016DCChecked}" />
+		</StackPanel>
     </StackPanel>
 </UserControl>

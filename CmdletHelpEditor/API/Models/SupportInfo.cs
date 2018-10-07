@@ -10,7 +10,7 @@ namespace CmdletHelpEditor.API.Models {
             Win2003StdChecked1, Win2003EEChecked1, Win2003DCChecked1, Win2008Checked1, Win2008StdChecked1,
             Win2008DCChecked1, Win2008R2Checked1, Win2008R2StdChecked1, Win2008R2EEChecked1, Win2008EEChecked1,
             Win2008R2DCChecked1, Win2012Checked1, Win2012StdChecked1, Win2012DCChecked1, Win2012R2Checked1,
-            Win2012R2StdChecked1, Win2012R2DCChecked1;
+            Win2012R2StdChecked1, Win2012R2DCChecked1, Win2016Checked1, Win2016StdChecked1, Win2016DCChecked1;
 		[XmlAttribute("ad")]
 		public Boolean ADChecked {
 			get { return ADChecked1; }
@@ -416,6 +416,58 @@ namespace CmdletHelpEditor.API.Models {
 					OnPropertyChanged("Win2012R2Checked");
 				}
 				OnPropertyChanged("Win2012R2DCChecked");
+			}
+		}
+		[XmlIgnore]
+		public Boolean Win2016Checked {
+			get { return Win2016Checked1; }
+			set {
+				Win2016Checked1 = value;
+				if (Win2016Checked1) {
+					Win2016StdChecked1 = Win2016DCChecked1 = true;
+					foreach (String str in new[] {"Win2016StdChecked", "Win2016DCChecked"}) {
+						OnPropertyChanged(str);
+					}
+				} else {
+					Win2016StdChecked1 = Win2016DCChecked1 = false;
+				}
+				foreach (String str in new[] {"Win2016Checked", "Win2016StdChecked", "Win2016DCChecked"}) {
+					OnPropertyChanged(str);
+				}
+			}
+		}
+		[XmlAttribute("w2k16s")]
+		public Boolean Win2016StdChecked {
+			get { return Win2016StdChecked1; }
+			set {
+				Win2016StdChecked1 = value;
+				if (Win2016StdChecked1) {
+					if (Win2016DCChecked) {
+						Win2016Checked1 = true;
+						OnPropertyChanged("Win2016Checked");
+					}
+				} else {
+					Win2016Checked1 = false;
+					OnPropertyChanged("Win2016Checked");
+				}
+				OnPropertyChanged("Win2016StdChecked");
+			}
+		}
+		[XmlAttribute("w2k16d")]
+		public Boolean Win2016DCChecked {
+			get { return Win2016DCChecked1; }
+			set {
+				Win2016DCChecked1 = value;
+				if (Win2016DCChecked1) {
+					if (Win2016StdChecked) {
+						Win2016Checked1 = true;
+						OnPropertyChanged("Win2016Checked");
+					}
+				} else {
+					Win2016Checked1 = false;
+					OnPropertyChanged("Win2016Checked");
+				}
+				OnPropertyChanged("Win2016DCChecked");
 			}
 		}
 
