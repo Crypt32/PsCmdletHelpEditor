@@ -16,10 +16,10 @@ namespace CmdletHelpEditor.API.ViewModels {
         static async void PublishSingle(Object obj) {
             if (obj == null) { return; }
             working = true;
-            MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
+            var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
             try {
                 await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null, false);
-                Utils.MsgBox("Success", "The operation completed successfully.", MessageBoxButton.OK, MessageBoxImage.Information);
+                Utils.MsgBox("Success", "The operation completed successfully.", MessageBoxImage.Information);
             }
             catch (Exception e) {
                 Utils.MsgBox("Error", e.Message);

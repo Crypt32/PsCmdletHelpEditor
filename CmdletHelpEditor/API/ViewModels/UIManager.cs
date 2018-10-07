@@ -20,7 +20,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         public static ICommand ShowStatusBarCommand => new RelayCommand(ShowStatusBar);
 
         public static void ShowAbout(Object obj) {
-            AboutBox AboutDlg = new AboutBox(Application.Current.Windows[0]);
+            var AboutDlg = new AboutBox(Application.Current.MainWindow);
             AboutDlg.ShowDialog();
         }
         public static void ShowConfigure(Object obj) {
@@ -28,7 +28,10 @@ namespace CmdletHelpEditor.API.ViewModels {
             OptDlg.ShowDialog();
         }
         public static void ShowModuleProperties(Object obj) {
-            ModuleProperties ModulePropsDlg = new ModuleProperties((MainWindowVM)Application.Current.MainWindow.DataContext);
+            Window mainWindow = Application.Current.MainWindow;
+            var ModulePropsDlg = new ModuleProperties((MainWindowVM)mainWindow?.DataContext) {
+                Owner = mainWindow
+            };
             ModulePropsDlg.ShowDialog();
         }
 

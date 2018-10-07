@@ -47,7 +47,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             PbValue = 0;
             Blogger blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
-                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
             Double duration = 100.0 / Cmdlets.Count;

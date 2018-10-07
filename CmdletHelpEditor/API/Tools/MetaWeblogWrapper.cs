@@ -24,14 +24,14 @@ namespace CmdletHelpEditor.API.Tools {
                     blogger = Utils.InitializeBlogger(module.Provider);
                 }
                 if (blogger == null) {
-                    Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation );
                     return;
                 }
                 if (String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
                     // assuming that article does not exist
                     cmdlet.ArticleIDString = blogger.AddPost(post);
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString) && !quiet) {
-                        Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxButton.OK, MessageBoxImage.Information);
+                        Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxImage.Information);
                     }
                     // get post URL once published
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
@@ -41,7 +41,7 @@ namespace CmdletHelpEditor.API.Tools {
                                 : blogger.GetPost(cmdlet.ArticleIDString).Permalink;
                             if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                                 var baseUrl = new Uri(module.Provider.ProviderURL);
-                                cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);
+                                cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{cmdlet.URL}";
                             }
                         } catch { }
                     }
@@ -49,6 +49,9 @@ namespace CmdletHelpEditor.API.Tools {
                     try {
                         // assuming that article exist, so we just change it
                         blogger.UpdatePost(post);
+                        var baseUrl = new Uri(module.Provider.ProviderURL);
+                        String permalink = blogger.GetPost(cmdlet.ArticleIDString).Permalink;
+                        cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{permalink}";
                     } catch (Exception e) {
                         // 0x80131600 connect succeeds, but the post is deleted. Remove postid
                         if (e.HResult == -2146232832 || e.HResult == -2147023728) {
@@ -62,7 +65,7 @@ namespace CmdletHelpEditor.API.Tools {
         public static async void PublishAll(ModuleObject module, ProgressBar pb) {
             Blogger blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
-                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
             List<CmdletObject> cmdletsToProcess = module.Cmdlets.Where(x => x.Publish).ToList();
@@ -72,7 +75,7 @@ namespace CmdletHelpEditor.API.Tools {
                 await PublishSingle(cmdlet, module, blogger, true);
                 pb.Value += duration;
             }
-            Utils.MsgBox("Success", (new Win32Exception(0)).Message, MessageBoxButton.OK, MessageBoxImage.Information);
+            Utils.MsgBox("Success", (new Win32Exception(0)).Message, MessageBoxImage.Information );
             pb.Value = 100;
         }
     }

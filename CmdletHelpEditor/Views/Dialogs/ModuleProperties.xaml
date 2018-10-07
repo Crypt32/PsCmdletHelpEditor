@@ -10,6 +10,7 @@
         Width="500"
         ResizeMode="NoResize"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        Foreground="Navy"
         ShowInTaskbar="False"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -77,7 +78,7 @@
                     <TextBlock Grid.Column="0" Grid.Row="6"/>
                     <TextBlock Text="Select website:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="7" Margin="0,5,0,0"/>
                     <ComboBox ItemsSource="{Binding WebSites}"
-                              DisplayMemberPath="blogName"
+                              DisplayMemberPath="BlogName"
                               SelectedValue="{Binding Mode=TwoWay, Path=ProviderInfo.Blog}"
                               SelectionChanged="BlogSelectionChanged"
                               IsEnabled="{Binding BlogsLoaded}"

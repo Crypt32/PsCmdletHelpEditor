@@ -23,8 +23,15 @@ namespace CmdletHelpEditor.API.Tools {
                 }
             };
         }
-        public static MessageBoxResult MsgBox(String header, String message, MessageBoxButton buttons = MessageBoxButton.OK, MessageBoxImage icon = MessageBoxImage.Error) {
-            return MessageBox.Show(message, header, buttons, icon);
+        public static MessageBoxResult MsgBox(String header, String message, MessageBoxImage image = MessageBoxImage.Error, MessageBoxButton button = MessageBoxButton.OK) {
+            WindowCollection windows = Application.Current.Windows;
+            Window hwnd = null;
+            if (windows.Count > 0) {
+                hwnd = windows[windows.Count - 1];
+            }
+            return hwnd == null
+                ? MessageBox.Show(message, header, button, image)
+                : MessageBox.Show(hwnd, message, header, button, image);
         }
         public static String GetCommandTypes() {
             List<String> cmds = new List<String>();

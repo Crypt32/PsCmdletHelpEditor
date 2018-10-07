@@ -312,7 +312,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean testSaved(ClosableModuleItem tab) {
             if (tab == null || tab.IsSaved || tab.Module == null) { return true; }
             tab.Focus();
-            MessageBoxResult mbxResult = Utils.MsgBox("PS Cmdlet Help Editor", Strings.InfoSaveRequired, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            MessageBoxResult mbxResult = Utils.MsgBox("PS Cmdlet Help Editor", Strings.InfoSaveRequired, MessageBoxImage.Warning, MessageBoxButton.YesNoCancel);
             switch (mbxResult) {
                 case MessageBoxResult.Yes:    SaveProjectFile(null); return true;
                 case MessageBoxResult.No:     return true;

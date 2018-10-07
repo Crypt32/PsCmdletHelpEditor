@@ -115,7 +115,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             IEnumerable<XmlToken> data = new List<XmlToken>();
             if (XmlChecked) {
                 if (module.UpgradeRequired) {
-                    Utils.MsgBox("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Utils.MsgBox("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxImage.Warning);
                     BusyControlVisible = Visibility.Collapsed;
                     return;
                 }

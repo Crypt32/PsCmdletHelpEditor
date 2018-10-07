@@ -116,14 +116,14 @@
                 </StackPanel>
                 <CheckBox Content="Windows 8 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win8Checked}" />
-                <CheckBox Content="Windows Server 2012 R2 Family"
-                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2Checked}" />
+                <CheckBox Content="Windows Server 2012 Family"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012Checked}" />
                 <StackPanel Margin="25,0,0,0"
                             behaviors:MarginSetter.Margin="25, 5, 5, 5">
-                    <CheckBox Content="Windows Server 2012 R2 Standard"
-                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2StdChecked}" />
-                    <CheckBox Content="Windows Server 2012 R2 Datacenter"
-                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2DCChecked}" />
+                    <CheckBox Content="Windows Server 2012 Standard"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012StdChecked}" />
+                    <CheckBox Content="Windows Server 2012 Datacenter"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012DCChecked}" />
                 </StackPanel>
                 <CheckBox Content="Windows 8.1 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
