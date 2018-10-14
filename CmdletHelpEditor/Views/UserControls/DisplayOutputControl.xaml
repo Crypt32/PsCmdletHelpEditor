@@ -7,58 +7,59 @@
              xmlns:tools="clr-namespace:CmdletHelpEditor.API.Tools"
              xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
              xmlns:userControls="clr-namespace:CmdletHelpEditor.Views.UserControls"
+             xmlns:controls="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
              mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
-			 Name="docuc">
-	<DockPanel>
-		<Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="Navy">
-			<StackPanel Orientation="Horizontal" Height="30" Background="{StaticResource NormalBlueGradientBrush}">
-				<RadioButton GroupName="group"
-							 Content="Text"
-							 VerticalAlignment="Center"
-							 Margin="10,0,0,0"
-							 IsChecked="{Binding EditorContext.OutputContext.TextChecked}"
-							 IsEnabled="False" />
-				<RadioButton GroupName="group"
-							 Content="XML"
-							 VerticalAlignment="Center"
-							 Margin="10,0,0,0"
-							 IsChecked="{Binding EditorContext.OutputContext.XmlChecked}" />
-				<RadioButton GroupName="group"
-							 Content="HTML Source"
-							 VerticalAlignment="Center"
-							 Margin="10,0,0,0"
-							 IsChecked="{Binding EditorContext.OutputContext.HtmlSourceChecked}" />
-				<RadioButton GroupName="group"
-							 Content="HTML"
-							 VerticalAlignment="Center"
-							 Margin="10,0,0,0"
-							 IsChecked="{Binding EditorContext.OutputContext.HtmlChecked}" />
-				<Button Content="Generate"
-						Margin="10,0,0,0"
-						Height="23"
-						MinWidth="60"
-						Command="{Binding EditorContext.OutputContext.GenerateOutputCommand}" />
-			</StackPanel>
-		</Border>
-		<c:BindableRichTextBox DockPanel.Dock="Top"
-							   IsUndoEnabled="False"
-							   UndoLimit="0"
-							   Width="{Binding ElementName=docuc, Path=ActualWidth, Mode=OneWay}"
-							   Document="{Binding EditorContext.OutputContext.Document}"
-							   FontFamily="Consolas"
-							   FontSize="14"
-							   VerticalContentAlignment="Stretch"
-							   HorizontalContentAlignment="Stretch"
-							   HorizontalScrollBarVisibility="Auto"
-							   VerticalScrollBarVisibility="Auto"
-							   IsReadOnly="True"
-							   Visibility="{Binding EditorContext.OutputContext.RtbVisible}"/>
-		<WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
-					DockPanel.Dock="Top"
-					Visibility="{Binding EditorContext.OutputContext.WebBrowserVisible}"/>
-		<userControls:BusyUC DockPanel.Dock="Top"
-							 Visibility="{Binding EditorContext.OutputContext.BusyControlVisible}"
-							 Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
-	</DockPanel>
+             d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
+             Name="docuc">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="Navy">
+            <StackPanel Orientation="Horizontal" Height="30" Background="{StaticResource NormalBlueGradientBrush}">
+                <RadioButton GroupName="group"
+                             Content="Text"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"
+                             IsChecked="{Binding EditorContext.OutputContext.TextChecked}"
+                             IsEnabled="False" />
+                <RadioButton GroupName="group"
+                             Content="XML"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"
+                             IsChecked="{Binding EditorContext.OutputContext.XmlChecked}" />
+                <RadioButton GroupName="group"
+                             Content="HTML Source"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"
+                             IsChecked="{Binding EditorContext.OutputContext.HtmlSourceChecked}" />
+                <RadioButton GroupName="group"
+                             Content="HTML"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"
+                             IsChecked="{Binding EditorContext.OutputContext.HtmlChecked}" />
+                <Button Content="Generate"
+                        Margin="10,0,0,0"
+                        Height="23"
+                        MinWidth="60"
+                        Command="{Binding EditorContext.OutputContext.GenerateOutputCommand}" />
+            </StackPanel>
+        </Border>
+        <controls:BindableRichTextBox DockPanel.Dock="Top"
+                               IsUndoEnabled="False"
+                               UndoLimit="0"
+                               Width="{Binding ElementName=docuc, Path=ActualWidth, Mode=OneWay}"
+                               Document="{Binding EditorContext.OutputContext.Document}"
+                               FontFamily="Consolas"
+                               FontSize="14"
+                               VerticalContentAlignment="Stretch"
+                               HorizontalContentAlignment="Stretch"
+                               HorizontalScrollBarVisibility="Auto"
+                               VerticalScrollBarVisibility="Auto"
+                               IsReadOnly="True"
+                               Visibility="{Binding EditorContext.OutputContext.RtbVisible}"/>
+        <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
+                    DockPanel.Dock="Top"
+                    Visibility="{Binding EditorContext.OutputContext.WebBrowserVisible}"/>
+        <userControls:BusyUC DockPanel.Dock="Top"
+                             Visibility="{Binding EditorContext.OutputContext.BusyControlVisible}"
+                             Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
+    </DockPanel>
 </UserControl>

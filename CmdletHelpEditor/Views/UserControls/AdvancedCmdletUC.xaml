@@ -10,7 +10,7 @@
     <StackPanel IsEnabled="{Binding SelectedModule.UseOnlineProvider}">
         <HeaderedContentControl Header="Online publishing information">
             <StackPanel>
-                <CheckBox Content="Allow to publish this cmdlet online" IsChecked="{Binding EditorContext.CurrentCmdlet.Publish}"/>
+                <CheckBox Content="Allow cmdlet help publishing online" IsChecked="{Binding EditorContext.CurrentCmdlet.Publish}"/>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>

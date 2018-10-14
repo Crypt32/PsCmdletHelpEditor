@@ -24,7 +24,10 @@ namespace CmdletHelpEditor.API.ViewModels {
             AboutDlg.ShowDialog();
         }
         public static void ShowConfigure(Object obj) {
-            Options OptDlg = new Options();
+            Window mainWindow = Application.Current.MainWindow;
+            var OptDlg = new Options {
+                Owner = mainWindow
+            };
             OptDlg.ShowDialog();
         }
         public static void ShowModuleProperties(Object obj) {
@@ -54,7 +57,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             return (obj as ClosableModuleItem)?.Module != null;
         }
         public static ClosableModuleItem GenerateTab() {
-            ClosableModuleItem cti = new ClosableModuleItem {
+            var cti = new ClosableModuleItem {
                 Header = "untitled",
                 IsSaved = true,
                 IsClosable = true,
@@ -74,7 +77,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             ((Grid)tab.Content).Children.Add(new ModuleSelectorControl());
         }
         public static void ShowEditor(ClosableModuleItem tab) {
-            MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
+            var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
             mwvm.SelectedModule = null;
             ((Grid)tab.Content).Children.Clear();
             ((Grid)tab.Content).Children.Add(new EditorControl(tab));

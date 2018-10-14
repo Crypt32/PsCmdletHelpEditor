@@ -29,7 +29,11 @@ namespace CmdletHelpEditor.API.ViewModels {
         public ClosableModuleItem Tab { get; set; }
 
         // dependency property is required for HtmlText property
-        public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register("HtmlText", typeof(String), typeof(OutputVM), new PropertyMetadata("<br />"));
+        public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(
+            nameof(HtmlText),
+            typeof(String),
+            typeof(OutputVM),
+            new PropertyMetadata("<br />"));
 
         public String HtmlText {
             get => (String)GetValue(HtmlTextProperty);
@@ -119,14 +123,14 @@ namespace CmdletHelpEditor.API.ViewModels {
                     BusyControlVisible = Visibility.Collapsed;
                     return;
                 }
-                List<CmdletObject> cmdlets = new List<CmdletObject> { cmd };
-                StringBuilder SB = new StringBuilder();
+                var cmdlets = new List<CmdletObject> { cmd };
+                var SB = new StringBuilder();
                 await XmlProcessor.XmlGenerateHelp(SB, cmdlets, null, module.IsOffline);
                 data = XmlTokenizer.LoopTokenize(SB.ToString());
             } else if (HtmlSourceChecked) {
                 data = await HtmlProcessor.GenerateHtmlSourceHelp(cmd, module);
             }
-            Paragraph para = new Paragraph();
+            var para = new Paragraph();
             para.Inlines.AddRange(ColorizeSource(data));
             Document = new FlowDocument();
             Document.Blocks.Add(para);

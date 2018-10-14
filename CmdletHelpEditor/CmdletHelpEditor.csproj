@@ -167,8 +167,6 @@
     <Compile Include="API\ViewModels\ViewModelBase.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
     <Compile Include="API\Models\ClosableModuleItem.cs" />
-    <Compile Include="Controls\ClosableTabControl.cs" />
-    <Compile Include="Themes\ScrollableTabPanel.cs" />
     <Compile Include="Views\Dialogs\AboutBox.xaml.cs">
       <DependentUpon>AboutBox.xaml</DependentUpon>
     </Compile>
@@ -205,7 +203,6 @@
     <Compile Include="Views\Dialogs\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BindableRichTextBox.cs" />
     <Compile Include="Controls\BrowserBehavior.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -287,22 +284,6 @@
     <Compile Include="Views\Windows\OnlinePublishProgressWindow.xaml.cs">
       <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Themes\ClosableTabItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\CloseTabButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Colors.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\ScrollableTabControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Dialogs\AboutBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

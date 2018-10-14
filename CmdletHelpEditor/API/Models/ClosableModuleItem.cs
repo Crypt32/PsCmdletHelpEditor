@@ -1,31 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
 using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.API.ViewModels;
+using SysadminsLV.WPF.OfficeTheme.Controls;
 
 namespace CmdletHelpEditor.API.Models {
-    public class ClosableModuleItem : TabItem, INotifyPropertyChanged {
+    public class ClosableModuleItem : ClosableTabItem, INotifyPropertyChanged {
         ModuleObject module;
         Boolean isSaved;
         String errorInfo;
 
-        // must be DependencyProperty
-        public static readonly DependencyProperty IsClosableProperty = DependencyProperty.Register(
-            nameof(IsClosable),
-            typeof(Boolean),
-            typeof(ClosableModuleItem),
-            new FrameworkPropertyMetadata(false));
-
+        
         void ModuleOnPendingSave(Object source, SavePendingEventArgs e) {
             IsSaved = false;
-        }
-
-        public Boolean IsClosable { 
-            get => (Boolean)GetValue(IsClosableProperty);
-            set => SetValue(IsClosableProperty, value);
         }
 
         public Boolean IsSaved {

@@ -6,6 +6,7 @@
         xmlns:controls="clr-namespace:CmdletHelpEditor.Controls"
         xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
         xmlns:parts="clr-namespace:CmdletHelpEditor.Views.UserControls.Parts"
+        xmlns:controls1="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
         x:Name="Window"
         Title="PowerShell Cmdlet Help Editor"
         Height="600"
@@ -97,7 +98,7 @@
         <parts:StatusBarMain x:Name="sb"
                              DockPanel.Dock="Bottom"/>
         
-        <controls:ClosableTabControl ItemsSource="{Binding Tabs}"
+        <controls1:ClosableTabControl ItemsSource="{Binding Tabs}"
                                      SelectedItem="{Binding SelectedTab}"
                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                      AddTabCommand="{Binding CommandManager.AddTabCommand}"

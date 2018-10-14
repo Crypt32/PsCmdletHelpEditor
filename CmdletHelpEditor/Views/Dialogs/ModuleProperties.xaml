@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
         Background="{StaticResource PanelBackgroundBrush}"
         Title="Module Properties"
         SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
         Width="500"
         ResizeMode="NoResize"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -23,7 +25,7 @@
         <GroupBox Header="Online publishing provider" VerticalAlignment="Top">
             <StackPanel>
                 <CheckBox Content="Use online publishing provider" Command="{Binding UseProviderCommand}" IsChecked="{Binding UseProvider}"/>
-                <Grid>
+                <Grid behaviors:MarginSetter.Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
@@ -40,7 +42,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="Provider name: "/>
+                    <TextBlock Text="Provider name: "/>
                     <ComboBox x:Name="ProvBox"
                               ItemsSource="{Binding Providers}"
                               SelectedItem="{Binding Mode=TwoWay, Path=ProviderInfo}"
@@ -49,34 +51,38 @@
                               DisplayMemberPath="ProviderName"
                               Grid.Column="1"
                               Grid.Row="0"/>
-                    <TextBlock Text="Provider URL:" VerticalAlignment="Center" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1"/>
+                    <TextBlock Text="Provider URL:"
+                               Grid.Column="0"
+                               Grid.Row="1"/>
                     <TextBox Text="{Binding Path=ProviderInfo.ProviderURL}"
                              Grid.Column="1"
                              Grid.Row="1"
-                             Margin="0,5,0,0"
                              IsEnabled="{Binding UrlEditable}"/>
-                    <TextBlock Text="User name:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="0,5,0,0"/>
+                    <TextBlock Text="User name:"
+                               Grid.Column="0"
+                               Grid.Row="2"/>
                     <TextBox Text="{Binding ProviderInfo.UserName}"
                              IsEnabled="{Binding UserEditable}"
                              Grid.Column="1"
-                             Grid.Row="2"
-                             Margin="0,5,0,0"/>
-                    <TextBlock Text="Password:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="0,5,0,0"/>
+                             Grid.Row="2"/>
+                    <TextBlock Text="Password:"
+                               Grid.Column="0"
+                               Grid.Row="3"/>
                     <PasswordBox x:Name="pwdBox"
                                  IsEnabled="{Binding UserEditable}"
                                  Grid.Column="1"
-                                 Grid.Row="3"
-                                 Margin="0,4,0,0"/>
+                                 Grid.Row="3"/>
                     <Button Content="Connect"
                             Click="ConnectClick"
                             IsEnabled="{Binding UserEditable}"
                             HorizontalAlignment="Left"
                             MinWidth="80"
                             Grid.Column="1"
-                            Grid.Row="5"
-                            Margin="0,5,0,0"/>
+                            Grid.Row="5"/>
                     <TextBlock Grid.Column="0" Grid.Row="6"/>
-                    <TextBlock Text="Select website:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="7" Margin="0,5,0,0"/>
+                    <TextBlock Text="Select website:"
+                               Grid.Column="0"
+                               Grid.Row="7"/>
                     <ComboBox ItemsSource="{Binding WebSites}"
                               DisplayMemberPath="BlogName"
                               SelectedValue="{Binding Mode=TwoWay, Path=ProviderInfo.Blog}"
@@ -84,7 +90,9 @@
                               IsEnabled="{Binding BlogsLoaded}"
                               Grid.Column="1"
                               Grid.Row="7"/>
-                    <TextBlock Text="Fetch post count: " VerticalAlignment="Center" Grid.Column="0" Grid.Row="8" Margin="0,5,0,0"/>
+                    <TextBlock Text="Fetch post count: "
+                               Grid.Column="0"
+                               Grid.Row="8"/>
                     <ComboBox SelectedValuePath="Content"
                               SelectedValue="{Binding ProviderInfo.FetchPostCount}"
                               Grid.Column="1"
