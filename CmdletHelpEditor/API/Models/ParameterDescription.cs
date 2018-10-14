@@ -112,7 +112,7 @@ namespace CmdletHelpEditor.API.Models {
                     Aliases.Add(alias);
                 }
             }
-            
+
         }
         void getType(CommandParameterInfo param) {
             String underlyingType = param.ParameterType.ToString();
@@ -133,6 +133,22 @@ namespace CmdletHelpEditor.API.Models {
             }
         }
 
+        public String PipelineInput {
+            get {
+                if (Pipeline || PipelinePropertyName) {
+                    String value = "true";
+                    if (Pipeline && !PipelinePropertyName) {
+                        value += " (ByValue)";
+                    } else if (Pipeline && PipelinePropertyName) {
+                        value += " (ByValue, ByPropertyName)";
+                    } else {
+                        value += " (ByPropertyName)";
+                    }
+                    return value;
+                }
+                return "false";
+            }
+        }
         Boolean Equals(ParameterDescription other) {
             return String.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
                 String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);

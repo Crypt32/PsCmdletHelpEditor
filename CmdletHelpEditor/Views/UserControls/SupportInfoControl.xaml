@@ -60,6 +60,10 @@
                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps5Checked}"/>
                 <RadioButton GroupName="PS"
                              Margin="5,5,0,0"
+                             Content="PowerShell 5.1"
+                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps51Checked}"/>
+                <RadioButton GroupName="PS"
+                             Margin="5,5,0,0"
                              Content="PowerShell 6.0"
                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps60Checked}"/>
                 <RadioButton GroupName="PS"

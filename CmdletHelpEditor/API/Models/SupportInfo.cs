@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace CmdletHelpEditor.API.Models {
     public class SupportInfo : INotifyPropertyChanged {
-        Boolean ad, rsat, ps2, ps3, ps4, ps5, ps60, ps61,
+        Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
             wxp, wv, w7, w8, w81, w10,
             w2k3, w2k3s, w2k3e, w2k3d,
             w2k8, w2k8s, w2k8e, w2k8d,
@@ -59,6 +59,14 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 ps5 = value;
                 OnPropertyChanged(nameof(Ps5Checked));
+            }
+        }
+        [XmlAttribute(nameof(ps51))]
+        public Boolean Ps51Checked {
+            get => ps51;
+            set {
+                ps51 = value;
+                OnPropertyChanged(nameof(Ps51Checked));
             }
         }
         [XmlAttribute(nameof(ps60))]

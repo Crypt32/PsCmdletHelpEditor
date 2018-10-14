@@ -15,7 +15,7 @@ namespace CmdletHelpEditor.API.Tools {
         }
         public static Task PublishSingle(CmdletObject cmdlet, ModuleObject module, Blogger blogger, Boolean quiet) {
             return Task.Factory.StartNew(() => {
-                Post post = new Post {
+                var post = new Post {
                     Title = cmdlet.Name,
                     PostId = cmdlet.ArticleIDString,
                     HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
