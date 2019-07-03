@@ -8,7 +8,7 @@ using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
     public class Blogger {
-        String _blogId;
+        String blogId;
         readonly String _userName;
         readonly SecureString _password;
         readonly IMetaWeblogProvider metaWeblogProvider;
@@ -25,8 +25,8 @@ namespace CmdletHelpEditor.API.MetaWeblog {
             clientProtocol.NonStandard = XmlRpcNonStandard.All;
         }
 
-        public void SetBlog(String blogId) {
-            _blogId = blogId;
+        public void SetBlog(String blog) {
+            this.blogId = blog;
         }
         public IEnumerable<BlogInfo> GetUsersBlogs() {
             try {
@@ -38,7 +38,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         }
         public List<Post> GetRecentPosts(Int32 postCount = 5) {
             try {
-                return new List<Post>(metaWeblogProvider.GetRecentPosts(_blogId, _userName, Crypt.SecureStringToString(_password), postCount));
+                return new List<Post>(metaWeblogProvider.GetRecentPosts(blogId, _userName, Crypt.SecureStringToString(_password), postCount));
             } catch (Exception e) {
                 Utils.MsgBox("Error", e.Message);
             }
@@ -53,7 +53,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
             return null;
         }
         public String AddPost(Post post, Boolean publish = true) {
-            return metaWeblogProvider.AddPost(_blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
+            return metaWeblogProvider.AddPost(blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
         }
         public Boolean UpdatePost(Post post, Boolean publish = true) {
             return metaWeblogProvider.UpdatePost(post.PostId, _userName, Crypt.SecureStringToString(_password), post, publish);

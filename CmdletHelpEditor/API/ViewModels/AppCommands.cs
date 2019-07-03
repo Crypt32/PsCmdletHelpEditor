@@ -107,7 +107,7 @@ namespace CmdletHelpEditor.API.ViewModels {
                 LoadCmdletsForProject(tab);
             } catch (Exception e) {
                 Utils.MsgBox("Read error", e.Message);
-                
+
             }
         }
         void SaveProjectFile(Object obj) {
@@ -284,8 +284,8 @@ namespace CmdletHelpEditor.API.ViewModels {
         // predicate
         Boolean CanOpen(Object obj) {
             return _mwvm.SelectedTab == null ||
-                (((Grid) _mwvm.SelectedTab.Content).Children.Count == 0 ||
-                !(((Grid) _mwvm.SelectedTab.Content).Children[0] is BusyUC));
+                (((Grid)_mwvm.SelectedTab.Content).Children.Count == 0 ||
+                !(((Grid)_mwvm.SelectedTab.Content).Children[0] is BusyUC));
         }
         Boolean CanSave(Object obj) {
             return _mwvm.SelectedTab != null &&
@@ -299,7 +299,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             return obj != null;
         }
         Boolean CanPublish(Object obj) {
-            Object[] param = (Object[]) obj;
+            Object[] param = (Object[])obj;
             return param[0] != null &&
                    ((ClosableModuleItem)param[0]).Module != null &&
                    ((ClosableModuleItem)param[0]).Module.Cmdlets.Count > 0;
@@ -314,8 +314,8 @@ namespace CmdletHelpEditor.API.ViewModels {
             tab.Focus();
             MessageBoxResult mbxResult = Utils.MsgBox("PS Cmdlet Help Editor", Strings.InfoSaveRequired, MessageBoxImage.Warning, MessageBoxButton.YesNoCancel);
             switch (mbxResult) {
-                case MessageBoxResult.Yes:    SaveProjectFile(null); return true;
-                case MessageBoxResult.No:     return true;
+                case MessageBoxResult.Yes: SaveProjectFile(null); return true;
+                case MessageBoxResult.No: return true;
                 case MessageBoxResult.Cancel: return false;
             }
             return true;
