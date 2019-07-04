@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -59,18 +61,17 @@ namespace CmdletHelpEditor.API.ViewModels {
                         await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger, true);
                         cmdlet.Status = OnlinePublishStatusEnum.Succeed;
                         cmdlet.StatusText = "The operation completed successfully.";
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         cmdlet.Status = OnlinePublishStatusEnum.Failed;
                         cmdlet.StatusText = e.Message;
                     }
-                }
-                else {
+                } else {
                     cmdlet.Status = OnlinePublishStatusEnum.Skipped;
                     cmdlet.StatusText = "The item is not configured for publishing";
                 }
 
                 PbValue += duration;
+                await Task.Factory.StartNew(() => Thread.Sleep(1000));
             }
             PbValue = 100;
         }

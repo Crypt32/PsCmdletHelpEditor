@@ -24,15 +24,14 @@ namespace CmdletHelpEditor.API.Tools {
                     blogger = Utils.InitializeBlogger(module.Provider);
                 }
                 if (blogger == null) {
-                    Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation );
-                    return;
+                    throw new Exception(Strings.WarnBloggerNeedsMoreData);
                 }
                 if (String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
                     // assuming that article does not exist
                     cmdlet.ArticleIDString = blogger.AddPost(post);
-                    if (!String.IsNullOrEmpty(cmdlet.ArticleIDString) && !quiet) {
-                        Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxImage.Information);
-                    }
+                    //if (!String.IsNullOrEmpty(cmdlet.ArticleIDString) && !quiet) {
+                    //    Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxImage.Information);
+                    //}
                     // get post URL once published
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
                         try {
@@ -75,7 +74,7 @@ namespace CmdletHelpEditor.API.Tools {
                 await PublishSingle(cmdlet, module, blogger, true);
                 pb.Value += duration;
             }
-            Utils.MsgBox("Success", (new Win32Exception(0)).Message, MessageBoxImage.Information );
+            Utils.MsgBox("Success", (new Win32Exception(0)).Message, MessageBoxImage.Information);
             pb.Value = 100;
         }
     }
