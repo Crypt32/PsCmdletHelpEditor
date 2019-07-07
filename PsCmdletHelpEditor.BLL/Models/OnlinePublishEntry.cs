@@ -1,8 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.Models {
-    class OnlinePublishEntry : INotifyPropertyChanged {
+    public class OnlinePublishEntry : ViewModelBase {
         CmdletObject cmdlet;
         OnlinePublishStatusEnum status = OnlinePublishStatusEnum.Pending;
         String statusText = "Pending";
@@ -28,11 +28,5 @@ namespace PsCmdletHelpEditor.BLL.Models {
                 OnPropertyChanged(nameof(StatusText));
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

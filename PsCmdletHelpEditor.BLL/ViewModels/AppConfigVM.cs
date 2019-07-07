@@ -6,18 +6,15 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    public class AppConfigVM : ViewModelBase, IAppConfigVM {
+    public class AppConfigVM : ClosableDialogViewModel, IAppConfigVM {
         readonly IConfigProvider _configProvider;
-        Boolean? dialogResult;
 
         public AppConfigVM(IConfigProvider configProvider) {
             _configProvider = configProvider;
             SaveConfigCommand = new RelayCommand(saveConfig);
-            CloseCommand = new RelayCommand(close);
         }
 
         public ICommand SaveConfigCommand { get; }
-        public ICommand CloseCommand { get; }
 
         public Boolean LoadPsFunctions {
             get => _configProvider.LoadPsFunctions;
@@ -94,14 +91,6 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             set {
                 _configProvider.ToolbarLocked = value;
                 OnPropertyChanged(nameof(ToolbarLocked));
-            }
-        }
-
-        public Boolean? DialogResult {
-            get => dialogResult;
-            set {
-                dialogResult = value;
-                OnPropertyChanged(nameof(DialogResult));
             }
         }
 

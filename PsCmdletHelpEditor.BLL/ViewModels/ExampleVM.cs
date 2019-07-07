@@ -1,11 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Input;
 using PsCmdletHelpEditor.BLL.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    public class ExampleVM : INotifyPropertyChanged {
+    public class ExampleVM : ViewModelBase {
         CmdletObject cmdlet;
         Example currentExample;
 
@@ -15,7 +15,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             UpExampleCommand = new RelayCommand(upExample, canUpExample);
             DownExampleCommad = new RelayCommand(downExample, canDownExample);
         }
-        
+
         public ICommand NewExampleCommand { get; set; }
         public ICommand RemoveExampleCommand { get; set; }
         public ICommand UpExampleCommand { get; set; }
@@ -30,7 +30,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 OnPropertyChanged("ExampleTextBoxEnabled");
             }
         }
-        
+
         void newExample(Object obj) {
             var example = new Example();
             cmdlet.Examples.Add(example);
@@ -72,15 +72,9 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) < count;
         }
 
-        public void SetCmdlet(CmdletObject newcmdlet) {
-            cmdlet = newcmdlet;
+        public void SetCmdlet(CmdletObject newCmdlet) {
+            cmdlet = newCmdlet;
             CurrentExample = null;
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

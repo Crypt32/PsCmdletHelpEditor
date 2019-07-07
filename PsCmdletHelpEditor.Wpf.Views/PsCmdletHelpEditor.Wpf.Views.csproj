@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ScrollableListView.cs" />
     <Compile Include="WpfUIWindowDialogService.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
     <Compile Include="Converters\BooleanToVisibilityReverse.cs" />
@@ -137,8 +138,8 @@
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\OnlinePublishProgressWindow.xaml.cs">
-      <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
+    <Compile Include="Dialogs\OnlinePublishProgressDialog.xaml.cs">
+      <DependentUpon>OnlinePublishProgressDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WindowDialog.xaml.cs">
       <DependentUpon>WindowDialog.xaml</DependentUpon>
@@ -257,7 +258,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\OnlinePublishProgressWindow.xaml">
+    <Page Include="Dialogs\OnlinePublishProgressDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

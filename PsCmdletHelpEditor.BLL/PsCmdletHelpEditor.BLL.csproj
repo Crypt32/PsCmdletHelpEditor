@@ -49,9 +49,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\Controls\IScrollableListView.cs" />
     <Compile Include="Abstraction\IAppConfigVM.cs" />
     <Compile Include="Abstraction\IConfigProvider.cs" />
     <Compile Include="Abstraction\IMainWindow.cs" />
+    <Compile Include="Abstraction\IOnlinePublishProgressVM.cs" />
     <Compile Include="Abstraction\IUIWindowDialogService.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Models\ClosableModuleItem.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Utility\SavePendingEventHandler.cs" />
     <Compile Include="ViewModels\AppCommands.cs" />
     <Compile Include="ViewModels\AppConfigVM.cs" />
+    <Compile Include="ViewModels\ClosableDialogViewModel.cs" />
     <Compile Include="ViewModels\EditorVM.cs" />
     <Compile Include="ViewModels\ExampleVM.cs" />
     <Compile Include="ViewModels\FormatCommands.cs" />
@@ -109,7 +112,6 @@
     <Compile Include="ViewModels\ParamVM.cs" />
     <Compile Include="ViewModels\RelatedLinkVM.cs" />
     <Compile Include="ViewModels\UIManager.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Unity">

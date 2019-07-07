@@ -9,8 +9,12 @@ namespace PsCmdletHelpEditor.Wpf.Views.Controls {
     /// <summary>
     /// This class contains a few useful extenders for the ListBox
     /// </summary>
-    public class ListViewExtenders : DependencyObject {
-        public static readonly DependencyProperty AutoScrollToEndProperty = DependencyProperty.RegisterAttached("AutoScrollToEnd", typeof(Boolean), typeof(ListViewExtenders), new UIPropertyMetadata(default(Boolean), OnAutoScrollToEndChanged));
+    class ListViewExtenders : DependencyObject {
+        public static readonly DependencyProperty AutoScrollToEndProperty = DependencyProperty.RegisterAttached(
+            "AutoScrollToEnd",
+            typeof(Boolean),
+            typeof(ListViewExtenders),
+            new UIPropertyMetadata(default(Boolean), OnAutoScrollToEndChanged));
 
         /// <summary>
         /// Returns the value of the AutoScrollToEndProperty
@@ -37,8 +41,7 @@ namespace PsCmdletHelpEditor.Wpf.Views.Controls {
         /// <param name="s">The sender (the ListBox)</param>
         /// <param name="e">Some additional information</param>
         public static void OnAutoScrollToEndChanged(DependencyObject s, DependencyPropertyChangedEventArgs e) {
-            var listView = s as ListView;
-            if (listView == null) { return; }
+            if (!(s is ListView listView)) { return; }
             var listViewItems = listView.Items;
             var data = listViewItems.SourceCollection as INotifyCollectionChanged;
 

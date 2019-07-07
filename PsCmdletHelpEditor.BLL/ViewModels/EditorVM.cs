@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using PsCmdletHelpEditor.BLL.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    public class EditorVM : INotifyPropertyChanged {
+    public class EditorVM : ViewModelBase {
         Int32 paramIndex = -1;
         CmdletObject currentCmdlet;
 
@@ -35,11 +35,5 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 OnPropertyChanged(nameof(ParamIndex));
             }
         }
-        
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

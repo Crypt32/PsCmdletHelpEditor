@@ -18,12 +18,14 @@ using Unity;
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class AppCommands {
         readonly IAppConfigVM _appConfig;
+        readonly IUIWindowDialogService _dialogService;
         readonly MainWindowVM _mwvm;
         Boolean alreadyRaised;
 
         public AppCommands(MainWindowVM parent) {
             _mwvm = parent;
             _appConfig = UnityConfig.Container.Resolve<IAppConfigVM>();
+            _dialogService = UnityConfig.Container.Resolve<IUIWindowDialogService>();
             AddTabCommand = new RelayCommand(AddTab);
             CloseTabCommand = new RelayCommand(CloseTab);
             LoadModulesCommand = new RelayCommand(LoadModules, CanLoadModuleList);
@@ -181,8 +183,8 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             }
         }
         void publishOnline(Object obj) {
-            OnlinePublishProgressWindow dlg = new OnlinePublishProgressWindow(_mwvm.SelectedTab.Module);
-            dlg.Show();
+            var vm = UnityConfig.Container.Resolve<IOnlinePublishProgressVM>();
+            vm.SetModule(_mwvm.SelectedTab.Module);
         }
 
         public async void LoadCmdlets(Object helpPath, Boolean importCBH) {

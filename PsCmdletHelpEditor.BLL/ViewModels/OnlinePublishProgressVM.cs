@@ -1,27 +1,41 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using PsCmdletHelpEditor.BLL.Abstraction;
+using PsCmdletHelpEditor.BLL.Abstraction.Controls;
 using PsCmdletHelpEditor.BLL.Models;
 using PsCmdletHelpEditor.BLL.Tools;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    class OnlinePublishProgressVM : ViewModelBase {
+    public class OnlinePublishProgressVM : ClosableDialogViewModel, IOnlinePublishProgressVM {
+        const String StartTitle = "Publish";
+        const String StopTitle = "Stop";
         ModuleObject module;
         Double pbValue;
         OnlinePublishEntry selectedEntry;
+        String buttonTitle;
+        Boolean isRunning, stopRequested;
 
         public OnlinePublishProgressVM() {
-            Cmdlets = new ObservableCollection<OnlinePublishEntry>();
+            buttonTitle = StartTitle;
             PublishCommand = new RelayCommand(publish);
         }
 
-        public ICommand PublishCommand { get; set; }
+        public ICommand PublishCommand { get; }
 
-        public ObservableCollection<OnlinePublishEntry> Cmdlets { get; set; }
+        public ObservableCollection<OnlinePublishEntry> Cmdlets { get; }
+            = new ObservableCollection<OnlinePublishEntry>();
+
+        public String ButtonTitle {
+            get => buttonTitle;
+            set {
+                buttonTitle = value;
+                OnPropertyChanged(nameof(ButtonTitle));
+            }
+        }
 
         public OnlinePublishEntry SelectedEntry {
             get => selectedEntry;
@@ -39,7 +53,15 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
 
         async void publish(Object obj) {
-            ListView lv = (ListView)obj;
+            if (isRunning) {
+                stopRequested = true;
+                return;
+            }
+            if (!(obj is IScrollableListView lv)) {
+                MsgBox.Show("Invalid Parameter", "The supplied parameter is incorrect.");
+                return;
+            }
+            ButtonTitle = StopTitle;
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
                 cmdlet.Status = OnlinePublishStatusEnum.Pending;
                 cmdlet.StatusText = "Pending for publish";
@@ -52,7 +74,13 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             }
             Double duration = 100.0 / Cmdlets.Count;
             PbValue = 0;
+            if (!isRunning) {
+                isRunning = true;
+            }
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
+                if (stopRequested) {
+                    break;
+                }
                 lv.ScrollIntoView(cmdlet);
                 if (cmdlet.Cmdlet.Publish) {
                     try {
@@ -70,7 +98,9 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
 
                 PbValue += duration;
             }
-            PbValue = 100;
+            isRunning = false;
+            stopRequested = false;
+            ButtonTitle = StartTitle;
         }
 
         public void SetModule(ModuleObject moduleObject) {
