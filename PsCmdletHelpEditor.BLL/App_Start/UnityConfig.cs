@@ -9,7 +9,9 @@ namespace PsCmdletHelpEditor.BLL {
 
         public static void Configure(IUnityContainer container) {
             Container = container;
-            container.RegisterType<IAppConfigVM, AppConfigVM>();
+            Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
+            container.RegisterSingleton<IAppConfigVM, AppConfigVM>();
+            container.RegisterSingleton<IFormatCommands, FormatCommands>();
             container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
         }
     }

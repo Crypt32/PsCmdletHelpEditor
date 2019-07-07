@@ -1,51 +1,49 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using PsCmdletHelpEditor.BLL.Abstraction;
+using PsCmdletHelpEditor.BLL.Abstraction.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    public static class FormatCommands {
-        static FormatCommands() {
-            SetCommonFormatCommand = new RelayCommand(SetFormat, CanFormat);
+    public class FormatCommands : IFormatCommands {
+        public FormatCommands() {
+            SetBoldCommand = new RelayCommand(setBold, canFormat);
+            SetItalicCommand = new RelayCommand(setItalic, canFormat);
+            SetUnderlineCommand = new RelayCommand(setUnderline, canFormat);
+            SetStrikeCommand = new RelayCommand(setStrike, canFormat);
         }
 
-        public static ICommand SetCommonFormatCommand { get; set; }
+        public ICommand SetBoldCommand { get; }
+        public ICommand SetItalicCommand { get; }
+        public ICommand SetUnderlineCommand { get; }
+        public ICommand SetStrikeCommand { get; }
 
-        static void SetFormat(Object obj) {
-            if (obj == null) { return; }
-            Object[] param = (Object[]) obj;
-            IInputElement felement = FocusManager.GetFocusedElement((MainWindow)param[0]);
-            if (!(felement is TextBox)) { return; }
-            Int32 index = ((TextBox)felement).CaretIndex;
-            switch (((Button)param[1]).Name) {
-                case "Bold":
-                    ((TextBox)felement).SelectedText = "[b]" + ((TextBox)felement).SelectedText + "[/b]";
-                    break;
-                case "Italic":
-                    ((TextBox)felement).SelectedText = "[i]" + ((TextBox)felement).SelectedText + "[/i]";
-                    break;
-                case "Underline":
-                    ((TextBox)felement).SelectedText = "[u]" + ((TextBox)felement).SelectedText + "[/u]";
-                    break;
-                case "Strike":
-                    ((TextBox)felement).SelectedText = "[s]" + ((TextBox)felement).SelectedText + "[/s]";
-                    break;
-            }
-            ((TextBox)felement).CaretIndex = index + 3;
+        void setBold(Object o) {
+            var textBox = (IFormattableTextBox)o;
+            setCommonFormat("b", textBox);
         }
-        static Boolean CanFormat(Object obj) {
-            //return true;
-            try {
-                if (obj == null) { return false; }
-                Object[] param = (Object[])obj;
-                IInputElement felement = FocusManager.GetFocusedElement((MainWindow)param[0]);
-                if (felement == null) { return false; }
-                return felement is TextBox && (String)((TextBox)felement).Tag == "AllowFormat";
-            }
-            catch (Exception e) {
+        void setItalic(Object o) {
+            var textBox = (IFormattableTextBox)o;
+            setCommonFormat("i", textBox);
+        }
+        void setUnderline(Object o) {
+            var textBox = (IFormattableTextBox)o;
+            setCommonFormat("u", textBox);
+        }
+        void setStrike(Object o) {
+            var textBox = (IFormattableTextBox)o;
+            setCommonFormat("s", textBox);
+        }
+        void setCommonFormat(String format, IFormattableTextBox textBox) {
+            Int32 index = textBox.CaretIndex;
+            textBox.SelectedText = $"[{format}]{textBox.SelectedText}[/{format}]";
+            textBox.CaretIndex = index + 2 + format.Length;
+        }
+        Boolean canFormat(Object o) {
+            if (!(o is IFormattableTextBox textBox)) {
                 return false;
             }
+            return textBox.AllowFormat;
         }
     }
 }

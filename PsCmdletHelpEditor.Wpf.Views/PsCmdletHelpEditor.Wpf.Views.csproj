@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\FormattableTextBox.cs" />
     <Compile Include="Controls\ScrollableListView.cs" />
     <Compile Include="WpfUIWindowDialogService.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />

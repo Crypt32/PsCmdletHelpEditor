@@ -94,6 +94,9 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             }
         }
 
+        public Boolean SupportsWorkflow { get; set; }
+        public Boolean SupportsDsc { get; set; }
+
         void saveConfig(Object obj) {
             try {
                 _configProvider.SaveSettings();

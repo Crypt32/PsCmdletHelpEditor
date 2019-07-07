@@ -3,22 +3,23 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.BLL.Models;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    public class MainWindowVM : DependencyObject, INotifyPropertyChanged {
+    public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
         Visibility pbVisible;
         Double pbProgress;
         String busyControlText;
         Int32? psversion;
         ClosableModuleItem selectedTab;
 
-        public MainWindowVM() {
-            //Settings.Default.Reload();
-            Modules = new ObservableCollection<ModuleObject>();
-            Tabs = new ObservableCollection<ClosableModuleItem>();
+        public MainWindowVM(
+            IFormatCommands formatCommands,
+            IAppConfigVM appConfig) {
+            FormatCommands = formatCommands;
             CommandManager = new AppCommands(this);
-            ConfigContext = new AppConfigVM();
+            ConfigContext = appConfig;
             initialize();
         }
         void initialize() {
@@ -43,13 +44,16 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         public RelatedLinkVM RelatedLinkContext { get; set; }
         public ExampleVM ExampleContext { get; set; }
         public OutputVM OutputContext { get; set; }
-        public AppConfigVM ConfigContext { get; set; }
+        public IAppConfigVM ConfigContext { get; }
+        public IFormatCommands FormatCommands { get; }
         #endregion
 
         // data definitions
-        public ObservableCollection<ModuleObject> Modules { get; set; }
-        public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
-        
+        public ObservableCollection<ModuleObject> Modules { get; }
+            = new ObservableCollection<ModuleObject>();
+        public ObservableCollection<ClosableModuleItem> Tabs { get; }
+            = new ObservableCollection<ClosableModuleItem>();
+
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
             nameof(SelectedModule),
@@ -73,7 +77,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             typeof(String),
             typeof(MainWindowVM),
             new PropertyMetadata(String.Empty));
-        
+
         // objects
         public ModuleObject SelectedModule {
             get => (ModuleObject)GetValue(SelectedModuleProperty);
@@ -85,11 +89,11 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 psversion = value;
                 switch (psversion) {
                     case 3:
-                        Settings.Default.WorkflowEnabled = true;
+                        ConfigContext.SupportsWorkflow = true;
                         break;
                     case 4:
-                        Settings.Default.WorkflowEnabled = true;
-                        Settings.Default.ConfigurationEnabled = true;
+                        ConfigContext.SupportsWorkflow = true;
+                        ConfigContext.SupportsDsc = true;
                         break;
                 }
                 OnPropertyChanged(nameof(PsVersion));

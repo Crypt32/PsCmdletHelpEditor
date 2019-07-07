@@ -3,62 +3,38 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-         xmlns:c="clr-namespace:PsCmdletHelpEditor.Wpf.Views.Converters"
-         xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels;assembly=PsCmdletHelpEditor"
+         xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
          mc:Ignorable="d"
-         d:DataContext="{d:DesignInstance vm:MainWindowVM}"
          FontWeight="Bold"
          FontFamily="Times New Roman"
+         d:DataContext="{d:DesignInstance vm:FormatCommands}"
          FontSize="14">
-    <ToolBar.Resources>
-        <c:MultiParamConverter x:Key="MultiParamConverter" />
-    </ToolBar.Resources>
     <Button x:Name="Bold"
             ToolTip="Bold (Ctrl + B)"
             MinWidth="21"
-            Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
-        <Button.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-                <Binding RelativeSource="{RelativeSource Self}"/>
-            </MultiBinding>
-        </Button.CommandParameter>
+            Command="{Binding SetBoldCommand}"
+            CommandParameter="{Binding (FocusManager.FocusedElement), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
         <TextBlock Text="B"/>
     </Button>
     <Button x:Name="Italic"
             ToolTip="Italic (Ctrl + I)"
             MinWidth="21"
-            Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
-        <Button.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-                <Binding RelativeSource="{RelativeSource Self}"/>
-            </MultiBinding>
-        </Button.CommandParameter>
+            Command="{Binding SetItalicCommand}"
+            CommandParameter="{Binding (FocusManager.FocusedElement), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
         <TextBlock Text="I" FontStyle="Italic"/>
     </Button>
     <Button x:Name="Underline"
             ToolTip="Underline (Ctrl + U)"
             MinWidth="21"
-            Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
-        <Button.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-                <Binding RelativeSource="{RelativeSource Self}"/>
-            </MultiBinding>
-        </Button.CommandParameter>
+            Command="{Binding SetUnderlineCommand}"
+            CommandParameter="{Binding (FocusManager.FocusedElement), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
         <TextBlock Text="U" TextDecorations="Underline"/>
     </Button>
     <Button x:Name="Strike"
-            ToolTip="Strikethrough (Ctrl + H)"
+            ToolTip="Strike-through (Ctrl + H)"
             MinWidth="21"
-            Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
-        <Button.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-                <Binding RelativeSource="{RelativeSource Self}"/>
-            </MultiBinding>
-        </Button.CommandParameter>
-        <TextBlock Text="S" TextDecorations="Strikethrough"/>
+            Command="{Binding SetStrikeCommand}"
+            CommandParameter="{Binding (FocusManager.FocusedElement), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <TextBlock Text="S" TextDecorations="Strike-through"/>
     </Button>
 </ToolBar>

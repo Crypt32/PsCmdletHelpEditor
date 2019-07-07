@@ -1,5 +1,3 @@
 ﻿namespace PsCmdletHelpEditor.BLL.Abstraction {
-    public interface IMainWindow {
-        
-    }
+    public interface IMainWindowVM { }
 }

@@ -43,10 +43,10 @@
                 <CheckBox Content="Script"
                           IsChecked="{Binding LoadPsScripts}"/>
                 <CheckBox Content="Workflow"
-                          IsEnabled="{Binding WorkflowEnabled}"
+                          IsEnabled="{Binding SupportsWorkflow}"
                           IsChecked="{Binding LoadPsWorkflows}"/>
                 <CheckBox Content="DSC Configuration"
-                          IsEnabled="{Binding ConfigurationEnabled}"
+                          IsEnabled="{Binding SupportsDsc}"
                           IsChecked="{Binding LoadPsDscConfigurations}"/>
                 <CheckBox Content="Application"
                           IsChecked="{Binding LoadPsApplications}"/>

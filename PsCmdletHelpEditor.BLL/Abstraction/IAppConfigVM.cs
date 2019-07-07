@@ -10,6 +10,8 @@ namespace PsCmdletHelpEditor.BLL.Abstraction {
         Boolean LoadPsApplications { get; set; }
         Boolean LoadPsDscConfigurations { get; set; }
         Boolean LoadExternalPsScripts { get; set; }
+        Boolean SupportsWorkflow { get; set; }
+        Boolean SupportsDsc { get; set; }
         Boolean ShowToolbar { get; set; }
         Boolean ShowStatusBar { get; set; }
         Boolean ToolbarLocked { get; set; }

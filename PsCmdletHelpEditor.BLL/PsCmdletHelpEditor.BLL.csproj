@@ -49,10 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\Controls\IFormattableTextBox.cs" />
     <Compile Include="Abstraction\Controls\IScrollableListView.cs" />
     <Compile Include="Abstraction\IAppConfigVM.cs" />
     <Compile Include="Abstraction\IConfigProvider.cs" />
-    <Compile Include="Abstraction\IMainWindow.cs" />
+    <Compile Include="Abstraction\IFormatCommands.cs" />
+    <Compile Include="Abstraction\IMainWindowVM.cs" />
     <Compile Include="Abstraction\IOnlinePublishProgressVM.cs" />
     <Compile Include="Abstraction\IUIWindowDialogService.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
