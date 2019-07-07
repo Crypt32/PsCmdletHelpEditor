@@ -17,25 +17,9 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                     ProviderURL = "https://www.codeplex.com/site/metaweblog"
                 },
                 new ProviderInformation {
-                    ProviderName = "Custom"
+                    ProviderName = "XML-RPC"
                 }
             };
-        }
-        public static String GetCommandTypes() {
-            List<String> cmds = new List<String>();
-            if (Settings.Default.FunctionChecked) { cmds.Add("Function"); }
-            if (Settings.Default.FilterChecked) { cmds.Add("Filter"); }
-            if (Settings.Default.CmdletChecked) { cmds.Add("Cmdlet"); }
-            if (Settings.Default.ExternalScriptChecked) { cmds.Add("ExternalScript"); }
-            if (Settings.Default.ScriptChecked) { cmds.Add("Script"); }
-            if (PowerShellProcessor.PsVersion >= 3 && Settings.Default.WorkflowChecked) { cmds.Add("Workflow"); }
-            if (PowerShellProcessor.PsVersion >= 4 && Settings.Default.ApplicationChecked) { cmds.Add("Application"); }
-            try {
-                return String.Join(",", cmds);
-            } catch {
-                return null;
-            }
-
         }
         public static IXmlRpcClient InitializeBlogger(ProviderInformation provInfo) {
             if (

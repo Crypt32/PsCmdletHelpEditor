@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using PsCmdletHelpEditor.BLL.Abstraction;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
@@ -114,6 +115,18 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
         void close(Object o) {
             DialogResult = true;
+        }
+
+        public String GetCommandTypesString() {
+            var commands = new List<String>();
+            if (LoadPsFunctions) { commands.Add("Function"); }
+            if (LoadPsFilter) { commands.Add("Filter"); }
+            if (LoadPsCmdlets) { commands.Add("Cmdlet"); }
+            if (LoadExternalPsScripts) { commands.Add("ExternalScript"); }
+            if (LoadPsScripts) { commands.Add("Script"); }
+            if (LoadPsWorkflows) { commands.Add("Workflow"); }
+            if (LoadPsDscConfigurations) { commands.Add("Application"); }
+            return String.Join(",", commands);
         }
     }
 }

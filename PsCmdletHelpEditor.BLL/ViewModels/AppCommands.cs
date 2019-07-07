@@ -8,18 +8,22 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
+using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.BLL.Models;
 using PsCmdletHelpEditor.BLL.Tools;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using Unity;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class AppCommands {
+        readonly IAppConfigVM _appConfig;
         readonly MainWindowVM _mwvm;
         Boolean alreadyRaised;
 
         public AppCommands(MainWindowVM parent) {
             _mwvm = parent;
+            _appConfig = UnityConfig.Container.Resolve<IAppConfigVM>();
             AddTabCommand = new RelayCommand(AddTab);
             CloseTabCommand = new RelayCommand(CloseTab);
             LoadModulesCommand = new RelayCommand(LoadModules, CanLoadModuleList);
@@ -184,14 +188,14 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         public async void LoadCmdlets(Object helpPath, Boolean importCBH) {
             ClosableModuleItem previousTab = _mwvm.SelectedTab;
             UIElement previousElement = ((Grid)previousTab.Content).Children[0];
-            String cmd = Utils.GetCommandTypes();
-            if (String.IsNullOrEmpty(cmd)) {
+            String commandsToLoad = _appConfig.GetCommandTypesString();
+            if (String.IsNullOrEmpty(commandsToLoad)) {
                 MsgBox.Show("Error", Strings.E_EmptyCmds);
                 return;
             }
             UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
             try {
-                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(_mwvm.SelectedModule, cmd, importCBH);
+                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(_mwvm.SelectedModule, commandsToLoad, importCBH);
                 _mwvm.SelectedModule.Cmdlets.Clear();
                 foreach (CmdletObject item in data) {
                     _mwvm.SelectedModule.Cmdlets.Add(item);
@@ -252,8 +256,8 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             UIManager.ShowModuleList(previousTab);
         }
         async void LoadCmdletsForProject(ClosableModuleItem tab) {
-            String cmd = Utils.GetCommandTypes();
-            if (String.IsNullOrEmpty(cmd)) {
+            String commandsToLoad = _appConfig.GetCommandTypesString();
+            if (String.IsNullOrEmpty(commandsToLoad)) {
                 MsgBox.Show("Error", Strings.E_EmptyCmds);
                 return;
             }
@@ -264,7 +268,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             tab.EditorContext.CurrentCmdlet = null;
             List<CmdletObject> nativeCmdlets = new List<CmdletObject>();
             try {
-                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(tab.Module, cmd, false);
+                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(tab.Module, commandsToLoad, false);
                 nativeCmdlets.AddRange(data);
                 PowerShellProcessor.CompareCmdlets(tab.Module, nativeCmdlets);
             } catch (Exception e) {
