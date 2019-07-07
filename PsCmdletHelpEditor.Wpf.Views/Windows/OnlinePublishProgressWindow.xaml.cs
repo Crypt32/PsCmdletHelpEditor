@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using PsCmdletHelpEditor.BLL.Models;
 
 namespace PsCmdletHelpEditor.Wpf.Views.Windows {
     /// <summary>

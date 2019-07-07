@@ -3,12 +3,12 @@
 		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		  xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+		  xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
 		  mc:Ignorable="d"
-		  d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
+		  d:DataContext="{d:DesignInstance vm:MainWindowVM}"
 		  Header="_Help">
 	<MenuItem Header="_About"
-			  Command="{Binding Source={x:Static viewModels:UIManager.AboutCommand}}">
+			  Command="{Binding Source={x:Static vm:UIManager.AboutCommand}}">
 		<MenuItem.Icon>
 			<Image Source="/Images/Menu/info_16x16.png"/>
 		</MenuItem.Icon>

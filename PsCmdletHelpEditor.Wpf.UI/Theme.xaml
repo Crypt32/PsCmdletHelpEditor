@@ -4,6 +4,7 @@
                     xmlns:m="clr-namespace:PsCmdletHelpEditor.BLL.Models;assembly=PsCmdletHelpEditor.BLL">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Wpf.OfficeTheme;component/UI/OfficeTheme.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/PsCmdletHelpEditor.Wpf.Views;component/DialogToVmMap.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBoxBase}}">
         <Setter Property="TextWrapping" Value="Wrap"/>

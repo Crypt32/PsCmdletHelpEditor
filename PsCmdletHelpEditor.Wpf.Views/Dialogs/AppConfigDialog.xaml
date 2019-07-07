@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="PsCmdletHelpEditor.Wpf.Views.Dialogs.AppConfigDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
+        xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
+        Background="{StaticResource PanelBackgroundBrush}"
+        mc:Ignorable="d"
+        Width="400"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        d:DataContext="{d:DesignInstance vm:AppConfigVM}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" Background="{StaticResource PanelHeaderBackground}">
+            <Border BorderThickness="0,1,0,0" BorderBrush="#FF7C9EBC" DockPanel.Dock="Top"/>
+            <Button Content="Cancel"
+                    IsCancel="True"
+                    Command="{Binding CloseCommand}"
+                    DockPanel.Dock="Right"
+                    MinWidth="60"
+                    Margin="10"/>
+            <Button Content="Save"
+                    IsDefault="True"
+                    Command="{Binding SaveConfigCommand}"
+                    DockPanel.Dock="Right"
+                    MinWidth="60"
+                    Margin="10"/>
+            <TextBlock/>
+        </DockPanel>
+        <GroupBox behaviors:MarginSetter.Margin="3"
+                  Header="Command types to load"
+                  Foreground="Navy">
+            <StackPanel>
+                <CheckBox Content="Function"
+                          IsChecked="{Binding LoadPsFunctions}"
+                          Margin="0,5,0,0"/>
+                <CheckBox Content="Filter"
+                          IsChecked="{Binding LoadPsFilter}"/>
+                <CheckBox Content="Cmdlet"
+                          IsChecked="{Binding LoadPsCmdlets}"/>
+                <CheckBox Content="External script"
+                          IsChecked="{Binding LoadExternalPsScripts}"/>
+                <CheckBox Content="Script"
+                          IsChecked="{Binding LoadPsScripts}"/>
+                <CheckBox Content="Workflow"
+                          IsEnabled="{Binding WorkflowEnabled}"
+                          IsChecked="{Binding LoadPsWorkflows}"/>
+                <CheckBox Content="DSC Configuration"
+                          IsEnabled="{Binding ConfigurationEnabled}"
+                          IsChecked="{Binding LoadPsDscConfigurations}"/>
+                <CheckBox Content="Application"
+                          IsChecked="{Binding LoadPsApplications}"/>
+            </StackPanel>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

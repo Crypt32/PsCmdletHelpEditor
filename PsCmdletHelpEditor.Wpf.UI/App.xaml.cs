@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using PsCmdletHelpEditor.BLL;
+using PsCmdletHelpEditor.BLL.Abstraction;
+using PsCmdletHelpEditor.Wpf.Views;
 using Unity;
 
 namespace PsCmdletHelpEditor.Wpf.UI {
@@ -14,6 +16,7 @@ namespace PsCmdletHelpEditor.Wpf.UI {
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
             IUnityContainer container = new UnityContainer();
+            container.RegisterType<IUIWindowDialogService, WpfUIWindowDialogService>();
             UnityConfig.Configure(container);
         }
 

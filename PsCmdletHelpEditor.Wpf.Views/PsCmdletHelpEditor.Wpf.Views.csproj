@@ -4,6 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{7E7D487D-443E-4594-8619-173C9F9A991B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -49,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WpfUIWindowDialogService.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
     <Compile Include="Converters\BooleanToVisibilityReverse.cs" />
     <Compile Include="Converters\MultiParamConverter.cs" />
@@ -59,8 +61,8 @@
     <Compile Include="Dialogs\ModuleProperties.xaml.cs">
       <DependentUpon>ModuleProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Options.xaml.cs">
-      <DependentUpon>Options.xaml</DependentUpon>
+    <Compile Include="Dialogs\AppConfigDialog.xaml.cs">
+      <DependentUpon>AppConfigDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\AdvancedCmdletUC.xaml.cs">
@@ -138,6 +140,9 @@
     <Compile Include="Windows\OnlinePublishProgressWindow.xaml.cs">
       <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\WindowDialog.xaml.cs">
+      <DependentUpon>WindowDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Dialogs\AboutBox.xaml">
@@ -148,9 +153,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\Options.xaml">
+    <Page Include="Dialogs\AppConfigDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogToVmMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AdvancedCmdletUC.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -252,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\WindowDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\down_32x32.png" />
@@ -332,6 +345,14 @@
     <ProjectReference Include="..\CmdletHelpEditor\CmdletHelpEditor.csproj">
       <Project>{1193A898-7B3B-4C3F-9594-7E71BA36F030}</Project>
       <Name>CmdletHelpEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PsCmdletHelpEditor.BLL\PsCmdletHelpEditor.BLL.csproj">
+      <Project>{70AAFD4A-CA90-4EDA-8832-232DF0ABD39C}</Project>
+      <Name>PsCmdletHelpEditor.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
+      <Project>{2FAE87F8-BEE9-4BE7-9F9D-5D795F2DE205}</Project>
+      <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

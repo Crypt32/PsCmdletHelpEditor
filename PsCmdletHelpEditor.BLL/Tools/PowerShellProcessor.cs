@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Threading.Tasks;
 using PsCmdletHelpEditor.BLL.Models;
+using PsCmdletHelpEditor.BLL.Properties;
 
 namespace PsCmdletHelpEditor.BLL.Tools {
     static class PowerShellProcessor {
@@ -59,10 +61,10 @@ namespace PsCmdletHelpEditor.BLL.Tools {
             return Task.Factory.StartNew(() => {
                 PowerShell ps = PowerShell.Create();
                 ps.AddScript("$PSVersionTable.PSVersion.Major");
-                PsVersion = (Int32?) ps.Invoke()[0].BaseObject;
+                PsVersion = (Int32?)ps.Invoke()[0].BaseObject;
                 ps.Dispose();
-                if (PsVersion >= 3) { Settings.Default.WorkflowEnabled = true; }
-                if (PsVersion >= 4) { Settings.Default.ConfigurationEnabled = true; }
+                if (PsVersion >= 3) { Settings.Default.LoadPsDscConfigurations = true; }
+                if (PsVersion >= 4) { Settings.Default.LoadPsScripts = true; }
                 return PsVersion;
             });
         }
@@ -99,8 +101,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                         Description = (String)item.Members["Description"].Value,
                         ModuleClass = "Snapin"
                     }).ToList());
-                }
-                finally {
+                } finally {
                     ps.Dispose();
                 }
                 List<String> exclude = new List<String> {
@@ -127,8 +128,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 } catch {
                     fired = true;
                     throw;
-                }
-                finally {
+                } finally {
                     ps.Dispose();
                     module.IsOffline = fired;
                 }
@@ -136,8 +136,8 @@ namespace PsCmdletHelpEditor.BLL.Tools {
         }
         public static Task<ModuleObject> GetModuleFromFile(String path) {
             return Task<ModuleObject>.Factory.StartNew(() => {
-                    PowerShell ps = PowerShell.Create();
-                    ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
+                PowerShell ps = PowerShell.Create();
+                ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
                 try {
                     List<PSObject> psmodule = ps.Invoke().ToList();
                     ModuleObject retValue = new ModuleObject {

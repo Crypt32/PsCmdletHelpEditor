@@ -2,11 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:CmdletHelpEditor.Properties"
-        xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-        xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
-        xmlns:controls1="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
+        xmlns:ctrl="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
         xmlns:parts="clr-namespace:PsCmdletHelpEditor.Wpf.Views.UserControls.Parts"
         xmlns:converters1="clr-namespace:PsCmdletHelpEditor.Wpf.Views.Converters"
+        xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
         x:Name="Window"
         Title="PowerShell Cmdlet Help Editor"
         Height="600"
@@ -18,7 +17,7 @@
         Initialized="WindowInitialized"
         Closing="WindowClosing">
     <Window.DataContext>
-        <viewModels:MainWindowVM/>
+        <vm:MainWindowVM/>
     </Window.DataContext>
     <Window.Resources>
         <converters1:MultiParamConverter x:Key="MultiParamConverter" />
@@ -30,7 +29,7 @@
         <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding CommandManager.AddTabCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedTab}"/>
         <!--Formatting-->
-        <KeyBinding Modifiers="Ctrl" Key="B" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <KeyBinding Modifiers="Ctrl" Key="B" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource MultiParamConverter}">
                     <Binding ElementName="Window"/>
@@ -38,7 +37,7 @@
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
-        <KeyBinding Modifiers="Ctrl" Key="I" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <KeyBinding Modifiers="Ctrl" Key="I" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource MultiParamConverter}">
                     <Binding ElementName="Window"/>
@@ -46,7 +45,7 @@
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
-        <KeyBinding Modifiers="Ctrl" Key="U" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <KeyBinding Modifiers="Ctrl" Key="U" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource MultiParamConverter}">
                     <Binding ElementName="Window"/>
@@ -54,7 +53,7 @@
                 </MultiBinding>
             </KeyBinding.CommandParameter>
         </KeyBinding>
-        <KeyBinding Modifiers="Ctrl" Key="H" Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <KeyBinding Modifiers="Ctrl" Key="H" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
             <KeyBinding.CommandParameter>
                 <MultiBinding Converter="{StaticResource MultiParamConverter}">
                     <Binding ElementName="Window"/>
@@ -98,7 +97,7 @@
         <parts:StatusBarMain x:Name="sb"
                              DockPanel.Dock="Bottom"/>
         
-        <controls1:ClosableTabControl ItemsSource="{Binding Tabs}"
+        <ctrl:ClosableTabControl ItemsSource="{Binding Tabs}"
                                      SelectedItem="{Binding SelectedTab}"
                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                      AddTabCommand="{Binding CommandManager.AddTabCommand}"

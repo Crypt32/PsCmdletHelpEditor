@@ -108,6 +108,10 @@
       <Project>{70AAFD4A-CA90-4EDA-8832-232DF0ABD39C}</Project>
       <Name>PsCmdletHelpEditor.BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PsCmdletHelpEditor.Wpf.Views\PsCmdletHelpEditor.Wpf.Views.csproj">
+      <Project>{7E7D487D-443E-4594-8619-173C9F9A991B}</Project>
+      <Name>PsCmdletHelpEditor.Wpf.Views</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

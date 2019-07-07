@@ -2,8 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.BLL.Models;
+using PsCmdletHelpEditor.BLL.Properties;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using Unity;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public static class UIManager {
@@ -19,11 +22,9 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             AboutDlg.ShowDialog();
         }
         public static void ShowConfigure(Object obj) {
-            Window mainWindow = Application.Current.MainWindow;
-            var OptDlg = new Options {
-                Owner = mainWindow
-            };
-            OptDlg.ShowDialog();
+            var uiManager = UnityConfig.Container.Resolve<IUIWindowDialogService>();
+            var vm = UnityConfig.Container.Resolve<IAppConfigVM>();
+            uiManager.ShowDialog("Settings", vm);
         }
         public static void ShowModuleProperties(Object obj) {
             Window mainWindow = Application.Current.MainWindow;
@@ -38,14 +39,14 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             tbt.Visibility = tbt.Visibility == Visibility.Visible
                 ? Visibility.Collapsed
                 : Visibility.Visible;
-            Settings.Default.ToolbarChecked = tbt.Visibility == Visibility.Visible;
+            Settings.Default.ShowToolbar = tbt.Visibility == Visibility.Visible;
         }
         static void ShowStatusBar(Object obj) {
             StatusBarMain sb = ((MainWindow)obj).sb;
             sb.Visibility = sb.Visibility == Visibility.Visible
                 ? Visibility.Collapsed
                 : Visibility.Visible;
-            Settings.Default.StatusbarChecked = sb.Visibility == Visibility.Visible;
+            Settings.Default.ShowStatusBar = sb.Visibility == Visibility.Visible;
         }
 
         static Boolean CanShowModuleProperties(Object obj) {

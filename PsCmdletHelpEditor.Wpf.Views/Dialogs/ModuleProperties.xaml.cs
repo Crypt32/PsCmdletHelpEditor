@@ -9,6 +9,7 @@ using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.BLL.Tools;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {

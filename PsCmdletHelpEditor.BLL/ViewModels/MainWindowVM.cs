@@ -18,7 +18,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             Modules = new ObservableCollection<ModuleObject>();
             Tabs = new ObservableCollection<ClosableModuleItem>();
             CommandManager = new AppCommands(this);
-            ConfigContext = new ConfigVM();
+            ConfigContext = new AppConfigVM();
             initialize();
         }
         void initialize() {
@@ -43,7 +43,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         public RelatedLinkVM RelatedLinkContext { get; set; }
         public ExampleVM ExampleContext { get; set; }
         public OutputVM OutputContext { get; set; }
-        public ConfigVM ConfigContext { get; set; }
+        public AppConfigVM ConfigContext { get; set; }
         #endregion
 
         // data definitions

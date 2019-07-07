@@ -49,12 +49,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\IAppConfigVM.cs" />
+    <Compile Include="Abstraction\IConfigProvider.cs" />
     <Compile Include="Abstraction\IMainWindow.cs" />
+    <Compile Include="Abstraction\IUIWindowDialogService.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Models\ClosableModuleItem.cs" />
     <Compile Include="Models\CmdletObject.cs" />
     <Compile Include="Models\CommandParameterInfo2.cs" />
     <Compile Include="Models\CommandParameterSetInfo2.cs" />
+    <Compile Include="Models\ConfigProvider.cs" />
     <Compile Include="Models\Example.cs" />
     <Compile Include="Models\GeneralDescription.cs" />
     <Compile Include="Models\ItemStatus.cs" />
@@ -70,6 +74,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Tools\Crypt.cs" />
     <Compile Include="Tools\FileProcessor.cs" />
@@ -88,7 +97,7 @@
     <Compile Include="Utility\SavePendingEventArgs.cs" />
     <Compile Include="Utility\SavePendingEventHandler.cs" />
     <Compile Include="ViewModels\AppCommands.cs" />
-    <Compile Include="ViewModels\ConfigVM.cs" />
+    <Compile Include="ViewModels\AppConfigVM.cs" />
     <Compile Include="ViewModels\EditorVM.cs" />
     <Compile Include="ViewModels\ExampleVM.cs" />
     <Compile Include="ViewModels\FormatCommands.cs" />
@@ -117,7 +126,13 @@
       <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
