@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PsCmdletHelpEditor.BLL.Models;
 using PsCmdletHelpEditor.XmlRpc;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     class ModulePropertiesVM : ViewModelBase {

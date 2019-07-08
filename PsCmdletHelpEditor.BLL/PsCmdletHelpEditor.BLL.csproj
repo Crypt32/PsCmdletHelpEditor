@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Abstraction\Controls\IFormattableTextBox.cs" />
     <Compile Include="Abstraction\Controls\IScrollableListView.cs" />
+    <Compile Include="Abstraction\IAboutDialogVM.cs" />
     <Compile Include="Abstraction\IAppConfigVM.cs" />
     <Compile Include="Abstraction\IConfigProvider.cs" />
     <Compile Include="Abstraction\IFormatCommands.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Tools\XmlTokenizer.cs" />
     <Compile Include="Utility\SavePendingEventArgs.cs" />
     <Compile Include="Utility\SavePendingEventHandler.cs" />
+    <Compile Include="ViewModels\AboutDialogVM.cs" />
     <Compile Include="ViewModels\AppCommands.cs" />
     <Compile Include="ViewModels\AppConfigVM.cs" />
     <Compile Include="ViewModels\ClosableDialogViewModel.cs" />

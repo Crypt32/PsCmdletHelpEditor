@@ -1,4 +1,5 @@
 ﻿using PsCmdletHelpEditor.BLL.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class ParamVM : ViewModelBase {

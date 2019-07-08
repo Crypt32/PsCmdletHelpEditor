@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Navigation;
 using System.Xml;
@@ -15,16 +14,8 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
         /// <summary>
         /// Default constructor is protected so callers must use one with a parent.
         /// </summary>
-        AboutBox() {
+        public AboutBox() {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Constructor that takes a parent for this AboutBox dialog.
-        /// </summary>
-        /// <param name="parent">Parent window for this dialog.</param>
-        public AboutBox(Window parent) : this() {
-            Owner = parent;
         }
 
         /// <summary>
@@ -91,8 +82,8 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
             get {
                 String desc = CalculatePropertyValue<AssemblyDescriptionAttribute>(propertyNameDescription, xPathDescription);
                 desc += Environment.NewLine + Environment.NewLine;
-                desc += "Credits:" +Environment.NewLine;
-                desc += "    Wassim Fayed (Microsoft) — for original idea;" +Environment.NewLine;
+                desc += "Credits:" + Environment.NewLine;
+                desc += "    Wassim Fayed (Microsoft) — for original idea;" + Environment.NewLine;
                 desc += "    Sergey Zwezdin — for WPF consultation;" + Environment.NewLine;
                 desc += "    Ali Badereddin — for XML syntax highlighter;";
                 return desc;
@@ -190,9 +181,5 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
             return result;
         }
         #endregion
-
-        void OkButton_OnClick(Object Sender, RoutedEventArgs E) {
-            Close();
-        }
     }
 }

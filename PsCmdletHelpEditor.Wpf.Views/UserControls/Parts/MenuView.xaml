@@ -3,19 +3,14 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:properties="clr-namespace:CmdletHelpEditor.Properties"
           xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
           mc:Ignorable="d"
           d:DataContext="{d:DesignInstance vm:MainWindowVM}"
           Header="_View">
-    <MenuItem Header="Toolbars"
+    <MenuItem Header="Show Toolbars"
               IsCheckable="True"
-              IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarChecked}"
-              Command="{x:Static vm:UIManager.ShowToolBarCommand}"
-              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-    <MenuItem Header="Statusbar"
+              IsChecked="{Binding ConfigContext.ShowToolbar}"/>
+    <MenuItem Header="Show Statusbar"
               IsCheckable="True"
-              IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=StatusbarChecked}"
-              Command="{x:Static vm:UIManager.ShowStatusBarCommand}"
-              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+              IsChecked="{Binding ConfigContext.ShowStatusBar}"/>
 </MenuItem>
