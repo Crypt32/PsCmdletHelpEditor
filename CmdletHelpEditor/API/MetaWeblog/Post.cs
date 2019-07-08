@@ -2,10 +2,10 @@
 using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
-    public class Post {
+    public class Post<T> {
         [XmlRpcMember("postid")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String PostId { get; set; }
+        public T PostId { get; set; }
         [XmlRpcMember("title")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String Title { get; set; }
@@ -42,7 +42,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String Permalink { get; set; }
 
-        protected Boolean Equals(Post other) {
+        protected Boolean Equals(Post<T> other) {
             return String.Equals(Title, other.Title);
         }
 
@@ -52,7 +52,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         public override Boolean Equals(Object obj) {
             if (ReferenceEquals(null, obj)) { return false; }
             if (ReferenceEquals(this, obj)) { return true; }
-            return obj.GetType() == GetType() && Equals((Post)obj);
+            return obj.GetType() == GetType() && Equals((Post<T>)obj);
         }
     }
 }

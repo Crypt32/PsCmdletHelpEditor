@@ -2,22 +2,22 @@
 using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
-    public interface IMetaWeblogProvider {
+    public interface IMetaWeblogProvider<T> {
         #region MetaWeblog API
         [XmlRpcMethod("metaWeblog.newPost")]
-        String AddPost(String blogid, String username, String password, Post post, Boolean publish);
+        String AddPost(String blogid, String username, String password, Post<T> post, Boolean publish);
 
         [XmlRpcMethod("metaWeblog.editPost")]
-        Boolean UpdatePost(String postid, String username, String password, Post post, Boolean publish);
+        Boolean UpdatePost(T postid, String username, String password, Post<T> post, Boolean publish);
 
         [XmlRpcMethod("metaWeblog.getPost")]
-        Post GetPost(String postid, String username, String password);
+        Post<Int32> GetPost(T postid, String username, String password);
 
         [XmlRpcMethod("metaWeblog.getCategories")]
         CategoryInfo[] GetCategories(String blogid, String username, String password);
 
         [XmlRpcMethod("metaWeblog.getRecentPosts")]
-        Post[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts);
+        Post<String>[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts);
 
         [XmlRpcMethod("metaWeblog.newMediaObject")]
         MediaObjectInfo NewMediaObject(String blogid, String username, String password, MediaObject mediaObject);
@@ -26,7 +26,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         #region Blogger API
         [XmlRpcMethod("blogger.deletePost")]
         [return: XmlRpcReturnValue(Description = "Returns true.")]
-        Boolean DeletePost(String key, String postid, String username, String password, Boolean publish);
+        Boolean DeletePost(String key, T postid, String username, String password, Boolean publish);
 
         [XmlRpcMethod("blogger.getUsersBlogs")]
         BlogInfo[] GetUsersBlogs(String key, String username, String password);

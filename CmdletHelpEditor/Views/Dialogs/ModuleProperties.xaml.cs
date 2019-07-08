@@ -116,9 +116,9 @@ namespace CmdletHelpEditor.Views.Dialogs {
         }
         async void FetchClick(Object Sender, RoutedEventArgs e) {
             if (_mwvm.SelectedTab.Module.Provider == null) { return; }
-            List<Post> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, _mwvm.SelectedTab.Module.Cmdlets, providerInfo.FetchPostCount);
+            List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, _mwvm.SelectedTab.Module.Cmdlets, providerInfo.FetchPostCount);
             foreach (CmdletObject cmdlet in _mwvm.SelectedTab.Module.Cmdlets) {
-                Int32 index = posts.IndexOf(new Post { Title = cmdlet.Name });
+                Int32 index = posts.IndexOf(new Post<String> { Title = cmdlet.Name });
                 if (index >= 0) {
                     cmdlet.ArticleIDString = posts[index].PostId;
                     cmdlet.URL = _mwvm.SelectedTab.Module.Provider.ProviderName.ToLower() == "codeplex"

@@ -10,14 +10,15 @@ using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
     static class MetaWeblogWrapper {
-        public static Task<List<Post>> GetRecentPosts(Blogger blogger, IEnumerable<CmdletObject> cmdlets, Int32 fetchPostCount) {
-            return Task<List<Post>>.Factory.StartNew(() => blogger.GetRecentPosts(fetchPostCount));
+        public static Task<List<Post<String>>> GetRecentPosts(Blogger blogger, IEnumerable<CmdletObject> cmdlets, Int32 fetchPostCount) {
+            return Task<List<Post<String>>>.Factory.StartNew(() => blogger.GetRecentPosts(fetchPostCount));
         }
         public static Task PublishSingle(CmdletObject cmdlet, ModuleObject module, Blogger blogger, Boolean quiet) {
             return Task.Factory.StartNew(() => {
-                var post = new Post {
+                Int32.TryParse(cmdlet.ArticleIDString, out Int32 id);
+                var post = new Post<Int32> {
                     Title = cmdlet.Name,
-                    PostId = cmdlet.ArticleIDString,
+                    PostId = id,
                     HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
                 };
                 if (blogger == null) {
