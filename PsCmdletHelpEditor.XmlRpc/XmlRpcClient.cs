@@ -13,7 +13,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
             _mwProvider = new XmlRpcProvider(provider.ProviderUrl);
         }
 
-        public Task<BlogInfo[]> GetUserBlogsAsync() {
+        public Task<XmlRpcBlogInfo[]> GetUserBlogsAsync() {
             return Task.Factory.StartNew(() =>
                 _mwProvider.GetUsersBlogs(
                     String.Empty,
@@ -21,7 +21,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     _provInfo.Password.ToPlainString())
                 );
         }
-        public Task<List<Post>> GetRecentPostsAsync(Int32 postCount = 5) {
+        public Task<List<XmlRpcPost>> GetRecentPostsAsync(Int32 postCount = 5) {
             return Task.Factory.StartNew(() =>
                 _mwProvider.GetRecentPosts(
                     _provInfo.ProviderID,
@@ -30,7 +30,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     postCount).ToList()
                 );
         }
-        public Task<Post> GetPostAsync(String postId) {
+        public Task<XmlRpcPost> GetPostAsync(String postId) {
             return Task.Factory.StartNew(() =>
                 _mwProvider.GetPost(
                     postId,
@@ -39,7 +39,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                 );
         }
 
-        public Task<String> AddPostAsync(Post post, Boolean publish = true) {
+        public Task<String> AddPostAsync(XmlRpcPost post, Boolean publish = true) {
             return Task.Factory.StartNew(() =>
                 _mwProvider.AddPost(
                     _provInfo.ProviderID,
@@ -49,7 +49,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     publish)
                 );
         }
-        public Task<Boolean> UpdatePostAsync(Post post, Boolean publish = true) {
+        public Task<Boolean> UpdatePostAsync(XmlRpcPost post, Boolean publish = true) {
             return Task.Factory.StartNew(() =>
                 _mwProvider.UpdatePost(
                     post.PostId,
@@ -59,7 +59,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     publish)
                 );
         }
-        public Task<Boolean> DeletePostAsync(Post post, Boolean publish = false) {
+        public Task<Boolean> DeletePostAsync(XmlRpcPost post, Boolean publish = false) {
             return Task.Factory.StartNew(() =>
                 _mwProvider.DeletePost(
                     String.Empty,

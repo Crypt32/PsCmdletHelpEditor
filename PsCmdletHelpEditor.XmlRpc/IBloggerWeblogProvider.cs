@@ -25,7 +25,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// <param name="password">User password to authenticate</param>
         /// <returns></returns>
         [XmlRpcMethod("blogger.getUsersBlogs")]
-        BlogInfo[] GetUsersBlogs(String key, String username, String password);
+        XmlRpcBlogInfo[] GetUsersBlogs(String key, String username, String password);
         /// <summary>
         /// Gets current user info.
         /// </summary>
@@ -34,6 +34,6 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// <param name="password">User password to authenticate</param>
         /// <returns>Current user info.</returns>
         [XmlRpcMethod("blogger.getUserInfo")]
-        UserInfo GetUserInfo(String key, String username, String password);
+        XmlRpcUserInfo GetUserInfo(String key, String username, String password);
     }
 }

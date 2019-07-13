@@ -19,7 +19,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// </param>
         /// <returns>Post ID</returns>
         [XmlRpcMethod("metaWeblog.newPost")]
-        String AddPost(String blogid, String username, String password, Post post, Boolean publish);
+        String AddPost(String blogid, String username, String password, XmlRpcPost post, Boolean publish);
         /// <summary>
         /// Updates existing blog post.
         /// </summary>
@@ -33,7 +33,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// </param>
         /// <returns>True.</returns>
         [XmlRpcMethod("metaWeblog.editPost")]
-        Boolean UpdatePost(String postid, String username, String password, Post post, Boolean publish);
+        Boolean UpdatePost(String postid, String username, String password, XmlRpcPost post, Boolean publish);
         /// <summary>
         /// Gets existing post.
         /// </summary>
@@ -44,7 +44,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// Requested post.
         /// </returns>
         [XmlRpcMethod("metaWeblog.getPost")]
-        Post GetPost(String postid, String username, String password);
+        XmlRpcPost GetPost(String postid, String username, String password);
         /// <summary>
         /// Gets content categories for blog post.
         /// </summary>
@@ -53,7 +53,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// <param name="password">User password to authenticate</param>
         /// <returns></returns>
         [XmlRpcMethod("metaWeblog.getCategories")]
-        CategoryInfo[] GetCategories(String blogid, String username, String password);
+        XmlRpcCategoryInfo[] GetCategories(String blogid, String username, String password);
         /// <summary>
         /// Gets recent posts for blog post. Posts are sorted by created date in descending order.
         /// </summary>
@@ -63,7 +63,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// <param name="numberOfPosts"></param>
         /// <returns></returns>
         [XmlRpcMethod("metaWeblog.getRecentPosts")]
-        Post[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts);
+        XmlRpcPost[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts);
         /// <summary>
         /// Saves media attachment for blog post locally.
         /// </summary>
@@ -75,6 +75,6 @@ namespace PsCmdletHelpEditor.XmlRpc {
         /// </param>
         /// <returns>Information about saved media attachment.</returns>
         [XmlRpcMethod("metaWeblog.newMediaObject")]
-        MediaObjectInfo NewMediaObject(String blogid, String username, String password, MediaObject mediaObject);
+        XmlRpcMediaObjectInfo NewMediaObject(String blogid, String username, String password, XmlRpcMediaObject mediaObject);
     }
 }

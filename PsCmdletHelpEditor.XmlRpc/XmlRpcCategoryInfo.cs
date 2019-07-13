@@ -2,7 +2,7 @@
 using CookComputing.XmlRpc;
 
 namespace PsCmdletHelpEditor.XmlRpc {
-    public class CategoryInfo {
+    public class XmlRpcCategoryInfo {
         [XmlRpcMember("categoryid")]
         public Int32 CategoryID { get; set; }
         [XmlRpcMember("title")]

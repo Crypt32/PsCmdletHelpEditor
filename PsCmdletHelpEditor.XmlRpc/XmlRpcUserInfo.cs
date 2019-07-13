@@ -2,7 +2,7 @@
 using CookComputing.XmlRpc;
 
 namespace PsCmdletHelpEditor.XmlRpc {
-    public class UserInfo {
+    public class XmlRpcUserInfo {
         [XmlRpcMember("userid")]
         public String UserId { get; set; }
         [XmlRpcMember("firstname")]

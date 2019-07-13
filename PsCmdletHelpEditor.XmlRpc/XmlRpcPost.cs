@@ -2,7 +2,7 @@
 using CookComputing.XmlRpc;
 
 namespace PsCmdletHelpEditor.XmlRpc {
-    public class Post {
+    public class XmlRpcPost {
         [XmlRpcMember("postid")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String PostId { get; set; }
@@ -42,7 +42,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String Permalink { get; set; }
 
-        protected Boolean Equals(Post other) {
+        protected Boolean Equals(XmlRpcPost other) {
             return String.Equals(Title, other.Title);
         }
 
@@ -52,7 +52,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         public override Boolean Equals(Object obj) {
             if (ReferenceEquals(null, obj)) { return false; }
             if (ReferenceEquals(this, obj)) { return true; }
-            return obj.GetType() == GetType() && Equals((Post)obj);
+            return obj.GetType() == GetType() && Equals((XmlRpcPost)obj);
         }
     }
 }

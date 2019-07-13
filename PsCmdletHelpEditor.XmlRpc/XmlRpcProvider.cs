@@ -19,28 +19,28 @@ namespace PsCmdletHelpEditor.XmlRpc {
         public Boolean DeletePost(String key, String postid, String username, String password, Boolean publish) {
             return _mwProvider.DeletePost(key, postid, username, password, publish);
         }
-        public BlogInfo[] GetUsersBlogs(String key, String username, String password) {
+        public XmlRpcBlogInfo[] GetUsersBlogs(String key, String username, String password) {
             return _mwProvider.GetUsersBlogs(key, username, password);
         }
-        public UserInfo GetUserInfo(String key, String username, String password) {
+        public XmlRpcUserInfo GetUserInfo(String key, String username, String password) {
             return _mwProvider.GetUserInfo(key, username, password);
         }
-        public String AddPost(String blogid, String username, String password, Post post, Boolean publish) {
+        public String AddPost(String blogid, String username, String password, XmlRpcPost post, Boolean publish) {
             return _mwProvider.AddPost(blogid, username, password, post, publish);
         }
-        public Boolean UpdatePost(String postid, String username, String password, Post post, Boolean publish) {
+        public Boolean UpdatePost(String postid, String username, String password, XmlRpcPost post, Boolean publish) {
             return _mwProvider.UpdatePost(postid, username, password, post, publish);
         }
-        public Post GetPost(String postid, String username, String password) {
+        public XmlRpcPost GetPost(String postid, String username, String password) {
             return _mwProvider.GetPost(postid, username, password);
         }
-        public CategoryInfo[] GetCategories(String blogid, String username, String password) {
+        public XmlRpcCategoryInfo[] GetCategories(String blogid, String username, String password) {
             return _mwProvider.GetCategories(blogid, username, password);
         }
-        public Post[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts) {
+        public XmlRpcPost[] GetRecentPosts(String blogid, String username, String password, Int32 numberOfPosts) {
             return _mwProvider.GetRecentPosts(blogid, username, password, numberOfPosts);
         }
-        public MediaObjectInfo NewMediaObject(String blogid, String username, String password, MediaObject mediaObject) {
+        public XmlRpcMediaObjectInfo NewMediaObject(String blogid, String username, String password, XmlRpcMediaObject mediaObject) {
             return _mwProvider.NewMediaObject(blogid, username, password, mediaObject);
         }
     }

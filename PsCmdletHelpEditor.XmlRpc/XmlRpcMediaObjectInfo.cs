@@ -2,7 +2,7 @@ using System;
 using CookComputing.XmlRpc;
 
 namespace PsCmdletHelpEditor.XmlRpc {
-    public class MediaObjectInfo {
+    public class XmlRpcMediaObjectInfo {
         [XmlRpcMember("file")]
         public String File { get; set; }
         [XmlRpcMember("url")]
