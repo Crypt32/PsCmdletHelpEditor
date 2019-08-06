@@ -63,17 +63,17 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             return obj != null;
         }
         void AddTab(Object obj) {
-            ClosableModuleItem tab = UIManager.GenerateTab();
+            Models.TabItem tab = UIManager.GenerateTab();
             _mwvm.Tabs.Add(tab);
             tab.Focus();
         }
         void CloseTab(Object obj) {
-            if (!(obj is ClosableModuleItem)) { return; }
+            if (!(obj is Models.TabItem)) { return; }
             if (_mwvm.SelectedTab.IsSaved) {
-                _mwvm.Tabs.Remove((ClosableModuleItem)obj);
+                _mwvm.Tabs.Remove((Models.TabItem)obj);
             } else {
-                if (testSaved((ClosableModuleItem)obj)) {
-                    _mwvm.Tabs.Remove((ClosableModuleItem)obj);
+                if (testSaved((Models.TabItem)obj)) {
+                    _mwvm.Tabs.Remove((Models.TabItem)obj);
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         void NewProject(Object obj) {
             if (!testSaved(_mwvm.SelectedTab)) { return; }
             if (_mwvm.SelectedTab == null) { AddTab(null); }
-            ClosableModuleItem tab = _mwvm.SelectedTab;
+            Models.TabItem tab = _mwvm.SelectedTab;
             Debug.Assert(tab != null, "tab != null");
             tab.Module = null;
             LoadModules(true);
@@ -103,7 +103,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 fileName = (String)obj;
             }
             AddTab(null);
-            ClosableModuleItem tab = _mwvm.SelectedTab;
+            Models.TabItem tab = _mwvm.SelectedTab;
             UIManager.ShowBusy(tab, Strings.InfoCmdletsLoading);
             try {
                 ModuleObject module = FileProcessor.ReadProjectFile(fileName);
@@ -166,7 +166,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
         void PublishHelpFile(Object obj) {
             Object[] param = (Object[])obj;
-            ModuleObject module = ((ClosableModuleItem)param[0]).Module;
+            ModuleObject module = ((Models.TabItem)param[0]).Module;
             ProgressBar pb = ((MainWindow)param[1]).sb.pb;
             SaveFileDialog dlg = new SaveFileDialog {
                 FileName = _mwvm.SelectedTab.Module.Name + ".Help.xml",
@@ -188,7 +188,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
 
         public async void LoadCmdlets(Object helpPath, Boolean importCBH) {
-            ClosableModuleItem previousTab = _mwvm.SelectedTab;
+            Models.TabItem previousTab = _mwvm.SelectedTab;
             UIElement previousElement = ((Grid)previousTab.Content).Children[0];
             String commandsToLoad = _appConfig.GetCommandTypesString();
             if (String.IsNullOrEmpty(commandsToLoad)) {
@@ -218,7 +218,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         async void LoadModules(Object obj) {
             // method call from ICommand is allowed only when module selector is active
             // so skip checks.
-            ClosableModuleItem previousTab = _mwvm.SelectedTab;
+            Models.TabItem previousTab = _mwvm.SelectedTab;
             UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
             _mwvm.Modules.Clear();
             try {
@@ -237,7 +237,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         async void LoadModuleFromFile(Object obj) {
             // method call from ICommand is allowed only when module selector is active
             // so skip checks.
-            ClosableModuleItem previousTab = _mwvm.SelectedTab;
+            Models.TabItem previousTab = _mwvm.SelectedTab;
             OpenFileDialog dlg = new OpenFileDialog {
                 DefaultExt = ".psm1",
                 Filter = "PowerShell module files (*.psm1, *.psd1)|*.psm1;*.psd1"
@@ -257,7 +257,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             }
             UIManager.ShowModuleList(previousTab);
         }
-        async void LoadCmdletsForProject(ClosableModuleItem tab) {
+        async void LoadCmdletsForProject(Models.TabItem tab) {
             String commandsToLoad = _appConfig.GetCommandTypesString();
             if (String.IsNullOrEmpty(commandsToLoad)) {
                 MsgBox.Show("Error", Strings.E_EmptyCmds);
@@ -306,15 +306,15 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         Boolean CanPublish(Object obj) {
             Object[] param = (Object[])obj;
             return param[0] != null &&
-                   ((ClosableModuleItem)param[0]).Module != null &&
-                   ((ClosableModuleItem)param[0]).Module.Cmdlets.Count > 0;
+                   ((Models.TabItem)param[0]).Module != null &&
+                   ((Models.TabItem)param[0]).Module.Cmdlets.Count > 0;
         }
         Boolean canPublishOnline(Object obj) {
             return _mwvm.SelectedTab != null && _mwvm.SelectedTab.Module != null && _mwvm.SelectedTab.Module.Provider != null;
         }
 
         // utility
-        Boolean testSaved(ClosableModuleItem tab) {
+        Boolean testSaved(Models.TabItem tab) {
             if (tab == null || tab.IsSaved || tab.Module == null) { return true; }
             tab.Focus();
             MessageBoxResult mbxResult = MsgBox.Show("PS Cmdlet Help Editor", Strings.InfoSaveRequired, MessageBoxImage.Warning, MessageBoxButton.YesNoCancel);

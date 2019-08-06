@@ -7,6 +7,7 @@
         xmlns:ctrl="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
         xmlns:parts="clr-namespace:PsCmdletHelpEditor.Wpf.Views.UserControls.Parts"
         xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
+        xmlns:uc="clr-namespace:PsCmdletHelpEditor.Wpf.Views.UserControls"
         Title="PowerShell Cmdlet Help Editor"
         Height="600"
         Width="800"
@@ -67,6 +68,29 @@
         <ctrl:ClosableTabControl ItemsSource="{Binding Tabs}"
                                  SelectedItem="{Binding SelectedTab}"
                                  CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
-                                 AddTabCommand="{Binding CommandManager.AddTabCommand}"/>
+                                 AddTabCommand="{Binding CommandManager.AddTabCommand}">
+            <ctrl:ClosableTabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </ctrl:ClosableTabControl.ItemTemplate>
+            <ctrl:ClosableTabControl.ContentTemplate>
+                <DataTemplate>
+                    <ctrl:ClosableTabItem>
+                        <ctrl:ClosableTabItem.Content>
+                            <ContentControl>
+                                <ContentControl.Content>
+                                    <Binding Path="TabManager.SelectedTab.TabContent">
+                                        <Binding.TargetNullValue>
+                                            <uc:StartPageUC/>
+                                        </Binding.TargetNullValue>
+                                    </Binding>
+                                </ContentControl.Content>
+                            </ContentControl>
+                        </ctrl:ClosableTabItem.Content>
+                    </ctrl:ClosableTabItem>
+                </DataTemplate>
+            </ctrl:ClosableTabControl.ContentTemplate>
+        </ctrl:ClosableTabControl>
     </DockPanel>
 </Window>

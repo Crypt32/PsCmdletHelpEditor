@@ -2,19 +2,51 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PsCmdletHelpEditor.BLL.Models;
-using PsCmdletHelpEditor.XmlRpc;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
+using PsCmdletHelpEditor.BLL.Tools;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
-    class ModulePropertiesVM : ViewModelBase {
+    public class ModulePropertiesVM : ClosableDialogViewModel {
+        ModuleObject m_module;
+        ProviderInformation selectedProv;
+        BlogInfo selectedBlog;
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
 
-        public ICommand ConnectProviderCommand { get; set; }
-        public ICommand FetchPostsCommand { get; set; }
+        public ModulePropertiesVM() {
+            SaveCommand = new RelayCommand(save);
+            // TODO
+            foreach (ProviderInformation prov in Utils.EnumProviders()) {
+                Providers.Add(prov);
+            }
+        }
 
-        public ObservableCollection<ProviderInformation> Providers { get; set; }
-        public ObservableCollection<BlogInfo> WebSites { get; set; }
+        public IAsyncCommand ConnectProviderCommand { get; set; }
+        public IAsyncCommand FetchPostsCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
 
+        public ObservableCollection<ProviderInformation> Providers { get; }
+            = new ObservableCollection<ProviderInformation>();
+        public ObservableCollection<BlogInfo> WebSites { get; }
+            = new ObservableCollection<BlogInfo>();
+
+        public ProviderInformation SelectedProv {
+            get => selectedProv;
+            set {
+                selectedProv = value;
+                if (selectedProv != null) {
+                    UrlEditable = true;
+                    UserEditable = true;
+                }
+                OnPropertyChanged(nameof(SelectedProv));
+            }
+        }
+        public BlogInfo SelectedBlog {
+            get => selectedBlog;
+            set {
+                selectedBlog = value;
+                OnPropertyChanged(nameof(SelectedBlog));
+            }
+        }
         public Boolean UseSupports {
             get => useSupports;
             set {
@@ -63,6 +95,22 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 blogSelected = value;
                 OnPropertyChanged(nameof(BlogSelected));
             }
+        }
+
+        void save(Object o) {
+            m_module.Provider = SelectedProv;
+
+            DialogResult = true;
+        }
+
+        public void SetModule(ModuleObject module) {
+            m_module = module;
+            SelectedProv = module.Provider;
+            SelectedBlog = module.Provider?.Blog;
+            UseSupports = module.UseSupports;
+            UseProvider = module.UseOnlineProvider;
+            ProvSelected = SelectedProv != null;
+            UrlEditable = SelectedProv != null;
         }
     }
 }

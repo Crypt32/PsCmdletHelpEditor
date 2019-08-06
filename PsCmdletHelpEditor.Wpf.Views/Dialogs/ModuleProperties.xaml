@@ -1,21 +1,18 @@
-﻿<Window x:Class="PsCmdletHelpEditor.Wpf.Views.Dialogs.ModuleProperties"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
-        Background="{StaticResource PanelBackgroundBrush}"
-        Title="Module Properties"
-        SizeToContent="Height"
-        WindowStartupLocation="CenterOwner"
-        Width="500"
-        ResizeMode="NoResize"
-        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-        Foreground="Navy"
-        ShowInTaskbar="False"
-        mc:Ignorable="d"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+﻿<UserControl x:Class="PsCmdletHelpEditor.Wpf.Views.Dialogs.ModuleProperties"
+             x:Name="This"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
+             xmlns:vm="clr-namespace:PsCmdletHelpEditor.BLL.ViewModels;assembly=PsCmdletHelpEditor.BLL"
+             Background="{StaticResource PanelBackgroundBrush}"
+             Width="500"
+             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+             Foreground="Navy"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:ModulePropertiesVM}">
     <StackPanel Margin="10">
         <GroupBox Header="General settings">
             <Grid>
@@ -24,8 +21,10 @@
         </GroupBox>
         <GroupBox Header="Online publishing provider" VerticalAlignment="Top">
             <StackPanel>
-                <CheckBox Content="Use online publishing provider" Command="{Binding UseProviderCommand}" IsChecked="{Binding UseProvider}"/>
-                <Grid behaviors:MarginSetter.Margin="5">
+                <CheckBox Content="Use online publishing provider"
+                          IsChecked="{Binding UseProvider}"/>
+                <Grid behaviors:MarginSetter.Margin="5"
+                      IsEnabled="{Binding UseProvider}">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
@@ -73,7 +72,8 @@
                                  Grid.Column="1"
                                  Grid.Row="3"/>
                     <Button Content="Connect"
-                            Click="ConnectClick"
+                            Command="{Binding ConnectProviderCommand}"
+                            CommandParameter="{Binding ElementName=This}"
                             IsEnabled="{Binding UserEditable}"
                             HorizontalAlignment="Left"
                             MinWidth="80"
@@ -121,7 +121,8 @@
                         </ComboBoxItem>
                     </ComboBox>
                     <Button Content="Fetch now"
-                            Click="FetchClick"
+                            Command="{Binding FetchPostsCommand}"
+                            CommandParameter="{Binding ElementName=This}"
                             MinWidth="80"
                             HorizontalAlignment="Left"
                             Grid.Column="1"
@@ -132,17 +133,18 @@
         </GroupBox>
         <DockPanel Margin="-10,10,-10,-10" Background="{StaticResource PanelHeaderBackground}">
             <Button Content="Close"
-                    Click="CloseClick"
+                    Command="{Binding CloseCommand}"
                     HorizontalAlignment="Right"
                     MinWidth="80"
                     DockPanel.Dock="Right"
                     Margin="10"/>
             <Button Content="Save"
-                    Click="SaveClick"
+                    Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding ElementName=This}"
                     MinWidth="80"
                     DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     Margin="0,10,0,10"/>
         </DockPanel>
     </StackPanel>
-</Window>
+</UserControl>

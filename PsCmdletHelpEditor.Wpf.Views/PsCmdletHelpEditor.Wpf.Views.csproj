@@ -85,9 +85,6 @@
     <Compile Include="UserControls\GeneralControl.xaml.cs">
       <DependentUpon>GeneralControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MainTabViewUC.xaml.cs">
-      <DependentUpon>MainTabViewUC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ModuleSelectorControl.xaml.cs">
       <DependentUpon>ModuleSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -130,8 +127,8 @@
     <Compile Include="UserControls\RelatedLinksControl.xaml.cs">
       <DependentUpon>RelatedLinksControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\StartUserControl.xaml.cs">
-      <DependentUpon>StartUserControl.xaml</DependentUpon>
+    <Compile Include="UserControls\StartPageUC.xaml.cs">
+      <DependentUpon>StartPageUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SupportInfoControl.xaml.cs">
       <DependentUpon>SupportInfoControl.xaml</DependentUpon>
@@ -184,10 +181,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\GeneralControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\MainTabViewUC.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -247,7 +240,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\StartUserControl.xaml">
+    <Page Include="UserControls\StartPageUC.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

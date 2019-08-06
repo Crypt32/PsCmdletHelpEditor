@@ -12,7 +12,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 namespace PsCmdletHelpEditor.BLL.Tools {
     public static class MetaWeblogWrapper {
         public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, IXmlRpcClient blogger, Boolean quiet) {
-            var post = new Post {
+            var post = new XmlRpcPost {
                 Title = cmdlet.Name,
                 PostId = cmdlet.ArticleIDString,
                 HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result

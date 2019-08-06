@@ -113,7 +113,7 @@ namespace PsCmdletHelpEditor.BLL.Models {
                 OnPropertyChanged(nameof(Provider), true);
             }
         }
-        public BlogInfo Blog { get; set; }
+        public XmlRpcBlogInfo Blog { get; set; }
         public Boolean OverridePostCount {
             get => overridePostCount;
             set {

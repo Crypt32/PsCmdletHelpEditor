@@ -28,7 +28,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
             }
             return module;
         }
-        public static void SaveProjectFile(ClosableModuleItem tab, String path) {
+        public static void SaveProjectFile(Models.TabItem tab, String path) {
             FileStream fs = new FileStream(path, FileMode.Create);
             tab.Module.ProjectPath = path;
             Double oldVersion = tab.Module.FormatVersion;

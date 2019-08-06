@@ -13,10 +13,6 @@ namespace PsCmdletHelpEditor.BLL.Tools {
         public static IEnumerable<ProviderInformation> EnumProviders() {
             return new ObservableCollection<ProviderInformation> {
                 new ProviderInformation {
-                    ProviderName = "CodePlex",
-                    ProviderURL = "https://www.codeplex.com/site/metaweblog"
-                },
-                new ProviderInformation {
                     ProviderName = "XML-RPC"
                 }
             };

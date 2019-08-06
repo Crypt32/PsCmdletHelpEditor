@@ -1,28 +1,43 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
+using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.BLL.Utility;
 using PsCmdletHelpEditor.BLL.ViewModels;
-using SysadminsLV.WPF.OfficeTheme.Controls;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.Models {
-    public class ClosableModuleItem : ClosableTabItem, INotifyPropertyChanged {
+    public class TabItem : ViewModelBase, ITabItem {
         ModuleObject module;
         Boolean isSaved;
-        String errorInfo;
+        String header, errorInfo;
+        ITabItemContent tabContent;
 
 
         void ModuleOnPendingSave(Object source, SavePendingEventArgs e) {
             IsSaved = false;
         }
 
+        public String Header {
+            get => header;
+            set {
+                header = value;
+                OnPropertyChanged(nameof(Header));
+            }
+        }
+        public ITabItemContent TabContent {
+            get => tabContent;
+            set {
+                tabContent = value;
+                OnPropertyChanged(nameof(TabContent));
+            }
+        }
         public Boolean IsSaved {
             get => isSaved;
             set {
                 if (isSaved != value) {
                     isSaved = value;
                     Header = isSaved
-                        ? Header.ToString().Replace("*", String.Empty)
+                        ? Header.Replace("*", String.Empty)
                         : Header + "*";
                     OnPropertyChanged(nameof(IsSaved));
                 }
@@ -50,10 +65,12 @@ namespace PsCmdletHelpEditor.BLL.Models {
             }
         }
         public EditorVM EditorContext { get; set; }
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public Boolean RequestClose() {
+            return false;
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void Save() {
+
+        }
     }
 }

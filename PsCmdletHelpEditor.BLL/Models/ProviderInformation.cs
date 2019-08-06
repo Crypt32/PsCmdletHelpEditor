@@ -1,13 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Security;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.BLL.Tools;
-using PsCmdletHelpEditor.XmlRpc;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.Models {
-    public class ProviderInformation : INotifyPropertyChanged {
+    public class ProviderInformation : ViewModelBase {
         String provName, url, userName, password;
         Int32 postCount = 50;
         BlogInfo blog;
@@ -62,13 +61,5 @@ namespace PsCmdletHelpEditor.BLL.Models {
                 OnPropertyChanged(nameof(FetchPostCount));
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
     }
 }

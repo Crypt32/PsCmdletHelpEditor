@@ -7,7 +7,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         Int32 paramIndex = -1;
         CmdletObject currentCmdlet;
 
-        public EditorVM(ClosableModuleItem parent) {
+        public EditorVM(TabItem parent) {
             ParamContext = new ParamVM();
             RelatedLinkContext = new RelatedLinkVM();
             ExampleContext = new ExampleVM();

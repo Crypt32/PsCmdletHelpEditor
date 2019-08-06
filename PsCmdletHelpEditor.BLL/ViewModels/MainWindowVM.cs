@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.BLL.Models;
 
@@ -12,7 +11,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         Double pbProgress;
         String busyControlText;
         Int32? psversion;
-        ClosableModuleItem selectedTab;
+        TabItem selectedTab;
 
         public MainWindowVM(
             IFormatCommands formatCommands,
@@ -23,18 +22,18 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             initialize();
         }
         void initialize() {
-            Panel content = new Grid();
-            ClosableModuleItem cti = new ClosableModuleItem {
-                Header = "untitled",
-                IsSaved = true,
-                IsClosable = true,
-                Content = content
-            };
-            content.Children.Add(new StartUserControl());
-            cti.Content = content;
-            cti.EditorContext = new EditorVM(cti);
-            Tabs.Add(cti);
-            SelectedTab = cti;
+            //Panel content = new Grid();
+            //ClosableModuleItem cti = new ClosableModuleItem {
+            //    Header = "untitled",
+            //    IsSaved = true,
+            //    IsClosable = true,
+            //    Content = content
+            //};
+            //content.Children.Add(new StartUserControl());
+            //cti.Content = content;
+            //cti.EditorContext = new EditorVM(cti);
+            //Tabs.Add(cti);
+            //SelectedTab = cti;
         }
 
         #region External properties
@@ -51,8 +50,8 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         // data definitions
         public ObservableCollection<ModuleObject> Modules { get; }
             = new ObservableCollection<ModuleObject>();
-        public ObservableCollection<ClosableModuleItem> Tabs { get; }
-            = new ObservableCollection<ClosableModuleItem>();
+        public ObservableCollection<TabItem> Tabs { get; }
+            = new ObservableCollection<TabItem>();
 
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
@@ -120,7 +119,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
                 OnPropertyChanged(nameof(BusyControlText));
             }
         }
-        public ClosableModuleItem SelectedTab {
+        public TabItem SelectedTab {
             get => selectedTab;
             set {
                 selectedTab = value;

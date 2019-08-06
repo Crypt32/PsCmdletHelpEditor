@@ -17,7 +17,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         Boolean xmlChecked = true, htmlSourceChecked, htmlChecked, textChecked;
         Visibility busyControlVisible, rtbVisible, webBrowserVisible;
 
-        public OutputVM(ClosableModuleItem parent) {
+        public OutputVM(TabItem parent) {
             BusyControlVisible = Visibility.Collapsed;
             RtbVisible = Visibility.Collapsed;
             WebBrowserVisible = Visibility.Collapsed;
@@ -27,7 +27,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
 
         public ICommand GenerateOutputCommand { get; set; }
 
-        public ClosableModuleItem Tab { get; set; }
+        public TabItem Tab { get; set; }
 
         // dependency property is required for HtmlText property
         public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(

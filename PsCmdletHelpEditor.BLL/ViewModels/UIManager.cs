@@ -24,6 +24,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             uiManager.ShowDialog("Settings", vm);
         }
         public static void ShowModuleProperties(Object obj) {
+
             Window mainWindow = Application.Current.MainWindow;
             var ModulePropsDlg = new ModuleProperties((MainWindowVM)mainWindow?.DataContext) {
                 Owner = mainWindow
@@ -32,10 +33,10 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
 
         static Boolean CanShowModuleProperties(Object obj) {
-            return (obj as ClosableModuleItem)?.Module != null;
+            return (obj as Models.TabItem)?.Module != null;
         }
-        public static ClosableModuleItem GenerateTab() {
-            var cti = new ClosableModuleItem {
+        public static TabItem GenerateTab() {
+            var cti = new Models.TabItem {
                 Header = "untitled",
                 IsSaved = true,
                 IsClosable = true,
@@ -54,7 +55,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             ((Grid)tab.Content).Children.Clear();
             ((Grid)tab.Content).Children.Add(new ModuleSelectorControl());
         }
-        public static void ShowEditor(ClosableModuleItem tab) {
+        public static void ShowEditor(Models.TabItem tab) {
             var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
             mwvm.SelectedModule = null;
             ((Grid)tab.Content).Children.Clear();

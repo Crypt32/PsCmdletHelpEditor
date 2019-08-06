@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CmdletHelpEditor.API.MetaWeblog;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.BLL.Abstraction;
+using PsCmdletHelpEditor.BLL.Models;
 using PsCmdletHelpEditor.BLL.Tools;
+using PsCmdletHelpEditor.BLL.ViewModels;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
     /// <summary>
     /// Interaction logic for ModuleProperties.xaml
     /// </summary>
-    public partial class ModuleProperties : INotifyPropertyChanged {
+    public partial class ModuleProperties : INotifyPropertyChanged, IHavePassword {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
         Blogger blogger;
@@ -26,7 +28,7 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
             _mwvm = context;
             UseProviderCommand = new RelayCommand(UseProviderChanged);
             UseSupports = _mwvm.SelectedTab.Module.UseSupports;
-            Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
+            Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders().ToList());
             WebSites = new ObservableCollection<BlogInfo>();
             InitializeComponent();
             if (context.SelectedTab.Module.Provider != null) {
@@ -40,6 +42,8 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
                 ProviderInfo = context.SelectedTab.Module.Provider;
             }
         }
+
+        public SecureString Password => pwdBox.SecurePassword;
 
         public ProviderInformation ProviderInfo {
             get => providerInfo;
@@ -122,9 +126,7 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
                 Int32 index = posts.IndexOf(new Post { Title = cmdlet.Name });
                 if (index >= 0) {
                     cmdlet.ArticleIDString = posts[index].PostId;
-                    cmdlet.URL = _mwvm.SelectedTab.Module.Provider.ProviderName.ToLower() == "codeplex"
-                        ? _mwvm.SelectedTab.Module.Provider.Blog.URL + "wikipage?title=" + cmdlet.Name
-                        : posts[index].Permalink;
+                    cmdlet.URL = posts[index].Permalink;
                     if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                         var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
                         cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);
@@ -138,12 +140,9 @@ namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
                 ? ProviderInfo
                 : null;
         }
-        void CloseClick(Object Sender, RoutedEventArgs e) {
-            Close();
-        }
 
         void ProvSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
-            UrlEditable = ProviderInfo != null && ProviderInfo.ProviderName == "Custom";
+            UrlEditable = ProviderInfo != null && ProviderInfo.ProviderName == "XML-RPC";
             UserEditable = ProviderInfo != null && !String.IsNullOrEmpty(ProviderInfo.ProviderName);
         }
         void SetPassword() {

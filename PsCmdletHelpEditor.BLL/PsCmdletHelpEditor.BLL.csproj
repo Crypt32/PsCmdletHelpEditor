@@ -55,11 +55,15 @@
     <Compile Include="Abstraction\IAppConfigVM.cs" />
     <Compile Include="Abstraction\IConfigProvider.cs" />
     <Compile Include="Abstraction\IFormatCommands.cs" />
+    <Compile Include="Abstraction\IHavePassword.cs" />
     <Compile Include="Abstraction\IMainWindowVM.cs" />
     <Compile Include="Abstraction\IOnlinePublishProgressVM.cs" />
+    <Compile Include="Abstraction\ITabItem.cs" />
+    <Compile Include="Abstraction\ITabItemContent.cs" />
     <Compile Include="Abstraction\IUIWindowDialogService.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="Models\ClosableModuleItem.cs" />
+    <Compile Include="Models\BlogInfo.cs" />
+    <Compile Include="Models\TabContentItem.cs" />
     <Compile Include="Models\CmdletObject.cs" />
     <Compile Include="Models\CommandParameterInfo2.cs" />
     <Compile Include="Models\CommandParameterSetInfo2.cs" />
@@ -115,6 +119,7 @@
     <Compile Include="ViewModels\OutputVM.cs" />
     <Compile Include="ViewModels\ParamVM.cs" />
     <Compile Include="ViewModels\RelatedLinkVM.cs" />
+    <Compile Include="ViewModels\TabItemManagerVM.cs" />
     <Compile Include="ViewModels\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
