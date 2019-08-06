@@ -26,7 +26,7 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         }
 
         public void SetBlog(String blog) {
-            this.blogId = blog;
+            blogId = blog;
         }
         public IEnumerable<BlogInfo> GetUsersBlogs() {
             return metaWeblogProvider.GetUsersBlogs(String.Empty, _userName, Crypt.SecureStringToString(_password));
@@ -34,15 +34,25 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         public List<Post<String>> GetRecentPosts(Int32 postCount = 5) {
             return new List<Post<String>>(metaWeblogProvider.GetRecentPosts(blogId, _userName, Crypt.SecureStringToString(_password), postCount));
         }
-        public Post<Int32> GetPost(String postId) {
-            var id = Convert.ToInt32(postId);
-            return metaWeblogProvider.GetPost(id, _userName, Crypt.SecureStringToString(_password));
+        public List<WpGetPost> GetPages(Int32 postCount = 5) {
+            var filter = new XmlRpcPageFilter();
+            filter.PostType = "page";
+            filter.Number = postCount;
+            return new List<WpGetPost>(metaWeblogProvider.GetPages(blogId, _userName, Crypt.SecureStringToString(_password), filter));
         }
-        public String AddPost(Post<Int32> post, Boolean publish = true) {
+        public WpGetPost GetPost(String postId) {
+            Int32 id = Convert.ToInt32(postId);
+            return metaWeblogProvider.GetPost(_userName, Crypt.SecureStringToString(_password), id);
+        }
+        public String AddPost(WpPost post, Boolean publish = true) {
             return metaWeblogProvider.AddPost(blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
         }
-        public Boolean UpdatePost(Post<Int32> post, Boolean publish = true) {
-            var id = Convert.ToInt32(post.PostId);
+        public String AddWpPost(WpPost post) {
+            Int32 id = Convert.ToInt32(blogId);
+            return metaWeblogProvider.AddWpPost(id, _userName, Crypt.SecureStringToString(_password), post);
+        }
+        public Boolean UpdatePost(WpPost post, String postID, Boolean publish = true) {
+            var id = Convert.ToInt32(postID);
             return metaWeblogProvider.UpdatePost(id, _userName, Crypt.SecureStringToString(_password), post, publish);
         }
         public Boolean DeletePost(Int32 postId, Boolean publish = false) {

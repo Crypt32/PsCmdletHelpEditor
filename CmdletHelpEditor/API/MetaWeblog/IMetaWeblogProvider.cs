@@ -5,13 +5,15 @@ namespace CmdletHelpEditor.API.MetaWeblog {
     public interface IMetaWeblogProvider<T> {
         #region MetaWeblog API
         [XmlRpcMethod("metaWeblog.newPost")]
-        String AddPost(String blogid, String username, String password, Post<T> post, Boolean publish);
+        String AddPost(String blogid, String username, String password, WpPost post, Boolean publish);
+        [XmlRpcMethod("wp.newPost")]
+        String AddWpPost(Int32 blogid, String username, String password, WpPost post);
 
         [XmlRpcMethod("metaWeblog.editPost")]
-        Boolean UpdatePost(T postid, String username, String password, Post<T> post, Boolean publish);
+        Boolean UpdatePost(T postid, String username, String password, WpPost post, Boolean publish);
 
         [XmlRpcMethod("metaWeblog.getPost")]
-        Post<Int32> GetPost(T postid, String username, String password);
+        WpGetPost GetPost(String username, String password, T postid);
 
         [XmlRpcMethod("metaWeblog.getCategories")]
         CategoryInfo[] GetCategories(String blogid, String username, String password);
@@ -34,5 +36,11 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         [XmlRpcMethod("blogger.getUserInfo")]
         UserInfo GetUserInfo(String key, String username, String password);
         #endregion
+
+        #region Wordpress
+        [XmlRpcMethod("wp.getPosts")]
+        WpGetPost[] GetPages(String blogid, String username, String password, XmlRpcPageFilter filter);
+        #endregion
+
     }
 }

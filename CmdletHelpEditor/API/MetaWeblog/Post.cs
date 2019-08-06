@@ -2,14 +2,124 @@
 using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
+    public abstract class WpPost {
+        public virtual String PostType { get; set; }
+        public virtual String Title { get; set; }
+        public virtual String HTML { get; set; }
+        //public virtual DateTime? DateCreated { get; set; }
+        public virtual String Permalink { get; set; }
+    }
+    public sealed class WpGetPost : WpPost {
+        [XmlRpcMember("post_id")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostId { get; set; }
+
+        [XmlRpcMember("post_status")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostStatus { get; set; }
+
+        [XmlRpcMember("post_type")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String PostType { get; set; }
+
+        [XmlRpcMember("post_parent")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostParent { get; set; }
+
+        [XmlRpcMember("post_title")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String Title { get; set; }
+
+        /// <summary>
+        /// Encoded URL (slug)
+        /// </summary>
+        [XmlRpcMember("post_name")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PageName { get; set; }
+
+        [XmlRpcMember("post_content")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String HTML { get; set; }
+
+        [XmlRpcMember("dateCreated")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public DateTime? DateCreated { get; set; }
+
+        [XmlRpcMember("link")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String Permalink { get; set; }
+    }
+
+    public sealed class WpPostCreate : WpPost {
+        [XmlRpcMember("post_status")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostStatus { get; set; }
+
+        [XmlRpcMember("post_type")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String PostType { get; set; }
+
+        [XmlRpcMember("post_parent")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public Int32 PostParent { get; set; }
+
+        [XmlRpcMember("post_title")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String Title { get; set; }
+
+        /// <summary>
+        /// Encoded URL (slug)
+        /// </summary>
+        [XmlRpcMember("post_name")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PageName { get; set; }
+
+        [XmlRpcMember("post_content")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String HTML { get; set; }
+    }
+    public sealed class WpPostUpdate : WpPost {
+        [XmlRpcMember("post_status")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostStatus { get; set; }
+
+        [XmlRpcMember("post_type")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String PostType { get; set; }
+
+        [XmlRpcMember("post_parent")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public Int32 PostParent { get; set; }
+
+        [XmlRpcMember("post_title")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String Title { get; set; }
+        
+        /// <summary>
+        /// Encoded URL (slug)
+        /// </summary>
+        [XmlRpcMember("post_name")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PageName { get; set; }
+
+        [XmlRpcMember("post_content")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public override String HTML { get; set; }
+    }
     public class Post<T> {
         [XmlRpcMember("postid")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public T PostId { get; set; }
+        [XmlRpcMember("post_type")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostType { get; set; }
+        [XmlRpcMember("post_parent")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public String PostParent { get; set; }
         [XmlRpcMember("title")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String Title { get; set; }
-        [XmlRpcMember("description")]
+        [XmlRpcMember("post_content")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public String HTML { get; set; }
         [XmlRpcMember("mt_text_more")]

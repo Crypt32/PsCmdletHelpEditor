@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -116,14 +117,13 @@ namespace CmdletHelpEditor.Views.Dialogs {
         }
         async void FetchClick(Object Sender, RoutedEventArgs e) {
             if (_mwvm.SelectedTab.Module.Provider == null) { return; }
-            List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, _mwvm.SelectedTab.Module.Cmdlets, providerInfo.FetchPostCount);
+            //List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, providerInfo.FetchPostCount);
+            var posts = await MetaWeblogWrapper.GetPages(blogger, providerInfo.FetchPostCount);
             foreach (CmdletObject cmdlet in _mwvm.SelectedTab.Module.Cmdlets) {
-                Int32 index = posts.IndexOf(new Post<String> { Title = cmdlet.Name });
-                if (index >= 0) {
-                    cmdlet.ArticleIDString = posts[index].PostId;
-                    cmdlet.URL = _mwvm.SelectedTab.Module.Provider.ProviderName.ToLower() == "codeplex"
-                        ? _mwvm.SelectedTab.Module.Provider.Blog.URL + "wikipage?title=" + cmdlet.Name
-                        : posts[index].Permalink;
+                WpGetPost post = posts.FirstOrDefault(x => x.Title.Equals(cmdlet.Name));
+                if (post != null) {
+                    cmdlet.ArticleIDString = post.PostId;
+                    cmdlet.URL = post.Permalink;
                     if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                         var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
                         cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);

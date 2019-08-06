@@ -139,9 +139,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="API\MetaWeblog\BloggerClient.cs" />
     <Compile Include="API\MetaWeblog\MediaObject.cs" />
     <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
+    <Compile Include="API\MetaWeblog\XmlRpcPageFilter.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />

@@ -10,17 +10,31 @@ using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
     static class MetaWeblogWrapper {
-        public static Task<List<Post<String>>> GetRecentPosts(Blogger blogger, IEnumerable<CmdletObject> cmdlets, Int32 fetchPostCount) {
+        public static Task<List<Post<String>>> GetRecentPosts(Blogger blogger, Int32 fetchPostCount) {
             return Task<List<Post<String>>>.Factory.StartNew(() => blogger.GetRecentPosts(fetchPostCount));
+        }
+        public static Task<List<WpGetPost>> GetPages(Blogger blogger, Int32 fetchPostCount) {
+            return Task<List<WpGetPost>>.Factory.StartNew(() => blogger.GetPages(fetchPostCount));
         }
         public static Task PublishSingle(CmdletObject cmdlet, ModuleObject module, Blogger blogger, Boolean quiet) {
             return Task.Factory.StartNew(() => {
                 Int32.TryParse(cmdlet.ArticleIDString, out Int32 id);
-                var post = new Post<Int32> {
-                    Title = cmdlet.Name,
-                    PostId = id,
-                    HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
-                };
+                WpPost post;
+                if (String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
+                    post = new WpPostCreate {
+                        Title = cmdlet.Name,
+                        PostType = "page",
+                        PostParent = 70,
+                        HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
+                    };
+                } else {
+                    post = new WpPostUpdate {
+                        Title = cmdlet.Name,
+                        PostType = "page",
+                        PostParent = 70,
+                        HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
+                    };
+                }
                 if (blogger == null) {
                     blogger = Utils.InitializeBlogger(module.Provider);
                 }
@@ -29,26 +43,21 @@ namespace CmdletHelpEditor.API.Tools {
                 }
                 if (String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
                     // assuming that article does not exist
-                    cmdlet.ArticleIDString = blogger.AddPost(post);
-                    //if (!String.IsNullOrEmpty(cmdlet.ArticleIDString) && !quiet) {
-                    //    Utils.MsgBox("Success", new Win32Exception(0).Message, MessageBoxImage.Information);
-                    //}
+                    cmdlet.ArticleIDString = blogger.AddWpPost(post);
                     // get post URL once published
                     if (!String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
                         try {
-                            cmdlet.URL = module.Provider.ProviderName.ToLower() == "codeplex"
-                                ? module.Provider.Blog.URL + "wikipage?title=" + cmdlet.Name
-                                : blogger.GetPost(cmdlet.ArticleIDString).Permalink;
+                            cmdlet.URL = blogger.GetPost(cmdlet.ArticleIDString).Permalink;
                             if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                                 var baseUrl = new Uri(module.Provider.ProviderURL);
                                 cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{cmdlet.URL}";
                             }
-                        } catch { }
+                        } catch (Exception ex) { }
                     }
                 } else {
                     try {
                         // assuming that article exist, so we just change it
-                        blogger.UpdatePost(post);
+                        blogger.UpdatePost(post, cmdlet.ArticleIDString);
                         var baseUrl = new Uri(module.Provider.ProviderURL);
                         String permalink = blogger.GetPost(cmdlet.ArticleIDString).Permalink;
                         cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{permalink}";
