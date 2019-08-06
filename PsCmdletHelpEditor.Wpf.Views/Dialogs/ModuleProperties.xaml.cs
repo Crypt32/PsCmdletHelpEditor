@@ -13,6 +13,7 @@ using PsCmdletHelpEditor.BLL.Models;
 using PsCmdletHelpEditor.BLL.Tools;
 using PsCmdletHelpEditor.BLL.ViewModels;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using BlogInfo = PsCmdletHelpEditor.BLL.Models.BlogInfo;
 
 namespace PsCmdletHelpEditor.Wpf.Views.Dialogs {
     /// <summary>
