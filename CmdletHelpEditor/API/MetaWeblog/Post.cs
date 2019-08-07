@@ -2,12 +2,11 @@
 using CookComputing.XmlRpc;
 
 namespace CmdletHelpEditor.API.MetaWeblog {
-    public abstract class WpPost {
+    public class WpPost {
         public virtual String PostType { get; set; }
         public virtual String Title { get; set; }
         public virtual String HTML { get; set; }
         //public virtual DateTime? DateCreated { get; set; }
-        public virtual String Permalink { get; set; }
     }
     public sealed class WpGetPost : WpPost {
         [XmlRpcMember("post_id")]
@@ -47,17 +46,17 @@ namespace CmdletHelpEditor.API.MetaWeblog {
 
         [XmlRpcMember("link")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public override String Permalink { get; set; }
+        public String Permalink { get; set; }
     }
 
     public sealed class WpPostCreate : WpPost {
         [XmlRpcMember("post_status")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String PostStatus { get; set; }
+        public String PostStatus { get; set; } = "publish";
 
         [XmlRpcMember("post_type")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public override String PostType { get; set; }
+        public override String PostType { get; set; } = "page";
 
         [XmlRpcMember("post_parent")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]

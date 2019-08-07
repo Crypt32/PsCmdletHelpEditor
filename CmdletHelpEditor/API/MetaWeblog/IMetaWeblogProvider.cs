@@ -7,13 +7,17 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         [XmlRpcMethod("metaWeblog.newPost")]
         String AddPost(String blogid, String username, String password, WpPost post, Boolean publish);
         [XmlRpcMethod("wp.newPost")]
-        String AddWpPost(Int32 blogid, String username, String password, WpPost post);
+        String AddWpPost(Int32 blogid, String username, String password, WpPostCreate post);
 
         [XmlRpcMethod("metaWeblog.editPost")]
         Boolean UpdatePost(T postid, String username, String password, WpPost post, Boolean publish);
+        [XmlRpcMethod("wp.editPost")]
+        Boolean UpdateWpPost(T blogid, String username, String password, T postid, WpPostUpdate post);
 
         [XmlRpcMethod("metaWeblog.getPost")]
-        WpGetPost GetPost(String username, String password, T postid);
+        WpGetPost GetPost(T postid, String username, String password);
+        [XmlRpcMethod("wp.getPost")]
+        WpGetPost GetWpPost(String username, String password, Int32 postid);
 
         [XmlRpcMethod("metaWeblog.getCategories")]
         CategoryInfo[] GetCategories(String blogid, String username, String password);

@@ -31,6 +31,12 @@
                     Margin="10"
                     Command="{Binding PublishCommand}"
                     CommandParameter="{Binding ElementName=lv}"/>
+            <Button Content="Retry"
+                    DockPanel.Dock="Right"
+                    Width="70"
+                    Margin="10"
+                    Command="{Binding RetryCommand}"
+                    CommandParameter="{Binding ElementName=lv}"/>
             <TextBlock/>
         </DockPanel>
         <ProgressBar DockPanel.Dock="Bottom"

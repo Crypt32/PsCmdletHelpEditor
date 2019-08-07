@@ -42,18 +42,27 @@ namespace CmdletHelpEditor.API.MetaWeblog {
         }
         public WpGetPost GetPost(String postId) {
             Int32 id = Convert.ToInt32(postId);
-            return metaWeblogProvider.GetPost(_userName, Crypt.SecureStringToString(_password), id);
+            return metaWeblogProvider.GetPost(id, _userName, Crypt.SecureStringToString(_password));
+        }
+        public WpGetPost GetWpPost(String postId) {
+            Int32 id = Convert.ToInt32(postId);
+            return metaWeblogProvider.GetWpPost(_userName, Crypt.SecureStringToString(_password), id);
         }
         public String AddPost(WpPost post, Boolean publish = true) {
             return metaWeblogProvider.AddPost(blogId, _userName, Crypt.SecureStringToString(_password), post, publish);
         }
-        public String AddWpPost(WpPost post) {
+        public String AddWpPost(WpPostCreate post) {
             Int32 id = Convert.ToInt32(blogId);
             return metaWeblogProvider.AddWpPost(id, _userName, Crypt.SecureStringToString(_password), post);
         }
         public Boolean UpdatePost(WpPost post, String postID, Boolean publish = true) {
             var id = Convert.ToInt32(postID);
             return metaWeblogProvider.UpdatePost(id, _userName, Crypt.SecureStringToString(_password), post, publish);
+        }
+        public Boolean UpdateWpPost(WpPostUpdate post, String postID, Boolean publish = true) {
+            var pageid = Convert.ToInt32(postID);
+            var blogid = Convert.ToInt32(blogId);
+            return metaWeblogProvider.UpdateWpPost(blogid, _userName, Crypt.SecureStringToString(_password), pageid, post);
         }
         public Boolean DeletePost(Int32 postId, Boolean publish = false) {
             var id = Convert.ToInt32(postId);

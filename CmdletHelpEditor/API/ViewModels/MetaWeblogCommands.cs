@@ -29,9 +29,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         static void PublishAll(Object obj) {
             working = true;
             MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-            (((MainWindow)obj).sb.pb).Visibility = Visibility.Visible;
+            ((MainWindow)obj).sb.pb.Visibility = Visibility.Visible;
             MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, ((MainWindow)obj).sb.pb);
-            (((MainWindow)obj).sb.pb).Visibility = Visibility.Collapsed;
+            ((MainWindow)obj).sb.pb.Visibility = Visibility.Collapsed;
             working = false;
         }
         static Boolean CanPublish(Object obj) {
