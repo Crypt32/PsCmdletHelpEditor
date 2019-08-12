@@ -262,13 +262,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\down_32x32.png" />
+    <Resource Include="Images\UIElements\down_32x32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\loading.png" />
+    <Resource Include="Images\UIElements\loading.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\logo.png" />
+    <Resource Include="Images\UIElements\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Menu\copy_16x16.png" />
@@ -334,7 +334,7 @@
     <Resource Include="Images\Statuses\warn_16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\up_32x32.png" />
+    <Resource Include="Images\UIElements\up_32x32.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CmdletHelpEditor\CmdletHelpEditor.csproj">
@@ -349,6 +349,9 @@
       <Project>{2FAE87F8-BEE9-4BE7-9F9D-5D795F2DE205}</Project>
       <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -95,7 +95,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
     <Content Include="_ExternalLibraries\Wpf.OfficeTheme.dll" />
   </ItemGroup>
   <ItemGroup>

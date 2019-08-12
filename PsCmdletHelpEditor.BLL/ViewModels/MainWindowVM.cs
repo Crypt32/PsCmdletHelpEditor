@@ -14,8 +14,10 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         TabItem selectedTab;
 
         public MainWindowVM(
+            ITabItemManagerVM tabManager,
             IFormatCommands formatCommands,
             IAppConfigVM appConfig) {
+            TabManager = tabManager;
             FormatCommands = formatCommands;
             CommandManager = new AppCommands(this);
             ConfigContext = appConfig;
@@ -48,6 +50,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         #endregion
 
         // data definitions
+        public ITabItemManagerVM TabManager { get; }
         public ObservableCollection<ModuleObject> Modules { get; }
             = new ObservableCollection<ModuleObject>();
         public ObservableCollection<TabItem> Tabs { get; }

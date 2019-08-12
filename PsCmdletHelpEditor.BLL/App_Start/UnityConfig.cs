@@ -12,6 +12,7 @@ namespace PsCmdletHelpEditor.BLL {
             Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
             container.RegisterSingleton<IAppConfigVM, AppConfigVM>();
             container.RegisterSingleton<IFormatCommands, FormatCommands>();
+            container.RegisterSingleton<ITabItemManagerVM, TabItemManagerVM>();
             container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
         }
     }
