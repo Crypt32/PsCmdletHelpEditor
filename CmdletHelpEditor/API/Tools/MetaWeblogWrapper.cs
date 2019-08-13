@@ -19,7 +19,7 @@ namespace CmdletHelpEditor.API.Tools {
         }
         public static Task PublishSingle(CmdletObject cmdlet, ModuleObject module, Blogger blogger, Boolean quiet) {
             return Task.Factory.StartNew(() => {
-                Thread.Sleep(61000);
+                Thread.Sleep(5000);
                 if (blogger == null) {
                     blogger = Utils.InitializeBlogger(module.Provider);
                 }
@@ -31,7 +31,7 @@ namespace CmdletHelpEditor.API.Tools {
                         Title = cmdlet.Name,
                         PageName = cmdlet.Name,
                         PostType = "page",
-                        PostParent = 70,
+                        PostParent = 16520, // 70 -- mtmsoftware.com, 16520 -- pkisolutions.com
                         HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
                     };
                     // assuming that article does not exist
@@ -40,7 +40,7 @@ namespace CmdletHelpEditor.API.Tools {
                     var post = new WpPostUpdate {
                         Title = cmdlet.Name,
                         PostType = "page",
-                        PostParent = 70,
+                        PostParent = 16520,
                         HTML = HtmlProcessor.GenerateHtmlView(cmdlet, module).Result
                     };
                     try {
@@ -76,11 +76,7 @@ namespace CmdletHelpEditor.API.Tools {
             List<CmdletObject> cmdletsToProcess = module.Cmdlets.Where(x => x.Publish).ToList();
             Double duration = 100.0 / cmdletsToProcess.Count;
             pb.Value = 0;
-            for (Int32 i = 0; i < cmdletsToProcess.Count; i++) {
-                CmdletObject cmdlet = cmdletsToProcess[i];
-                if (i % 5 == 0) {
-                    await Task.Delay(70000);
-                }
+            foreach (CmdletObject cmdlet in cmdletsToProcess) {
                 await PublishSingle(cmdlet, module, blogger, true);
                 pb.Value += duration;
             }

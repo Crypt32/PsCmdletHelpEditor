@@ -107,11 +107,16 @@ namespace CmdletHelpEditor.Views.Dialogs {
         void ConnectClick(Object Sender, RoutedEventArgs e) {
             SetPassword();
             blogger = Utils.InitializeBlogger(ProviderInfo);
-            IEnumerable<BlogInfo> blogs = blogger.GetUsersBlogs();
-            if (blogs == null) { return; }
-            WebSites.Clear();
-            foreach (BlogInfo blog in blogs) {
-                WebSites.Add(blog);
+            try {
+                IEnumerable<BlogInfo> blogs = blogger.GetUsersBlogs();
+                if (blogs == null) { return; }
+                WebSites.Clear();
+                foreach (BlogInfo blog in blogs) {
+                    WebSites.Add(blog);
+                }
+            }
+            catch (Exception ex) {
+                Utils.MsgBox("Error", ex.Message);
             }
             BlogsLoaded = true;
         }

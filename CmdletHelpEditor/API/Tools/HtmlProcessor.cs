@@ -365,6 +365,16 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
                     SB.AppendLine("	<li>Windows Server 2016 Datacenter</li>");
                 }
             }
+            if (cmdlet.SupportInformation.Win2019Checked) {
+                SB.AppendLine("	<li>Windows Server 2019 all editions</li>");
+            } else {
+                if (cmdlet.SupportInformation.Win2019StdChecked) {
+                    SB.AppendLine("	<li>Windows Server 2019 Standard</li>");
+                }
+                if (cmdlet.SupportInformation.Win2019DCChecked) {
+                    SB.AppendLine("	<li>Windows Server 2019 Datacenter</li>");
+                }
+            }
             SB.Append("</ul>");
         }
 
