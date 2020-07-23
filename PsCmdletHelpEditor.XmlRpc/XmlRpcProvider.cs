@@ -2,16 +2,20 @@
 using System.Net;
 using System.Reflection;
 using CookComputing.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
 
 namespace PsCmdletHelpEditor.XmlRpc {
     public class XmlRpcProvider : XmlRpcService, IXmlRpcProvider {
         readonly IXmlRpcProvider _mwProvider;
 
-        public XmlRpcProvider(String serverUrl) {
+        public XmlRpcProvider(String providerUrl) {
             _mwProvider = (IXmlRpcProvider)XmlRpcProxyGen.Create(typeof(IXmlRpcProvider));
-            XmlRpcClientProtocol clientProtocol = _mwProvider as XmlRpcClientProtocol;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            clientProtocol.Url = serverUrl;
+            var clientProtocol = _mwProvider as XmlRpcClientProtocol;
+            if (clientProtocol == null) {
+                throw new ArgumentException("Not valid XmlRpcClientProtocol");
+            }
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
+            clientProtocol.Url = providerUrl;
             clientProtocol.UserAgent = "PS Cmdlet Help Editor/" + Assembly.GetExecutingAssembly().GetName().Version;
             clientProtocol.NonStandard = XmlRpcNonStandard.All;
         }
@@ -42,6 +46,21 @@ namespace PsCmdletHelpEditor.XmlRpc {
         }
         public XmlRpcMediaObjectInfo NewMediaObject(String blogid, String username, String password, XmlRpcMediaObject mediaObject) {
             return _mwProvider.NewMediaObject(blogid, username, password, mediaObject);
+        }
+        public WpPost[] GetWpRecentPosts(String blogid, String username, String password, Int32 numberOfPosts) {
+            return _mwProvider.GetWpRecentPosts(blogid, username, password, numberOfPosts);
+        }
+        public String AddWpPost(Int32 blogid, String username, String password, WpPostCreate post) {
+            return _mwProvider.AddWpPost(blogid, username, password, post);
+        }
+        public Boolean UpdateWpPost(Int32 blogid, String username, String password, Int32 postid, WpPostUpdate post) {
+            return _mwProvider.UpdateWpPost(blogid, username, password, postid, post);
+        }
+        public WpGetPost GetWpPost(String username, String password, Int32 postid) {
+            return _mwProvider.GetWpPost(username, password, postid);
+        }
+        public WpGetPost[] GetPages(String blogid, String username, String password, XmlRpcPageFilter filter) {
+            return _mwProvider.GetPages(blogid, username, password, filter);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.Windows;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
@@ -18,11 +19,11 @@ namespace CmdletHelpEditor.API.ViewModels {
             working = true;
             var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
             try {
-                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null, false);
-                Utils.MsgBox("Success", "The operation completed successfully.", MessageBoxImage.Information);
+                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null);
+                MsgBox.Show("Success", "The operation completed successfully.", MessageBoxImage.Information);
             }
             catch (Exception e) {
-                Utils.MsgBox("Error", e.Message);
+                MsgBox.Show("Error", e.Message);
             }
             working = false;
         }

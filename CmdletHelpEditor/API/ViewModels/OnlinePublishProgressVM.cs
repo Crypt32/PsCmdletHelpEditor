@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
+using PsCmdletHelpEditor.XmlRpc;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
@@ -44,9 +45,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         async void retry(Object o) {
             ListView lv = (ListView)o;
             PbValue = 0;
-            Blogger blogger = Utils.InitializeBlogger(module.Provider);
+            WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
-                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
+                MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
             Double duration = 100.0 / Cmdlets.Count;
@@ -59,7 +60,7 @@ namespace CmdletHelpEditor.API.ViewModels {
                 lv.ScrollIntoView(cmdlet);
                 if (cmdlet.Cmdlet.Publish) {
                     try {
-                        await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger, true);
+                        await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger);
                         cmdlet.Status = OnlinePublishStatusEnum.Succeed;
                         cmdlet.StatusText = "The operation completed successfully.";
                     } catch (Exception e) {
@@ -83,9 +84,9 @@ namespace CmdletHelpEditor.API.ViewModels {
                 cmdlet.StatusText = "Pending for publish";
             }
             PbValue = 0;
-            Blogger blogger = Utils.InitializeBlogger(module.Provider);
+            WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
-                Utils.MsgBox("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
+                MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
             Double duration = 100.0 / Cmdlets.Count;
@@ -94,7 +95,7 @@ namespace CmdletHelpEditor.API.ViewModels {
                 lv.ScrollIntoView(cmdlet);
                 if (cmdlet.Cmdlet.Publish) {
                     try {
-                        await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger, true);
+                        await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger);
                         cmdlet.Status = OnlinePublishStatusEnum.Succeed;
                         cmdlet.StatusText = "The operation completed successfully.";
                     } catch (Exception e) {

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Xml;
 using CmdletHelpEditor.API.Models;
 using CodeKicker.BBCode;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace CmdletHelpEditor.API.Tools {
     static class XmlProcessor {
@@ -58,7 +59,7 @@ namespace CmdletHelpEditor.API.Tools {
             ns.AddNamespace("dev", "http://schemas.microsoft.com/maml/dev/2004/10");
             XmlNodeList commandNodes = doc.SelectNodes("//command:command", ns);
             if (commandNodes == null) {
-                Utils.MsgBox("Error", "Error while reading XML.\nThe help file do not contains Command node.");
+                MsgBox.Show("Error", "Error while reading XML.\nThe help file do not contains Command node.");
                 return;
             }
             List<String> processed = new List<String>();

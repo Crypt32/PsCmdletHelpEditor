@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Security;
 using System.Xml.Serialization;
-using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Tools;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace CmdletHelpEditor.API.Models {
     public class ProviderInformation : INotifyPropertyChanged {
@@ -46,7 +46,7 @@ namespace CmdletHelpEditor.API.Models {
                 try {
                     SecurePassword = Crypt.DecryptPassword(password);
                 } catch (Exception e) {
-                    Utils.MsgBox("Error", e.Message);
+                    MsgBox.Show("Error", e.Message);
                     SecurePassword = null;
                 }
                 OnPropertyChanged(nameof(Password));

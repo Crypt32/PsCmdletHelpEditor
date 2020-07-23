@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.ViewModels {

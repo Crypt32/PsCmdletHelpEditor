@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PsCmdletHelpEditor.XmlRpc.Helpers;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
 
 namespace PsCmdletHelpEditor.XmlRpc {
-    public class XmlRpcClient : IXmlRpcClient {
+    public class WpXmlRpcClient {
         readonly XmlRpcProviderInfo _provInfo;
         readonly IXmlRpcProvider _mwProvider;
 
-        public XmlRpcClient(XmlRpcProviderInfo provider) {
+        public WpXmlRpcClient(XmlRpcProviderInfo provider) {
             _provInfo = provider;
             _mwProvider = new XmlRpcProvider(provider.ProviderUrl);
         }
@@ -22,42 +23,41 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     _provInfo.Password.ToPlainString())
                 );
         }
-        public Task<List<XmlRpcPost>> GetRecentPostsAsync(Int32 postCount = 5) {
+        public Task<List<WpPost>> GetRecentPostsAsync(Int32 postCount = 5) {
             return Task.Factory.StartNew(() =>
-                _mwProvider.GetRecentPosts(
+                _mwProvider.GetWpRecentPosts(
                     _provInfo.ProviderID,
                     _provInfo.UserName,
                     _provInfo.Password.ToPlainString(),
                     postCount).ToList()
                 );
         }
-        public Task<XmlRpcPost> GetPostAsync(String postId) {
+        public Task<WpGetPost> GetPostAsync(Int32 postId) {
             return Task.Factory.StartNew(() =>
-                _mwProvider.GetPost(
-                    postId,
+                _mwProvider.GetWpPost(
                     _provInfo.UserName,
-                    _provInfo.Password.ToPlainString())
+                    _provInfo.Password.ToPlainString(),
+                    postId)
                 );
         }
 
-        public Task<String> AddPostAsync(XmlRpcPost post, Boolean publish = true) {
+        public Task<String> AddPostAsync(WpPostCreate post, Boolean publish = true) {
             return Task.Factory.StartNew(() =>
-                _mwProvider.AddPost(
-                    _provInfo.ProviderID,
+                _mwProvider.AddWpPost(
+                    Convert.ToInt32(_provInfo.ProviderID),
                     _provInfo.UserName,
                     _provInfo.Password.ToPlainString(),
-                    post,
-                    publish)
+                    post)
                 );
         }
-        public Task<Boolean> UpdatePostAsync(XmlRpcPost post, Boolean publish = true) {
+        public Task<Boolean> UpdatePostAsync(WpPostUpdate post, Int32 postId, Boolean publish = true) {
             return Task.Factory.StartNew(() =>
-                _mwProvider.UpdatePost(
-                    post.PostId,
+                _mwProvider.UpdateWpPost(
+                    Convert.ToInt32(_provInfo.ProviderID),
                     _provInfo.UserName,
                     _provInfo.Password.ToPlainString(),
-                    post,
-                    publish)
+                    postId,
+                    post)
                 );
         }
         public Task<Boolean> DeletePostAsync(XmlRpcPost post, Boolean publish = false) {
@@ -69,6 +69,10 @@ namespace PsCmdletHelpEditor.XmlRpc {
                     _provInfo.Password.ToPlainString(),
                     publish)
                 );
+        }
+
+        public void SetBlog(String blogID) {
+            _provInfo.ProviderID = blogID;
         }
     }
 }

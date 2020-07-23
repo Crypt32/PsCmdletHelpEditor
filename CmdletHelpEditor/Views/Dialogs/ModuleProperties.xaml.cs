@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.Views.Dialogs {
@@ -19,7 +22,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
     public partial class ModuleProperties : INotifyPropertyChanged {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
-        Blogger blogger;
+        WpXmlRpcClient blogger;
         readonly MainWindowVM _mwvm;
 
         public ModuleProperties(MainWindowVM context) {
@@ -108,30 +111,34 @@ namespace CmdletHelpEditor.Views.Dialogs {
             SetPassword();
             blogger = Utils.InitializeBlogger(ProviderInfo);
             try {
-                IEnumerable<BlogInfo> blogs = blogger.GetUsersBlogs();
+                var blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
                 if (blogs == null) { return; }
                 WebSites.Clear();
-                foreach (BlogInfo blog in blogs) {
-                    WebSites.Add(blog);
+                foreach (XmlRpcBlogInfo blog in blogs) {
+                    var b = new BlogInfo {
+                        BlogID = blog.BlogID,
+                        BlogName = blog.BlogName,
+                        URL = blog.URL
+                    };
+                    WebSites.Add(b);
                 }
-            }
-            catch (Exception ex) {
-                Utils.MsgBox("Error", ex.Message);
+            } catch (Exception ex) {
+                MsgBox.Show("Error", ex.Message);
             }
             BlogsLoaded = true;
         }
         async void FetchClick(Object Sender, RoutedEventArgs e) {
             if (_mwvm.SelectedTab.Module.Provider == null) { return; }
             //List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, providerInfo.FetchPostCount);
-            var posts = await MetaWeblogWrapper.GetPages(blogger, providerInfo.FetchPostCount);
+            List<WpPost> posts = await blogger.GetRecentPostsAsync(providerInfo.FetchPostCount); // await MetaWeblogWrapper.GetPages(blogger, providerInfo.FetchPostCount);
             foreach (CmdletObject cmdlet in _mwvm.SelectedTab.Module.Cmdlets) {
-                WpGetPost post = posts.FirstOrDefault(x => x.Title.Equals(cmdlet.Name));
+                WpPost post = posts.FirstOrDefault(x => x.Title.Equals(cmdlet.Name));
                 if (post != null) {
                     cmdlet.ArticleIDString = post.PostId;
                     cmdlet.URL = post.Permalink;
                     if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                         var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
-                        cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);
+                        cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{cmdlet.URL}";
                     }
                 }
             }
@@ -173,6 +180,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
 
         void BlogSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
             if (blogger == null || ProviderInfo?.Blog == null) { return; }
+            
             blogger.SetBlog(ProviderInfo.Blog.BlogID);
         }
     }

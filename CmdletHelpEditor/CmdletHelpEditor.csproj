@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CmdletHelpEditor</RootNamespace>
     <AssemblyName>PsCmdletHelpEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -130,9 +130,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.28, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\WpfTheme\WpfTheme\bin\Release\Wpf.OfficeTheme.dll</HintPath>
+      <HintPath>_ExternalLibraries\Wpf.OfficeTheme.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="API\MetaWeblog\MediaObject.cs" />
-    <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
-    <Compile Include="API\MetaWeblog\XmlRpcPageFilter.cs" />
+    <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
@@ -187,13 +185,6 @@
     <Compile Include="API\Tools\XmlToken.cs" />
     <Compile Include="API\Tools\XmlTokenEnum.cs" />
     <Compile Include="API\Tools\XmlTokenizer.cs" />
-    <Compile Include="API\MetaWeblog\Blogger.cs" />
-    <Compile Include="API\MetaWeblog\CategoryInfo.cs" />
-    <Compile Include="API\MetaWeblog\IMetaWeblogProvider.cs" />
-    <Compile Include="API\MetaWeblog\BlogInfo.cs" />
-    <Compile Include="API\MetaWeblog\Post.cs" />
-    <Compile Include="API\MetaWeblog\UserInfo.cs" />
-    <Compile Include="API\MetaWeblog\XmlRpcFaultInfo.cs" />
     <Compile Include="API\ViewModels\ParamVM.cs" />
     <Compile Include="API\ViewModels\ExampleVM.cs" />
     <Compile Include="API\ViewModels\RelatedLinkVM.cs" />
@@ -519,6 +510,10 @@
     <ProjectReference Include="..\CodeKicker.BBCode\CodeKicker.BBCode.csproj">
       <Project>{1c8a5fb6-633a-43bd-b1b7-75a0ddc308f5}</Project>
       <Name>CodeKicker.BBCode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
+      <Project>{2fae87f8-bee9-4be7-9f9d-5d795f2de205}</Project>
+      <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

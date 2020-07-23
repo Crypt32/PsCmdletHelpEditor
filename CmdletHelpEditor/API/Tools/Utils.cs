@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
-using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
+using PsCmdletHelpEditor.XmlRpc;
 
 namespace CmdletHelpEditor.API.Tools {
     static class Utils {
@@ -23,16 +22,6 @@ namespace CmdletHelpEditor.API.Tools {
                 }
             };
         }
-        public static MessageBoxResult MsgBox(String header, String message, MessageBoxImage image = MessageBoxImage.Error, MessageBoxButton button = MessageBoxButton.OK) {
-            WindowCollection windows = Application.Current.Windows;
-            Window hwnd = null;
-            if (windows.Count > 0) {
-                hwnd = windows[windows.Count - 1];
-            }
-            return hwnd == null
-                ? MessageBox.Show(message, header, button, image)
-                : MessageBox.Show(hwnd, message, header, button, image);
-        }
         public static String GetCommandTypes() {
             List<String> cmds = new List<String>();
             if (Settings.Default.FunctionChecked) { cmds.Add("Function"); }
@@ -49,16 +38,15 @@ namespace CmdletHelpEditor.API.Tools {
             }
             
         }
-        public static Blogger InitializeBlogger(ProviderInformation provInfo) {
+        public static WpXmlRpcClient InitializeBlogger(ProviderInformation provInfo) {
             if (
                 String.IsNullOrEmpty(provInfo.ProviderURL) ||
                 String.IsNullOrEmpty(provInfo.UserName) ||
                 provInfo.SecurePassword == null
             ) { return null; }
-            Blogger blogger = new Blogger(provInfo.ProviderURL, provInfo.UserName, provInfo.SecurePassword);
-            if (provInfo.Blog != null && !String.IsNullOrEmpty(provInfo.Blog.BlogID)) {
-                blogger.SetBlog(provInfo.Blog.BlogID);
-            }
+            var xProvInfo = new XmlRpcProviderInfo(provInfo.ProviderURL, provInfo.UserName, provInfo.SecurePassword);
+            var blogger = new WpXmlRpcClient(xProvInfo);
+            xProvInfo.ProviderID = provInfo.Blog?.BlogID;
             return blogger;
         }
     }

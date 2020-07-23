@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
@@ -119,7 +120,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             IEnumerable<XmlToken> data = new List<XmlToken>();
             if (XmlChecked) {
                 if (module.UpgradeRequired) {
-                    Utils.MsgBox("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxImage.Warning);
+                    MsgBox.Show("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxImage.Warning);
                     BusyControlVisible = Visibility.Collapsed;
                     return;
                 }

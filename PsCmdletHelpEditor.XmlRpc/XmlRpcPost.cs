@@ -5,42 +5,42 @@ namespace PsCmdletHelpEditor.XmlRpc {
     public class XmlRpcPost {
         [XmlRpcMember("postid")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String PostId { get; set; }
+        public virtual String PostId { get; set; }
         [XmlRpcMember("title")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String Title { get; set; }
+        public virtual String Title { get; set; }
         [XmlRpcMember("description")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String HTML { get; set; }
+        public virtual String HTML { get; set; }
         [XmlRpcMember("mt_text_more")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String TextMore { get; set; }
+        public virtual String TextMore { get; set; }
         [XmlRpcMember("mt_keywords")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String Keywords { get; set; }
+        public virtual String Keywords { get; set; }
         [XmlRpcMember("wp_slug")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String Slug { get; set; }
+        public virtual String Slug { get; set; }
         [XmlRpcMember("mt_basename")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String BaseName { get; set; }
+        public virtual String BaseName { get; set; }
         [XmlRpcMember("mt_excerpt")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String Excerpt { get; set; }
+        public virtual String Excerpt { get; set; }
         [XmlRpcMember("wp_author_id")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String AuthorID { get; set; }
+        public virtual String AuthorID { get; set; }
         [XmlRpcMember("categories")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String[] Categories { get; set; }
+        public virtual String[] Categories { get; set; }
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public Boolean IsPublished { get; set; }
+        public virtual Boolean IsPublished { get; set; }
         [XmlRpcMember("dateCreated")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public DateTime? DateCreated { get; set; }
+        public virtual DateTime? DateCreated { get; set; }
         [XmlRpcMember("link")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public String Permalink { get; set; }
+        public virtual String Permalink { get; set; }
 
         protected Boolean Equals(XmlRpcPost other) {
             return String.Equals(Title, other.Title);

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace PsCmdletHelpEditor.XmlRpc {
+namespace PsCmdletHelpEditor.XmlRpc.Helpers {
     static class SecureStringExtensions {
         public static String ToPlainString(this SecureString secureString) {
             IntPtr bstr = Marshal.SecureStringToBSTR(secureString);
