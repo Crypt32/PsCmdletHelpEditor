@@ -11,9 +11,9 @@ using PsCmdletHelpEditor.BLL.Properties;
 namespace PsCmdletHelpEditor.BLL.Tools {
     static class PowerShellProcessor {
         public static Int32? PsVersion { get; set; }
-        static List<ModuleObject> ModuleList { get; set; }
+        static List<PsModuleObject> ModuleList { get; set; }
 
-        static String getInvocationString(ModuleObject module, String cmds) {
+        static String getInvocationString(PsModuleObject module, String cmds) {
             Object[] args = new Object[5];
             args[1] = module.Name;
             args[4] = cmds;
@@ -70,15 +70,15 @@ namespace PsCmdletHelpEditor.BLL.Tools {
         }
         /// <param name="force">Forces module list reload. Otherwise cached list is returned.</param>
         /// <returns></returns>
-        public static Task<IEnumerable<ModuleObject>> EnumModules(Boolean force) {
-            return Task<IEnumerable<ModuleObject>>.Factory.StartNew(() => {
+        public static Task<IEnumerable<PsModuleObject>> EnumModules(Boolean force) {
+            return Task<IEnumerable<PsModuleObject>>.Factory.StartNew(() => {
                 if (ModuleList != null && !force) { return ModuleList; }
                 PowerShell ps = PowerShell.Create();
                 try {
                     ps.AddCommand("Get-Module").AddParameter("ListAvailable");
                     List<PSObject> modules = ps.Invoke().ToList();
 
-                    ModuleList = modules.Select(item => new ModuleObject {
+                    ModuleList = modules.Select(item => new PsModuleObject {
                         Name = (String)item.Members["Name"].Value,
                         ModuleType = (ModuleType)item.Members["ModuleType"].Value,
                         Version = item.Members["Version"].Value.ToString(),
@@ -94,7 +94,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                     ps.AddCommand("Get-PSSnapin");
                     modules.AddRange(ps.Invoke().ToList());
 
-                    ModuleList.AddRange(modules.Select(item => new ModuleObject {
+                    ModuleList.AddRange(modules.Select(item => new PsModuleObject {
                         Name = (String)item.Members["Name"].Value,
                         ModuleType = ModuleType.Binary,
                         Version = item.Members["Version"].Value.ToString(),
@@ -115,7 +115,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 return ModuleList.Where(x => !exclude.Contains(x.Name)).ToList();
             });
         }
-        public static Task<IEnumerable<CmdletObject>> EnumCmdlets(ModuleObject module, String cmds, Boolean fromCBH) {
+        public static Task<IEnumerable<CmdletObject>> EnumCmdlets(PsModuleObject module, String cmds, Boolean fromCBH) {
             return Task<IEnumerable<CmdletObject>>.Factory.StartNew(() => {
                 Boolean fired = false;
                 PowerShell ps = PowerShell.Create();
@@ -134,13 +134,13 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 }
             });
         }
-        public static Task<ModuleObject> GetModuleFromFile(String path) {
-            return Task<ModuleObject>.Factory.StartNew(() => {
+        public static Task<PsModuleObject> GetModuleFromFile(String path) {
+            return Task<PsModuleObject>.Factory.StartNew(() => {
                 PowerShell ps = PowerShell.Create();
                 ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
                 try {
                     List<PSObject> psmodule = ps.Invoke().ToList();
-                    ModuleObject retValue = new ModuleObject {
+                    PsModuleObject retValue = new PsModuleObject {
                         Name = (String)psmodule[0].Members["Name"].Value,
                         ModuleType = (ModuleType)psmodule[0].Members["ModuleType"].Value,
                         Version = psmodule[0].Members["Version"].Value.ToString(),
@@ -156,7 +156,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
         }
         /// <param name="module">Module imported from project</param>
         /// <param name="cmdlets">active cmdlets from online module</param>
-        public static void CompareCmdlets(ModuleObject module, List<CmdletObject> cmdlets) {
+        public static void CompareCmdlets(PsModuleObject module, List<CmdletObject> cmdlets) {
             if (module.Cmdlets.Count == 0) {
                 module.Cmdlets = new ObservableCollection<CmdletObject>(cmdlets);
                 return;

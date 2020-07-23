@@ -10,17 +10,17 @@ using PsCmdletHelpEditor.BLL.Models;
 
 namespace PsCmdletHelpEditor.BLL.Tools {
     static class FileProcessor {
-        public static ModuleObject ReadProjectFile(String path) {
+        public static PsModuleObject ReadProjectFile(String path) {
             FileStream fs = null;
-            ModuleObject module;
+            PsModuleObject module;
             try {
                 Double version;
                 XmlAttributeOverrides overrides = XmlFormatConverter.GetOverrides(path, out version);
                 fs = new FileStream(path, FileMode.Open);
                 XmlSerializer serializer = overrides == null
-                    ? new XmlSerializer(typeof(ModuleObject))
-                    : new XmlSerializer(typeof(ModuleObject), overrides);
-                module = (ModuleObject)serializer.Deserialize(fs);
+                    ? new XmlSerializer(typeof(PsModuleObject))
+                    : new XmlSerializer(typeof(PsModuleObject), overrides);
+                module = (PsModuleObject)serializer.Deserialize(fs);
                 module.ProjectPath = path;
                 module.FormatVersion = version;
             } finally {
@@ -44,7 +44,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 }
             }
             tab.Module.FormatVersion = Utils.CurrentFormatVersion;
-            XmlSerializer serializer = new XmlSerializer(typeof(ModuleObject));
+            XmlSerializer serializer = new XmlSerializer(typeof(PsModuleObject));
             try {
                 serializer.Serialize(fs, tab.Module);
                 tab.Module.ProjectPath = path;
@@ -66,7 +66,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 .Any(dir => dir.EnumerateDirectories(moduleName).Any());
         }
 
-        public static async void PublishHelpFile(String path, ModuleObject module, ProgressBar pb) {
+        public static async void PublishHelpFile(String path, PsModuleObject module, ProgressBar pb) {
             XmlWriter writer = null;
             StringBuilder SB = new StringBuilder();
             if (module.Cmdlets.Count == 0) { return; }

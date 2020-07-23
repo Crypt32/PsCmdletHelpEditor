@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Wpf.OfficeTheme">
-      <HintPath>..\PsCmdletHelpEditor.Wpf.UI\_ExternalLibraries\Wpf.OfficeTheme.dll</HintPath>
+      <HintPath>..\..\WpfTheme\WpfTheme\bin\Release\Wpf.OfficeTheme.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +58,7 @@
     <Compile Include="Abstraction\IHavePassword.cs" />
     <Compile Include="Abstraction\IMainWindowVM.cs" />
     <Compile Include="Abstraction\IOnlinePublishProgressVM.cs" />
+    <Compile Include="Abstraction\IProgressStatus.cs" />
     <Compile Include="Abstraction\ITabItem.cs" />
     <Compile Include="Abstraction\ITabItemContent.cs" />
     <Compile Include="Abstraction\IUIWindowDialogService.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="ViewModels\AboutDialogVM.cs" />
     <Compile Include="ViewModels\AppCommands.cs" />
     <Compile Include="ViewModels\AppConfigVM.cs" />
-    <Compile Include="ViewModels\ClosableDialogViewModel.cs" />
+    <Compile Include="ViewModels\ClosableViewModel.cs" />
     <Compile Include="ViewModels\EditorVM.cs" />
     <Compile Include="ViewModels\ExampleVM.cs" />
     <Compile Include="ViewModels\FormatCommands.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="ViewModels\OnlinePublishProgressVM.cs" />
     <Compile Include="ViewModels\OutputVM.cs" />
     <Compile Include="ViewModels\ParamVM.cs" />
+    <Compile Include="ViewModels\ProgressStatus.cs" />
     <Compile Include="ViewModels\RelatedLinkVM.cs" />
     <Compile Include="ViewModels\TabItemManagerVM.cs" />
     <Compile Include="ViewModels\UIManager.cs" />

@@ -7,7 +7,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class ModulePropertiesVM : ClosableDialogViewModel {
-        ModuleObject m_module;
+        PsModuleObject m_module;
         ProviderInformation selectedProv;
         BlogInfo selectedBlog;
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
@@ -103,7 +103,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             DialogResult = true;
         }
 
-        public void SetModule(ModuleObject module) {
+        public void SetModule(PsModuleObject module) {
             m_module = module;
             SelectedProv = module.Provider;
             SelectedBlog = module.Provider?.Blog;

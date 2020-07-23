@@ -33,7 +33,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
             foreach (String prop in new[] { "ModuleClass", "UseSupports" }) {
                 legacyElements = new XmlAttributes();
                 legacyElements.XmlElements.Add(new XmlElementAttribute(prop));
-                tbo.Add(typeof(ModuleObject), prop, legacyElements);
+                tbo.Add(typeof(PsModuleObject), prop, legacyElements);
             }
             foreach (String prop in new[] { "Verb", "Noun" }) {
                 legacyElements = new XmlAttributes();

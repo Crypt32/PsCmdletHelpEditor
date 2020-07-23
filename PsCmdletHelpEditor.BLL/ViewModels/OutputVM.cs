@@ -101,7 +101,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
 
         async void GenerateOutput(Object obj) {
             CmdletObject cmd = Tab.EditorContext.CurrentCmdlet;
-            ModuleObject module = Tab.Module;
+            PsModuleObject module = Tab.Module;
             if (cmd == null) { return; }
 
             BusyControlVisible = Visibility.Visible;

@@ -14,6 +14,7 @@ using PsCmdletHelpEditor.BLL.Tools;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
+using IUIWindowDialogService = PsCmdletHelpEditor.BLL.Abstraction.IUIWindowDialogService;
 
 namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class AppCommands {
@@ -106,7 +107,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             Models.TabItem tab = _mwvm.SelectedTab;
             UIManager.ShowBusy(tab, Strings.InfoCmdletsLoading);
             try {
-                ModuleObject module = FileProcessor.ReadProjectFile(fileName);
+                PsModuleObject module = FileProcessor.ReadProjectFile(fileName);
                 Debug.Assert(tab != null, "tab != null");
                 tab.Module = module;
                 LoadCmdletsForProject(tab);
@@ -150,7 +151,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             }
         }
         void ImportFromXmlHelp(Object obj) {
-            ModuleObject module = (ModuleObject)obj;
+            PsModuleObject module = (PsModuleObject)obj;
             OpenFileDialog dlg = new OpenFileDialog {
                 FileName = module.Name + ".Help.xml",
                 DefaultExt = ".xml",
@@ -166,7 +167,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         }
         void PublishHelpFile(Object obj) {
             Object[] param = (Object[])obj;
-            ModuleObject module = ((Models.TabItem)param[0]).Module;
+            PsModuleObject module = ((Models.TabItem)param[0]).Module;
             ProgressBar pb = ((MainWindow)param[1]).sb.pb;
             SaveFileDialog dlg = new SaveFileDialog {
                 FileName = _mwvm.SelectedTab.Module.Name + ".Help.xml",
@@ -222,10 +223,10 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
             _mwvm.Modules.Clear();
             try {
-                IEnumerable<ModuleObject> data = obj == null
+                IEnumerable<PsModuleObject> data = obj == null
                     ? await PowerShellProcessor.EnumModules(true)
                     : await PowerShellProcessor.EnumModules(false);
-                foreach (ModuleObject item in data) {
+                foreach (PsModuleObject item in data) {
                     _mwvm.Modules.Add(item);
                 }
             } catch (Exception e) {
@@ -246,7 +247,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             if (result != true) { return; }
             UIManager.ShowBusy(previousTab, Strings.InfoModuleLoading);
             try {
-                ModuleObject module = await PowerShellProcessor.GetModuleFromFile(dlg.FileName);
+                PsModuleObject module = await PowerShellProcessor.GetModuleFromFile(dlg.FileName);
                 if (module != null && !_mwvm.Modules.Contains(module)) {
                     _mwvm.Modules.Add(module);
                     module.ModulePath = dlg.FileName;

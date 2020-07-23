@@ -13,7 +13,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
     public class OnlinePublishProgressVM : ClosableDialogViewModel, IOnlinePublishProgressVM {
         const String StartTitle = "Publish";
         const String StopTitle = "Stop";
-        ModuleObject module;
+        PsModuleObject module;
         Double pbValue;
         OnlinePublishEntry selectedEntry;
         String buttonTitle;
@@ -103,7 +103,7 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             ButtonTitle = StartTitle;
         }
 
-        public void SetModule(ModuleObject moduleObject) {
+        public void SetModule(PsModuleObject moduleObject) {
             module = moduleObject;
             foreach (CmdletObject cmdlet in module.Cmdlets) {
                 Cmdlets.Add(new OnlinePublishEntry { Cmdlet = cmdlet });

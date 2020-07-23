@@ -369,11 +369,11 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
         }
 
         // generates HTML for web browser control
-        public static Task<String> GenerateHtmlView(CmdletObject cmdlet, ModuleObject moduleObject) {
+        public static Task<String> GenerateHtmlView(CmdletObject cmdlet, PsModuleObject moduleObject) {
             return Task<String>.Factory.StartNew(() => generatePureHtml(cmdlet, moduleObject.Cmdlets, new StringBuilder(), moduleObject.UseSupports));
         }
         // generates HTML for HTML source view
-        public static Task<IEnumerable<XmlToken>> GenerateHtmlSourceHelp(CmdletObject cmdlet, ModuleObject moduleObject) {
+        public static Task<IEnumerable<XmlToken>> GenerateHtmlSourceHelp(CmdletObject cmdlet, PsModuleObject moduleObject) {
             return Task<IEnumerable<XmlToken>>.Factory.StartNew(() =>
                 XmlTokenizer.LoopTokenize(
                     generatePureHtml(cmdlet, moduleObject.Cmdlets, new StringBuilder(), moduleObject.UseSupports)

@@ -35,7 +35,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
             return retValue.TrimEnd();
         }
         // reader
-        public static void ImportFromXml(String file, ModuleObject moduleObject) {
+        public static void ImportFromXml(String file, PsModuleObject moduleObject) {
             if (String.IsNullOrEmpty(file)) { return; }
             FileInfo fileInfo = new FileInfo(file);
             String supDocPath = fileInfo.DirectoryName + "\\" + moduleObject.Name + ".supports.xml";

@@ -7,7 +7,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace PsCmdletHelpEditor.BLL.Models {
     public class TabItem : ViewModelBase, ITabItem {
-        ModuleObject module;
+        PsModuleObject module;
         Boolean isSaved;
         String header, errorInfo;
         ITabItemContent tabContent;
@@ -43,7 +43,7 @@ namespace PsCmdletHelpEditor.BLL.Models {
                 }
             }
         }
-        public ModuleObject Module {
+        public PsModuleObject Module {
             get => module;
             set {
                 module = value;

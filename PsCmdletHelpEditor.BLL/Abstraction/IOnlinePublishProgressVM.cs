@@ -2,6 +2,6 @@
 
 namespace PsCmdletHelpEditor.BLL.Abstraction {
     public interface IOnlinePublishProgressVM {
-        void SetModule(ModuleObject moduleObject);
+        void SetModule(PsModuleObject moduleObject);
     }
 }

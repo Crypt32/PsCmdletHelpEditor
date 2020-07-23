@@ -11,7 +11,7 @@ using PsCmdletHelpEditor.XmlRpc;
 namespace PsCmdletHelpEditor.BLL.Models {
     [XmlInclude(typeof(CmdletObject))]
     //[XmlRoot("")]
-    public class ModuleObject : INotifyPropertyChanged {
+    public class PsModuleObject : INotifyPropertyChanged {
         Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
         String projectPath, extraHeader, extraFooter;
         Int32? fetchPostCount;
@@ -19,7 +19,7 @@ namespace PsCmdletHelpEditor.BLL.Models {
         ProviderInformation provider;
         ObservableCollection<CmdletObject> cmdlets;
 
-        public ModuleObject() {
+        public PsModuleObject() {
             Cmdlets = new ObservableCollection<CmdletObject>();
         }
 
@@ -156,7 +156,7 @@ namespace PsCmdletHelpEditor.BLL.Models {
             }
         }
 
-        protected Boolean Equals(ModuleObject other) {
+        protected Boolean Equals(PsModuleObject other) {
             return String.Equals(Name, other.Name) && String.Equals(Version, other.Version);
         }
 
@@ -173,7 +173,7 @@ namespace PsCmdletHelpEditor.BLL.Models {
         public override Boolean Equals(Object obj) {
             if (ReferenceEquals(null, obj)) { return false; }
             if (ReferenceEquals(this, obj)) { return true; }
-            return obj.GetType() == GetType() && Equals((ModuleObject)obj);
+            return obj.GetType() == GetType() && Equals((PsModuleObject)obj);
         }
 
         void OnPropertyChanged(String name, Boolean markUnsaved) {

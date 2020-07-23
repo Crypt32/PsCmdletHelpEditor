@@ -16,7 +16,9 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
         public MainWindowVM(
             ITabItemManagerVM tabManager,
             IFormatCommands formatCommands,
-            IAppConfigVM appConfig) {
+            IAppConfigVM appConfig,
+            IProgressStatus progress) {
+            ProgressStatus = progress;
             TabManager = tabManager;
             FormatCommands = formatCommands;
             CommandManager = new AppCommands(this);
@@ -51,15 +53,15 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
 
         // data definitions
         public ITabItemManagerVM TabManager { get; }
-        public ObservableCollection<ModuleObject> Modules { get; }
-            = new ObservableCollection<ModuleObject>();
+        public ObservableCollection<PsModuleObject> Modules { get; }
+            = new ObservableCollection<PsModuleObject>();
         public ObservableCollection<TabItem> Tabs { get; }
             = new ObservableCollection<TabItem>();
 
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
             nameof(SelectedModule),
-            typeof(ModuleObject),
+            typeof(PsModuleObject),
             typeof(MainWindowVM),
             new PropertyMetadata(null));
 
@@ -80,9 +82,11 @@ namespace PsCmdletHelpEditor.BLL.ViewModels {
             typeof(MainWindowVM),
             new PropertyMetadata(String.Empty));
 
+        public IProgressStatus ProgressStatus { get; }
+
         // objects
-        public ModuleObject SelectedModule {
-            get => (ModuleObject)GetValue(SelectedModuleProperty);
+        public PsModuleObject SelectedModule {
+            get => (PsModuleObject)GetValue(SelectedModuleProperty);
             set => SetValue(SelectedModuleProperty, value);
         }
         public Int32? PsVersion {

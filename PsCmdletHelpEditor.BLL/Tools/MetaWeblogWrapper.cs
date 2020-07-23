@@ -11,7 +11,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace PsCmdletHelpEditor.BLL.Tools {
     public static class MetaWeblogWrapper {
-        public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, IXmlRpcClient blogger, Boolean quiet) {
+        public static async Task PublishSingle(CmdletObject cmdlet, PsModuleObject module, IXmlRpcClient blogger, Boolean quiet) {
             var post = new XmlRpcPost {
                 Title = cmdlet.Name,
                 PostId = cmdlet.ArticleIDString,
@@ -58,7 +58,7 @@ namespace PsCmdletHelpEditor.BLL.Tools {
                 }
             }
         }
-        public static async void PublishAll(ModuleObject module, ProgressBar pb) {
+        public static async void PublishAll(PsModuleObject module, ProgressBar pb) {
             IXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
                 MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
