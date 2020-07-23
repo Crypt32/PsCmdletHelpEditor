@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.UserControls;
@@ -15,7 +16,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         Int32? psversion;
         ClosableModuleItem selectedTab;
 
-        public MainWindowVM() {
+        public MainWindowVM(IDataSource dataSource) {
+            DataSource = dataSource;
+            DataSource.ModuleList.Add(new PsModuleItem());
             //Settings.Default.Reload();
             Modules = new ObservableCollection<ModuleObject>();
             Tabs = new ObservableCollection<ClosableModuleItem>();
@@ -51,6 +54,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         // data definitions
         public ObservableCollection<ModuleObject> Modules { get; set; }
         public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
+        public IDataSource DataSource { get; }
         
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(

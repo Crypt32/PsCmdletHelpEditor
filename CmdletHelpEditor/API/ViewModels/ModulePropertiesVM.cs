@@ -9,10 +9,12 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
     class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
+        readonly IDataSource _dataSource;
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
 
-        public ModulePropertiesVM() {
+        public ModulePropertiesVM(IDataSource dataSource) {
+            _dataSource = dataSource;
             ConnectProviderCommand = new AsyncCommand(connect);
         }
 
@@ -78,9 +80,6 @@ namespace CmdletHelpEditor.API.ViewModels {
             if (!(o is IHasPassword pwd)) {
                 return Task.CompletedTask;
             }
-
-
-
             return Task.CompletedTask;
         }
         Boolean canConnect(Object o) {

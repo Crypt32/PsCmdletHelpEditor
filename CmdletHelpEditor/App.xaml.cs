@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
 using Unity;
@@ -26,7 +27,7 @@ namespace CmdletHelpEditor {
         }
 
         void configureServices() {
-            
+            Container.RegisterSingleton<IDataSource, DataSource>();
         }
     }
 }

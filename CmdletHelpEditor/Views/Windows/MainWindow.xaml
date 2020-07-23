@@ -97,7 +97,12 @@
         </ToolBarTray>
         <parts:StatusBarMain x:Name="sb"
                              DockPanel.Dock="Bottom"/>
-        
+
+        <!--<controls1:ClosableTabControl ItemsSource="{Binding DataSource.ModuleList}"
+                                      SelectedItem="{Binding SelectedTab}"
+                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
+                                      AddTabCommand="{Binding CommandManager.AddTabCommand}"
+                                      Style="{StaticResource ScrollableTabControl}"/>-->
         <controls1:ClosableTabControl ItemsSource="{Binding Tabs}"
                                      SelectedItem="{Binding SelectedTab}"
                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
