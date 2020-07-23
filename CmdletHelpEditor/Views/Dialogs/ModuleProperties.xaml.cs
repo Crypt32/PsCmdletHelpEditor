@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
@@ -19,7 +21,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
     /// <summary>
     /// Interaction logic for ModuleProperties.xaml
     /// </summary>
-    public partial class ModuleProperties : INotifyPropertyChanged {
+    public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
         WpXmlRpcClient blogger;
@@ -172,16 +174,17 @@ namespace CmdletHelpEditor.Views.Dialogs {
             }
         }
 
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
         void BlogSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
             if (blogger == null || ProviderInfo?.Blog == null) { return; }
             
             blogger.SetBlog(ProviderInfo.Blog.BlogID);
         }
+        public SecureString Password => pwdBox.SecurePassword;
+
+        void OnPropertyChanged(String name) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

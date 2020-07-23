@@ -149,6 +149,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstract\IHasPassword.cs" />
+    <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
+    <Compile Include="Abstract\IAsyncVM.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
@@ -167,6 +170,8 @@
     <Compile Include="API\Tools\Crypt.cs" />
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
+    <Compile Include="API\ViewModels\AsyncViewModel.cs" />
+    <Compile Include="API\ViewModels\ClosableWindowVM.cs" />
     <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
     <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />

@@ -2,32 +2,31 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    public class OutputVM : DependencyObject, INotifyPropertyChanged {
+    public class OutputVM : DependencyObject, IAsyncVM {
         FlowDocument document;
-        Boolean xmlChecked = true, htmlSourceChecked, htmlChecked, textChecked;
-        Visibility busyControlVisible, rtbVisible, webBrowserVisible;
+        Boolean xmlChecked, htmlSourceChecked, htmlChecked, textChecked, isBusy;
 
         public OutputVM(ClosableModuleItem parent) {
-            BusyControlVisible = Visibility.Collapsed;
-            RtbVisible = Visibility.Collapsed;
-            WebBrowserVisible = Visibility.Collapsed;
+            XmlChecked = true;
             Tab = parent;
-            GenerateOutputCommand = new RelayCommand(GenerateOutput, CanGenerateView);
+            GenerateOutputCommand = new AsyncCommand(generateOutput, canGenerateView);
         }
 
-        public ICommand GenerateOutputCommand { get; set; }
+        public IAsyncCommand GenerateOutputCommand { get; }
 
-        public ClosableModuleItem Tab { get; set; }
+        public ClosableModuleItem Tab { get; }
 
         // dependency property is required for HtmlText property
         public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(
@@ -40,11 +39,19 @@ namespace CmdletHelpEditor.API.ViewModels {
             get => (String)GetValue(HtmlTextProperty);
             set => SetValue(HtmlTextProperty, value);
         }
+        public Boolean IsBusy {
+            get => isBusy;
+            set {
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
         public Boolean XmlChecked {
             get => xmlChecked;
             set {
                 xmlChecked = value;
                 OnPropertyChanged(nameof(XmlChecked));
+                OnPropertyChanged(nameof(RtbChecked));
             }
         }
         public Boolean HtmlSourceChecked {
@@ -52,6 +59,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             set {
                 htmlSourceChecked = value;
                 OnPropertyChanged(nameof(HtmlSourceChecked));
+                OnPropertyChanged(nameof(RtbChecked));
             }
         }
         public Boolean HtmlChecked {
@@ -59,6 +67,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             set {
                 htmlChecked = value;
                 OnPropertyChanged(nameof(HtmlChecked));
+                OnPropertyChanged(nameof(RtbChecked));
             }
         }
         public Boolean TextChecked {
@@ -66,30 +75,10 @@ namespace CmdletHelpEditor.API.ViewModels {
             set {
                 textChecked = value;
                 OnPropertyChanged(nameof(TextChecked));
+                OnPropertyChanged(nameof(RtbChecked));
             }
         }
-
-        public Visibility BusyControlVisible {
-            get => busyControlVisible;
-            set {
-                busyControlVisible = value;
-                OnPropertyChanged(nameof(BusyControlVisible));
-            }
-        }
-        public Visibility RtbVisible {
-            get => rtbVisible;
-            set {
-                rtbVisible = value;
-                OnPropertyChanged(nameof(RtbVisible));
-            }
-        }
-        public Visibility WebBrowserVisible {
-            get => webBrowserVisible;
-            set {
-                webBrowserVisible = value;
-                OnPropertyChanged(nameof(WebBrowserVisible));
-            }
-        }
+        public Boolean RtbChecked => XmlChecked || HtmlSourceChecked;
 
         public FlowDocument Document {
             get => document;
@@ -99,50 +88,45 @@ namespace CmdletHelpEditor.API.ViewModels {
             }
         }
 
-        async void GenerateOutput(Object obj) {
+        async Task generateOutput(Object obj, CancellationToken cancellationToken) {
             CmdletObject cmd = Tab.EditorContext.CurrentCmdlet;
             ModuleObject module = Tab.Module;
             if (cmd == null) { return; }
-            
-            BusyControlVisible = Visibility.Visible;
-            RtbVisible = Visibility.Collapsed;
-            WebBrowserVisible = Visibility.Collapsed;
-            
-            if (HtmlChecked) {
-                HtmlText = await HtmlProcessor.GenerateHtmlView(cmd, module);
-                HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmd.Name, HtmlText, cmd.ExtraHeader, cmd.ExtraFooter);
-                BusyControlVisible = Visibility.Collapsed;
-                RtbVisible = Visibility.Collapsed;
-                WebBrowserVisible = Visibility.Visible;
+            if (XmlChecked && module.UpgradeRequired) {
+                MsgBox.Show("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxImage.Warning);
                 return;
             }
+            IsBusy = true;
 
-            IEnumerable<XmlToken> data = new List<XmlToken>();
-            if (XmlChecked) {
-                if (module.UpgradeRequired) {
-                    MsgBox.Show("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.", MessageBoxImage.Warning);
-                    BusyControlVisible = Visibility.Collapsed;
-                    return;
-                }
-                var cmdlets = new List<CmdletObject> { cmd };
-                var SB = new StringBuilder();
-                await XmlProcessor.XmlGenerateHelp(SB, cmdlets, null, module.IsOffline);
-                data = XmlTokenizer.LoopTokenize(SB.ToString());
-            } else if (HtmlSourceChecked) {
-                data = await HtmlProcessor.GenerateHtmlSourceHelp(cmd, module);
+            if (HtmlChecked) {
+                await renderHtml(cmd, module);
+            } else {
+                IEnumerable<XmlToken> data = XmlChecked
+                    ? await generateXml(cmd, module)
+                    : await generateHtmlSource(cmd, module);
+                var para = new Paragraph();
+                para.Inlines.AddRange(colorizeSource(data));
+                Document = new FlowDocument();
+                Document.Blocks.Add(para);
             }
-            var para = new Paragraph();
-            para.Inlines.AddRange(ColorizeSource(data));
-            Document = new FlowDocument();
-            Document.Blocks.Add(para);
-            BusyControlVisible = Visibility.Collapsed;
-            WebBrowserVisible = Visibility.Collapsed;
-            RtbVisible = Visibility.Visible;
+            IsBusy = false;
         }
-        Boolean CanGenerateView(Object obj) {
-            return BusyControlVisible != Visibility.Visible;
+        Boolean canGenerateView(Object obj) {
+            return !IsBusy;
         }
-        static IEnumerable<Run> ColorizeSource(IEnumerable<XmlToken> data) {
+        async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
+            var SB = new StringBuilder();
+            await XmlProcessor.XmlGenerateHelp(SB, new[] {cmdlet}, null, module.IsOffline);
+            return XmlTokenizer.LoopTokenize(SB.ToString());
+        }
+        async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
+            return await HtmlProcessor.GenerateHtmlSourceHelp(cmdlet, module);
+        }
+        async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
+            HtmlText = await HtmlProcessor.GenerateHtmlView(cmdlet, module);
+            HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, HtmlText, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
+        }
+        static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {
             List<Run> blocks = new List<Run>();
             foreach (XmlToken token in data) {
                 Run run = new Run(token.Text);
