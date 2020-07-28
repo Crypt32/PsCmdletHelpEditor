@@ -9,7 +9,7 @@ using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.UserControls;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    public class MainWindowVM : DependencyObject, INotifyPropertyChanged {
+    public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
         Visibility pbVisible;
         Double pbProgress;
         String busyControlText;

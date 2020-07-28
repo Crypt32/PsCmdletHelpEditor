@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,7 @@ namespace CmdletHelpEditor.API.Tools {
             FileStream fs = new FileStream(path, FileMode.Create);
             tab.Module.ProjectPath = path;
             Double oldVersion = tab.Module.FormatVersion;
+            // remove read stuff: obsolete cmdlets and parameters
             if (!tab.Module.IsOffline) {
                 foreach (CmdletObject cmdlet in tab.Module.Cmdlets.ToArray()) {
                     if (cmdlet.GeneralHelp.Status == ItemStatus.Missing) {
@@ -43,6 +45,15 @@ namespace CmdletHelpEditor.API.Tools {
                     }
                 }
             }
+            // sort cmdlets by name
+            IEnumerable<CmdletObject> cmdlets = tab.Module.Cmdlets
+                .OrderBy(x => x.Name)
+                .ToList();
+            tab.Module.Cmdlets.Clear();
+            foreach (CmdletObject cmdlet in cmdlets) {
+                tab.Module.Cmdlets.Add(cmdlet);
+            }
+
             tab.Module.FormatVersion = Utils.CurrentFormatVersion;
             XmlSerializer serializer = new XmlSerializer(typeof(ModuleObject));
             try {

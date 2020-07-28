@@ -151,6 +151,8 @@
     </ApplicationDefinition>
     <Compile Include="Abstract\IDataSource.cs" />
     <Compile Include="Abstract\IHasPassword.cs" />
+    <Compile Include="Abstract\IMainTabContent.cs" />
+    <Compile Include="Abstract\IMainWindowVM.cs" />
     <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
     <Compile Include="Abstract\IAsyncVM.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />

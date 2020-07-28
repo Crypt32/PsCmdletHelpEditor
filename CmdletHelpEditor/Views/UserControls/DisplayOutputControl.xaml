@@ -42,17 +42,19 @@
                         Command="{Binding EditorContext.OutputContext.GenerateOutputCommand}" />
             </StackPanel>
         </Border>
-        <controls:BindableRichTextBox IsUndoEnabled="False"
+        <controls:BindableRichTextBox x:Name="SrcRtbBox"
+                                      IsUndoEnabled="False"
                                       UndoLimit="0"
                                       Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
                                       FontFamily="Consolas"
-                                      FontSize="14"
+                                      FontSize="12"
                                       VerticalContentAlignment="Stretch"
                                       HorizontalContentAlignment="Stretch"
                                       HorizontalScrollBarVisibility="Auto"
                                       VerticalScrollBarVisibility="Auto"
                                       IsReadOnly="True"
-                                      Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                      Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      PreviewMouseWheel="onRtbPreviewMouseWheel"/>
         <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
                     Visibility="{Binding EditorContext.OutputContext.HtmlChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <userControls:BusyUC Visibility="{Binding EditorContext.OutputContext.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"

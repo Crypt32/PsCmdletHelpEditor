@@ -30,12 +30,17 @@
     </StatusBarItem>
     <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
     <StatusBarItem>
-        <TextBlock MinWidth="200"
+        <TextBlock MinWidth="100"
                    MaxWidth="400"
                    Style="{StaticResource ResourceKey=StatusBarTextBlock}"
                    Text="{Binding SelectedModule.ProjectPath}"
                    ToolTip="{Binding SelectedModule.ProjectPath}"/>
     </StatusBarItem>
+    <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
+    <TextBlock>
+        <Run Text="Commands: "/>
+        <Run Text="{Binding SelectedTab.Module.Cmdlets.Count, Mode=OneWay}"/>
+    </TextBlock>
     <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
     <StatusBarItem>
         <Image Width="16" Style="{StaticResource ImgStatus}" ToolTip="{Binding SelectedTab.ErrorInfo}"/>

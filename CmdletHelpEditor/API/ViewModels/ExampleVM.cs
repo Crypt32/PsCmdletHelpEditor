@@ -13,13 +13,13 @@ namespace CmdletHelpEditor.API.ViewModels {
             NewExampleCommand = new RelayCommand(newExample, canNewExample);
             RemoveExampleCommand = new RelayCommand(removeExample, canRemoveExample);
             UpExampleCommand = new RelayCommand(upExample, canUpExample);
-            DownExampleCommad = new RelayCommand(downExample, canDownExample);
+            DownExampleCommand = new RelayCommand(downExample, canDownExample);
         }
         
         public ICommand NewExampleCommand { get; set; }
         public ICommand RemoveExampleCommand { get; set; }
         public ICommand UpExampleCommand { get; set; }
-        public ICommand DownExampleCommad { get; set; }
+        public ICommand DownExampleCommand { get; set; }
         public Boolean ExampleTextBoxEnabled { get; set; }
         public Example CurrentExample {
             get => currentExample;
