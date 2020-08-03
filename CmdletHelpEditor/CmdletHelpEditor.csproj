@@ -155,6 +155,7 @@
     <Compile Include="Abstract\IMainWindowVM.cs" />
     <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
     <Compile Include="Abstract\IAsyncVM.cs" />
+    <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />

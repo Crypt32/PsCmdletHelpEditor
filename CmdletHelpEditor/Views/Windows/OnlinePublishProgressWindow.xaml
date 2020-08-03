@@ -25,12 +25,12 @@
                     DockPanel.Dock="Right"
                     Width="70"
                     Margin="10"/>
-            <Button Content="Publish"
+            <Button Content="{Binding PublishCaption}"
                     DockPanel.Dock="Right"
                     Width="70"
                     Margin="10"
                     Command="{Binding PublishCommand}"
-                    CommandParameter="{Binding ElementName=lv}"/>
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
             <Button Content="Retry"
                     DockPanel.Dock="Right"
                     Width="70"

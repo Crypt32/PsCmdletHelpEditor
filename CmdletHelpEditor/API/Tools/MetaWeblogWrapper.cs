@@ -14,7 +14,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 namespace CmdletHelpEditor.API.Tools {
     static class MetaWeblogWrapper {
         public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, WpXmlRpcClient blogger) {
-            Thread.Sleep(5000);
+            await Task.Factory.StartNew(() => Thread.Sleep(5000));
             if (blogger == null) {
                 blogger = Utils.InitializeBlogger(module.Provider);
             }

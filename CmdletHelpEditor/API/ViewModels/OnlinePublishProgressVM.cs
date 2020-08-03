@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using PsCmdletHelpEditor.XmlRpc;
@@ -12,18 +13,21 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    class OnlinePublishProgressVM : ViewModelBase {
+    class OnlinePublishProgressVM : AsyncViewModel {
+        Boolean stopRequested;
+        String publishCaption;
         ModuleObject module;
         Double pbValue;
         OnlinePublishEntry selectedEntry;
 
         public OnlinePublishProgressVM() {
             Cmdlets = new ObservableCollection<OnlinePublishEntry>();
-            PublishCommand = new RelayCommand(publish);
-            RetryCommand = new RelayCommand(retry);
+            PublishCommand = new AsyncCommand(publish);
+            RetryCommand = new AsyncCommand(retry);
+            PublishCaption = "Publish";
         }
 
-        public ICommand PublishCommand { get; set; }
+        public IAsyncCommand PublishCommand { get; set; }
         public ICommand RetryCommand { get; set; }
 
         public ObservableCollection<OnlinePublishEntry> Cmdlets { get; set; }
@@ -42,8 +46,22 @@ namespace CmdletHelpEditor.API.ViewModels {
                 OnPropertyChanged(nameof(PbValue));
             }
         }
-        async void retry(Object o) {
-            ListView lv = (ListView)o;
+
+        public String PublishCaption {
+            get => publishCaption;
+            set {
+                publishCaption = value;
+                OnPropertyChanged(nameof(PublishCaption));
+            }
+        }
+        async Task publish(IList<CmdletObject> cmdlets) {
+
+        }
+        async Task retry(Object o, CancellationToken token) {
+            if (IsBusy) {
+                return;
+            }
+            IScrollToView lv = (IScrollToView)o;
             PbValue = 0;
             WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
@@ -52,7 +70,12 @@ namespace CmdletHelpEditor.API.ViewModels {
             }
             Double duration = 100.0 / Cmdlets.Count;
             PbValue = 0;
+            IsBusy = true;
+            PublishCaption = "Stop";
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
+                if (stopRequested) {
+                    break;
+                }
                 if (cmdlet.Status != OnlinePublishStatusEnum.Failed) {
                     PbValue += duration;
                     continue;
@@ -73,12 +96,13 @@ namespace CmdletHelpEditor.API.ViewModels {
                 }
 
                 PbValue += duration;
-                await Task.Factory.StartNew(() => Thread.Sleep(1000));
             }
             PbValue = 100;
+            IsBusy = false;
+            PublishCaption = "Publish";
         }
-        async void publish(Object obj) {
-            ListView lv = (ListView)obj;
+        async Task publish(Object o, CancellationToken token) {
+            IScrollToView lv = (IScrollToView)o;
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
                 cmdlet.Status = OnlinePublishStatusEnum.Pending;
                 cmdlet.StatusText = "Pending for publish";
@@ -91,7 +115,12 @@ namespace CmdletHelpEditor.API.ViewModels {
             }
             Double duration = 100.0 / Cmdlets.Count;
             PbValue = 0;
+            IsBusy = true;
+            PublishCaption = "Stop";
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
+                if (stopRequested) {
+                    break;
+                }
                 lv.ScrollIntoView(cmdlet);
                 if (cmdlet.Cmdlet.Publish) {
                     try {
@@ -108,9 +137,10 @@ namespace CmdletHelpEditor.API.ViewModels {
                 }
 
                 PbValue += duration;
-                await Task.Factory.StartNew(() => Thread.Sleep(1000));
             }
             PbValue = 100;
+            IsBusy = false;
+            PublishCaption = "Publish";
         }
 
         public void SetModule(ModuleObject moduleObject) {

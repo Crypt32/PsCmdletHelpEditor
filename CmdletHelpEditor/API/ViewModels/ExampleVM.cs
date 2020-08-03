@@ -26,8 +26,8 @@ namespace CmdletHelpEditor.API.ViewModels {
             set {
                 currentExample = value;
                 ExampleTextBoxEnabled = currentExample != null;
-                OnPropertyChanged("CurrentExample");
-                OnPropertyChanged("ExampleTextBoxEnabled");
+                OnPropertyChanged(nameof(CurrentExample));
+                OnPropertyChanged(nameof(ExampleTextBoxEnabled));
             }
         }
         
@@ -67,13 +67,16 @@ namespace CmdletHelpEditor.API.ViewModels {
             CurrentExample = cmdlet.Examples[old + 1];
         }
         Boolean canDownExample(Object obj) {
-            if (!canNewExample(null)) { return false; }
+            if (!canNewExample(null)) {
+                return false;
+            }
+
             Int32 count = cmdlet.RelatedLinks.Count - 1;
             return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) < count;
         }
 
-        public void SetCmdlet(CmdletObject newcmdlet) {
-            cmdlet = newcmdlet;
+        public void SetCmdlet(CmdletObject newCmdlet) {
+            cmdlet = newCmdlet;
             CurrentExample = null;
         }
 
