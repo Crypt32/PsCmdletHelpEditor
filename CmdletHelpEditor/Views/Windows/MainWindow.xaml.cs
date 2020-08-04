@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Properties;
 
@@ -10,8 +9,11 @@ namespace CmdletHelpEditor.Views.Windows {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow {
-        public MainWindow(IMainWindowVM dataContext) {
+        readonly IPsProcessor _psProcessor;
+
+        public MainWindow(IMainWindowVM dataContext, IPsProcessor psProcessor) {
             DataContext = dataContext;
+            _psProcessor = psProcessor;
             InitializeComponent();
         }
 
@@ -20,7 +22,7 @@ namespace CmdletHelpEditor.Views.Windows {
         }
         async void WindowInitialized(Object sender, EventArgs e) {
             var dc = (MainWindowVM)DataContext;
-            dc.PsVersion = await PowerShellProcessor.GetPsVersion();
+            dc.PsVersion = await _psProcessor.GetPsVersion();
             Settings.Default.Reload();
         }
     }

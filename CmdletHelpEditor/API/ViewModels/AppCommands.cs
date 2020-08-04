@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.UserControls;
@@ -14,13 +15,16 @@ using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using Unity;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public class AppCommands {
         readonly MainWindowVM _mwvm;
+        readonly IPsProcessor _psProcessor;
         Boolean alreadyRaised;
 
         public AppCommands(MainWindowVM parent) {
+            _psProcessor = App.Container.Resolve<IPsProcessor>();
             _mwvm = parent;
             AddTabCommand = new RelayCommand(AddTab);
             CloseTabCommand = new RelayCommand(CloseTab);
@@ -192,7 +196,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             }
             UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
             try {
-                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(_mwvm.SelectedModule, cmd, importCBH);
+                IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdlets(_mwvm.SelectedModule, cmd, importCBH);
                 _mwvm.SelectedModule.Cmdlets.Clear();
                 foreach (CmdletObject item in data) {
                     _mwvm.SelectedModule.Cmdlets.Add(item);
@@ -217,10 +221,9 @@ namespace CmdletHelpEditor.API.ViewModels {
             UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
             _mwvm.Modules.Clear();
             try {
-                IEnumerable<ModuleObject> data = obj == null
-                    ? await PowerShellProcessor.EnumModules(true)
-                    : await PowerShellProcessor.EnumModules(false);
-                foreach (ModuleObject item in data) {
+                await _psProcessor.EnumModules(obj == null);
+
+                foreach (ModuleObject item in _psProcessor.ModuleList) {
                     _mwvm.Modules.Add(item);
                 }
             } catch (Exception e) {
@@ -241,7 +244,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             if (result != true) { return; }
             UIManager.ShowBusy(previousTab, Strings.InfoModuleLoading);
             try {
-                ModuleObject module = await PowerShellProcessor.GetModuleFromFile(dlg.FileName);
+                ModuleObject module = await _psProcessor.GetModuleFromFile(dlg.FileName);
                 if (module != null && !_mwvm.Modules.Contains(module)) {
                     _mwvm.Modules.Add(module);
                     module.ModulePath = dlg.FileName;
@@ -265,9 +268,9 @@ namespace CmdletHelpEditor.API.ViewModels {
             tab.EditorContext.CurrentCmdlet = null;
             List<CmdletObject> nativeCmdlets = new List<CmdletObject>();
             try {
-                IEnumerable<CmdletObject> data = await PowerShellProcessor.EnumCmdlets(tab.Module, cmd, false);
+                IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdlets(tab.Module, cmd, false);
                 nativeCmdlets.AddRange(data);
-                PowerShellProcessor.CompareCmdlets(tab.Module, nativeCmdlets);
+                tab.Module.CompareCmdlets(nativeCmdlets);
             } catch (Exception e) {
                 String message = e.Message + "\n\nYou still can use the module project in offline mode";
                 message += "\nHowever certain functionality may not be available.";

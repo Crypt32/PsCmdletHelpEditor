@@ -13,7 +13,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Visibility pbVisible;
         Double pbProgress;
         String busyControlText;
-        Int32? psversion;
+        Int32? psVersion;
         ClosableModuleItem selectedTab;
 
         public MainWindowVM(IDataSource dataSource) {
@@ -86,10 +86,10 @@ namespace CmdletHelpEditor.API.ViewModels {
             set => SetValue(SelectedModuleProperty, value);
         }
         public Int32? PsVersion {
-            get => psversion;
+            get => psVersion;
             set {
-                psversion = value;
-                switch (psversion) {
+                psVersion = value;
+                switch (psVersion) {
                     case 3:
                         Settings.Default.WorkflowEnabled = true;
                         break;

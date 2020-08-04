@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Management.Automation;
 using System.Xml.Serialization;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.Utility;
+using CmdletHelpEditor.Properties;
 
 namespace CmdletHelpEditor.API.Models {
     [XmlInclude(typeof(CmdletObject))]
@@ -153,6 +156,53 @@ namespace CmdletHelpEditor.API.Models {
                     cmdlets.CollectionChanged += cmdletsOnCollectionChanged;
                 }
             }
+        }
+
+        /// <param name="module">Module imported from project</param>
+        /// <param name="cmdlets">active cmdlets from online module</param>
+        public void CompareCmdlets(IList<CmdletObject> cmdlets) {
+            if (Cmdlets.Count == 0) {
+                Cmdlets = new ObservableCollection<CmdletObject>(cmdlets);
+                return;
+            }
+            List<String> processed = new List<String>();
+            // process saved cmdlets
+            foreach (CmdletObject cmdlet in Cmdlets) {
+                Int32 activeCmdletIndex = cmdlets.IndexOf(cmdlet);
+                if (activeCmdletIndex >= 0) {
+                    // update syntax, parametersets and parameter information from active cmdlet to project
+                    cmdlet.Syntax = cmdlets[activeCmdletIndex].Syntax;
+                    cmdlet.ParameterSets = cmdlets[activeCmdletIndex].ParameterSets;
+                    cmdlet.UpdateParamSets();
+                    cmdlet.CopyFromCmdlet(cmdlets[activeCmdletIndex]);
+                    processed.Add(cmdlet.Name);
+                } else {
+                    // saved project contains orphaned cmdlet
+                    cmdlet.GeneralHelp.Status = ItemStatus.Missing;
+                }
+            }
+            // add new cmdlets to the project if any
+            foreach (CmdletObject cmdlet in cmdlets.Where(cmdlet => !processed.Contains(cmdlet.Name))) {
+                Cmdlets.Add(cmdlet);
+            }
+        }
+        public String GetInvocationString(String commandTypes) {
+            Object[] args = new Object[5];
+            args[1] = Name;
+            args[4] = commandTypes;
+            if (ModuleClass == "Module" || ModuleClass == "External") {
+                args[0] = "Import-Module";
+                args[2] = String.IsNullOrEmpty(ModulePath)
+                    ? Name
+                    : ModulePath;
+                args[3] = ModuleClass == "External" || !HasManifest
+                    ? null
+                    : " -RequiredVersion " + Version;
+                return String.Format(Resources.ipmoTemplate, args);
+            }
+            args[0] = "Add-PSSnapin";
+            args[2] = args[3] = null;
+            return String.Format(Resources.ipmoTemplate, args);
         }
 
         protected Boolean Equals(ModuleObject other) {

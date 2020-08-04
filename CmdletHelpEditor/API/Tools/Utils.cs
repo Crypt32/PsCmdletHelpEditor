@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.XmlRpc;
+using Unity;
 
 namespace CmdletHelpEditor.API.Tools {
     static class Utils {
-        public static String ArgPath { get; set; }
         public static Double CurrentFormatVersion => 1.1;
 
         public static IEnumerable<Double> SupportedFormatVersions => new[] { 0, 1.0, 1.1 };
@@ -23,16 +24,17 @@ namespace CmdletHelpEditor.API.Tools {
             };
         }
         public static String GetCommandTypes() {
-            List<String> cmds = new List<String>();
-            if (Settings.Default.FunctionChecked) { cmds.Add("Function"); }
-            if (Settings.Default.FilterChecked) { cmds.Add("Filter"); }
-            if (Settings.Default.CmdletChecked) { cmds.Add("Cmdlet"); }
-            if (Settings.Default.ExternalScriptChecked) { cmds.Add("ExternalScript"); }
-            if (Settings.Default.ScriptChecked) { cmds.Add("Script"); }
-            if (PowerShellProcessor.PsVersion >= 3 && Settings.Default.WorkflowChecked) { cmds.Add("Workflow"); }
-            if (PowerShellProcessor.PsVersion >= 4 && Settings.Default.ApplicationChecked) { cmds.Add("Application"); }
+            var psProcessor = App.Container.Resolve<IPsProcessor>();
+            List<String> commandTypes = new List<String>();
+            if (Settings.Default.FunctionChecked) { commandTypes.Add("Function"); }
+            if (Settings.Default.FilterChecked) { commandTypes.Add("Filter"); }
+            if (Settings.Default.CmdletChecked) { commandTypes.Add("Cmdlet"); }
+            if (Settings.Default.ExternalScriptChecked) { commandTypes.Add("ExternalScript"); }
+            if (Settings.Default.ScriptChecked) { commandTypes.Add("Script"); }
+            if (psProcessor.PsVersion >= 3 && Settings.Default.WorkflowChecked) { commandTypes.Add("Workflow"); }
+            if (psProcessor.PsVersion >= 4 && Settings.Default.ApplicationChecked) { commandTypes.Add("Application"); }
             try {
-                return String.Join(",", cmds);
+                return String.Join(",", commandTypes);
             } catch {
                 return null;
             }

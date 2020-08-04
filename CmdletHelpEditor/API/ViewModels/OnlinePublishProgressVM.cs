@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +22,6 @@ namespace CmdletHelpEditor.API.ViewModels {
         OnlinePublishEntry selectedEntry;
 
         public OnlinePublishProgressVM() {
-            Cmdlets = new ObservableCollection<OnlinePublishEntry>();
             PublishCommand = new AsyncCommand(publish);
             RetryCommand = new AsyncCommand(retry);
             PublishCaption = "Publish";
@@ -30,7 +30,8 @@ namespace CmdletHelpEditor.API.ViewModels {
         public IAsyncCommand PublishCommand { get; set; }
         public ICommand RetryCommand { get; set; }
 
-        public ObservableCollection<OnlinePublishEntry> Cmdlets { get; set; }
+        public ObservableCollection<OnlinePublishEntry> Cmdlets { get; }
+            = new ObservableCollection<OnlinePublishEntry>();
 
         public OnlinePublishEntry SelectedEntry {
             get => selectedEntry;
@@ -54,31 +55,20 @@ namespace CmdletHelpEditor.API.ViewModels {
                 OnPropertyChanged(nameof(PublishCaption));
             }
         }
-        async Task publish(IList<CmdletObject> cmdlets) {
-
-        }
-        async Task retry(Object o, CancellationToken token) {
-            if (IsBusy) {
-                return;
-            }
-            IScrollToView lv = (IScrollToView)o;
+        async Task publish(IScrollToView lv, ICollection<OnlinePublishEntry> cmdlets) {
             PbValue = 0;
             WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
                 MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
-            Double duration = 100.0 / Cmdlets.Count;
+            Double duration = 100.0 / cmdlets.Count;
             PbValue = 0;
             IsBusy = true;
             PublishCaption = "Stop";
-            foreach (OnlinePublishEntry cmdlet in Cmdlets) {
+            foreach (OnlinePublishEntry cmdlet in cmdlets) {
                 if (stopRequested) {
                     break;
-                }
-                if (cmdlet.Status != OnlinePublishStatusEnum.Failed) {
-                    PbValue += duration;
-                    continue;
                 }
                 lv.ScrollIntoView(cmdlet);
                 if (cmdlet.Cmdlet.Publish) {
@@ -101,46 +91,24 @@ namespace CmdletHelpEditor.API.ViewModels {
             IsBusy = false;
             PublishCaption = "Publish";
         }
+        async Task retry(Object o, CancellationToken token) {
+            if (IsBusy) {
+                return;
+            }
+            IScrollToView lv = (IScrollToView)o;
+            await publish(lv, Cmdlets.Where(x => x.Status == OnlinePublishStatusEnum.Failed).ToList());
+        }
         async Task publish(Object o, CancellationToken token) {
+            if (IsBusy) {
+                stopRequested = true;
+                return;
+            }
             IScrollToView lv = (IScrollToView)o;
             foreach (OnlinePublishEntry cmdlet in Cmdlets) {
                 cmdlet.Status = OnlinePublishStatusEnum.Pending;
                 cmdlet.StatusText = "Pending for publish";
             }
-            PbValue = 0;
-            WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
-            if (blogger == null) {
-                MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
-                return;
-            }
-            Double duration = 100.0 / Cmdlets.Count;
-            PbValue = 0;
-            IsBusy = true;
-            PublishCaption = "Stop";
-            foreach (OnlinePublishEntry cmdlet in Cmdlets) {
-                if (stopRequested) {
-                    break;
-                }
-                lv.ScrollIntoView(cmdlet);
-                if (cmdlet.Cmdlet.Publish) {
-                    try {
-                        await MetaWeblogWrapper.PublishSingle(cmdlet.Cmdlet, module, blogger);
-                        cmdlet.Status = OnlinePublishStatusEnum.Succeed;
-                        cmdlet.StatusText = "The operation completed successfully.";
-                    } catch (Exception e) {
-                        cmdlet.Status = OnlinePublishStatusEnum.Failed;
-                        cmdlet.StatusText = e.Message;
-                    }
-                } else {
-                    cmdlet.Status = OnlinePublishStatusEnum.Skipped;
-                    cmdlet.StatusText = "The item is not configured for publishing";
-                }
-
-                PbValue += duration;
-            }
-            PbValue = 100;
-            IsBusy = false;
-            PublishCaption = "Publish";
+            await publish(lv, Cmdlets);
         }
 
         public void SetModule(ModuleObject moduleObject) {

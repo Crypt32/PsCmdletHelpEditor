@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
 using Unity;
@@ -29,6 +30,7 @@ namespace CmdletHelpEditor {
         void configureServices() {
             Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
             Container.RegisterSingleton<IDataSource, DataSource>();
+            Container.RegisterSingleton<IPsProcessor, PowerShellProcessor>();
         }
     }
 }
