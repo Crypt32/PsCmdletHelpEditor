@@ -71,7 +71,7 @@ namespace CmdletHelpEditor.API.ViewModels {
                 return false;
             }
 
-            Int32 count = cmdlet.RelatedLinks.Count - 1;
+            Int32 count = cmdlet.Examples.Count - 1;
             return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) < count;
         }
 
