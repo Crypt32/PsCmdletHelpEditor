@@ -50,7 +50,10 @@
         <TextBlock Text="PowerShell host version: "><Run Text="{Binding PsVersion}"/></TextBlock>
     </StatusBarItem>
     <StatusBarItem>
-        <ProgressBar Height="20" x:Name="pb" Width="100" Visibility="Collapsed"/>
+        <ProgressBar Height="20"
+                     Width="100"
+                     Value="{Binding ProgressBar.Progress}"
+                     Visibility="{Binding ProgressBar.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </StatusBarItem>
     <Separator/>
     <StatusBarItem>

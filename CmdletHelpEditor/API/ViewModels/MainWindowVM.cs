@@ -16,8 +16,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         Int32? psVersion;
         ClosableModuleItem selectedTab;
 
-        public MainWindowVM(IDataSource dataSource) {
+        public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
             DataSource = dataSource;
+            ProgressBar = progressBar;
             DataSource.ModuleList.Add(new PsModuleItem());
             //Settings.Default.Reload();
             Modules = new ObservableCollection<ModuleObject>();
@@ -55,6 +56,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         public ObservableCollection<ModuleObject> Modules { get; set; }
         public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
         public IDataSource DataSource { get; }
+        public IProgressBar ProgressBar { get; }
         
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(

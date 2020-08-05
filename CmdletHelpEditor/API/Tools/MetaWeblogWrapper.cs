@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using PsCmdletHelpEditor.XmlRpc;
 using PsCmdletHelpEditor.XmlRpc.WordPress;
@@ -61,7 +61,7 @@ namespace CmdletHelpEditor.API.Tools {
             //    } catch (Exception ex) { }
             //}
         }
-        public static async void PublishAll(ModuleObject module, ProgressBar pb) {
+        public static async void PublishAll(ModuleObject module, IProgressBar pb) {
             WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
                 MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
@@ -69,14 +69,14 @@ namespace CmdletHelpEditor.API.Tools {
             }
             List<CmdletObject> cmdletsToProcess = module.Cmdlets.Where(x => x.Publish).ToList();
             Double duration = 100.0 / cmdletsToProcess.Count;
-            pb.Value = 0;
+            pb.Progress = 0;
             foreach (CmdletObject cmdlet in cmdletsToProcess) {
                 await PublishSingle(cmdlet, module, blogger);
-                pb.Value += duration;
+                pb.Progress += duration;
             }
 
             MsgBox.Show("Success", new Win32Exception(0).Message, MessageBoxImage.Information);
-            pb.Value = 100;
+            pb.Progress = 100;
         }
     }
 }

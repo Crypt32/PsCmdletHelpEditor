@@ -18,10 +18,10 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean stopRequested;
         String publishCaption;
         ModuleObject module;
-        Double pbValue;
         OnlinePublishEntry selectedEntry;
 
-        public OnlinePublishProgressVM() {
+        public OnlinePublishProgressVM(IProgressBar progressBar) {
+            ProgressBar = progressBar;
             PublishCommand = new AsyncCommand(publish);
             RetryCommand = new AsyncCommand(retry);
             PublishCaption = "Publish";
@@ -40,13 +40,6 @@ namespace CmdletHelpEditor.API.ViewModels {
                 OnPropertyChanged(nameof(SelectedEntry));
             }
         }
-        public Double PbValue {
-            get => pbValue;
-            set {
-                pbValue = value;
-                OnPropertyChanged(nameof(PbValue));
-            }
-        }
 
         public String PublishCaption {
             get => publishCaption;
@@ -55,15 +48,17 @@ namespace CmdletHelpEditor.API.ViewModels {
                 OnPropertyChanged(nameof(PublishCaption));
             }
         }
+
+        public IProgressBar ProgressBar { get; }
+
         async Task publish(IScrollToView lv, ICollection<OnlinePublishEntry> cmdlets) {
-            PbValue = 0;
             WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
             if (blogger == null) {
                 MsgBox.Show("Warning", Strings.WarnBloggerNeedsMoreData, MessageBoxImage.Exclamation);
                 return;
             }
             Double duration = 100.0 / cmdlets.Count;
-            PbValue = 0;
+            ProgressBar.Start();
             IsBusy = true;
             PublishCaption = "Stop";
             foreach (OnlinePublishEntry cmdlet in cmdlets) {
@@ -85,9 +80,9 @@ namespace CmdletHelpEditor.API.ViewModels {
                     cmdlet.StatusText = "The item is not configured for publishing";
                 }
 
-                PbValue += duration;
+                ProgressBar.Progress += duration;
             }
-            PbValue = 100;
+            ProgressBar.End();
             IsBusy = false;
             PublishCaption = "Publish";
         }

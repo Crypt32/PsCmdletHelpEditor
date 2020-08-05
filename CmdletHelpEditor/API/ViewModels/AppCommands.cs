@@ -23,17 +23,19 @@ namespace CmdletHelpEditor.API.ViewModels {
     public class AppCommands {
         readonly MainWindowVM _mwvm;
         readonly IPsProcessor _psProcessor;
+        readonly IProgressBar _progressBar;
         Boolean alreadyRaised;
 
         public AppCommands(MainWindowVM parent) {
             _psProcessor = App.Container.Resolve<IPsProcessor>();
+            _progressBar = App.Container.Resolve<IProgressBar>();
             _mwvm = parent;
             AddTabCommand = new RelayCommand(addTab);
             CloseTabCommand = new RelayCommand(closeTab);
             LoadModulesCommand = new AsyncCommand(loadModules, canLoadModuleList);
             LoadFromFileCommand = new AsyncCommand(loadModuleFromFile, canLoadModuleList);
             ImportFromXmlHelpCommand = new RelayCommand(importFromXmlHelp, canImportFromHelp);
-            PublishHelpCommand = new RelayCommand(publishHelpFile, canPublish);
+            PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
             ImportFromCBHelpCommand = new RelayCommand(importFromCommentHelp, canImportFromHelp);
             NewCommand = new RelayCommand(newProject, canOpen);
             OpenCommand = new RelayCommand(OpenProject, canOpen);
@@ -143,10 +145,8 @@ namespace CmdletHelpEditor.API.ViewModels {
         void importFromCommentHelp(Object obj) {
             LoadCmdlets(null, true);
         }
-        void publishHelpFile(Object obj) {
-            Object[] param = (Object[])obj;
-            ModuleObject module = ((ClosableModuleItem)param[0]).Module;
-            ProgressBar pb = ((MainWindow)param[1]).sb.pb;
+        async Task publishHelpFile(Object o, CancellationToken token) {
+            ModuleObject module = ((ClosableModuleItem)o).Module;
             SaveFileDialog dlg = new SaveFileDialog {
                 FileName = _mwvm.SelectedTab.Module.Name + ".Help.xml",
                 DefaultExt = ".xml",
@@ -155,7 +155,7 @@ namespace CmdletHelpEditor.API.ViewModels {
             Boolean? result = dlg.ShowDialog();
             if (result == true) {
                 try {
-                    FileProcessor.PublishHelpFile(dlg.FileName, module, pb);
+                    await module.PublishHelpFile(dlg.FileName, _progressBar);
                 } catch (Exception e) {
                     MsgBox.Show("XML Write error", e.Message);
                 }

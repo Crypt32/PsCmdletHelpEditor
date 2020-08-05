@@ -42,7 +42,7 @@
         <ProgressBar DockPanel.Dock="Bottom"
                      Height="20"
                      Margin="10"
-                     Value="{Binding PbValue}"/>
+                     Value="{Binding ProgressBar.Progress}"/>
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Margin="5"
                      Height="40"

@@ -32,7 +32,9 @@ namespace CmdletHelpEditor.API.ViewModels {
         }
         
         void newExample(Object obj) {
-            var example = new Example();
+            var example = new Example {
+                Name = $"Example {cmdlet.Examples.Count + 1}"
+            };
             cmdlet.Examples.Add(example);
             CurrentExample = example;
         }

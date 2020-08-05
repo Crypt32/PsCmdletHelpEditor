@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools {
@@ -77,25 +76,21 @@ namespace CmdletHelpEditor.API.Tools {
                 .Any(dir => dir.EnumerateDirectories(moduleName).Any());
         }
 
-        public static async void PublishHelpFile(String path, ModuleObject module, ProgressBar pb) {
+        public static async Task PublishHelpFile(this ModuleObject module, String path, IProgressBar pb) {
             XmlWriter writer = null;
-            StringBuilder SB = new StringBuilder();
             if (module.Cmdlets.Count == 0) { return; }
-            pb.Value = 0;
-            pb.Visibility = Visibility.Visible;
+            pb.Start();
             XmlWriterSettings settings = new XmlWriterSettings {
-                Indent = true,
-                IndentChars = ("	"),
+                Indent = false,
                 NewLineHandling = NewLineHandling.None,
                 ConformanceLevel = ConformanceLevel.Document
             };
             try {
                 writer = XmlWriter.Create(path, settings);
-                writer.WriteStartDocument();
-                await XmlProcessor.XmlGenerateHelp(SB, module.Cmdlets, pb, module.IsOffline);
-                writer.WriteRaw(SB.ToString());
+                await writer.WriteStartDocumentAsync();
+                await writer.WriteRawAsync(await XmlProcessor.XmlGenerateHelp(module.Cmdlets, pb, module.IsOffline));
             } finally {
-                pb.Visibility = Visibility.Collapsed;
+                pb.End();
                 writer?.Close();
             }
         }

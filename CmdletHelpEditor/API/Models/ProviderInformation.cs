@@ -44,7 +44,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 password = value;
                 try {
-                    SecurePassword = Crypt.DecryptPassword(password);
+                    SecurePassword = password.DecryptPassword();
                 } catch (Exception e) {
                     MsgBox.Show("Error", e.Message);
                     SecurePassword = null;

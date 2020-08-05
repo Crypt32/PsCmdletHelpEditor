@@ -130,6 +130,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Unity.Abstractions, Version=5.11.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.11.7\lib\net46\Unity.Abstractions.dll</HintPath>
     </Reference>
@@ -155,6 +156,7 @@
     <Compile Include="Abstract\IMainWindowVM.cs" />
     <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
     <Compile Include="Abstract\IAsyncVM.cs" />
+    <Compile Include="Abstract\IProgressBar.cs" />
     <Compile Include="Abstract\IPsProcessor.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />
@@ -163,6 +165,11 @@
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
+    <Compile Include="API\Templates\XmlMamlTemplate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XmlMamlTemplate.resx</DependentUpon>
+    </Compile>
     <Compile Include="API\Tools\MarkDownProcessor.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
@@ -172,7 +179,7 @@
     <Compile Include="API\Converters\MultiParamConverter.cs" />
     <Compile Include="API\Tools\ParserType.cs" />
     <Compile Include="API\Tools\Strings.cs" />
-    <Compile Include="API\Tools\Crypt.cs" />
+    <Compile Include="API\Tools\CryptExtensions.cs" />
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
     <Compile Include="API\ViewModels\AsyncViewModel.cs" />
@@ -182,6 +189,7 @@
     <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
     <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
+    <Compile Include="API\ViewModels\ProgressBarVM.cs" />
     <Compile Include="API\ViewModels\PsModuleItem.cs" />
     <Compile Include="API\ViewModels\UIManager.cs" />
     <Compile Include="API\ViewModels\FormatCommands.cs" />
@@ -460,6 +468,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="API\Templates\XmlMamlTemplate.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>XmlMamlTemplate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

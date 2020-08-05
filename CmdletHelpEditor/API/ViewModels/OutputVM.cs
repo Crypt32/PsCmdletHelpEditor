@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xml.Linq;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
@@ -115,12 +115,12 @@ namespace CmdletHelpEditor.API.ViewModels {
             return !IsBusy;
         }
         async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
-            var SB = new StringBuilder();
-            await XmlProcessor.XmlGenerateHelp(SB, new[] {cmdlet}, null, module.IsOffline);
-            return XmlTokenizer.LoopTokenize(SB.ToString());
+            String rawXml = await XmlProcessor.XmlGenerateHelp(new[] { cmdlet }, null, module.IsOffline);
+            return XmlTokenizer.LoopTokenize(XElement.Parse(rawXml).ToString());
         }
         async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
-            return await HtmlProcessor.GenerateHtmlSourceHelp(cmdlet, module);
+            String rawHtml = await HtmlProcessor.GenerateHtmlView(cmdlet, module);
+            return XmlTokenizer.LoopTokenize(XElement.Parse(rawHtml).ToString());
         }
         async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
             HtmlText = await HtmlProcessor.GenerateHtmlView(cmdlet, module);

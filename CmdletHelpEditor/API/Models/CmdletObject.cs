@@ -28,6 +28,8 @@ namespace CmdletHelpEditor.API.Models {
 
         public CmdletObject() {
             initialize();
+            Examples = new ObservableCollection<Example>();
+            RelatedLinks = new ObservableCollection<RelatedLink>();
         }
 
         void OnBindingListChanged(Object Sender, ListChangedEventArgs ChangedEventArgs) {
@@ -86,10 +88,8 @@ namespace CmdletHelpEditor.API.Models {
                 if (exampleList != null) {
                     exampleList.CollectionChanged -= childOnCollectionChanged;
                 }
-                exampleList = value;
-                if (exampleList != null) {
-                    exampleList.CollectionChanged += childOnCollectionChanged;
-                }
+                exampleList = value ?? new ObservableCollection<Example>();
+                exampleList.CollectionChanged += childOnCollectionChanged;
             }
         }
         public ObservableCollection<RelatedLink> RelatedLinks {
@@ -98,10 +98,8 @@ namespace CmdletHelpEditor.API.Models {
                 if (linkList != null) {
                     linkList.CollectionChanged -= childOnCollectionChanged;
                 }
-                linkList = value;
-                if (linkList != null) {
-                    linkList.CollectionChanged += childOnCollectionChanged;
-                }
+                linkList = value ?? new ObservableCollection<RelatedLink>();
+                linkList.CollectionChanged += childOnCollectionChanged;
             }
         }
         public SupportInfo SupportInformation {

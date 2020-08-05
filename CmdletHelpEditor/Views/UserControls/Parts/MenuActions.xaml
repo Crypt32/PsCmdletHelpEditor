@@ -8,9 +8,6 @@
           mc:Ignorable="d"
           d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
           Header="_Actions">
-    <MenuItem.Resources>
-        <converters:MultiParamConverter x:Key="MultiParamConverter" />
-    </MenuItem.Resources>
     <MenuItem Header="_Reload Modules"
               InputGestureText="F5"
               Command="{Binding CommandManager.LoadModulesCommand}">
@@ -20,13 +17,8 @@
     </MenuItem>
     <Separator/>
     <MenuItem Header="Publish XML Help to file"
-              Command="{Binding CommandManager.PublishHelpCommand}">
-        <MenuItem.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding Path="SelectedTab"/>
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-            </MultiBinding>
-        </MenuItem.CommandParameter>
+              Command="{Binding CommandManager.PublishHelpCommand}"
+              CommandParameter="{Binding SelectedTab}">
         <MenuItem.Icon>
             <Image Source="/Images/Menu/xml_16x16.png"/>
         </MenuItem.Icon>

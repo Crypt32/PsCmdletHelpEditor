@@ -7,31 +7,41 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Xml;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Templates;
 using CodeKicker.BBCode;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace CmdletHelpEditor.API.Tools {
-    static class XmlProcessor {
-        static readonly String n = Environment.NewLine;
+    class XmlProcessor {
+        readonly IProgressBar _progressBar;
+        readonly BBCodeParser _bbRules;
+
+        public XmlProcessor(IProgressBar progressBar) {
+            _progressBar = progressBar;
+            _bbRules = HtmlProcessor.GetParser(ParserType.Clear);
+        }
+
         // general
-        static String generateParagraphs(String input, BBCodeParser bbRules, Int32 tabCount) {
-            String tabs = new String('\t', tabCount);
+        static String generateParagraphs(String input, BBCodeParser bbRules) {
+            if (String.IsNullOrEmpty(input)) {
+                return "<maml:para />";
+            }
+
             input = Regex.Replace(input, "(?<!\r)\n", "\r\n");
-            if (String.IsNullOrEmpty(input)) { return tabs + "<maml:para />" + n; }
             String[] temp = input.Split(new[] { "\r\n\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             for (Int32 index = 0; index < temp.Length; index++) {
                 temp[index] = bbRules.ToHtml(temp[index], true);
             }
-            return tabs + "<maml:para>" + String.Join("</maml:para>" + n + tabs + "<maml:para>", temp) + "</maml:para>" + n;
+            return "<maml:para>" + String.Join("</maml:para><maml:para>", temp) + "</maml:para>";
         }
         static String readParagraphs(XmlNodeList nodes) {
             if (nodes == null || nodes.Count == 0) { return String.Empty; }
             String retValue = nodes
                 .Cast<XmlNode>()
-                .Aggregate(String.Empty, (current, node) => current + (Regex.Replace(node.InnerText, "(?<!\r)\n", "\r\n") + n + n));
+                .Aggregate(String.Empty, (current, node) => current + Regex.Replace(node.InnerText, "(?<!\r)\n", "\r\n"));
             return retValue.TrimEnd();
         }
         // reader
@@ -71,22 +81,22 @@ namespace CmdletHelpEditor.API.Tools {
                     if (String.Equals(nameNode.InnerText.Trim(), cmdlet.Name, StringComparison.CurrentCultureIgnoreCase) && !processed.Contains(cmdlet.Name.ToLower())) {
                         isFound = true;
                         processed.Add(cmdlet.Name);
-                        ReadXml(commandNode, ns, cmdlet);
+                        readXml(commandNode, ns, cmdlet);
                         try {
                             if (fileInfo.Exists) {
-                                ReadSupports(nodes, cmdlet);
+                                readSupports(nodes, cmdlet);
                             }
                         } catch { }
                     }
                 }
                 if (!isFound) {
                     CmdletObject currentCmdlet = new CmdletObject(nameNode.InnerText.Trim());
-                    ReadXml(commandNode, ns, currentCmdlet);
+                    readXml(commandNode, ns, currentCmdlet);
                     moduleObject.Cmdlets.Add(currentCmdlet);
                 }
             }
         }
-        static void ReadXml(XmlNode commandNode, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
+        static void readXml(XmlNode commandNode, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             XmlNode tempNode = commandNode.SelectSingleNode("command:details/maml:description", ns);
             // Synopsis
             if (tempNode != null) {
@@ -110,21 +120,21 @@ namespace CmdletHelpEditor.API.Tools {
             }
             // Input type
             XmlNodeList nodes = commandNode.SelectNodes("command:inputTypes/command:inputType", ns);
-            ReadTypes(nodes, ns, currentCmdlet, false);
+            readTypes(nodes, ns, currentCmdlet, false);
             // Output type
             nodes = commandNode.SelectNodes("command:returnValues/command:returnValue", ns);
-            ReadTypes(nodes, ns, currentCmdlet, true);
+            readTypes(nodes, ns, currentCmdlet, true);
             // Parameters
             nodes = commandNode.SelectNodes("command:parameters/command:parameter", ns);
-            ReadParameters(nodes, ns, currentCmdlet);
+            readParameters(nodes, ns, currentCmdlet);
             // Examples
             nodes = commandNode.SelectNodes("command:examples/command:example", ns);
-            ReadExamples(nodes, ns, currentCmdlet);
+            readExamples(nodes, ns, currentCmdlet);
             // Related links
             nodes = commandNode.SelectNodes("maml:relatedLinks/maml:navigationLink", ns);
-            ReadLinks(nodes, ns, currentCmdlet);
+            readLinks(nodes, ns, currentCmdlet);
         }
-        static void ReadParameters(IEnumerable paramNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
+        static void readParameters(IEnumerable paramNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (paramNodes == null) { return; }
             foreach (XmlNode paramNode in paramNodes) {
                 ParameterDescription foundParam = new ParameterDescription();
@@ -170,6 +180,9 @@ namespace CmdletHelpEditor.API.Tools {
                     }
                     // Globbing
                     tempNode = paramNode.SelectSingleNode("@globbing", ns);
+                    if (tempNode != null) {
+                        newParam.AcceptsArray = Convert.ToBoolean(tempNode.InnerText.Trim());
+                    }
                     // Pipeline input
                     tempNode = paramNode.SelectSingleNode("@pipelineInput", ns);
                     if (tempNode != null) {
@@ -197,7 +210,7 @@ namespace CmdletHelpEditor.API.Tools {
                 }
             }
         }
-        static void ReadTypes(IEnumerable typeNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet, Boolean output) {
+        static void readTypes(IEnumerable typeNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet, Boolean output) {
             if (typeNodes == null) { return; }
             List<String> types = new List<String>();
             List<String> url = new List<String>();
@@ -217,7 +230,7 @@ namespace CmdletHelpEditor.API.Tools {
                 }
                 tempNode = typeNode.SelectSingleNode("maml:description", ns);
                 if (tempNode != null) {
-                    descriptionNodes += n + readParagraphs(tempNode.ChildNodes);
+                    descriptionNodes += readParagraphs(tempNode.ChildNodes);
                 }
                 descriptions.Add(descriptionNodes);
             }
@@ -239,7 +252,7 @@ namespace CmdletHelpEditor.API.Tools {
                 }
             }
         }
-        static void ReadExamples(IEnumerable exampleNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
+        static void readExamples(IEnumerable exampleNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (exampleNodes == null) { return; }
             foreach (XmlNode exampleNode in exampleNodes) {
                 Example example = new Example();
@@ -278,7 +291,7 @@ namespace CmdletHelpEditor.API.Tools {
                 currentCmdlet.Examples.Add(example);
             }
         }
-        static void ReadLinks(IEnumerable linkNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
+        static void readLinks(IEnumerable linkNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (linkNodes == null) { return; }
             foreach (XmlNode linkNode in linkNodes) {
                 RelatedLink link = new RelatedLink();
@@ -295,7 +308,7 @@ namespace CmdletHelpEditor.API.Tools {
                 currentCmdlet.RelatedLinks.Add(link);
             }
         }
-        static void ReadSupports(IEnumerable nodes, CmdletObject currentCmdlet) {
+        static void readSupports(IEnumerable nodes, CmdletObject currentCmdlet) {
             foreach (XmlNode node in nodes) {
                 if (node.Attributes == null || node.Attributes["name"].Value != currentCmdlet.Name) { continue; }
                 XmlNodeList currentNode = node.SelectNodes("Info");
@@ -334,116 +347,90 @@ namespace CmdletHelpEditor.API.Tools {
         }
 
         // writer
-        public static async Task XmlGenerateHelp(StringBuilder SB, IEnumerable<CmdletObject> cmdlets, ProgressBar pb, Boolean isOffline) {
+        public static async Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
             List<CmdletObject> cmdletsToProcess = isOffline
                 ? new List<CmdletObject>(cmdlets)
                 : new List<CmdletObject>(cmdlets.Where(x => x.GeneralHelp.Status != ItemStatus.Missing));
-            if (cmdletsToProcess.Count == 0) { return; }
-            BBCodeParser bbrules = HtmlProcessor.GetParser(ParserType.Clear);
+            if (cmdletsToProcess.Count == 0) { return String.Empty; }
+            BBCodeParser bbRules = HtmlProcessor.GetParser(ParserType.Clear);
             Double duration = 0;
             if (pb != null) {
                 duration = 100.0 / cmdletsToProcess.Count;
             }
-            SB.Append("<helpItems schema=\"maml\">" + n);
+            var sb = new StringBuilder("<helpItems schema=\"maml\">");
             foreach (CmdletObject cmdlet in cmdletsToProcess) {
-                await XmlGenerateBody(bbrules, SB, cmdlet);
+                await xmlGenerateBody(bbRules, sb, cmdlet);
                 if (pb != null) {
-                    pb.Value += duration;
+                    pb.Progress += duration;
                 }
             }
-            SB.Append("</helpItems>");
+            sb.Append("</helpItems>");
+            return sb.ToString();
         }
-        static Task XmlGenerateBody(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
+        static Task xmlGenerateBody(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
             return Task.Factory.StartNew(() => {
-                SB.Append("<command:command xmlns:maml=\"http://schemas.microsoft.com/maml/2004/10\" xmlns:command=\"http://schemas.microsoft.com/maml/dev/command/2004/10\" xmlns:dev=\"http://schemas.microsoft.com/maml/dev/2004/10\" xmlns:MSHelp=\"http://msdn.microsoft.com/mshelp\">" + n);
-                XmlGenerateCmdletDetail(bbRules, SB, cmdlet);
-                SB.Append("	<command:syntax>" + n);
+                SB.Append("<command:command xmlns:maml=\"http://schemas.microsoft.com/maml/2004/10\" xmlns:command=\"http://schemas.microsoft.com/maml/dev/command/2004/10\" xmlns:dev=\"http://schemas.microsoft.com/maml/dev/2004/10\" xmlns:MSHelp=\"http://msdn.microsoft.com/mshelp\">");
+                xmlGenerateCmdletDetail(bbRules, SB, cmdlet);
+                SB.Append("<command:syntax>");
                 // if current cmdlet hasn't parameters, then just write single syntaxItem
                 if (cmdlet.Parameters.Count == 0) {
-                    SB.Append("		<command:syntaxItem>" + n);
-                    SB.Append("			<maml:name>");
-                    SB.Append(SecurityElement.Escape(cmdlet.Name));
-                    SB.Append("</maml:name>" + n);
-                    SB.Append("		</command:syntaxItem>" + n);
+                    SB.AppendFormat(XmlMamlTemplate.CommandSyntax,
+                        SecurityElement.Escape(cmdlet.Name));
                 } else {
-                    XmlGenerateParameterSyntax(bbRules, SB, cmdlet);
+                    xmlGenerateParameterSyntax(bbRules, SB, cmdlet);
                 }
-                SB.Append("	</command:syntax>" + n);
-                SB.Append("	<command:parameters>");
+                SB.Append("</command:syntax><command:parameters>");
                 if (cmdlet.Parameters.Count > 0) {
-                    SB.Append(n);
                     foreach (ParameterDescription item in cmdlet.Parameters.Where(item => item.Status != ItemStatus.Missing)) {
-                        XmlGenerateParameter(bbRules, SB, item);
+                        SB.Append(xmlGenerateParameter(bbRules, item));
                     }
                 }
-                SB.Append("	</command:parameters>" + n);
-                XmlGenerateInputTypes(bbRules, SB, cmdlet);
-                XmlGenerateReturnTypes(bbRules, SB, cmdlet);
-                XmlGenerateErrors(SB);
-                XmlGenerateNotes(bbRules, SB, cmdlet);
-                SB.Append("	<command:examples>" + n);
-                if (cmdlet.Examples.Count > 0) {
-                    foreach (Example item in cmdlet.Examples) {
-                        XmlGenerateExamples(bbRules, SB, item);
-                    }
+                SB.Append("</command:parameters>");
+                SB.Append(xmlGenerateInputTypes(bbRules, cmdlet));
+                SB.Append(xmlGenerateReturnTypes(bbRules, cmdlet));
+                SB.Append(XmlMamlTemplate.Error);
+                SB.AppendFormat(XmlMamlTemplate.Note,
+                    generateParagraphs(cmdlet.GeneralHelp.Notes, bbRules));
+                SB.Append("<command:examples>");
+                foreach (Example item in cmdlet.Examples) {
+                    SB.Append(xmlGenerateExamples(bbRules, item));
                 }
-                SB.Append("	</command:examples>" + n);
-                SB.Append("	<maml:relatedLinks>" + n);
-                if (cmdlet.RelatedLinks.Count > 0) {
-                    foreach (RelatedLink link in cmdlet.RelatedLinks) {
-                        XmlGenerateLinks(SB, link);
-                    }
+                SB.Append("</command:examples><maml:relatedLinks>");
+                foreach (RelatedLink link in cmdlet.RelatedLinks) {
+                    SB.AppendFormat(XmlMamlTemplate.RelatedLink,
+                        SecurityElement.Escape(link.LinkText),
+                        SecurityElement.Escape(link.LinkUrl));
                 }
-                SB.Append("	</maml:relatedLinks>" + n);
-                SB.Append("</command:command>" + n);
+                SB.Append("</maml:relatedLinks></command:command>");
             });
         }
-        static void XmlGenerateCmdletDetail(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
-            SB.Append("<!--Generated by PS Cmdlet Help Editor-->" + n);
-            SB.Append("	<command:details>" + n);
-            SB.Append("		<command:name>");
-            SB.Append(SecurityElement.Escape(cmdlet.Name));
-            SB.Append("</command:name>" + n);
-            // synopsis
-            SB.Append("		<maml:description>" + n);
-            SB.Append(generateParagraphs(cmdlet.GeneralHelp.Synopsis, bbRules, 3));
-            SB.Append("		</maml:description>" + n);
-            // TODO copyrights
-            SB.Append("		<maml:copyright>" + n);
-            SB.Append("			<maml:para />" + n);
-            //SB.Append("		<!--Add copy right info here.-->" + n);
-            SB.Append("		</maml:copyright>" + n);
-            SB.Append("		<command:verb>");
-            SB.Append(SecurityElement.Escape(cmdlet.Verb));
-            SB.Append("</command:verb>" + n);
-            SB.Append("		<command:noun>");
-            SB.Append(SecurityElement.Escape(cmdlet.Noun));
-            SB.Append("</command:noun>" + n);
-            //dev version
-            SB.Append("		<dev:version />" + n);
-            //End </commnd:details>
-            SB.Append("	</command:details>" + n);
-            //Add Cmdlet detailed description
-            SB.Append("	<maml:description>" + n);
-            SB.Append(generateParagraphs(cmdlet.GeneralHelp.Description, bbRules, 2));
-            SB.Append("	</maml:description>" + n);
+        static void xmlGenerateCmdletDetail(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
+            SB.AppendFormat(XmlMamlTemplate.Details,
+                SecurityElement.Escape(cmdlet.Name),
+                generateParagraphs(cmdlet.GeneralHelp.Synopsis, bbRules),
+                SecurityElement.Escape(cmdlet.Verb),
+                SecurityElement.Escape(cmdlet.Noun),
+                generateParagraphs(cmdlet.GeneralHelp.Description, bbRules));
         }
-        static void XmlGenerateParameterSyntax(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
+        static void xmlGenerateParameterSyntax(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
             String[] exclude = {
                 "verbose","debug","erroraction","warningaction","errorvariable","warningvariable","outvariable","outbuffer","pipelinevariable"
             };
             foreach (CommandParameterSetInfo2 paramSet in cmdlet.ParamSets) {
-                SB.Append("		<command:syntaxItem>" + n);
-                SB.Append("			<maml:name>" + SecurityElement.Escape(cmdlet.Name) + "</maml:name>" + n);
+                SB.Append("<command:syntaxItem>");
+                SB.Append("<maml:name>" + SecurityElement.Escape(cmdlet.Name) + "</maml:name>");
                 foreach (String paramSetParam in paramSet.Parameters) {
-                    if (exclude.Contains(paramSetParam.ToLower())) { continue; }
+                    if (exclude.Contains(paramSetParam.ToLower())) {
+                        continue;
+                    }
+
                     ParameterDescription param = null;
                     String setParam = paramSetParam;
                     foreach (ParameterDescription parameter in cmdlet.Parameters.Where(x => String.Equals(x.Name, setParam, StringComparison.CurrentCultureIgnoreCase))) {
                         param = parameter;
                     }
                     if (param == null) { continue; }
-                    SB.Append("			<command:parameter required=\"" + param.Mandatory.ToString().ToLower() + "\"");
+                    SB.Append("<command:parameter required=\"" + param.Mandatory.ToString().ToLower() + "\"");
                     SB.Append(" variableLength=\"" + param.AcceptsArray.ToString().ToLower() + "\"");
                     SB.Append(" globbing=\"" + param.Globbing.ToString().ToLower() + "\"");
                     SB.Append(" pipelineInput=\"");
@@ -459,12 +446,12 @@ namespace CmdletHelpEditor.API.Tools {
                     } else {
                         SB.Append("false");
                     }
-                    SB.Append("\" position=\"" + param.Position + "\">" + n);
-                    SB.Append("				<maml:name>" + SecurityElement.Escape(param.Name) + "</maml:name>" + n);
-                    SB.Append("				<maml:description>" + n);
-                    SB.Append(generateParagraphs(param.Description, bbRules, 5));
-                    SB.Append("				</maml:description>" + n);
-                    SB.Append("				<command:parameterValue ");
+                    SB.Append("\" position=\"" + param.Position + "\">");
+                    SB.Append("<maml:name>" + SecurityElement.Escape(param.Name) + "</maml:name>");
+                    SB.Append("<maml:description>");
+                    SB.Append(generateParagraphs(param.Description, bbRules));
+                    SB.Append("</maml:description>");
+                    SB.Append("<command:parameterValue ");
                     String paramValueRequired = "true";
                     if (param.Type.ToLower() == "boolean" || param.Type.ToLower() == "switchparameter") {
                         paramValueRequired = "false";
@@ -473,146 +460,82 @@ namespace CmdletHelpEditor.API.Tools {
                     SB.Append("required=\"" + paramValueRequired + "\"");
                     SB.Append(" variableLength=\"" + param.AcceptsArray.ToString().ToLower() + "\">");
                     SB.Append(SecurityElement.Escape(param.Type));
-                    SB.Append("</command:parameterValue>" + n);
-                    SB.Append("			</command:parameter>" + n);
+                    SB.Append("</command:parameterValue>");
+                    SB.Append("</command:parameter>");
                 }
-                SB.Append("		</command:syntaxItem>" + n);
+                SB.Append("</command:syntaxItem>");
             }
         }
-        static void XmlGenerateParameter(BBCodeParser bbRules, StringBuilder SB, ParameterDescription param) {
-            SB.Append("		<command:parameter required=\"" + param.Mandatory.ToString().ToLower() + "\"");
-            SB.Append(" variableLength=\"" + param.AcceptsArray.ToString().ToLower() + "\"");
-            SB.Append(" globbing=\"" + param.Globbing.ToString().ToLower() + "\"");
-            SB.Append(" pipelineInput=\"");
-            if (param.Pipeline || param.PipelinePropertyName) {
-                SB.Append("true");
-                if (param.Pipeline && !param.PipelinePropertyName) {
-                    SB.Append(" (ByValue)");
-                } else if (param.Pipeline && param.PipelinePropertyName) {
-                    SB.Append(" (ByValue, ByPropertyName)");
-                } else {
-                    SB.Append(" (ByPropertyName)");
-                }
-            } else {
-                SB.Append("false");
-            }
-            SB.Append("\" position=\"" + param.Position + "\">" + n);
-            SB.Append("			<maml:name>" + SecurityElement.Escape(param.Name) + "</maml:name>" + n);
-            SB.Append("			<maml:description>" + n);
-            SB.Append(generateParagraphs(param.Description, bbRules, 4));
-            SB.Append("			</maml:description>" + n);
-            SB.Append("			<command:parameterValue ");
+        static String xmlGenerateParameter(BBCodeParser bbRules, ParameterDescription param) {
             String paramValueRequired = "true";
             if (param.Type.ToLower() == "boolean" || param.Type.ToLower() == "switchparameter") {
                 paramValueRequired = "false";
             }
-            //Additional parameter Values
-            SB.Append("required=\"" + paramValueRequired + "\"");
-            SB.Append(" variableLength=\"" + param.AcceptsArray.ToString().ToLower() + "\">");
-            SB.Append(SecurityElement.Escape(param.Type));
-            SB.Append("</command:parameterValue>" + n);
-            SB.Append("			<dev:type>" + n);
-            SB.Append("				<maml:name>" + SecurityElement.Escape(param.Type) + "</maml:name>" + n);
-            SB.Append("				<maml:uri/>" + n);
-            SB.Append("			</dev:type>" + n);
-            SB.Append("			<dev:defaultValue>" + SecurityElement.Escape(param.DefaultValue) + "</dev:defaultValue>" + n);
-            SB.Append("		</command:parameter>" + n);
+            String paramValue = String.Format(XmlMamlTemplate.CommandParamValue,
+                paramValueRequired,
+                param.AcceptsArray.ToString().ToLower(),
+                SecurityElement.Escape(param.Type));
+
+            String pipelineInput = "false";
+            if (param.Pipeline || param.PipelinePropertyName) {
+                pipelineInput = "true";
+                if (param.Pipeline && !param.PipelinePropertyName) {
+                    pipelineInput += " (ByValue)";
+                } else if (param.Pipeline && param.PipelinePropertyName) {
+                    pipelineInput += " (ByValue, ByPropertyName)";
+                } else {
+                    pipelineInput += " (ByPropertyName)";
+                }
+            }
+
+            return String.Format(XmlMamlTemplate.CommandParam,
+                param.Mandatory.ToString().ToLower(),
+                param.AcceptsArray.ToString().ToLower(),
+                param.Globbing.ToString().ToLower(),
+                pipelineInput,
+                param.Position,
+                SecurityElement.Escape(param.Name),
+                generateParagraphs(param.Description, bbRules),
+                paramValue,
+                SecurityElement.Escape(param.Type),
+                SecurityElement.Escape(param.DefaultValue));
         }
-        static void XmlGenerateInputTypes(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
-            List<String> inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(new[] { ';' }));
-            List<String> inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(new[] { ';' }));
+        static String xmlGenerateInputTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
+            List<String> inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
+            List<String> inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
             List<String> inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            SB.Append("	<command:inputTypes>" + n);
+            
+            var SB = new StringBuilder("<command:inputTypes>");
             for (Int32 index = 0; index < inputTypes.Count; index++) {
-                SB.Append("		<command:inputType>" + n);
-                SB.Append("			<dev:type>" + n);
-                SB.Append("				<maml:name>" + bbRules.ToHtml(inputTypes[index], true) + "</maml:name>" + n);
-                try {
-                    SB.Append("				<maml:uri>" + bbRules.ToHtml(inputUrls[index], true) + "</maml:uri>" + n);
-                } catch {
-                    SB.Append("				<maml:uri />" + n);
-                }
-                SB.Append("				<maml:description/>" + n);
-                SB.Append("			</dev:type>" + n);
-                SB.Append("			<maml:description>" + n);
-                try {
-                    SB.Append(generateParagraphs(inputDescription[index], bbRules, 4));
-                } catch {
-                    SB.Append("<maml:para />" + n);
-                }
-                SB.Append("			</maml:description>" + n);
-                SB.Append("		</command:inputType>" + n);
+                SB.AppendFormat(XmlMamlTemplate.InputType,
+                    bbRules.ToHtml(inputTypes[index], true),
+                    bbRules.ToHtml(inputUrls[index], true),
+                    generateParagraphs(inputDescription[index], bbRules));
             }
-            SB.Append("	</command:inputTypes>" + n);
+            SB.Append("	</command:inputTypes>");
+            return SB.ToString();
         }
-        static void XmlGenerateReturnTypes(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
-            List<String> returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(new[] { ';' }));
-            List<String> returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(new[] { ';' }));
+        static String xmlGenerateReturnTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
+            List<String> returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
+            List<String> returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
             List<String> returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            SB.Append("	<command:returnValues>" + n);
+            
+            var SB = new StringBuilder("<command:returnValues>");
             for (Int32 index = 0; index < returnTypes.Count; index++) {
-                SB.Append("		<command:returnValue>" + n);
-                SB.Append("			<dev:type>" + n);
-                SB.Append("				<maml:name>" + bbRules.ToHtml(returnTypes[index], true) + "</maml:name>" + n);
-                try {
-                    SB.Append("				<maml:uri>" + bbRules.ToHtml(returnUrls[index], true) + "</maml:uri>" + n);
-                } catch {
-                    SB.Append("				<maml:uri />" + n);
-                }
-                SB.Append("				<maml:description/>" + n);
-                SB.Append("			</dev:type>" + n);
-                SB.Append("			<maml:description>" + n);
-                try {
-                    SB.Append(generateParagraphs(returnDescription[index], bbRules, 4));
-                } catch {
-                    SB.Append("<maml:para />" + n);
-                }
-                SB.Append("			</maml:description>" + n);
-                SB.Append("		</command:returnValue>" + n);
+                SB.AppendFormat(XmlMamlTemplate.ReturnType,
+                    bbRules.ToHtml(returnTypes[index], true),
+                    bbRules.ToHtml(returnUrls[index], true),
+                    generateParagraphs(returnDescription[index], bbRules));
             }
-            SB.Append("	</command:returnValues>" + n);
+            SB.Append("	</command:returnValues>");
+            return SB.ToString();
         }
-        static void XmlGenerateErrors(StringBuilder SB) {
-            // TODO errors
-            SB.Append("	<command:terminatingErrors></command:terminatingErrors>" + n);
-            SB.Append("	<command:nonTerminatingErrors></command:nonTerminatingErrors>" + n);
-        }
-        static void XmlGenerateNotes(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
-            SB.Append("	<maml:alertSet>" + n);
-            SB.Append("		<maml:title></maml:title>" + n);
-            SB.Append("		<maml:alert>" + n);
-            SB.Append(generateParagraphs(cmdlet.GeneralHelp.Notes, bbRules, 3));
-            SB.Append("		</maml:alert>" + n);
-            SB.Append("	</maml:alertSet>" + n);
-        }
-        static void XmlGenerateExamples(BBCodeParser bbRules, StringBuilder SB, Example example) {
-            SB.Append("		<command:example>" + n);
-            SB.Append("			<maml:title>--------------------------  " + SecurityElement.Escape(example.Name) + "  --------------------------</maml:title>" + n);
-            SB.Append("			<maml:introduction>" + n);
-            SB.Append("				<maml:paragraph>PS C:\\&gt;</maml:paragraph>" + n);
-            SB.Append("			</maml:introduction>" + n);
-            SB.Append("			<dev:code>");
-            SB.Append(SecurityElement.Escape(example.Cmd) + "</dev:code>" + n);
-            SB.Append("			<dev:remarks>" + n);
-            SB.Append(generateParagraphs(example.Description, bbRules, 4));
-            SB.Append("				<maml:para />" + n);
-            SB.Append("				<maml:para />" + n);
-            SB.Append("				<maml:para>" + SecurityElement.Escape(example.Output) + "</maml:para>" + n);
-            SB.Append("			</dev:remarks>" + n);
-            SB.Append("			<command:commandLines>" + n);
-            SB.Append("				<command:commandLine>" + n);
-            SB.Append("					<command:commandText>" + n);
-            SB.Append("						<maml:para />" + n);
-            SB.Append("					</command:commandText>" + n);
-            SB.Append("				</command:commandLine>" + n);
-            SB.Append("			</command:commandLines>" + n);
-            SB.Append("		</command:example>" + n);
-        }
-        static void XmlGenerateLinks(StringBuilder SB, RelatedLink link) {
-            SB.Append("		<maml:navigationLink>" + n);
-            SB.Append("			<maml:linkText>" + SecurityElement.Escape(link.LinkText) + "</maml:linkText>" + n);
-            SB.Append("			<maml:uri>" + SecurityElement.Escape(link.LinkUrl) + "</maml:uri>" + n);
-            SB.Append("		</maml:navigationLink>" + n);
+        static String xmlGenerateExamples(BBCodeParser bbRules, Example example) {
+            return String.Format(XmlMamlTemplate.Example,
+                SecurityElement.Escape(example.Name),
+                SecurityElement.Escape(example.Cmd),
+                generateParagraphs(example.Description, bbRules),
+                SecurityElement.Escape(example.Output));
         }
     }
 }

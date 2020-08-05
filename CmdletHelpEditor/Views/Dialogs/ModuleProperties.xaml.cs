@@ -161,7 +161,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
         }
         void SetPassword() {
             if (ProviderInfo.SecurePassword == null) {
-                ProviderInfo.Password = Crypt.EncryptPassword(pwdBox.SecurePassword);
+                ProviderInfo.Password = pwdBox.SecurePassword.EncryptPassword();
                 pwdBox.Clear();
             }
         }
