@@ -158,7 +158,7 @@ namespace CmdletHelpEditor.API.Tools {
 <p style=""margin-left: 40px;"">This cmdlet supports the common parameters: Verbose, Debug,<br />
 ErrorAction, ErrorVariable, InformationAction, InformationVariable,<br />
 WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.<br />
-For more information, see about_CommonParameters (<a href=""https://go.microsoft.com/fwlink/?LinkID=113216\"">https://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
+For more information, see about_CommonParameters (<a href=""https://go.microsoft.com/fwlink/?LinkID=113216"">https://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
 ");
             
         }
