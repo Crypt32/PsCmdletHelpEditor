@@ -7,11 +7,6 @@
 // Licensed under the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace CodeKicker.BBCode.SyntaxTree
 {
     public class SyntaxTreeVisitor

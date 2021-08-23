@@ -7,12 +7,7 @@
 // Licensed under the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Resources;
-using System.Text;
 
 namespace CodeKicker.BBCode
 {

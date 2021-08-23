@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace CmdletHelpEditor.Views.UserControls {
+﻿namespace CmdletHelpEditor.Views.UserControls {
     /// <summary>
     /// Interaction logic for AdvancedCmdletUC.xaml
     /// </summary>

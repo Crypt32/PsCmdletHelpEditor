@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CmdletHelpEditor.API.MetaWeblog;
 using CmdletHelpEditor.API.Models;
@@ -12,7 +7,6 @@ using CmdletHelpEditor.API.Models;
 namespace CmdletHelpEditor.API.ViewModels {
     class ModulePropertiesVM : ViewModelBase {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
-        ProviderInformation providerInfo;
 
         public ICommand ConnectProviderCommand { get; set; }
         public ICommand FetchPostsCommand { get; set; }
