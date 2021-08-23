@@ -7,7 +7,6 @@ using CmdletHelpEditor.API.Models;
 namespace CmdletHelpEditor.API.ViewModels {
     class ModulePropertiesVM : ViewModelBase {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
-        ProviderInformation providerInfo;
 
         public ICommand ConnectProviderCommand { get; set; }
         public ICommand FetchPostsCommand { get; set; }

@@ -42,9 +42,9 @@ namespace CmdletHelpEditor.API.ViewModels {
                 Object[] param = (Object[])obj;
                 IInputElement felement = FocusManager.GetFocusedElement((MainWindow)param[0]);
                 if (felement == null) { return false; }
-                return felement is TextBox && (String)((TextBox)felement).Tag == "AllowFormat";
+                return felement is TextBox textBox && (String)textBox.Tag == "AllowFormat";
             }
-            catch (Exception e) {
+            catch (Exception) {
                 return false;
             }
         }
