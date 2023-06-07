@@ -3,19 +3,23 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.UserControls;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    public class MainWindowVM : DependencyObject, INotifyPropertyChanged {
+    public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
         Visibility pbVisible;
         Double pbProgress;
         String busyControlText;
-        Int32? psversion;
+        Int32? psVersion;
         ClosableModuleItem selectedTab;
 
-        public MainWindowVM() {
+        public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
+            DataSource = dataSource;
+            ProgressBar = progressBar;
+            DataSource.ModuleList.Add(new PsModuleItem());
             //Settings.Default.Reload();
             Modules = new ObservableCollection<ModuleObject>();
             Tabs = new ObservableCollection<ClosableModuleItem>();
@@ -51,6 +55,8 @@ namespace CmdletHelpEditor.API.ViewModels {
         // data definitions
         public ObservableCollection<ModuleObject> Modules { get; set; }
         public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
+        public IDataSource DataSource { get; }
+        public IProgressBar ProgressBar { get; }
         
         // must be dependency property.
         public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
@@ -82,10 +88,10 @@ namespace CmdletHelpEditor.API.ViewModels {
             set => SetValue(SelectedModuleProperty, value);
         }
         public Int32? PsVersion {
-            get => psversion;
+            get => psVersion;
             set {
-                psversion = value;
-                switch (psversion) {
+                psVersion = value;
+                switch (psVersion) {
                     case 3:
                         Settings.Default.WorkflowEnabled = true;
                         break;

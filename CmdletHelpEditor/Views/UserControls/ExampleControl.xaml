@@ -8,8 +8,50 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance models:ClosableModuleItem}">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-                    IsEnabled="{Binding EditorContext.ExampleContext.ExampleTextBoxEnabled}">
+        <StackPanel DockPanel.Dock="Right">
+            <StackPanel Orientation="Horizontal"
+                        Margin="10">
+                <Button Content="New"
+                        Width="75"
+                        Command="{Binding EditorContext.ExampleContext.NewExampleCommand}"/>
+                <Button Content="Remove"
+                        Width="75"
+                        Command="{Binding EditorContext.ExampleContext.RemoveExampleCommand}"
+                        Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ListBox Margin="10,0,10,0"
+                         HorizontalAlignment="Left"
+                         Height="150"
+                         VerticalAlignment="Top"
+                         Width="200"
+                         SelectedItem="{Binding EditorContext.ExampleContext.CurrentExample}"
+                         ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
+                         DisplayMemberPath="Name"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0"
+                            VerticalAlignment="Bottom"
+                            Width="24"
+                            Command="{Binding EditorContext.ExampleContext.UpExampleCommand}"
+                            ToolTip="Move example up">
+                        <Image Source="/Images/up_32x32.png"/>
+                    </Button>
+                    <Button Grid.Row="2"
+                            VerticalAlignment="Top"
+                            Width="24"
+                            Command="{Binding EditorContext.ExampleContext.DownExampleCommand}"
+                            ToolTip="Move example down">
+                        <Image Source="/Images/down_32x32.png"/>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel IsEnabled="{Binding EditorContext.ExampleContext.ExampleTextBoxEnabled}">
             <HeaderedContentControl>
                 <HeaderedContentControl.Header>
                     <TextBlock>
@@ -26,6 +68,7 @@
             <HeaderedContentControl Header="Example command:">
                 <TextBox MinLines="10"
                          MaxLines="10"
+                         FontFamily="Consolas"
                          Text="{Binding EditorContext.ExampleContext.CurrentExample.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Example description:">
@@ -37,52 +80,9 @@
             <HeaderedContentControl Header="Example output:">
                 <TextBox MinLines="10"
                          MaxLines="10"
+                         FontFamily="Consolas"
                          Text="{Binding EditorContext.ExampleContext.CurrentExample.Output, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-        <ListBox Margin="10,0,10,0"
-                 Name="lbExamples"
-                 HorizontalAlignment="Left"
-                 Height="150"
-                 VerticalAlignment="Top"
-                 Width="350"
-                 SelectedItem="{Binding EditorContext.ExampleContext.CurrentExample}"
-                 ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
-                 DisplayMemberPath="Name"
-                 x:FieldModifier="private" />
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0"
-                        VerticalAlignment="Bottom"
-                        Width="24"
-                        Command="{Binding EditorContext.ExampleContext.UpExampleCommand}"
-                        ToolTip="Move example up">
-                    <Image Source="/Images/up_32x32.png"/>
-                </Button>
-                <Button Grid.Row="2"
-                        VerticalAlignment="Top"
-                        Width="24"
-                        Command="{Binding EditorContext.ExampleContext.DownExampleCommad}"
-                        ToolTip="Move example down">
-                    <Image Source="/Images/down_32x32.png"/>
-                </Button>
-            </Grid>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom"
-                    Orientation="Horizontal"
-                    Margin="10">
-            <Button Content="New"
-                    Width="75"
-                    Command="{Binding EditorContext.ExampleContext.NewExampleCommand}"/>
-            <Button Content="Remove"
-                    Width="75"
-                    Command="{Binding EditorContext.ExampleContext.RemoveExampleCommand}"
-                    Margin="10,0,0,0"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

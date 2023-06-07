@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Xml.Serialization;
-
-namespace CmdletHelpEditor.API.Models {
+﻿namespace CmdletHelpEditor.API.Models {
     public class SupportInfo : INotifyPropertyChanged {
         Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
             wxp, wv, w7, w8, w81, w10,
@@ -12,7 +8,7 @@ namespace CmdletHelpEditor.API.Models {
             w2k12, w2k12s, w2k12d,
             w2k12r2, w2k12r2s, w2k12r2d,
             w2k16, w2k16s, w2k16d,
-            w2k19, w2k22;
+            w2k19, w2k19s, w2k19d;
 
         [XmlAttribute(nameof(ad))]
         public Boolean ADChecked {
@@ -543,6 +539,65 @@ namespace CmdletHelpEditor.API.Models {
                     OnPropertyChanged(nameof(Win2016Checked));
                 }
                 OnPropertyChanged(nameof(Win2016DCChecked));
+            }
+        }
+        [XmlIgnore]
+        public Boolean Win2019Checked {
+            get => w2k19;
+            set {
+                w2k19 = value;
+                if (w2k19) {
+                    w2k19s = w2k19d = true;
+                    foreach (String str in new[] {
+                                                     nameof(Win2019StdChecked),
+                                                     nameof(Win2019DCChecked)
+                                                 }) {
+                        OnPropertyChanged(str);
+                    }
+                } else {
+                    w2k19s = w2k19d = false;
+                }
+                foreach (String str in new[] {
+                                                 nameof(Win2019Checked),
+                                                 nameof(Win2019StdChecked),
+                                                 nameof(Win2019DCChecked)
+                                             }) {
+                    OnPropertyChanged(str);
+                }
+            }
+        }
+        [XmlAttribute(nameof(w2k19s))]
+        public Boolean Win2019StdChecked {
+            get => w2k19s;
+            set {
+                w2k19s = value;
+                if (w2k19s) {
+                    if (Win2019DCChecked) {
+                        w2k19 = true;
+                        OnPropertyChanged(nameof(Win2019Checked));
+                    }
+                } else {
+                    w2k19 = false;
+                    OnPropertyChanged(nameof(Win2019Checked));
+                }
+                OnPropertyChanged(nameof(Win2019StdChecked));
+            }
+        }
+        [XmlAttribute(nameof(w2k19d))]
+        public Boolean Win2019DCChecked {
+            get => w2k19d;
+            set {
+                w2k19d = value;
+                if (w2k19d) {
+                    if (Win2019StdChecked) {
+                        w2k19 = true;
+                        OnPropertyChanged(nameof(Win2019Checked));
+                    }
+                } else {
+                    w2k19 = false;
+                    OnPropertyChanged(nameof(Win2019Checked));
+                }
+                OnPropertyChanged(nameof(Win2019DCChecked));
             }
         }
 

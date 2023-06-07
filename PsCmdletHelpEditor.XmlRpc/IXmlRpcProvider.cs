@@ -1,3 +1,3 @@
 ﻿namespace PsCmdletHelpEditor.XmlRpc {
-    public interface IXmlRpcProvider : IBloggerWeblogProvider, IMetaWeblogProvider { }
+    public interface IXmlRpcProvider : IBloggerWeblogProvider, IMetaWeblogProvider, IWpBlogProvider { }
 }

@@ -158,7 +158,7 @@ namespace CmdletHelpEditor.API.Tools {
 <p style=""margin-left: 40px;"">This cmdlet supports the common parameters: Verbose, Debug,<br />
 ErrorAction, ErrorVariable, InformationAction, InformationVariable,<br />
 WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.<br />
-For more information, see about_CommonParameters (<a href=""https://go.microsoft.com/fwlink/?LinkID=113216\"">https://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
+For more information, see about_CommonParameters (<a href=""https://go.microsoft.com/fwlink/?LinkID=113216"">https://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
 ");
             
         }
@@ -365,20 +365,22 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
                     SB.AppendLine("	<li>Windows Server 2016 Datacenter</li>");
                 }
             }
+            if (cmdlet.SupportInformation.Win2019Checked) {
+                SB.AppendLine("	<li>Windows Server 2019 all editions</li>");
+            } else {
+                if (cmdlet.SupportInformation.Win2019StdChecked) {
+                    SB.AppendLine("	<li>Windows Server 2019 Standard</li>");
+                }
+                if (cmdlet.SupportInformation.Win2019DCChecked) {
+                    SB.AppendLine("	<li>Windows Server 2019 Datacenter</li>");
+                }
+            }
             SB.Append("</ul>");
         }
 
         // generates HTML for web browser control
         public static Task<String> GenerateHtmlView(CmdletObject cmdlet, ModuleObject moduleObject) {
             return Task<String>.Factory.StartNew(() => generatePureHtml(cmdlet, moduleObject.Cmdlets, new StringBuilder(), moduleObject.UseSupports));
-        }
-        // generates HTML for HTML source view
-        public static Task<IEnumerable<XmlToken>> GenerateHtmlSourceHelp(CmdletObject cmdlet, ModuleObject moduleObject) {
-            return Task<IEnumerable<XmlToken>>.Factory.StartNew(() =>
-                XmlTokenizer.LoopTokenize(
-                    generatePureHtml(cmdlet, moduleObject.Cmdlets, new StringBuilder(), moduleObject.UseSupports)
-                )
-            );
         }
     }
 }

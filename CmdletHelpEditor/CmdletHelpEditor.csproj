@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CmdletHelpEditor</RootNamespace>
     <AssemblyName>PsCmdletHelpEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -118,19 +118,30 @@
     </Reference>
     <Reference Include="System.Management.Automation" />
     <Reference Include="System" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Unity.Abstractions, Version=5.11.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.7\lib\net46\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.8.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.7\lib\net46\Unity.Container.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.28, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\WpfTheme\WpfTheme\bin\Release\Wpf.OfficeTheme.dll</HintPath>
+      <HintPath>_ExternalLibraries\Wpf.OfficeTheme.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -138,14 +149,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="API\MetaWeblog\BloggerClient.cs" />
-    <Compile Include="API\MetaWeblog\MediaObject.cs" />
-    <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
+    <Compile Include="Abstract\IDataSource.cs" />
+    <Compile Include="Abstract\IHasPassword.cs" />
+    <Compile Include="Abstract\IMainTabContent.cs" />
+    <Compile Include="Abstract\IMainWindowVM.cs" />
+    <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
+    <Compile Include="Abstract\IAsyncVM.cs" />
+    <Compile Include="Abstract\IProgressBar.cs" />
+    <Compile Include="Abstract\IPsProcessor.cs" />
+    <Compile Include="Abstract\IScrollToView.cs" />
+    <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
+    <Compile Include="API\Templates\XmlMamlTemplate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XmlMamlTemplate.resx</DependentUpon>
+    </Compile>
     <Compile Include="API\Tools\MarkDownProcessor.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
@@ -155,12 +178,18 @@
     <Compile Include="API\Converters\MultiParamConverter.cs" />
     <Compile Include="API\Tools\ParserType.cs" />
     <Compile Include="API\Tools\Strings.cs" />
-    <Compile Include="API\Tools\Crypt.cs" />
+    <Compile Include="API\Tools\CryptExtensions.cs" />
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
+    <Compile Include="API\ViewModels\AsyncViewModel.cs" />
+    <Compile Include="API\ViewModels\ClosableWindowVM.cs" />
+    <Compile Include="API\ViewModels\DataSource.cs" />
+    <Compile Include="API\ViewModels\FileOperations.cs" />
     <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
     <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
+    <Compile Include="API\ViewModels\ProgressBarVM.cs" />
+    <Compile Include="API\ViewModels\PsModuleItem.cs" />
     <Compile Include="API\ViewModels\UIManager.cs" />
     <Compile Include="API\ViewModels\FormatCommands.cs" />
     <Compile Include="API\ViewModels\ViewModelBase.cs" />
@@ -185,13 +214,6 @@
     <Compile Include="API\Tools\XmlToken.cs" />
     <Compile Include="API\Tools\XmlTokenEnum.cs" />
     <Compile Include="API\Tools\XmlTokenizer.cs" />
-    <Compile Include="API\MetaWeblog\Blogger.cs" />
-    <Compile Include="API\MetaWeblog\CategoryInfo.cs" />
-    <Compile Include="API\MetaWeblog\IMetaWeblogProvider.cs" />
-    <Compile Include="API\MetaWeblog\BlogInfo.cs" />
-    <Compile Include="API\MetaWeblog\Post.cs" />
-    <Compile Include="API\MetaWeblog\UserInfo.cs" />
-    <Compile Include="API\MetaWeblog\XmlRpcFaultInfo.cs" />
     <Compile Include="API\ViewModels\ParamVM.cs" />
     <Compile Include="API\ViewModels\ExampleVM.cs" />
     <Compile Include="API\ViewModels\RelatedLinkVM.cs" />
@@ -445,6 +467,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="API\Templates\XmlMamlTemplate.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>XmlMamlTemplate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -517,6 +543,10 @@
     <ProjectReference Include="..\CodeKicker.BBCode\CodeKicker.BBCode.csproj">
       <Project>{1c8a5fb6-633a-43bd-b1b7-75a0ddc308f5}</Project>
       <Name>CodeKicker.BBCode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
+      <Project>{2fae87f8-bee9-4be7-9f9d-5d795f2de205}</Project>
+      <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

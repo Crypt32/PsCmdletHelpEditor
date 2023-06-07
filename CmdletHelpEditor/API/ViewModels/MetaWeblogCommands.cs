@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.Views.Windows;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using Unity;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public static class MetaWeblogCommands {
@@ -18,20 +20,21 @@ namespace CmdletHelpEditor.API.ViewModels {
             working = true;
             var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
             try {
-                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null, false);
-                Utils.MsgBox("Success", "The operation completed successfully.", MessageBoxImage.Information);
+                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null);
+                MsgBox.Show("Success", "The operation completed successfully.", MessageBoxImage.Information);
             }
             catch (Exception e) {
-                Utils.MsgBox("Error", e.Message);
+                MsgBox.Show("Error", e.Message);
             }
             working = false;
         }
         static void PublishAll(Object obj) {
             working = true;
+            var pb = App.Container.Resolve<IProgressBar>();
             MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-            (((MainWindow)obj).sb.pb).Visibility = Visibility.Visible;
-            MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, ((MainWindow)obj).sb.pb);
-            (((MainWindow)obj).sb.pb).Visibility = Visibility.Collapsed;
+            pb.Start();
+            MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, pb);
+            pb.End();
             working = false;
         }
         static Boolean CanPublish(Object obj) {

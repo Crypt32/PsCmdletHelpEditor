@@ -25,18 +25,24 @@
                     DockPanel.Dock="Right"
                     Width="70"
                     Margin="10"/>
-            <Button Content="Publish"
+            <Button Content="{Binding PublishCaption}"
                     DockPanel.Dock="Right"
                     Width="70"
                     Margin="10"
                     Command="{Binding PublishCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Button Content="Retry"
+                    DockPanel.Dock="Right"
+                    Width="70"
+                    Margin="10"
+                    Command="{Binding RetryCommand}"
                     CommandParameter="{Binding ElementName=lv}"/>
             <TextBlock/>
         </DockPanel>
         <ProgressBar DockPanel.Dock="Bottom"
                      Height="20"
                      Margin="10"
-                     Value="{Binding PbValue}"/>
+                     Value="{Binding ProgressBar.Progress}"/>
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Margin="5"
                      Height="40"

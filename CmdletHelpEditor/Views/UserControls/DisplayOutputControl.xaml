@@ -42,24 +42,22 @@
                         Command="{Binding EditorContext.OutputContext.GenerateOutputCommand}" />
             </StackPanel>
         </Border>
-        <controls:BindableRichTextBox DockPanel.Dock="Top"
-                               IsUndoEnabled="False"
-                               UndoLimit="0"
-                               Width="{Binding ElementName=docuc, Path=ActualWidth, Mode=OneWay}"
-                               Document="{Binding EditorContext.OutputContext.Document}"
-                               FontFamily="Consolas"
-                               FontSize="14"
-                               VerticalContentAlignment="Stretch"
-                               HorizontalContentAlignment="Stretch"
-                               HorizontalScrollBarVisibility="Auto"
-                               VerticalScrollBarVisibility="Auto"
-                               IsReadOnly="True"
-                               Visibility="{Binding EditorContext.OutputContext.RtbVisible}"/>
+        <controls:BindableRichTextBox x:Name="SrcRtbBox"
+                                      IsUndoEnabled="False"
+                                      UndoLimit="0"
+                                      Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
+                                      FontFamily="Consolas"
+                                      FontSize="12"
+                                      VerticalContentAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      IsReadOnly="True"
+                                      Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      PreviewMouseWheel="onRtbPreviewMouseWheel"/>
         <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
-                    DockPanel.Dock="Top"
-                    Visibility="{Binding EditorContext.OutputContext.WebBrowserVisible}"/>
-        <userControls:BusyUC DockPanel.Dock="Top"
-                             Visibility="{Binding EditorContext.OutputContext.BusyControlVisible}"
+                    Visibility="{Binding EditorContext.OutputContext.HtmlChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <userControls:BusyUC Visibility="{Binding EditorContext.OutputContext.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                              Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
     </DockPanel>
 </UserControl>

@@ -1,73 +1,89 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CmdletHelpEditor.API.MetaWeblog;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    class ModulePropertiesVM : ViewModelBase {
+    class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
+        readonly IDataSource _dataSource;
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
 
-        public ICommand ConnectProviderCommand { get; set; }
+        public ModulePropertiesVM(IDataSource dataSource) {
+            _dataSource = dataSource;
+            ConnectProviderCommand = new AsyncCommand(connect);
+        }
+
+        public IAsyncCommand ConnectProviderCommand { get; set; }
         public ICommand FetchPostsCommand { get; set; }
 
-        public ObservableCollection<ProviderInformation> Providers { get; set; }
-        public ObservableCollection<BlogInfo> WebSites { get; set; }
+        public ObservableCollection<ProviderInformation> Providers { get; }
+            = new ObservableCollection<ProviderInformation>();
+        public ObservableCollection<BlogInfo> WebSites { get; }
+            = new ObservableCollection<BlogInfo>();
 
         public Boolean UseSupports {
             get => useSupports;
             set {
                 useSupports = value;
-                OnPropertyChanged("UseSupports");
+                OnPropertyChanged(nameof(UseSupports));
             }
         }
         public Boolean UseProvider {
             get => useProvider;
             set {
                 useProvider = value;
-                OnPropertyChanged("UseProvider");
+                OnPropertyChanged(nameof(UseProvider));
             }
         }
         public Boolean ProvSelected {
             get => provSelected;
             set {
                 provSelected = value;
-                OnPropertyChanged("ProvSelected");
+                OnPropertyChanged(nameof(ProvSelected));
             }
         }
         public Boolean UrlEditable {
             get => urlEditable;
             set {
                 urlEditable = value;
-                OnPropertyChanged("UrlEditable");
+                OnPropertyChanged(nameof(UrlEditable));
             }
         }
         public Boolean UserEditable {
             get => userEditable;
             set {
                 userEditable = value;
-                OnPropertyChanged("UserEditable");
+                OnPropertyChanged(nameof(UserEditable));
             }
         }
         public Boolean BlogsLoaded {
             get => blogsLoaded;
             set {
                 blogsLoaded = value;
-                OnPropertyChanged("BlogsLoaded");
+                OnPropertyChanged(nameof(BlogsLoaded));
             }
         }
         public Boolean BlogSelected {
             get => blogSelected;
             set {
                 blogSelected = value;
-                OnPropertyChanged("BlogSelected");
+                OnPropertyChanged(nameof(BlogSelected));
             }
+        }
+
+        Task connect(Object o, CancellationToken cancellationToken) {
+            if (!(o is IHasPassword pwd)) {
+                return Task.CompletedTask;
+            }
+            return Task.CompletedTask;
+        }
+        Boolean canConnect(Object o) {
+            return false;
         }
     }
 }

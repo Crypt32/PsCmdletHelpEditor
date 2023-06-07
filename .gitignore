@@ -210,7 +210,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-/PsCmdletHelpEditor.XmlRpc
 /PsCmdletHelpEditor.Wpf.Views
 /PsCmdletHelpEditor.Wpf.UI
 /PsCmdletHelpEditor.BLL

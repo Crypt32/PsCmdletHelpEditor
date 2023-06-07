@@ -28,6 +28,8 @@ namespace CmdletHelpEditor.API.Models {
 
         public CmdletObject() {
             initialize();
+            Examples = new ObservableCollection<Example>();
+            RelatedLinks = new ObservableCollection<RelatedLink>();
         }
 
         void OnBindingListChanged(Object Sender, ListChangedEventArgs ChangedEventArgs) {
@@ -86,10 +88,8 @@ namespace CmdletHelpEditor.API.Models {
                 if (exampleList != null) {
                     exampleList.CollectionChanged -= childOnCollectionChanged;
                 }
-                exampleList = value;
-                if (exampleList != null) {
-                    exampleList.CollectionChanged += childOnCollectionChanged;
-                }
+                exampleList = value ?? new ObservableCollection<Example>();
+                exampleList.CollectionChanged += childOnCollectionChanged;
             }
         }
         public ObservableCollection<RelatedLink> RelatedLinks {
@@ -98,10 +98,8 @@ namespace CmdletHelpEditor.API.Models {
                 if (linkList != null) {
                     linkList.CollectionChanged -= childOnCollectionChanged;
                 }
-                linkList = value;
-                if (linkList != null) {
-                    linkList.CollectionChanged += childOnCollectionChanged;
-                }
+                linkList = value ?? new ObservableCollection<RelatedLink>();
+                linkList.CollectionChanged += childOnCollectionChanged;
             }
         }
         public SupportInfo SupportInformation {
@@ -433,6 +431,31 @@ namespace CmdletHelpEditor.API.Models {
                 ParamSets.Add(info);
             }
         }
+
+        public void CopyFromCmdlet(CmdletObject sourceCmdlet) {
+            List<String> processed = new List<String>();
+            // process saved parameters
+            for (Int32 index = 0; index < Parameters.Count; index++) {
+                Int32 sourceIndex = sourceCmdlet.Parameters.IndexOf(Parameters[index]);
+                if (sourceIndex >= 0) {
+                    // copy user input to source cmdlet
+                    sourceCmdlet.Parameters[sourceIndex].Description = Parameters[index].Description;
+                    sourceCmdlet.Parameters[sourceIndex].Globbing = Parameters[index].Globbing;
+                    sourceCmdlet.Parameters[sourceIndex].DefaultValue = Parameters[index].DefaultValue;
+                    // replace parameter from source to destination cmdlet
+                    Parameters[index] = sourceCmdlet.Parameters[sourceIndex];
+                    processed.Add(Parameters[index].Name);
+                } else {
+                    // saved cmdlet contains orphaned parameter
+                    Parameters[index].Status = ItemStatus.Missing;
+                }
+            }
+            // process active non-processed parameters. They are new parameters
+            foreach (ParameterDescription param in sourceCmdlet.Parameters.Where(param => !processed.Contains(param.Name))) {
+               Parameters.Add(param);
+            }
+        }
+
         public override String ToString() {
             return Name;
         }

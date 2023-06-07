@@ -13,26 +13,28 @@ namespace CmdletHelpEditor.API.ViewModels {
             NewExampleCommand = new RelayCommand(newExample, canNewExample);
             RemoveExampleCommand = new RelayCommand(removeExample, canRemoveExample);
             UpExampleCommand = new RelayCommand(upExample, canUpExample);
-            DownExampleCommad = new RelayCommand(downExample, canDownExample);
+            DownExampleCommand = new RelayCommand(downExample, canDownExample);
         }
         
         public ICommand NewExampleCommand { get; set; }
         public ICommand RemoveExampleCommand { get; set; }
         public ICommand UpExampleCommand { get; set; }
-        public ICommand DownExampleCommad { get; set; }
+        public ICommand DownExampleCommand { get; set; }
         public Boolean ExampleTextBoxEnabled { get; set; }
         public Example CurrentExample {
             get => currentExample;
             set {
                 currentExample = value;
                 ExampleTextBoxEnabled = currentExample != null;
-                OnPropertyChanged("CurrentExample");
-                OnPropertyChanged("ExampleTextBoxEnabled");
+                OnPropertyChanged(nameof(CurrentExample));
+                OnPropertyChanged(nameof(ExampleTextBoxEnabled));
             }
         }
         
         void newExample(Object obj) {
-            var example = new Example();
+            var example = new Example {
+                Name = $"Example {cmdlet.Examples.Count + 1}"
+            };
             cmdlet.Examples.Add(example);
             CurrentExample = example;
         }
@@ -67,13 +69,16 @@ namespace CmdletHelpEditor.API.ViewModels {
             CurrentExample = cmdlet.Examples[old + 1];
         }
         Boolean canDownExample(Object obj) {
-            if (!canNewExample(null)) { return false; }
-            Int32 count = cmdlet.RelatedLinks.Count - 1;
+            if (!canNewExample(null)) {
+                return false;
+            }
+
+            Int32 count = cmdlet.Examples.Count - 1;
             return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) < count;
         }
 
-        public void SetCmdlet(CmdletObject newcmdlet) {
-            cmdlet = newcmdlet;
+        public void SetCmdlet(CmdletObject newCmdlet) {
+            cmdlet = newCmdlet;
             CurrentExample = null;
         }
 

@@ -44,6 +44,7 @@
             <Style TargetType="HeaderedContentControl" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
                 <Setter Property="IsTabStop" Value="False"/>
             </Style>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -28,7 +28,11 @@
                     <TextBlock Text="Article URL: " VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
                     <TextBox Text="{Binding EditorContext.CurrentCmdlet.Name}" Grid.Row="0" Grid.Column="1" IsReadOnly="True"/>
                     <TextBox Text="{Binding EditorContext.CurrentCmdlet.ArticleIDString}" Grid.Row="1" Grid.Column="1" IsReadOnly="True"/>
-                    <TextBox Text="{Binding EditorContext.CurrentCmdlet.URL}" MinLines="2" MaxLines="2" Grid.Row="2" Grid.Column="1" IsReadOnly="True"/>
+                    <TextBox Text="{Binding EditorContext.CurrentCmdlet.URL, UpdateSourceTrigger=PropertyChanged}"
+                             MinLines="2"
+                             MaxLines="2"
+                             Grid.Row="2"
+                             Grid.Column="1"/>
                     <Button Content="Publish this cmdlet"
                             IsEnabled="{Binding EditorContext.CurrentCmdlet.Publish}"
                             Command="{x:Static vm:MetaWeblogCommands.PublishArticleCommand}"

@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Security;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.API.MetaWeblog;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.Views.Dialogs {
     /// <summary>
     /// Interaction logic for ModuleProperties.xaml
     /// </summary>
-    public partial class ModuleProperties : INotifyPropertyChanged {
+    public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
         ProviderInformation providerInfo;
-        Blogger blogger;
+        WpXmlRpcClient blogger;
         readonly MainWindowVM _mwvm;
 
         public ModuleProperties(MainWindowVM context) {
@@ -106,27 +112,35 @@ namespace CmdletHelpEditor.Views.Dialogs {
         void ConnectClick(Object Sender, RoutedEventArgs e) {
             SetPassword();
             blogger = Utils.InitializeBlogger(ProviderInfo);
-            IEnumerable<BlogInfo> blogs = blogger.GetUsersBlogs();
-            if (blogs == null) { return; }
-            WebSites.Clear();
-            foreach (BlogInfo blog in blogs) {
-                WebSites.Add(blog);
+            try {
+                var blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
+                if (blogs == null) { return; }
+                WebSites.Clear();
+                foreach (XmlRpcBlogInfo blog in blogs) {
+                    var b = new BlogInfo {
+                        BlogID = blog.BlogID,
+                        BlogName = blog.BlogName,
+                        URL = blog.URL
+                    };
+                    WebSites.Add(b);
+                }
+            } catch (Exception ex) {
+                MsgBox.Show("Error", ex.Message);
             }
             BlogsLoaded = true;
         }
         async void FetchClick(Object Sender, RoutedEventArgs e) {
             if (_mwvm.SelectedTab.Module.Provider == null) { return; }
-            List<Post> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, _mwvm.SelectedTab.Module.Cmdlets, providerInfo.FetchPostCount);
+            //List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, providerInfo.FetchPostCount);
+            List<WpPost> posts = await blogger.GetRecentPostsAsync(providerInfo.FetchPostCount); // await MetaWeblogWrapper.GetPages(blogger, providerInfo.FetchPostCount);
             foreach (CmdletObject cmdlet in _mwvm.SelectedTab.Module.Cmdlets) {
-                Int32 index = posts.IndexOf(new Post { Title = cmdlet.Name });
-                if (index >= 0) {
-                    cmdlet.ArticleIDString = posts[index].PostId;
-                    cmdlet.URL = _mwvm.SelectedTab.Module.Provider.ProviderName.ToLower() == "codeplex"
-                        ? _mwvm.SelectedTab.Module.Provider.Blog.URL + "wikipage?title=" + cmdlet.Name
-                        : posts[index].Permalink;
+                WpPost post = posts.FirstOrDefault(x => x.Title.Equals(cmdlet.Name));
+                if (post != null) {
+                    cmdlet.ArticleIDString = post.PostId;
+                    cmdlet.URL = post.Permalink;
                     if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
                         var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
-                        cmdlet.URL = String.Format("{0}://{1}{2}", baseUrl.Scheme, baseUrl.DnsSafeHost, cmdlet.URL);
+                        cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{cmdlet.URL}";
                     }
                 }
             }
@@ -147,7 +161,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
         }
         void SetPassword() {
             if (ProviderInfo.SecurePassword == null) {
-                ProviderInfo.Password = Crypt.EncryptPassword(pwdBox.SecurePassword);
+                ProviderInfo.Password = pwdBox.SecurePassword.EncryptPassword();
                 pwdBox.Clear();
             }
         }
@@ -160,15 +174,17 @@ namespace CmdletHelpEditor.Views.Dialogs {
             }
         }
 
+        void BlogSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
+            if (blogger == null || ProviderInfo?.Blog == null) { return; }
+            
+            blogger.SetBlog(ProviderInfo.Blog.BlogID);
+        }
+        public SecureString Password => pwdBox.SecurePassword;
+
         void OnPropertyChanged(String name) {
             PropertyChangedEventHandler handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         public event PropertyChangedEventHandler PropertyChanged;
-
-        void BlogSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
-            if (blogger == null || ProviderInfo?.Blog == null) { return; }
-            blogger.SetBlog(ProviderInfo.Blog.BlogID);
-        }
     }
 }
