@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using CmdletHelpEditor.API.Abstractions;
 
 namespace CmdletHelpEditor.API.Models {
-    public class Example : INotifyPropertyChanged {
+
+    public class Example : INotifyPropertyChanged, IPsExample {
         String ename, cmd, description, output;
         readonly Int32 _uid;
 
@@ -47,9 +49,18 @@ namespace CmdletHelpEditor.API.Models {
         }
 
         public override Boolean Equals(Object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+
             return Equals((Example)obj);
         }
 

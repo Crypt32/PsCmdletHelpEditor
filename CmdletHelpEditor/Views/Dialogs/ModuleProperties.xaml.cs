@@ -113,7 +113,7 @@ namespace CmdletHelpEditor.Views.Dialogs {
             SetPassword();
             blogger = Utils.InitializeBlogger(ProviderInfo);
             try {
-                var blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
+                IEnumerable<XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
                 if (blogs == null) { return; }
                 WebSites.Clear();
                 foreach (XmlRpcBlogInfo blog in blogs) {

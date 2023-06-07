@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Abstractions;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Templates;
 using CodeKicker.BBCode;
@@ -501,9 +502,9 @@ namespace CmdletHelpEditor.API.Tools {
                 SecurityElement.Escape(param.DefaultValue));
         }
         static String xmlGenerateInputTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
-            List<String> inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
-            List<String> inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
-            List<String> inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            var inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
+            var inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
+            var inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(';'));
 
             var SB = new StringBuilder("<command:inputTypes>");
             for (Int32 index = 0; index < inputTypes.Count; index++) {
@@ -516,9 +517,9 @@ namespace CmdletHelpEditor.API.Tools {
             return SB.ToString();
         }
         static String xmlGenerateReturnTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
-            List<String> returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
-            List<String> returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
-            List<String> returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            var returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
+            var returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
+            var returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(';'));
 
             var SB = new StringBuilder("<command:returnValues>");
             for (Int32 index = 0; index < returnTypes.Count; index++) {
@@ -530,7 +531,7 @@ namespace CmdletHelpEditor.API.Tools {
             SB.Append("	</command:returnValues>");
             return SB.ToString();
         }
-        static String xmlGenerateExamples(BBCodeParser bbRules, Example example) {
+        static String xmlGenerateExamples(BBCodeParser bbRules, IPsExample example) {
             return String.Format(XmlMamlTemplate.Example,
                 SecurityElement.Escape(example.Name),
                 SecurityElement.Escape(example.Cmd),

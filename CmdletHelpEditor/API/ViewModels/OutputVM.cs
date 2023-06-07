@@ -120,16 +120,16 @@ namespace CmdletHelpEditor.API.ViewModels {
         }
         async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
             String rawHtml = await HtmlProcessor.GenerateHtmlView(cmdlet, module);
-            return XmlTokenizer.LoopTokenize(XElement.Parse(rawHtml).ToString());
+            return XmlTokenizer.LoopTokenize(XElement.Parse("<div>" + rawHtml + "</div>").ToString());
         }
         async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
             HtmlText = await HtmlProcessor.GenerateHtmlView(cmdlet, module);
             HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, HtmlText, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
         }
         static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {
-            List<Run> blocks = new List<Run>();
+            var blocks = new List<Run>();
             foreach (XmlToken token in data) {
-                Run run = new Run(token.Text);
+                var run = new Run(token.Text);
                 switch (token.Type) {
                     case XmlTokenEnum.Attribute: run.Foreground = new SolidColorBrush(Colors.Red); break;
                     case XmlTokenEnum.Comment: run.Foreground = new SolidColorBrush(Colors.Green); break;

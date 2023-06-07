@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommandParam" xml:space="preserve">
-    <value>&lt;command:parameter required="{0}" variableLength="{1}" globbing="{2}" pipelineInput="{3}" position="{4}"&gt;&lt;maml:name&gt;{5}&lt;/maml:name&gt;&lt;maml:description&gt;{6}&lt;/maml:description&gt;{7}&lt;dev:type&gt;&lt;maml:name&gt;{8}&lt;/maml:name&gt;&lt;maml:uri/&gt;&lt;/dev:type&gt;&lt;dev:defaultValue&gt;{9}&lt;/command:parameter&gt;</value>
+    <value>&lt;command:parameter required="{0}" variableLength="{1}" globbing="{2}" pipelineInput="{3}" position="{4}"&gt;&lt;maml:name&gt;{5}&lt;/maml:name&gt;&lt;maml:description&gt;{6}&lt;/maml:description&gt;{7}&lt;dev:type&gt;&lt;maml:name&gt;{8}&lt;/maml:name&gt;&lt;maml:uri/&gt;&lt;/dev:type&gt;&lt;dev:defaultValue&gt;{9}&lt;/dev:defaultValue&gt;&lt;/command:parameter&gt;</value>
   </data>
   <data name="CommandParamValue" xml:space="preserve">
     <value>&lt;command:parameterValue required="{0}" variableLength="{1}"&gt;{2}&lt;/command:parameterValue&gt;</value>

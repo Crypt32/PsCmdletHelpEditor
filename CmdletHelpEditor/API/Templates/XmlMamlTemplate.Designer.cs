@@ -61,7 +61,7 @@ namespace CmdletHelpEditor.API.Templates {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;command:parameter required=&quot;{0}&quot; variableLength=&quot;{1}&quot; globbing=&quot;{2}&quot; pipelineInput=&quot;{3}&quot; position=&quot;{4}&quot;&gt;&lt;maml:name&gt;{5}&lt;/maml:name&gt;&lt;maml:description&gt;{6}&lt;/maml:description&gt;{7}&lt;dev:type&gt;&lt;maml:name&gt;{8}&lt;/maml:name&gt;&lt;maml:uri/&gt;&lt;/dev:type&gt;&lt;dev:defaultValue&gt;{9}&lt;/command:parameter&gt;.
+        ///   Looks up a localized string similar to &lt;command:parameter required=&quot;{0}&quot; variableLength=&quot;{1}&quot; globbing=&quot;{2}&quot; pipelineInput=&quot;{3}&quot; position=&quot;{4}&quot;&gt;&lt;maml:name&gt;{5}&lt;/maml:name&gt;&lt;maml:description&gt;{6}&lt;/maml:description&gt;{7}&lt;dev:type&gt;&lt;maml:name&gt;{8}&lt;/maml:name&gt;&lt;maml:uri/&gt;&lt;/dev:type&gt;&lt;dev:defaultValue&gt;{9}&lt;/dev:defaultValue&gt;&lt;/command:parameter&gt;.
         /// </summary>
         internal static string CommandParam {
             get {
