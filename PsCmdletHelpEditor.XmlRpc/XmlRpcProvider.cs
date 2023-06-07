@@ -1,5 +1,11 @@
-﻿namespace PsCmdletHelpEditor.XmlRpc {
-    public class XmlRpcProvider : XmlRpcService, IXmlRpcProvider {
+﻿using System;
+using System.Net;
+using System.Reflection;
+using CookComputing.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
+
+namespace PsCmdletHelpEditor.XmlRpc {
+    public class XmlRpcProvider : IXmlRpcProvider {
         readonly IXmlRpcProvider _mwProvider;
 
         public XmlRpcProvider(String providerUrl) {

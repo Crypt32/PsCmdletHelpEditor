@@ -1,4 +1,10 @@
-﻿namespace PsCmdletHelpEditor.XmlRpc {
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PsCmdletHelpEditor.XmlRpc.Helpers;
+
+namespace PsCmdletHelpEditor.XmlRpc {
     public class XmlRpcClient : IXmlRpcClient {
         readonly XmlRpcProviderInfo _provInfo;
         readonly IXmlRpcProvider _mwProvider;

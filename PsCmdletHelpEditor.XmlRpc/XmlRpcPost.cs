@@ -1,4 +1,7 @@
-﻿namespace PsCmdletHelpEditor.XmlRpc {
+﻿using System;
+using CookComputing.XmlRpc;
+
+namespace PsCmdletHelpEditor.XmlRpc {
     public class XmlRpcPost {
         [XmlRpcMember("postid")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]

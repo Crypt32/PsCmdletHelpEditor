@@ -1,4 +1,8 @@
-﻿namespace CmdletHelpEditor.API.Models {
+﻿using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
+
+namespace CmdletHelpEditor.API.Models {
     public class SupportInfo : INotifyPropertyChanged {
         Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
             wxp, wv, w7, w8, w81, w10,
