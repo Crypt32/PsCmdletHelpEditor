@@ -6,7 +6,6 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public class RelatedLinkVM : INotifyPropertyChanged {
-        //readonly EditorVM _evm;
         CmdletObject cmdlet;
         RelatedLink currentRelink;
 

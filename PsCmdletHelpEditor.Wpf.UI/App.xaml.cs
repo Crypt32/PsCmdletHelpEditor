@@ -2,6 +2,7 @@
 using PsCmdletHelpEditor.BLL;
 using PsCmdletHelpEditor.BLL.Abstraction;
 using PsCmdletHelpEditor.Wpf.Views;
+using PsCmdletHelpEditor.Wpf.Views.UserControls;
 using Unity;
 
 namespace PsCmdletHelpEditor.Wpf.UI {
@@ -17,6 +18,7 @@ namespace PsCmdletHelpEditor.Wpf.UI {
             base.OnStartup(e);
             IUnityContainer container = new UnityContainer();
             container.RegisterType<IUIWindowDialogService, WpfUIWindowDialogService>();
+            container.RegisterType<IStartPage, StartPageUC>();
             UnityConfig.Configure(container);
         }
 

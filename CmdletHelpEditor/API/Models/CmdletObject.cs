@@ -191,7 +191,7 @@ namespace CmdletHelpEditor.API.Models {
             ParamSets = new List<CommandParameterSetInfo2>();
             getParameterSets(cmdlet);
             getParameters();
-            getOutputtypes(cmdlet);
+            getOutputTypes(cmdlet);
             getSyntax(cmdlet);
             RelatedLinks = new ObservableCollection<RelatedLink>();
             Examples = new ObservableCollection<Example>();
@@ -278,8 +278,7 @@ namespace CmdletHelpEditor.API.Models {
                 }
 
                 if (type.Properties["description"] == null) { continue; }
-                var descriptionBase = type.Members["description"].Value as PSObject[];
-                if (descriptionBase != null) {
+                if (type.Members["description"].Value is PSObject[] descriptionBase) {
                     String description = (descriptionBase)
                         .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
                     descs.Add(String.IsNullOrEmpty(description)
@@ -355,7 +354,7 @@ namespace CmdletHelpEditor.API.Models {
                 ParameterSets = new List<CommandParameterSetInfo>((ReadOnlyCollection<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value);
                 foreach (CommandParameterSetInfo paramInfo in ParameterSets) {
                     var info = new CommandParameterSetInfo2 { Name = paramInfo.Name };
-                    foreach (var param in paramInfo.Parameters) {
+                    foreach (CommandParameterInfo param in paramInfo.Parameters) {
                         info.Parameters.Add(param.Name);
                     }
                     ParamSets.Add(info);
@@ -371,10 +370,9 @@ namespace CmdletHelpEditor.API.Models {
                 }
             }
         }
-        void getOutputtypes(PSObject cmdlet) {
-            var outputTypeMember = cmdlet.Members["OutputType"];
-            var outputTypeNames = outputTypeMember?.Value as IEnumerable<PSTypeName>;
-            if (outputTypeNames == null) {
+        void getOutputTypes(PSObject cmdlet) {
+            PSMemberInfo outputTypeMember = cmdlet.Members["OutputType"];
+            if (!(outputTypeMember?.Value is IEnumerable<PSTypeName> outputTypeNames)) {
                 return;
             }
             String joined = String.Join(";", outputTypeNames.Select(tn => tn.Name));
@@ -382,9 +380,9 @@ namespace CmdletHelpEditor.API.Models {
         }
         void getSyntax(PSObject cmdlet) {
             Syntax = new List<String>();
-            foreach (CommandParameterSetInfo paraset in ParameterSets) {
+            foreach (CommandParameterSetInfo paramSet in ParameterSets) {
                 String syntaxItem = Convert.ToString(cmdlet.Members["name"].Value);
-                foreach (CommandParameterInfo item in paraset.Parameters) {
+                foreach (CommandParameterInfo item in paramSet.Parameters) {
                     if (_excludedParams.Contains(item.Name.ToLower())) { continue; }
                     Boolean named = item.Position < 0;
                     // fetch param type
@@ -429,7 +427,7 @@ namespace CmdletHelpEditor.API.Models {
             ParamSets.Clear();
             foreach (CommandParameterSetInfo paramInfo in ParameterSets) {
                 var info = new CommandParameterSetInfo2 { Name = paramInfo.Name };
-                foreach (var param in paramInfo.Parameters) {
+                foreach (CommandParameterInfo param in paramInfo.Parameters) {
                     info.Parameters.Add(param.Name);
                 }
                 ParamSets.Add(info);
@@ -439,10 +437,8 @@ namespace CmdletHelpEditor.API.Models {
             return Name;
         }
         public override Boolean Equals(Object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CmdletObject) obj);
+            return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
+                                                   obj.GetType() == GetType() && Equals((CmdletObject)obj));
         }
 
         protected Boolean Equals(CmdletObject other) {

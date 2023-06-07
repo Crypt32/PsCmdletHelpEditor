@@ -10,7 +10,6 @@ using CmdletHelpEditor.API.Utility;
 
 namespace CmdletHelpEditor.API.Models {
     [XmlInclude(typeof(CmdletObject))]
-    //[XmlRoot("")]
     public class ModuleObject : INotifyPropertyChanged {
         Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
         String projectPath, extraHeader, extraFooter;

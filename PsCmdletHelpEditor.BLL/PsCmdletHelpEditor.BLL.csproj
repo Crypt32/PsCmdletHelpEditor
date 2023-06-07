@@ -59,6 +59,7 @@
     <Compile Include="Abstraction\IMainWindowVM.cs" />
     <Compile Include="Abstraction\IOnlinePublishProgressVM.cs" />
     <Compile Include="Abstraction\IProgressStatus.cs" />
+    <Compile Include="Abstraction\IStartPage.cs" />
     <Compile Include="Abstraction\ITabItem.cs" />
     <Compile Include="Abstraction\ITabItemContent.cs" />
     <Compile Include="Abstraction\IUIWindowDialogService.cs" />

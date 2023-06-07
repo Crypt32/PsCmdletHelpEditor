@@ -11,7 +11,8 @@ namespace CmdletHelpEditor.API.Models {
             w2k8r2, w2k8r2s, w2k8r2e, w2k8r2d,
             w2k12, w2k12s, w2k12d,
             w2k12r2, w2k12r2s, w2k12r2d,
-            w2k16, w2k16s, w2k16d;
+            w2k16, w2k16s, w2k16d,
+            w2k19, w2k22;
 
         [XmlAttribute(nameof(ad))]
         public Boolean ADChecked {
