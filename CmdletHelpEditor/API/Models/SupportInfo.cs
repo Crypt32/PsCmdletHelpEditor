@@ -799,8 +799,8 @@ namespace CmdletHelpEditor.API.Models {
             }
         }
 
-        public void SetWinOsVersion(WinOsVersionSupport WinOsVersion) {
-            this.WinOsVersion = WinOsVersion;
+        public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
+            WinOsVersion = winOsVersion;
         }
     }
 }
