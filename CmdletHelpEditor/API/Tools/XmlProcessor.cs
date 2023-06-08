@@ -328,6 +328,8 @@ namespace CmdletHelpEditor.API.Tools {
                         case "win7": currentCmdlet.SupportInformation.Win7Checked = value; break;
                         case "win8": currentCmdlet.SupportInformation.Win8Checked = value; break;
                         case "win81": currentCmdlet.SupportInformation.Win81Checked = value; break;
+                        case "win10": currentCmdlet.SupportInformation.Win10Checked = value; break;
+                        case "win11": currentCmdlet.SupportInformation.Win11Checked = value; break;
                         case "win2k3std": currentCmdlet.SupportInformation.Win2003StdChecked = value; break;
                         case "win2k3ee": currentCmdlet.SupportInformation.Win2003EEChecked = value; break;
                         case "win2k3dc": currentCmdlet.SupportInformation.Win2003DCChecked = value; break;
@@ -340,7 +342,12 @@ namespace CmdletHelpEditor.API.Tools {
                         case "win2k12std": currentCmdlet.SupportInformation.Win2012StdChecked = value; break;
                         case "win2k12dc": currentCmdlet.SupportInformation.Win2012DCChecked = value; break;
                         case "win2k12r2std": currentCmdlet.SupportInformation.Win2012R2StdChecked = value; break;
-                        case "win2k12r2dc": currentCmdlet.SupportInformation.Win2012R2DCChecked = value; break;
+                        case "win2k16std": currentCmdlet.SupportInformation.Win2016StdChecked = value; break;
+                        case "win2k16dc": currentCmdlet.SupportInformation.Win2016DCChecked = value; break;
+                        case "win2k19std": currentCmdlet.SupportInformation.Win2019StdChecked = value; break;
+                        case "win2k19dc": currentCmdlet.SupportInformation.Win2019DCChecked = value; break;
+                        case "win2k22std": currentCmdlet.SupportInformation.Win2022StdChecked = value; break;
+                        case "win2k22dc": currentCmdlet.SupportInformation.Win2022DCChecked = value; break;
                     }
                 }
             }

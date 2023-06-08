@@ -160,6 +160,17 @@
                     <CheckBox Content="Windows Server 2019 Datacenter"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2019DCChecked}" />
                 </StackPanel>
+                <CheckBox Content="Windows 11 Family"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win11Checked}" />
+                <CheckBox Content="Windows Server 2022 Family"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022Checked}" />
+                <StackPanel Margin="25,0,0,0"
+                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                    <CheckBox Content="Windows Server 2022 Standard"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022StdChecked}" />
+                    <CheckBox Content="Windows Server 2022 Datacenter"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022DCChecked}" />
+                </StackPanel>
             </StackPanel>
         </HeaderedContentControl>
     </StackPanel>

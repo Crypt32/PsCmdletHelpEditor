@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CmdletHelpEditor.API.Abstractions;
 using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Utility;
 using CodeKicker.BBCode;
 
 namespace CmdletHelpEditor.API.Tools {
@@ -81,7 +84,9 @@ namespace CmdletHelpEditor.API.Tools {
             htmlGenerateNotes(rules, SB, cmdlet);
             htmlGenerateExamples(rules, SB, cmdlet);
             htmlGenerateRelatedLinks(rules, SB, cmdlets, cmdlet);
-            if (useSupports) { htmlGenerateSupports(cmdlet, ref SB); }
+            if (useSupports) {
+                htmlGenerateSupports(cmdlet.SupportInformation, ref SB);
+            }
             if (!String.IsNullOrEmpty(cmdlet.ExtraFooter)) {
                 SB.Append(cmdlet.ExtraFooter);
             }
@@ -164,9 +169,9 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
         }
         static void htmlGenerateInputTypes(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
             SB.AppendLine("<h2>Inputs</h2>");
-            List<String> inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
-            List<String> inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
-            List<String> inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(';'));
+            var inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
+            var inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
+            var inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(';'));
             for (Int32 index = 0; index < inputTypes.Count; index++) {
                 if (index < inputUrls.Count) {
                     if (String.IsNullOrEmpty(inputUrls[index])) {
@@ -184,9 +189,9 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
         }
         static void htmlGenerateReturnTypes(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
             SB.Append("<h2>Outputs</h2>" + _nl);
-            List<String> returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
-            List<String> returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
-            List<String> returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(';'));
+            var returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
+            var returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
+            var returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(';'));
             for (Int32 index = 0; index < returnTypes.Count; index++) {
                 if (index < returnUrls.Count) {
                     SB.AppendLine(String.IsNullOrEmpty(returnUrls[index])
@@ -249,130 +254,128 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
             }
             SB.AppendLine("</p>");
         }
-        static void htmlGenerateSupports(CmdletObject cmdlet, ref StringBuilder SB) {
+        static void htmlGenerateSupports(ISupportInfo supportInfo, ref StringBuilder SB) {
             String currentHtml = String.Empty;
-            if (cmdlet.SupportInformation.ADChecked) {
+            if (supportInfo.ADChecked) {
                 currentHtml += "<div class=\"alert alert-warning\">This command is not available in non-domain environments</div>" + _nl;
             }
-            if (cmdlet.SupportInformation.RsatChecked) {
+            if (supportInfo.RsatChecked) {
                 currentHtml += "<div class=\"alert alert-warning\">This command requires installed Remote Server Administration Tools (RSAT)</div>" + _nl;
             }
             SB = new StringBuilder(currentHtml + SB);
             SB.AppendLine("<h2>Minimum PowerShell version support</h2>" + _nl);
-            String psver;
-            if (cmdlet.SupportInformation.Ps2Checked) {
-                psver = "PowerShell 2.0";
-            } else if (cmdlet.SupportInformation.Ps3Checked) {
-                psver = "PowerShell 3.0";
-            } else if (cmdlet.SupportInformation.Ps4Checked) {
-                psver = "PowerShell 4.0";
-            } else if (cmdlet.SupportInformation.Ps5Checked) {
-                psver = "PowerShell 5.0";
-            } else if (cmdlet.SupportInformation.Ps60Checked) {
-                psver = "PowerShell 6.0";
-            } else if (cmdlet.SupportInformation.Ps61Checked) {
-                psver = "PowerShell 6.1";
-            } else {
-                psver = "Any";
-            }
-            SB.AppendLine($"<ul><li>{psver}</li></ul>");
+            String psVersion = supportInfo.PsVersion.GetAttributeOfType<DisplayAttribute>().Name;
+            SB.AppendLine($"<ul><li>{psVersion}</li></ul>");
             SB.AppendLine("<h2>Operating System Support</h2>");
             SB.AppendLine("<ul>");
-            if (cmdlet.SupportInformation.WinXpChecked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.WinXP) == WinOsVersionSupport.WinXP) {
                 SB.AppendLine("	<li>Windows XP</li>");
             }
-            if (cmdlet.SupportInformation.WinVistaChecked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.WinVista) == WinOsVersionSupport.WinVista) {
                 SB.AppendLine("	<li>Windows Vista</li>");
             }
-            if (cmdlet.SupportInformation.Win7Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win7) == WinOsVersionSupport.Win7) {
                 SB.AppendLine("	<li>Windows 7</li>");
             }
-            if (cmdlet.SupportInformation.Win8Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win8) == WinOsVersionSupport.Win8) {
                 SB.AppendLine("	<li>Windows 8</li>");
             }
-            if (cmdlet.SupportInformation.Win81Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win81) == WinOsVersionSupport.Win81) {
                 SB.AppendLine("	<li>Windows 8.1</li>");
             }
-            if (cmdlet.SupportInformation.Win10Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win10) == WinOsVersionSupport.Win10) {
                 SB.AppendLine("	<li>Windows 10</li>");
             }
-            if (cmdlet.SupportInformation.Win2003Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win11) == WinOsVersionSupport.Win11) {
+                SB.AppendLine("	<li>Windows 11</li>");
+            }
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2003) == WinOsVersionSupport.Win2003) {
                 SB.AppendLine("	<li>Windows Server 2003 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2003StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2003Std) == WinOsVersionSupport.Win2003Std) {
                     SB.AppendLine("	<li>Windows Server 2003 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2003EEChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2003EE) == WinOsVersionSupport.Win2003EE) {
                     SB.AppendLine("	<li>Windows Server 2003 Enterprise</li>");
                 }
-                if (cmdlet.SupportInformation.Win2003DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2003DC) == WinOsVersionSupport.Win2003DC) {
                     SB.AppendLine("	<li>Windows Server 2003 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2008Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008) == WinOsVersionSupport.Win2008) {
                 SB.AppendLine("	<li>Windows Server 2008 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2008StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008Std) == WinOsVersionSupport.Win2008Std) {
                     SB.AppendLine("	<li>Windows Server 2008 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2008EEChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008EE) == WinOsVersionSupport.Win2008EE) {
                     SB.AppendLine("	<li>Windows Server 2008 Enterprise</li>");
                 }
-                if (cmdlet.SupportInformation.Win2008DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008DC) == WinOsVersionSupport.Win2008DC) {
                     SB.AppendLine("	<li>Windows Server 2008 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2008R2Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008R2) == WinOsVersionSupport.Win2008R2) {
                 SB.AppendLine("	<li>Windows Server 2008 R2 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2008R2StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008R2Std) == WinOsVersionSupport.Win2008R2Std) {
                     SB.AppendLine("	<li>Windows Server 2008 R2 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2008R2EEChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008R2EE) == WinOsVersionSupport.Win2008R2EE) {
                     SB.AppendLine("	<li>Windows Server 2008 R2 Enterprise</li>");
                 }
-                if (cmdlet.SupportInformation.Win2008R2DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2008R2DC) == WinOsVersionSupport.Win2008R2DC) {
                     SB.AppendLine("	<li>Windows Server 2008 R2 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2012Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012) == WinOsVersionSupport.Win2012) {
                 SB.AppendLine("	<li>Windows Server 2012 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2012StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012Std) == WinOsVersionSupport.Win2012Std) {
                     SB.AppendLine("	<li>Windows Server 2012 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2012DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012DC) == WinOsVersionSupport.Win2012DC) {
                     SB.AppendLine("	<li>Windows Server 2012 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2012R2Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012R2) == WinOsVersionSupport.Win2012R2) {
                 SB.AppendLine("	<li>Windows Server 2012 R2 all editions</li>" );
             } else {
-                if (cmdlet.SupportInformation.Win2012R2StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012R2Std) == WinOsVersionSupport.Win2012R2Std) {
                     SB.AppendLine("	<li>Windows Server 2012 R2 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2012R2DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2012R2DC) == WinOsVersionSupport.Win2012R2DC) {
                     SB.AppendLine("	<li>Windows Server 2012 R2 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2016Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2016) == WinOsVersionSupport.Win2016) {
                 SB.AppendLine("	<li>Windows Server 2016 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2016StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2016Std) == WinOsVersionSupport.Win2016Std) {
                     SB.AppendLine("	<li>Windows Server 2016 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2016DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2016DC) == WinOsVersionSupport.Win2016DC) {
                     SB.AppendLine("	<li>Windows Server 2016 Datacenter</li>");
                 }
             }
-            if (cmdlet.SupportInformation.Win2019Checked) {
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2019) == WinOsVersionSupport.Win2019) {
                 SB.AppendLine("	<li>Windows Server 2019 all editions</li>");
             } else {
-                if (cmdlet.SupportInformation.Win2019StdChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2019Std) == WinOsVersionSupport.Win2019Std) {
                     SB.AppendLine("	<li>Windows Server 2019 Standard</li>");
                 }
-                if (cmdlet.SupportInformation.Win2019DCChecked) {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2019DC) == WinOsVersionSupport.Win2019DC) {
                     SB.AppendLine("	<li>Windows Server 2019 Datacenter</li>");
+                }
+            }
+            if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2022) == WinOsVersionSupport.Win2022) {
+                SB.AppendLine("	<li>Windows Server 2022 all editions</li>");
+            } else {
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2022Std) == WinOsVersionSupport.Win2022Std) {
+                    SB.AppendLine("	<li>Windows Server 2022 Standard</li>");
+                }
+                if ((supportInfo.WinOsVersion & WinOsVersionSupport.Win2022DC) == WinOsVersionSupport.Win2022DC) {
+                    SB.AppendLine("	<li>Windows Server 2022 Datacenter</li>");
                 }
             }
             SB.Append("</ul>");

@@ -116,6 +116,7 @@
     <Reference Include="PresentationFramework.Aero">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Management.Automation" />
     <Reference Include="System" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -160,12 +161,14 @@
     <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Abstractions\IPsExample.cs" />
     <Compile Include="API\Abstractions\IPsRelatedLink.cs" />
+    <Compile Include="API\Abstractions\ISupportInfo.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
+    <Compile Include="API\Models\PsVersionSupport.cs" />
     <Compile Include="API\Templates\XmlMamlTemplate.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,6 +176,7 @@
     </Compile>
     <Compile Include="API\Tools\MarkDownProcessor.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
+    <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
     <Compile Include="API\Utility\SavePendingEventHandler.cs" />
     <Compile Include="API\ViewModels\AppCommands.cs" />

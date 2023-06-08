@@ -1,19 +1,35 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.Abstractions;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
-    public class SupportInfo : INotifyPropertyChanged {
+    public class SupportInfo : ViewModelBase, ISupportInfo {
         Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
-            wxp, wv, w7, w8, w81, w10,
+            wxp, wv, w7, w8, w81, w10, w11,
             w2k3, w2k3s, w2k3e, w2k3d,
             w2k8, w2k8s, w2k8e, w2k8d,
             w2k8r2, w2k8r2s, w2k8r2e, w2k8r2d,
             w2k12, w2k12s, w2k12d,
             w2k12r2, w2k12r2s, w2k12r2d,
             w2k16, w2k16s, w2k16d,
-            w2k19, w2k19s, w2k19d;
+            w2k19, w2k19s, w2k19d,
+            w2k22, w2k22s, w2k22d;
 
+        [XmlAttribute("minPsVersion")]
+        public Int32 PsVersionAsInt {
+            get => (Int32)PsVersion;
+            set => PsVersion = (PsVersionSupport)value;
+        }
+        [XmlIgnore]
+        public PsVersionSupport PsVersion { get; set; }
+        [XmlAttribute("winOsSupport")]
+        public Int32 WinOsVersionAsInt {
+            get => (Int32)WinOsVersion;
+            set => WinOsVersion = (WinOsVersionSupport)value;
+        }
+        [XmlIgnore]
+        public WinOsVersionSupport WinOsVersion { get; set; }
         [XmlAttribute(nameof(ad))]
         public Boolean ADChecked {
             get => ad;
@@ -35,6 +51,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps2;
             set {
                 ps2 = value;
+                if (ps2) {
+                    PsVersion = PsVersionSupport.Ps20;
+                }
                 OnPropertyChanged(nameof(Ps2Checked));
             }
         }
@@ -43,6 +62,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps3;
             set {
                 ps3 = value;
+                if (ps3) {
+                    PsVersion = PsVersionSupport.Ps30;
+                }
                 OnPropertyChanged(nameof(Ps3Checked));
             }
         }
@@ -51,6 +73,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps4;
             set {
                 ps4 = value;
+                if (ps4) {
+                    PsVersion = PsVersionSupport.Ps40;
+                }
                 OnPropertyChanged(nameof(Ps4Checked));
             }
         }
@@ -59,6 +84,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps5;
             set {
                 ps5 = value;
+                if (ps5) {
+                    PsVersion = PsVersionSupport.Ps50;
+                }
                 OnPropertyChanged(nameof(Ps5Checked));
             }
         }
@@ -67,6 +95,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps51;
             set {
                 ps51 = value;
+                if (ps51) {
+                    PsVersion = PsVersionSupport.Ps51;
+                }
                 OnPropertyChanged(nameof(Ps51Checked));
             }
         }
@@ -75,6 +106,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps60;
             set {
                 ps60 = value;
+                if (ps60) {
+                    PsVersion = PsVersionSupport.Ps60;
+                }
                 OnPropertyChanged(nameof(Ps60Checked));
             }
         }
@@ -83,6 +117,9 @@ namespace CmdletHelpEditor.API.Models {
             get => ps61;
             set {
                 ps61 = value;
+                if (ps61) {
+                    PsVersion = PsVersionSupport.Ps61;
+                }
                 OnPropertyChanged(nameof(Ps61Checked));
             }
         }
@@ -91,6 +128,11 @@ namespace CmdletHelpEditor.API.Models {
             get => wxp;
             set {
                 wxp = value;
+                if (wxp) {
+                    WinOsVersion |= WinOsVersionSupport.WinXP;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.WinXP;
+                }
                 OnPropertyChanged(nameof(WinXpChecked));
             }
         }
@@ -99,6 +141,11 @@ namespace CmdletHelpEditor.API.Models {
             get => wv;
             set {
                 wv = value;
+                if (wv) {
+                    WinOsVersion |= WinOsVersionSupport.WinVista;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.WinVista;
+                }
                 OnPropertyChanged(nameof(WinVistaChecked));
             }
         }
@@ -107,6 +154,11 @@ namespace CmdletHelpEditor.API.Models {
             get => w7;
             set {
                 w7 = value;
+                if (w7) {
+                    WinOsVersion |= WinOsVersionSupport.Win7;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win7;
+                }
                 OnPropertyChanged(nameof(Win7Checked));
             }
         }
@@ -115,6 +167,11 @@ namespace CmdletHelpEditor.API.Models {
             get => w8;
             set {
                 w8 = value;
+                if (w8) {
+                    WinOsVersion |= WinOsVersionSupport.Win8;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win8;
+                }
                 OnPropertyChanged(nameof(Win8Checked));
             }
         }
@@ -123,6 +180,11 @@ namespace CmdletHelpEditor.API.Models {
             get => w81;
             set {
                 w81 = value;
+                if (w81) {
+                    WinOsVersion |= WinOsVersionSupport.Win81;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win81;
+                }
                 OnPropertyChanged(nameof(Win81Checked));
             }
         }
@@ -131,7 +193,25 @@ namespace CmdletHelpEditor.API.Models {
             get => w10;
             set {
                 w10 = value;
+                if (w10) {
+                    WinOsVersion |= WinOsVersionSupport.Win10;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win10;
+                }
                 OnPropertyChanged(nameof(Win10Checked));
+            }
+        }
+        [XmlAttribute(nameof(w11))]
+        public Boolean Win11Checked {
+            get => w11;
+            set {
+                w11 = value;
+                if (w11) {
+                    WinOsVersion |= WinOsVersionSupport.Win11;
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win11;
+                }
+                OnPropertyChanged(nameof(Win11Checked));
             }
         }
         [XmlIgnore]
@@ -140,6 +220,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k3 = value;
                 if (w2k3) {
+                    WinOsVersion |= WinOsVersionSupport.Win2003;
                     w2k3s = w2k3e = w2k3d = true;
                     foreach (String str in new[] {
                                                       nameof(Win2003StdChecked),
@@ -149,6 +230,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2003;
                     w2k3s = w2k3e = w2k3d = false;
                 }
                 foreach (String str in new[] {
@@ -167,11 +249,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k3s = value;
                 if (w2k3s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2003Std;
                     if (Win2003EEChecked && Win2003DCChecked) {
                         w2k3 = true;
                         OnPropertyChanged(nameof(Win2003Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2003Std;
                     w2k3 = false;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
@@ -184,11 +268,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k3e = value;
                 if (w2k3e) {
+                    WinOsVersion |= WinOsVersionSupport.Win2003EE;
                     if (Win2003StdChecked && Win2003DCChecked) {
                         w2k3 = true;
                         OnPropertyChanged(nameof(Win2003Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2003EE;
                     w2k3 = false;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
@@ -201,11 +287,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k3d = value;
                 if (w2k3d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2003DC;
                     if (Win2003StdChecked && Win2003EEChecked) {
                         w2k3 = true;
                         OnPropertyChanged(nameof(Win2003Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2003DC;
                     w2k3 = false;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
@@ -218,6 +306,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8 = value;
                 if (w2k8) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008;
                     w2k8s = w2k8e = w2k8d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2008StdChecked),
@@ -227,6 +316,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008;
                     w2k8s = w2k8e = w2k8d = false;
                 }
                 foreach (String str in new[] {
@@ -245,11 +335,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8s = value;
                 if (w2k8s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008Std;
                     if (Win2008EEChecked && Win2008DCChecked) {
                         w2k8 = true;
                         OnPropertyChanged(nameof(Win2008Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008Std;
                     w2k8 = false;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
@@ -262,11 +354,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8e = value;
                 if (w2k8e) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008EE;
                     if (Win2008StdChecked && Win2008DCChecked) {
                         w2k8 = true;
                         OnPropertyChanged(nameof(Win2008Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008EE;
                     w2k8 = false;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
@@ -279,11 +373,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8d = value;
                 if (w2k8d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008DC;
                     if (Win2008StdChecked && Win2008EEChecked) {
                         w2k8 = true;
                         OnPropertyChanged(nameof(Win2008Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008DC;
                     w2k8 = false;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
@@ -296,6 +392,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8r2 = value;
                 if (w2k8r2) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008R2;
                     w2k8r2s = w2k8r2e = w2k8r2d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2008R2StdChecked),
@@ -305,6 +402,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008R2;
                     w2k8r2s = w2k8r2e = w2k8r2d = false;
                 }
                 foreach (String str in new[] {
@@ -323,11 +421,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8r2s = value;
                 if (w2k8r2s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008R2Std;
                     if (Win2008R2EEChecked && Win2008R2DCChecked) {
                         w2k8r2 = true;
                         OnPropertyChanged(nameof(Win2008R2Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008R2Std;
                     w2k8r2 = false;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
@@ -340,11 +440,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8r2e = value;
                 if (w2k8r2e) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008R2EE;
                     if (Win2008R2StdChecked && Win2008R2DCChecked) {
                         w2k8r2 = true;
                         OnPropertyChanged(nameof(Win2008R2Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008R2EE;
                     w2k8r2 = false;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
@@ -357,11 +459,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k8r2d = value;
                 if (w2k8r2d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2008R2DC;
                     if (Win2008R2StdChecked && Win2008R2EEChecked) {
                         w2k8r2 = true;
                         OnPropertyChanged(nameof(Win2008R2Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2008R2DC;
                     w2k8r2 = false;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
@@ -374,6 +478,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12 = value;
                 if (w2k12) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012;
                     w2k12s = w2k12d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2012StdChecked),
@@ -382,6 +487,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012;
                     w2k12s = w2k12d = false;
                 }
                 foreach (String str in new[] {
@@ -399,11 +505,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12s = value;
                 if (w2k12s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012Std;
                     if (Win2012DCChecked) {
                         w2k12 = true;
                         OnPropertyChanged(nameof(Win2012Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012Std;
                     w2k12 = false;
                     OnPropertyChanged(nameof(Win2012Checked));
                 }
@@ -416,11 +524,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12d = value;
                 if (w2k12d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012DC;
                     if (Win2012StdChecked) {
                         w2k12 = true;
                         OnPropertyChanged(nameof(Win2012Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012DC;
                     w2k12 = false;
                     OnPropertyChanged(nameof(Win2012Checked));
                 }
@@ -433,6 +543,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12r2 = value;
                 if (w2k12r2) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012R2;
                     w2k12r2s = w2k12r2d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2012R2StdChecked),
@@ -441,6 +552,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012R2;
                     w2k12r2s = w2k12r2d = false;
                 }
                 foreach (String str in new[] {
@@ -458,11 +570,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12r2s = value;
                 if (w2k12r2s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012R2Std;
                     if (Win2012R2DCChecked) {
                         w2k12r2 = true;
                         OnPropertyChanged(nameof(Win2012R2Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012R2Std;
                     w2k12r2 = false;
                     OnPropertyChanged(nameof(Win2012R2Checked));
                 }
@@ -475,11 +589,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k12r2d = value;
                 if (w2k12r2d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2012R2DC;
                     if (Win2012R2StdChecked) {
                         w2k12r2 = true;
                         OnPropertyChanged(nameof(Win2012R2Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2012R2DC;
                     w2k12r2 = false;
                     OnPropertyChanged(nameof(Win2012R2Checked));
                 }
@@ -492,6 +608,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k16 = value;
                 if (w2k16) {
+                    WinOsVersion |= WinOsVersionSupport.Win2016;
                     w2k16s = w2k16d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2016StdChecked),
@@ -500,6 +617,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2016;
                     w2k16s = w2k16d = false;
                 }
                 foreach (String str in new[] {
@@ -517,11 +635,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k16s = value;
                 if (w2k16s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2016Std;
                     if (Win2016DCChecked) {
                         w2k16 = true;
                         OnPropertyChanged(nameof(Win2016Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2016Std;
                     w2k16 = false;
                     OnPropertyChanged(nameof(Win2016Checked));
                 }
@@ -534,11 +654,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k16d = value;
                 if (w2k16d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2016DC;
                     if (Win2016StdChecked) {
                         w2k16 = true;
                         OnPropertyChanged(nameof(Win2016Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2016DC;
                     w2k16 = false;
                     OnPropertyChanged(nameof(Win2016Checked));
                 }
@@ -551,6 +673,7 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k19 = value;
                 if (w2k19) {
+                    WinOsVersion |= WinOsVersionSupport.Win2019;
                     w2k19s = w2k19d = true;
                     foreach (String str in new[] {
                                                      nameof(Win2019StdChecked),
@@ -559,6 +682,7 @@ namespace CmdletHelpEditor.API.Models {
                         OnPropertyChanged(str);
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2019;
                     w2k19s = w2k19d = false;
                 }
                 foreach (String str in new[] {
@@ -576,11 +700,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k19s = value;
                 if (w2k19s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2019Std;
                     if (Win2019DCChecked) {
                         w2k19 = true;
                         OnPropertyChanged(nameof(Win2019Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2019Std;
                     w2k19 = false;
                     OnPropertyChanged(nameof(Win2019Checked));
                 }
@@ -593,11 +719,13 @@ namespace CmdletHelpEditor.API.Models {
             set {
                 w2k19d = value;
                 if (w2k19d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2019DC;
                     if (Win2019StdChecked) {
                         w2k19 = true;
                         OnPropertyChanged(nameof(Win2019Checked));
                     }
                 } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2019DC;
                     w2k19 = false;
                     OnPropertyChanged(nameof(Win2019Checked));
                 }
@@ -605,11 +733,74 @@ namespace CmdletHelpEditor.API.Models {
             }
         }
 
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        [XmlIgnore]
+        public Boolean Win2022Checked {
+            get => w2k22;
+            set {
+                w2k22 = value;
+                if (w2k22) {
+                    WinOsVersion |= WinOsVersionSupport.Win2022;
+                    w2k22s = w2k22d = true;
+                    foreach (String str in new[] {
+                                                     nameof(Win2022StdChecked),
+                                                     nameof(Win2022DCChecked)
+                                                 }) {
+                        OnPropertyChanged(str);
+                    }
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2022;
+                    w2k22s = w2k22d = false;
+                }
+                foreach (String str in new[] {
+                                                 nameof(Win2022Checked),
+                                                 nameof(Win2022StdChecked),
+                                                 nameof(Win2022DCChecked)
+                                             }) {
+                    OnPropertyChanged(str);
+                }
+            }
+        }
+        [XmlAttribute(nameof(w2k22s))]
+        public Boolean Win2022StdChecked {
+            get => w2k22s;
+            set {
+                w2k22s = value;
+                if (w2k22s) {
+                    WinOsVersion |= WinOsVersionSupport.Win2022Std;
+                    if (Win2022DCChecked) {
+                        w2k22 = true;
+                        OnPropertyChanged(nameof(Win2022Checked));
+                    }
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2022Std;
+                    w2k22 = false;
+                    OnPropertyChanged(nameof(Win2022Checked));
+                }
+                OnPropertyChanged(nameof(Win2022StdChecked));
+            }
+        }
+        [XmlAttribute(nameof(w2k22d))]
+        public Boolean Win2022DCChecked {
+            get => w2k22d;
+            set {
+                w2k22d = value;
+                if (w2k22d) {
+                    WinOsVersion |= WinOsVersionSupport.Win2022DC;
+                    if (Win2022StdChecked) {
+                        w2k22 = true;
+                        OnPropertyChanged(nameof(Win2022Checked));
+                    }
+                } else {
+                    WinOsVersion &= ~WinOsVersionSupport.Win2022DC;
+                    w2k22 = false;
+                    OnPropertyChanged(nameof(Win2022Checked));
+                }
+                OnPropertyChanged(nameof(Win2022DCChecked));
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void SetWinOsVersion(WinOsVersionSupport WinOsVersion) {
+            this.WinOsVersion = WinOsVersion;
+        }
     }
 }
