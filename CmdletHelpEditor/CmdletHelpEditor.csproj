@@ -159,6 +159,7 @@
     <Compile Include="Abstract\IPsProcessor.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Abstractions\IPsExample.cs" />
+    <Compile Include="API\Abstractions\IPsRelatedLink.cs" />
     <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterInfo2.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="API\ViewModels\PsModuleItem.cs" />
     <Compile Include="API\ViewModels\UIManager.cs" />
     <Compile Include="API\ViewModels\FormatCommands.cs" />
-    <Compile Include="API\ViewModels\ViewModelBase.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
     <Compile Include="API\Models\ClosableModuleItem.cs" />
     <Compile Include="Views\Dialogs\AboutBox.xaml.cs">

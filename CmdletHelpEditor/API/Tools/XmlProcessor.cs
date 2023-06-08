@@ -48,11 +48,11 @@ namespace CmdletHelpEditor.API.Tools {
         // reader
         public static void ImportFromXml(String file, ModuleObject moduleObject) {
             if (String.IsNullOrEmpty(file)) { return; }
-            FileInfo fileInfo = new FileInfo(file);
+            var fileInfo = new FileInfo(file);
             String supDocPath = fileInfo.DirectoryName + "\\" + moduleObject.Name + ".supports.xml";
             fileInfo = new FileInfo(supDocPath);
             XmlNodeList nodes = null;
-            XmlDocument supDoc = new XmlDocument();
+            var supDoc = new XmlDocument();
             try {
                 if (fileInfo.Exists) {
                     supDoc.Load(supDocPath);
@@ -62,9 +62,9 @@ namespace CmdletHelpEditor.API.Tools {
                 }
             } catch { }
 
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.Load(file);
-            XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
+            var ns = new XmlNamespaceManager(doc.NameTable);
             ns.AddNamespace("command", "http://schemas.microsoft.com/maml/dev/command/2004/10");
             ns.AddNamespace("maml", "http://schemas.microsoft.com/maml/2004/10");
             ns.AddNamespace("dev", "http://schemas.microsoft.com/maml/dev/2004/10");
@@ -73,7 +73,7 @@ namespace CmdletHelpEditor.API.Tools {
                 MsgBox.Show("Error", "Error while reading XML.\nThe help file do not contains Command node.");
                 return;
             }
-            List<String> processed = new List<String>();
+            var processed = new List<String>();
             foreach (XmlNode commandNode in commandNodes) {
                 XmlNode nameNode = commandNode.SelectSingleNode("command:details/command:name", ns);
                 if (nameNode == null) { continue; }
@@ -91,7 +91,7 @@ namespace CmdletHelpEditor.API.Tools {
                     }
                 }
                 if (!isFound) {
-                    CmdletObject currentCmdlet = new CmdletObject(nameNode.InnerText.Trim());
+                    var currentCmdlet = new CmdletObject(nameNode.InnerText.Trim());
                     readXml(commandNode, ns, currentCmdlet);
                     moduleObject.Cmdlets.Add(currentCmdlet);
                 }
@@ -138,7 +138,7 @@ namespace CmdletHelpEditor.API.Tools {
         static void readParameters(IEnumerable paramNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (paramNodes == null) { return; }
             foreach (XmlNode paramNode in paramNodes) {
-                ParameterDescription foundParam = new ParameterDescription();
+                var foundParam = new ParameterDescription();
                 XmlNode tempNode = paramNode.SelectSingleNode("maml:name", ns);
                 if (tempNode == null) { continue; }
                 Boolean isFound = false;
@@ -213,9 +213,9 @@ namespace CmdletHelpEditor.API.Tools {
         }
         static void readTypes(IEnumerable typeNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet, Boolean output) {
             if (typeNodes == null) { return; }
-            List<String> types = new List<String>();
-            List<String> url = new List<String>();
-            List<String> descriptions = new List<String>();
+            var types = new List<String>();
+            var url = new List<String>();
+            var descriptions = new List<String>();
             foreach (XmlNode typeNode in typeNodes) {
                 XmlNode tempNode = typeNode.SelectSingleNode("dev:type/maml:name", ns);
                 if (tempNode == null) { continue; }
@@ -256,7 +256,7 @@ namespace CmdletHelpEditor.API.Tools {
         static void readExamples(IEnumerable exampleNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (exampleNodes == null) { return; }
             foreach (XmlNode exampleNode in exampleNodes) {
-                Example example = new Example();
+                var example = new Example();
                 // Example name
                 XmlNode tempNode = exampleNode.SelectSingleNode("maml:title", ns);
                 if (tempNode != null) {
@@ -295,7 +295,7 @@ namespace CmdletHelpEditor.API.Tools {
         static void readLinks(IEnumerable linkNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
             if (linkNodes == null) { return; }
             foreach (XmlNode linkNode in linkNodes) {
-                RelatedLink link = new RelatedLink();
+                var link = new RelatedLink();
                 // Link name
                 XmlNode tempNode = linkNode.SelectSingleNode("maml:linkText", ns);
                 if (tempNode != null) {
@@ -397,7 +397,7 @@ namespace CmdletHelpEditor.API.Tools {
                     SB.Append(xmlGenerateExamples(bbRules, item));
                 }
                 SB.Append("</command:examples><maml:relatedLinks>");
-                foreach (RelatedLink link in cmdlet.RelatedLinks) {
+                foreach (IPsRelatedLink link in cmdlet.RelatedLinks) {
                     SB.AppendFormat(XmlMamlTemplate.RelatedLink,
                         SecurityElement.Escape(link.LinkText),
                         SecurityElement.Escape(link.LinkUrl));

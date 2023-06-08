@@ -1,8 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
+using CmdletHelpEditor.API.Abstractions;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
-    public class RelatedLink : INotifyPropertyChanged {
+    public class RelatedLink : ViewModelBase, IPsRelatedLink {
         readonly Int32 _uid;
         String linkText, linkUrl;
 
@@ -30,10 +31,8 @@ namespace CmdletHelpEditor.API.Models {
         }
 
         public override Boolean Equals(Object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((RelatedLink) obj);
+            return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
+                                                   obj.GetType() == this.GetType() && Equals((RelatedLink)obj));
         }
 
         protected Boolean Equals(RelatedLink other) {
@@ -45,11 +44,5 @@ namespace CmdletHelpEditor.API.Models {
                 return _uid.GetHashCode() * 397;
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

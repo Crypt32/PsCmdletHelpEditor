@@ -86,8 +86,7 @@
                 <ContextMenu>
                     <MenuItem Header="Lock toolbars"
                               IsCheckable="True"
-                              IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarLocked}"
-                              Template="{StaticResource MenuItemControlSubmenuTemplate}"/>
+                              IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarLocked}"/>
                 </ContextMenu>
             </ToolBarTray.ContextMenu>
             <parts:ToolBarStd Style="{StaticResource {x:Type ToolBar}}"/>

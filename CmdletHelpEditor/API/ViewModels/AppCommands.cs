@@ -254,11 +254,11 @@ namespace CmdletHelpEditor.API.ViewModels {
             return obj != null;
         }
         static Boolean canPublish(Object obj) {
-            Object[] param = (Object[])obj;
-            return ((ClosableModuleItem) param[0])?.Module != null && ((ClosableModuleItem)param[0]).Module.Cmdlets.Count > 0;
+            //Object[] param = (Object[])obj;
+            return ((ClosableModuleItem)obj)?.Module != null && ((ClosableModuleItem)obj).Module.Cmdlets.Count > 0;
         }
         Boolean canPublishOnline(Object obj) {
-            return _mwvm.SelectedTab != null && _mwvm.SelectedTab.Module != null && _mwvm.SelectedTab.Module.Provider != null;
+            return _mwvm.SelectedTab?.Module?.Provider != null;
         }
 
         // utility

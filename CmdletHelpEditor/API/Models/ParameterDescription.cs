@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Management.Automation;
 using System.Xml.Serialization;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
-    public class ParameterDescription : INotifyPropertyChanged {
+    public class ParameterDescription : ViewModelBase {
         String description, defaultValue;
         Boolean globbing;
         ItemStatus status = ItemStatus.New;
@@ -15,8 +15,8 @@ namespace CmdletHelpEditor.API.Models {
             Attributes = new List<String>();
             Aliases = new List<String>();
         }
-        public ParameterDescription(CommandParameterInfo param) {
-            m_initialize(param);
+        public ParameterDescription(CommandParameterInfo param) : this() {
+            initialize(param);
         }
 
         public String Name { get; set; }
@@ -79,7 +79,7 @@ namespace CmdletHelpEditor.API.Models {
             set => status = value;
         }
 
-        void m_initialize(CommandParameterInfo param) {
+        void initialize(CommandParameterInfo param) {
             status = ItemStatus.New;
             Name = param.Name;
             // get type
@@ -99,14 +99,12 @@ namespace CmdletHelpEditor.API.Models {
                 Positional = false;
             }
             // process attributes
-            Attributes = new List<String>();
             if (param.Attributes.Count > 0) {
                 foreach (Attribute item in param.Attributes) {
                     Attributes.Add(item.ToString());
                 }
             }
             // process parameter aliases
-            Aliases = new List<String>();
             if (param.Aliases.Count > 0) {
                 foreach (String alias in param.Aliases) {
                     Aliases.Add(alias);
@@ -163,11 +161,5 @@ namespace CmdletHelpEditor.API.Models {
             if (ReferenceEquals(this, obj)) { return true; }
             return obj is ParameterDescription other && Equals(other);
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

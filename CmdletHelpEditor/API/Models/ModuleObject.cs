@@ -164,7 +164,7 @@ namespace CmdletHelpEditor.API.Models {
                 Cmdlets = new ObservableCollection<CmdletObject>(cmdlets);
                 return;
             }
-            List<String> processed = new List<String>();
+            var processed = new HashSet<String>(StringComparer.OrdinalIgnoreCase);
             // process saved cmdlets
             foreach (CmdletObject cmdlet in Cmdlets) {
                 Int32 activeCmdletIndex = cmdlets.IndexOf(cmdlet);
@@ -204,12 +204,17 @@ namespace CmdletHelpEditor.API.Models {
             return String.Format(Resources.ipmoTemplate, args);
         }
 
-        protected Boolean Equals(ModuleObject other) {
-            return String.Equals(Name, other.Name) && String.Equals(Version, other.Version);
-        }
-
         public override String ToString() {
             return Name;
+        }
+        
+        public override Boolean Equals(Object obj) {
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            return obj.GetType() == GetType() && Equals((ModuleObject) obj);
+        }
+        protected Boolean Equals(ModuleObject other) {
+            return String.Equals(Name, other.Name) && String.Equals(Version, other.Version);
         }
         public override Int32 GetHashCode() {
             unchecked {
@@ -217,11 +222,6 @@ namespace CmdletHelpEditor.API.Models {
                 hashCode = (hashCode * 397) ^ (Version != null ? Version.GetHashCode() : 0);
                 return hashCode;
             }
-        }
-        public override Boolean Equals(Object obj) {
-            if (ReferenceEquals(null, obj)) { return false; }
-            if (ReferenceEquals(this, obj)) { return true; }
-            return obj.GetType() == GetType() && Equals((ModuleObject) obj);
         }
 
         void OnPropertyChanged(String name, Boolean markUnsaved) {

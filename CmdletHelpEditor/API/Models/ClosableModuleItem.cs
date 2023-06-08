@@ -12,7 +12,7 @@ namespace CmdletHelpEditor.API.Models {
         String errorInfo;
 
         
-        void ModuleOnPendingSave(Object source, SavePendingEventArgs e) {
+        void moduleOnPendingSave(Object source, SavePendingEventArgs e) {
             IsSaved = false;
         }
 
@@ -34,9 +34,9 @@ namespace CmdletHelpEditor.API.Models {
                 module = value;
                 OnPropertyChanged(nameof(Module));
                 if (value != null) {
-                    module.PendingSave += ModuleOnPendingSave;
+                    module.PendingSave += moduleOnPendingSave;
                     if (!String.IsNullOrEmpty(value.ProjectPath)) {
-                        FileInfo fi = new FileInfo(value.ProjectPath);
+                        var fi = new FileInfo(value.ProjectPath);
                         Header = fi.Name;
                     }
                 }
@@ -50,6 +50,7 @@ namespace CmdletHelpEditor.API.Models {
             }
         }
         public EditorVM EditorContext { get; set; }
+
         void OnPropertyChanged(String name) {
             PropertyChangedEventHandler handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(name));

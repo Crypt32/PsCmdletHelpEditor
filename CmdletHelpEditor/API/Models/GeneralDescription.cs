@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
-    public class GeneralDescription : INotifyPropertyChanged {
+    public class GeneralDescription : ViewModelBase {
         String synopsis, description, notes, inputType, inputUrl, inputDescription, returnType, returnUrl, returnDescription;
         ItemStatus status = ItemStatus.New;
 
@@ -105,11 +105,5 @@ namespace CmdletHelpEditor.API.Models {
                 OnPropertyChanged("Status");
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -1,21 +1,21 @@
 ﻿using System;
-using System.ComponentModel;
 using CmdletHelpEditor.API.Abstractions;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
 
-    public class Example : INotifyPropertyChanged, IPsExample {
-        String ename, cmd, description, output;
+    public class Example : ViewModelBase, IPsExample {
+        String name, cmd, description, output;
         readonly Int32 _uid;
 
         public Example() {
             _uid = Guid.NewGuid().GetHashCode();
         }
         public String Name {
-            get => ename ?? String.Empty;
+            get => name ?? String.Empty;
             set {
-                if (ename != value) {
-                    ename = value;
+                if (name != value) {
+                    name = value;
                     OnPropertyChanged(nameof(Name));
                 }
             }
@@ -49,19 +49,8 @@ namespace CmdletHelpEditor.API.Models {
         }
 
         public override Boolean Equals(Object obj) {
-            if (ReferenceEquals(null, obj)) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj)) {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType()) {
-                return false;
-            }
-
-            return Equals((Example)obj);
+            return !ReferenceEquals(null, obj) &&
+                   (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Example)obj));
         }
 
         protected Boolean Equals(Example other) {
@@ -73,12 +62,5 @@ namespace CmdletHelpEditor.API.Models {
                 return _uid.GetHashCode() * 397;
             }
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

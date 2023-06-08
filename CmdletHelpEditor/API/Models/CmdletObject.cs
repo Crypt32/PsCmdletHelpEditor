@@ -6,13 +6,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Xml.Serialization;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models {
     [XmlInclude(typeof(ParameterDescription))]
     [XmlInclude(typeof(Example))]
     [XmlInclude(typeof(RelatedLink))]
     [XmlInclude(typeof(CommandParameterSetInfo2))]
-    public class CmdletObject : INotifyPropertyChanged {
+    public class CmdletObject : ViewModelBase {
         String extraHeader, extraFooter, url, articleID;
         Boolean publish;
         SupportInfo supportInfo;
@@ -36,10 +37,10 @@ namespace CmdletHelpEditor.API.Models {
             OnPropertyChanged("nested2");
         }
 
-        public CmdletObject(PSObject cmdlet, Boolean cbh) : this() {
+        public CmdletObject(PSObject cmdlet, Boolean contentBasedHelp) : this() {
             if (cmdlet == null) { return; }
             initializeFromCmdlet(cmdlet);
-            if (cbh) {
+            if (contentBasedHelp) {
                 initializeFromHelp(cmdlet);
             }
         }
@@ -206,19 +207,17 @@ namespace CmdletHelpEditor.API.Models {
                 .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
             GeneralHelp.Description = description.TrimEnd();
             // notes
-            //try {
-                if (help.Properties["alertSet"] != null) {
-                    importNotesHelp((PSObject)help.Members["alertSet"].Value);
-                }
-            //} catch { }
+            if (help.Properties["alertSet"] != null) {
+                importNotesHelp((PSObject)help.Members["alertSet"].Value);
+            }
             // input type
-                if (help.Properties["inputTypes"] != null) {
-                    importTypes((PSObject)help.Members["inputTypes"].Value, true);
-                }
+            if (help.Properties["inputTypes"] != null) {
+                importTypes((PSObject)help.Members["inputTypes"].Value, true);
+            }
             // return type
-                if (help.Properties["returnValues"] != null) {
-                    importTypes((PSObject)help.Members["returnValues"].Value, false);
-                }
+            if (help.Properties["returnValues"] != null) {
+                importTypes((PSObject)help.Members["returnValues"].Value, false);
+            }
             // parameters
             try {
                 var param = (PSObject)help.Members["parameters"].Value;
@@ -241,15 +240,13 @@ namespace CmdletHelpEditor.API.Models {
         void importTypes(PSObject types, Boolean input) {
             var iType = new List<PSObject>();
             if (input) {
-                var value = types.Members["inputType"].Value as PSObject;
-                if (value != null) {
+                if (types.Members["inputType"].Value is PSObject value) {
                     iType.Add(value);
                 } else {
                     iType = new List<PSObject>((PSObject[])types.Members["inputType"].Value);
                 }
             } else {
-                var value = types.Members["returnValue"].Value as PSObject;
-                if (value != null) {
+                if (types.Members["returnValue"].Value is PSObject value) {
                     iType.Add(value);
                 } else {
                     iType = new List<PSObject>((PSObject[])types.Members["returnValue"].Value);
@@ -361,9 +358,9 @@ namespace CmdletHelpEditor.API.Models {
         }
         void getParameters() {
             if (ParameterSets.Count == 0) { return; }
-            foreach (CommandParameterSetInfo paramset in ParameterSets) {
-                if (paramset.Parameters.Count == 0) { return; }
-                foreach (CommandParameterInfo param in from param in paramset.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new ParameterDescription(param) where !Parameters.Contains(para) select param) {
+            foreach (CommandParameterSetInfo paramSet in ParameterSets) {
+                if (paramSet.Parameters.Count == 0) { return; }
+                foreach (CommandParameterInfo param in from param in paramSet.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new ParameterDescription(param) where !Parameters.Contains(para) select param) {
                     Parameters.Add(new ParameterDescription(param));
                 }
             }
@@ -433,7 +430,7 @@ namespace CmdletHelpEditor.API.Models {
         }
 
         public void CopyFromCmdlet(CmdletObject sourceCmdlet) {
-            List<String> processed = new List<String>();
+            var processed = new List<String>();
             // process saved parameters
             for (Int32 index = 0; index < Parameters.Count; index++) {
                 Int32 sourceIndex = sourceCmdlet.Parameters.IndexOf(Parameters[index]);
@@ -471,11 +468,5 @@ namespace CmdletHelpEditor.API.Models {
         public override Int32 GetHashCode() {
             return Name != null ? Name.GetHashCode() : 0;
         }
-
-        void OnPropertyChanged(String name) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.ViewModels {
     public abstract class ClosableWindowVM : ViewModelBase {
