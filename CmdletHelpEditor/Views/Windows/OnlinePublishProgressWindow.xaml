@@ -7,9 +7,6 @@
         Background="{StaticResource PanelBackgroundBrush}"
         mc:Ignorable="d"
         Title="Publish Cmdlet Help Online" Height="500" Width="500">
-    <Window.DataContext>
-        <viewModels:OnlinePublishProgressVM/>
-    </Window.DataContext>
     <DockPanel>
         <!--TODO-->
         <!--<StatusBar DockPanel.Dock="Bottom"
@@ -41,7 +38,7 @@
         </DockPanel>
         <ProgressBar DockPanel.Dock="Bottom"
                      Height="20"
-                     Margin="10"
+                     Margin="5"
                      Value="{Binding ProgressBar.Progress}"/>
         <StackPanel DockPanel.Dock="Bottom">
             <TextBox Margin="5"

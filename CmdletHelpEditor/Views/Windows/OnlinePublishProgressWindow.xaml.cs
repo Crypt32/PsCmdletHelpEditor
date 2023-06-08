@@ -3,6 +3,7 @@ using System.Windows;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.ViewModels;
+using Unity;
 
 namespace CmdletHelpEditor.Views.Windows {
     /// <summary>
@@ -11,7 +12,9 @@ namespace CmdletHelpEditor.Views.Windows {
     public partial class OnlinePublishProgressWindow : IScrollToView {
         public OnlinePublishProgressWindow(ModuleObject module) {
             InitializeComponent();
-            ((OnlinePublishProgressVM)DataContext).SetModule(module);
+            IOnlinePublishProgressVM dc = App.Container.Resolve<IOnlinePublishProgressVM>();
+            dc.SetModule(module);
+            DataContext = dc;
         }
 
         void CloseClick(Object sender, RoutedEventArgs e) {

@@ -24,6 +24,9 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="-1"/>
+        </Style>
     </UserControl.Resources>
     <DockPanel>
         <Grid DockPanel.Dock="Top"

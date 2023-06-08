@@ -57,7 +57,7 @@
                                       PreviewMouseWheel="onRtbPreviewMouseWheel"/>
         <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
                     Visibility="{Binding EditorContext.OutputContext.HtmlChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <userControls:BusyUC Visibility="{Binding EditorContext.OutputContext.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                             Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
+        <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"
+                                 Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
     </DockPanel>
 </UserControl>

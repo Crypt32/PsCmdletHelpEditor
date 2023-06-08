@@ -103,9 +103,9 @@
                                       AddTabCommand="{Binding CommandManager.AddTabCommand}"
                                       Style="{StaticResource ScrollableTabControl}"/>-->
         <controls1:ClosableTabControl ItemsSource="{Binding Tabs}"
-                                     SelectedItem="{Binding SelectedTab}"
-                                     CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
-                                     AddTabCommand="{Binding CommandManager.AddTabCommand}"
-                                     Style="{StaticResource ScrollableTabControl}"/>
+                                      SelectedItem="{Binding SelectedTab}"
+                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
+                                      AddTabCommand="{Binding CommandManager.AddTabCommand}"
+                                      Style="{StaticResource ScrollableTabControl}"/>
     </DockPanel>
 </Window>

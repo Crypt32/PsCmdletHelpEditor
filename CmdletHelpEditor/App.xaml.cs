@@ -32,6 +32,7 @@ namespace CmdletHelpEditor {
             Container.RegisterSingleton<IDataSource, DataSource>();
             Container.RegisterSingleton<IPsProcessor, PowerShellProcessor>();
             Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
+            Container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
         }
     }
 }

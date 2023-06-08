@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
+             xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance vm:MainWindowVM}">
     <StackPanel IsEnabled="{Binding SelectedModule.UseOnlineProvider}">
         <HeaderedContentControl Header="Online publishing information">
-            <StackPanel>
+            <StackPanel behaviors:MarginSetter.Margin="3">
                 <CheckBox Content="Allow cmdlet help publishing online" IsChecked="{Binding EditorContext.CurrentCmdlet.Publish}"/>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -44,6 +45,11 @@
             </StackPanel>
         </HeaderedContentControl>
         <Grid>
+            <Grid.Resources>
+                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Setter Property="Margin" Value="-1"/>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>

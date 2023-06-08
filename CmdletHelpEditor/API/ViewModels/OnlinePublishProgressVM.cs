@@ -14,7 +14,10 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
-    class OnlinePublishProgressVM : AsyncViewModel {
+    public interface IOnlinePublishProgressVM {
+        void SetModule(ModuleObject moduleObject);
+    }
+    class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
         Boolean stopRequested;
         String publishCaption;
         ModuleObject module;

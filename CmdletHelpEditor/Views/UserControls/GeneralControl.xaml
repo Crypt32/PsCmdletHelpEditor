@@ -7,6 +7,11 @@
              mc:Ignorable="d"
              d:DesignWidth="740" d:DesignHeight="915"
              d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="-1"/>
+        </Style>
+    </UserControl.Resources>
     <StackPanel Margin="0">
         <HeaderedContentControl Header="Synopsis:">
             <TextBox MaxLines="6"

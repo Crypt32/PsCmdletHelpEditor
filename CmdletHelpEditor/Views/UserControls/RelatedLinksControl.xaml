@@ -4,10 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:c="clr-namespace:CmdletHelpEditor.Controls"
              xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
              d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="-1"/>
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     IsEnabled="{Binding EditorContext.RelatedLinkContext.LinkTextBoxEnabled}">

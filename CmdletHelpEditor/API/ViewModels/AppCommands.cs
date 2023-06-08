@@ -15,6 +15,7 @@ using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.UserControls;
 using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
+using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
@@ -240,7 +241,7 @@ namespace CmdletHelpEditor.API.ViewModels {
         Boolean canOpen(Object obj) {
             return _mwvm.SelectedTab == null ||
                 (((Grid)_mwvm.SelectedTab.Content).Children.Count == 0 ||
-                !(((Grid)_mwvm.SelectedTab.Content).Children[0] is BusyUC));
+                !(((Grid)_mwvm.SelectedTab.Content).Children[0] is LoadingSpinner));
         }
         Boolean canSave(Object obj) {
             return _mwvm.SelectedTab != null &&

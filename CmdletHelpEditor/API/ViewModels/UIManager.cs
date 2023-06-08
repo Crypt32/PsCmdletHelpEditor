@@ -8,6 +8,7 @@ using CmdletHelpEditor.Views.Dialogs;
 using CmdletHelpEditor.Views.UserControls;
 using CmdletHelpEditor.Views.UserControls.Parts;
 using CmdletHelpEditor.Views.Windows;
+using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels {
@@ -70,7 +71,10 @@ namespace CmdletHelpEditor.API.ViewModels {
         }
         public static void ShowBusy(ContentControl tab, String text) {
             ((Grid)tab.Content).Children.Clear();
-            ((Grid)tab.Content).Children.Add(new BusyUC(text));
+            ((Grid)tab.Content).Children.Add(new LoadingSpinner {
+                IsShown = true,
+                Text = text
+            });
         }
         public static void ShowModuleList(ContentControl tab) {
             ((Grid)tab.Content).Children.Clear();
