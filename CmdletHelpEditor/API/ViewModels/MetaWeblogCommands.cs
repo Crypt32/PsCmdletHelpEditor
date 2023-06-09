@@ -4,46 +4,47 @@ using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
-using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
 
-namespace CmdletHelpEditor.API.ViewModels {
-    public static class MetaWeblogCommands {
-        static Boolean working;
+namespace CmdletHelpEditor.API.ViewModels;
 
-        public static ICommand PublishArticleCommand => new RelayCommand(PublishSingle, CanPublish);
-        public static ICommand PublishAllCommand => new RelayCommand(PublishAll, CanPublish);
+public static class MetaWeblogCommands {
+    static Boolean working;
 
-        static async void PublishSingle(Object obj) {
-            if (obj == null) { return; }
-            working = true;
-            var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-            try {
-                await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null);
-                MsgBox.Show("Success", "The operation completed successfully.", MessageBoxImage.Information);
-            }
-            catch (Exception e) {
-                MsgBox.Show("Error", e.Message);
-            }
-            working = false;
+    public static ICommand PublishArticleCommand => new RelayCommand(publishSingle, canPublish);
+    public static ICommand PublishAllCommand => new RelayCommand(publishAll, canPublish);
+
+    static async void publishSingle(Object obj) {
+        if (obj == null) {
+            return;
         }
-        static void PublishAll(Object obj) {
-            working = true;
-            var pb = App.Container.Resolve<IProgressBar>();
-            MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-            pb.Start();
-            MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, pb);
-            pb.End();
-            working = false;
+        IMsgBox msgBox = App.Container.Resolve<IMsgBox>();
+        working = true;
+        var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
+        try {
+            await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null);
+            msgBox.ShowInfo("Success", "The operation completed successfully.");
+        } catch (Exception e) {
+            msgBox.ShowError("Error", e.Message);
         }
-        static Boolean CanPublish(Object obj) {
-            if (working) { return false; }
-            MainWindowVM mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-            return mwvm.SelectedTab != null &&
-                   mwvm.SelectedTab.Module != null &&
-                   mwvm.SelectedTab.Module.Provider != null &&
-                   (!mwvm.SelectedTab.Module.IsOffline || !mwvm.SelectedTab.Module.UpgradeRequired);
-        }
+        working = false;
+    }
+    static void publishAll(Object obj) {
+        working = true;
+        IProgressBar pb = App.Container.Resolve<IProgressBar>();
+        var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
+        pb.Start();
+        MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, pb);
+        pb.End();
+        working = false;
+    }
+    static Boolean canPublish(Object obj) {
+        if (working) { return false; }
+        var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
+        return mwvm.SelectedTab != null &&
+               mwvm.SelectedTab.Module != null &&
+               mwvm.SelectedTab.Module.Provider != null &&
+               (!mwvm.SelectedTab.Module.IsOffline || !mwvm.SelectedTab.Module.UpgradeRequired);
     }
 }

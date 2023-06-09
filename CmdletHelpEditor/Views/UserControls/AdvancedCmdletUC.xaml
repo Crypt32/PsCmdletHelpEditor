@@ -6,7 +6,7 @@
              xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="500"
+             d:DesignHeight="500" d:DesignWidth="700"
              d:DataContext="{d:DesignInstance vm:MainWindowVM}">
     <StackPanel IsEnabled="{Binding SelectedModule.UseOnlineProvider}">
         <HeaderedContentControl Header="Online publishing information">
@@ -17,12 +17,11 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition Height="5"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="500"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Article Title: " Grid.Row="0" Grid.Column="0"/>
                     <TextBlock Text="Article ID: " Grid.Row="1" Grid.Column="0"/>
@@ -34,13 +33,14 @@
                              MaxLines="2"
                              Grid.Row="2"
                              Grid.Column="1"/>
-                    <Button Content="Publish this cmdlet"
+                    <Button Grid.Row="3"
+                            Grid.Column="0"
+                            Content="Publish this cmdlet"
                             IsEnabled="{Binding EditorContext.CurrentCmdlet.Publish}"
                             Command="{x:Static vm:MetaWeblogCommands.PublishArticleCommand}"
                             CommandParameter="{Binding EditorContext.CurrentCmdlet}"
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Padding="5,5,5,5"/>
+                            Margin="3"
+                            Padding="5,3,5,5"/>
                 </Grid>
             </StackPanel>
         </HeaderedContentControl>

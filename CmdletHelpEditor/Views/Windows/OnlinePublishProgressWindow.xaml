@@ -3,18 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+        xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
         Background="{StaticResource PanelBackgroundBrush}"
         mc:Ignorable="d"
-        Title="Publish Cmdlet Help Online" Height="500" Width="500">
+        d:DataContext="{d:DesignInstance vm:OnlinePublishProgressVM}"
+        Title="Publish Cmdlet Help Online"
+        Height="500"
+        Width="500">
     <DockPanel>
-        <!--TODO-->
-        <!--<StatusBar DockPanel.Dock="Bottom"
+        <StatusBar DockPanel.Dock="Bottom"
                    Height="25">
             <StatusBarItem>
-                <TextBlock Text="blablabla"></TextBlock>
+                <TextBlock>
+                    <Run Text="Loaded commands:"/><Run Text="{Binding Cmdlets.Count, Mode=OneWay}"/>
+                </TextBlock>
             </StatusBarItem>
-        </StatusBar>-->
+        </StatusBar>
         <DockPanel DockPanel.Dock="Bottom" Background="{StaticResource PanelHeaderBackground}">
             <Border BorderThickness="0,1,0,0" BorderBrush="#FF7C9EBC" DockPanel.Dock="Top"/>
             <Button Content="Close"
@@ -33,7 +37,7 @@
                     Width="70"
                     Margin="10"
                     Command="{Binding RetryCommand}"
-                    CommandParameter="{Binding ElementName=lv}"/>
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
             <TextBlock/>
         </DockPanel>
         <ProgressBar DockPanel.Dock="Bottom"
