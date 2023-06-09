@@ -48,8 +48,6 @@
         </ListView>
         <GridSplitter Grid.Column="1"
                       ResizeBehavior="PreviousAndNext"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Stretch"
                       ResizeDirection="Columns"/>
         <TabControl Grid.Column="2" Background="{StaticResource PanelBackgroundBrush}">
             <TabItem Header="General">
