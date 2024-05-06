@@ -24,7 +24,7 @@ abstract class OutputProcessor {
     /// </summary>
     /// <param name="type">Requested parser type.</param>
     /// <returns>BB-code parser.</returns>
-    protected abstract BBCodeParser GetParser(ParserType type);
+    public abstract BBCodeParser GetParser(ParserType type);
     /// <summary>
     /// Generates Heading 1
     /// </summary>

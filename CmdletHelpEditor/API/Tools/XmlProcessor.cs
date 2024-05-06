@@ -21,7 +21,7 @@ class XmlProcessor {
 
     public XmlProcessor(IProgressBar progressBar) {
         _progressBar = progressBar;
-        _bbRules = HtmlProcessor.GetParser(ParserType.Clear);
+        _bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
     }
 
     // general
@@ -356,7 +356,7 @@ class XmlProcessor {
             ? new List<CmdletObject>(cmdlets)
             : new List<CmdletObject>(cmdlets.Where(x => x.GeneralHelp.Status != ItemStatus.Missing));
         if (cmdletsToProcess.Count == 0) { return String.Empty; }
-        BBCodeParser bbRules = HtmlProcessor.GetParser(ParserType.Clear);
+        BBCodeParser bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
         Double duration = 0;
         if (pb != null) {
             duration = 100.0 / cmdletsToProcess.Count;
