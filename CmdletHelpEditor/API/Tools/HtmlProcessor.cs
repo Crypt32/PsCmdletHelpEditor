@@ -14,7 +14,12 @@ using CodeKicker.BBCode;
 namespace CmdletHelpEditor.API.Tools;
 
 class HtmlProcessorV2 : OutputProcessor {
-    protected override BBCodeParser GetParser(ParserType type) {
+
+    public HtmlProcessorV2() {
+        HandleNewLine = true;
+    }
+
+    public override BBCodeParser GetParser(ParserType type) {
         switch (type) {
             case ParserType.Basic:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
@@ -66,7 +71,7 @@ class HtmlProcessorV2 : OutputProcessor {
         return "<h3>" + content + "</h3>";
     }
     protected override String GeneratePre(String content) {
-        return "<h1>" + content + "</h1>";
+        return "<pre>" + SecurityElement.Escape(content) + "</pre>";
     }
     protected override String GenerateParagraph(String content) {
         return "<p style=\"margin-left: 40px;\">" + content + "</p>";

@@ -13,7 +13,7 @@ class MarkDownProcessor : OutputProcessor {
             '.'
         };
 
-    protected override BBCodeParser GetParser(ParserType type) {
+    public override BBCodeParser GetParser(ParserType type) {
         switch (type) {
             case ParserType.Basic:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
@@ -30,8 +30,8 @@ class MarkDownProcessor : OutputProcessor {
                     new BBTag("u", "<u>", "</u>"),
                     new BBTag("s", "~", "~"),
                     new BBTag("url", "<a href=\"${href}\">", "</a>", new BBAttribute("href", ""), new BBAttribute("href", "href")),
-                    new BBTag("pre", $"```{NL}", $"```{NL}"),
-                    new BBTag("quote", "> ", "", new BBAttribute("class", ""), new BBAttribute("class", "class")),
+                    new BBTag("pre", $"```{NL}", $"{NL}```"),
+                    new BBTag("quote", $"{NL}> ", "", new BBAttribute("class", ""), new BBAttribute("class", "class")),
                     new BBTag("color", "<span style=\"color: ${color};\">","</span>", new BBAttribute("color", ""), new BBAttribute("color", "color"))
                 ]);
             case ParserType.Clear:
@@ -59,18 +59,20 @@ class MarkDownProcessor : OutputProcessor {
         return "# " + content;
     }
     protected override String GenerateH2(String content) {
-        return "## " + content;
+        return NL + "## " + content;
     }
     protected override String GenerateH3(String content) {
-        return "## " + content;
+        return NL + "### " + content;
     }
     protected override String GeneratePre(String content) {
-        return $@"```
+        return $@"
+```
 {content}
-```";
+```
+";
     }
     protected override String GenerateParagraph(String content) {
-        return $"<p style=\"margin-left: 40px;\">{content}</p>";
+        return NL + content + NL;// $"<p style=\"margin-left: 40px;\">{content}</p>";
     }
     protected override String GenerateHyperLink(String linkText, String linkUrl) {
         return $"[{linkText}]({linkUrl})";

@@ -19,6 +19,9 @@ namespace CmdletHelpEditor.API.Tools;
 abstract class OutputProcessor {
     protected readonly String NL = Environment.NewLine;
 
+    protected Boolean HandleNewLine { get; set; }
+    protected Boolean EscapeHtml { get; set; }
+
     /// <summary>
     /// Gets BB-code parser based on requested parser type.
     /// </summary>
@@ -81,6 +84,9 @@ abstract class OutputProcessor {
     /// <returns>Markup.</returns>
     protected abstract String GenerateParamTable(ParameterDescription param);
 
+    String escape(String content) {
+        return EscapeHtml ? SecurityElement.Escape(content) : content;
+    }
     String generateHtmlLink(String source, IEnumerable<CmdletObject> cmdlets) {
         if (cmdlets != null) {
             foreach (CmdletObject cmdlet in cmdlets
@@ -90,7 +96,12 @@ abstract class OutputProcessor {
                 source = source.Replace(cmdlet.Name, $"[url={cmdlet.URL}]{cmdlet.Name}[/url]");
             }
         }
-        return source.Replace("\n", "[br]" + NL);
+
+        if (HandleNewLine) {
+            return source.Replace("\n\n", "[br]" + NL);
+        }
+
+        return source;
     }
 
     // generates pure encoded HTML string
@@ -113,13 +124,13 @@ abstract class OutputProcessor {
         if (!String.IsNullOrEmpty(cmdlet.ExtraFooter)) {
             SB.Append(cmdlet.ExtraFooter);
         }
-        return SB.ToString();
+        return SB.ToString().TrimEnd();
     }
     void htmlGenerateName(StringBuilder SB, CmdletObject cmdlet) {
         if (!String.IsNullOrEmpty(cmdlet.ExtraHeader)) {
             SB.Append(cmdlet.ExtraHeader);
         }
-        SB.AppendLine(GenerateH1(SecurityElement.Escape(cmdlet.Name)));
+        SB.AppendLine(GenerateH1(escape(cmdlet.Name)));
     }
     void htmlGenerateSynopsis(BBCodeParser rules, StringBuilder SB, IReadOnlyList<CmdletObject> cmdlets, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Synopsis"));
@@ -132,7 +143,7 @@ abstract class OutputProcessor {
         SB.AppendLine(GenerateH2("Syntax"));
         var preContent = new StringBuilder();
         foreach (String syntaxItem in cmdlet.Syntax) {
-            preContent.AppendLine(SecurityElement.Escape(syntaxItem) + " [&lt;CommonParameters&gt;]");
+            preContent.AppendLine(syntaxItem + " [<CommonParameters>]");
         }
         SB.AppendLine(GeneratePre(preContent.ToString()));
     }
@@ -146,7 +157,7 @@ abstract class OutputProcessor {
     void htmlGenerateParams(BBCodeParser rules, StringBuilder SB, IReadOnlyList<CmdletObject> cmdlets, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Parameters"));
         foreach (ParameterDescription param in cmdlet.Parameters) {
-            String paramNameContent = $"-{SecurityElement.Escape(param.Name)} <em style=\"font-weight: 100;\">&lt;{SecurityElement.Escape(param.Type)}&gt;</em>";
+            String paramNameContent = $"-{escape(param.Name)} <em style=\"font-weight: 100;\">&lt;{escape(param.Type)}&gt;</em>";
             SB.AppendLine(GenerateH3(paramNameContent));
             if (!String.IsNullOrEmpty(param.Description)) {
                 String str = rules.ToHtml(generateHtmlLink(param.Description, cmdlets));
@@ -213,17 +224,17 @@ For more information, see about_CommonParameters"));
             String name = String.IsNullOrEmpty(example.Name)
                 ? $"Example {index + 1}"
                 : example.Name;
-            SB.AppendLine(GenerateH3(SecurityElement.Escape(name)));
+            SB.AppendLine(GenerateH3(escape(name)));
             if (!String.IsNullOrEmpty(example.Cmd)) {
                 String cmd = !example.Cmd.StartsWith("PS C:\\>")
                     ? $"PS C:\\> {example.Cmd}"
                     : example.Cmd;
 
-                SB.AppendLine(GeneratePre(SecurityElement.Escape(cmd)));
+                SB.AppendLine(GeneratePre(cmd));
             }
 
             if (!String.IsNullOrEmpty(example.Output)) {
-                SB.AppendLine(GeneratePre(SecurityElement.Escape(example.Output)));
+                SB.AppendLine(GeneratePre(escape(example.Output)));
             }
 
             if (!String.IsNullOrEmpty(example.Description)) {
@@ -240,7 +251,7 @@ For more information, see about_CommonParameters"));
 
         var content = new StringBuilder();
         foreach (RelatedLink link in cmdlet.RelatedLinks.Where(x => !x.LinkText.Equals("online version:", StringComparison.OrdinalIgnoreCase))) {
-            content.Append("    " + rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets)));
+            content.Append(rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets)));
             if (!String.IsNullOrEmpty(link.LinkUrl)) {
                 content.Append(GenerateHyperLink(link.LinkText, link.LinkUrl));
             }
