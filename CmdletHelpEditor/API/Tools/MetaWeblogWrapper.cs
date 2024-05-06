@@ -21,23 +21,24 @@ static class MetaWeblogWrapper {
         if (blogger == null) {
             throw new Exception(Strings.WarnBloggerNeedsMoreData);
         }
+        var htmlGenerator = new HtmlProcessorV2();
         if (String.IsNullOrEmpty(cmdlet.ArticleIDString)) {
             var post = new WpPostCreate {
-                                            Title = cmdlet.Name,
-                                            PageName = cmdlet.Name,
-                                            PostType = "page",
-                                            PostParent = 16520, // 70 -- mtmsoftware.com, 16520 -- pkisolutions.com
-                                            HTML = await HtmlProcessor.GenerateHtmlView(cmdlet, module)
-                                        };
+                Title = cmdlet.Name,
+                PageName = cmdlet.Name,
+                PostType = "page",
+                PostParent = 16520,
+                HTML = await htmlGenerator.GenerateViewAsync(cmdlet, module)
+            };
             // assuming that article does not exist
             cmdlet.ArticleIDString = await blogger.AddPostAsync(post);
         } else {
             var post = new WpPostUpdate {
-                                            Title = cmdlet.Name,
-                                            PostType = "page",
-                                            PostParent = 16520,
-                                            HTML = await HtmlProcessor.GenerateHtmlView(cmdlet, module)
-                                        };
+                Title = cmdlet.Name,
+                PostType = "page",
+                PostParent = 16520,
+                HTML = await htmlGenerator.GenerateViewAsync(cmdlet, module)
+            };
             try {
                 // assuming that article exist, so we just change it
                 await blogger.UpdatePostAsync(post, Convert.ToInt32(cmdlet.ArticleIDString));
@@ -75,7 +76,7 @@ static class MetaWeblogWrapper {
             await PublishSingle(cmdlet, module, blogger);
             pb.Progress += duration;
         }
-        
+
         msgBox.ShowInfo("Success", new Win32Exception(0).Message);
         pb.Progress = 100;
     }

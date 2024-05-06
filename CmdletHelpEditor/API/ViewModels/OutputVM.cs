@@ -127,7 +127,8 @@ public class OutputVM : DependencyObject, IAsyncVM {
         return XmlTokenizer.LoopTokenize(XElement.Parse("<div>" + rawHtml + "</div>").ToString());
     }
     async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
-        HtmlText = await HtmlProcessor.GenerateHtmlView(cmdlet, module);
+        var htmlProcessor = new HtmlProcessorV2();
+        HtmlText = await htmlProcessor.GenerateViewAsync(cmdlet, module);
         HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, HtmlText, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
     }
     static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {

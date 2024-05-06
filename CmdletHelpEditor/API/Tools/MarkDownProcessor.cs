@@ -17,7 +17,7 @@ namespace CmdletHelpEditor.API.Tools;
 /// Represents abstract class for HTML-based help source generator
 /// </summary>
 abstract class OutputProcessor {
-    static readonly String _nl = Environment.NewLine;
+    protected readonly String NL = Environment.NewLine;
 
     /// <summary>
     /// Gets BB-code parser based on requested parser type.
@@ -81,7 +81,7 @@ abstract class OutputProcessor {
     /// <returns>Markup.</returns>
     protected abstract String GenerateParamTable(ParameterDescription param);
 
-    static String generateHtmlLink(String source, IEnumerable<CmdletObject> cmdlets) {
+    String generateHtmlLink(String source, IEnumerable<CmdletObject> cmdlets) {
         if (cmdlets != null) {
             foreach (CmdletObject cmdlet in cmdlets
                          .Select(x => new { cmdlet = x, regex = new Regex(@"\b" + x.Name + @"\b") })
@@ -90,7 +90,7 @@ abstract class OutputProcessor {
                 source = source.Replace(cmdlet.Name, $"[url={cmdlet.URL}]{cmdlet.Name}[/url]");
             }
         }
-        return source.Replace("\n", "[br]" + _nl);
+        return source.Replace("\n", "[br]" + NL);
     }
 
     // generates pure encoded HTML string
@@ -385,7 +385,6 @@ For more information, see about_CommonParameters"));
     }
 }
 class MarkDownProcessor : OutputProcessor {
-    static readonly String _nl = Environment.NewLine;
     static readonly Char[] _escapeChars = new[] {
             '#', '{', '}', '[', ']', '<', '>', '*', '+', '-', '|', '\\', '`', '_',
             '.'
@@ -408,7 +407,7 @@ class MarkDownProcessor : OutputProcessor {
                     new BBTag("u", "<u>", "</u>"),
                     new BBTag("s", "~", "~"),
                     new BBTag("url", "<a href=\"${href}\">", "</a>", new BBAttribute("href", ""), new BBAttribute("href", "href")),
-                    new BBTag("pre", $"```{_nl}", $"```{_nl}"),
+                    new BBTag("pre", $"```{NL}", $"```{NL}"),
                     new BBTag("quote", "> ", "", new BBAttribute("class", ""), new BBAttribute("class", "class")),
                     new BBTag("color", "<span style=\"color: ${color};\">","</span>", new BBAttribute("color", ""), new BBAttribute("color", "color"))
                 ]);
