@@ -168,11 +168,11 @@ abstract class OutputProcessor {
         // Common parameters
         SB.AppendLine(GenerateH3("&lt;CommonParameters&gt;"));
         String link = GenerateHyperLink("https://go.microsoft.com/fwlink/?LinkID=113216", "https://go.microsoft.com/fwlink/?LinkID=113216");
-        SB.Append(GenerateParagraph(@"This cmdlet supports the common parameters: Verbose, Debug,<br />
-ErrorAction, ErrorVariable, InformationAction, InformationVariable,<br />
-WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.<br />
-For more information, see about_CommonParameters"));
-        SB.AppendLine(" " + link);
+        String br = HandleNewLine ? "<br/>" : String.Empty;
+        SB.AppendLine(GenerateParagraph(@$"This cmdlet supports the common parameters: Verbose, Debug,{br}
+ErrorAction, ErrorVariable, InformationAction, InformationVariable,{br}
+WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.{br}
+For more information, see about_CommonParameters ({link})"));
     }
     void htmlGenerateInputTypes(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Inputs"));
