@@ -18,7 +18,7 @@ namespace CmdletHelpEditor.API.ViewModels;
 public class OutputVM : DependencyObject, IAsyncVM {
     readonly IMsgBox _msgBox;
     FlowDocument document;
-    Boolean xmlChecked, htmlSourceChecked, htmlChecked, textChecked, isBusy;
+    Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlChecked, textChecked, isBusy;
 
     public OutputVM(ClosableModuleItem parent) {
         _msgBox = App.Container.Resolve<IMsgBox>();
@@ -65,6 +65,14 @@ public class OutputVM : DependencyObject, IAsyncVM {
             OnPropertyChanged(nameof(RtbChecked));
         }
     }
+    public Boolean MdSourceChecked {
+        get => mdSourceChecked;
+        set {
+            mdSourceChecked = value;
+            OnPropertyChanged(nameof(MdSourceChecked));
+            OnPropertyChanged(nameof(RtbChecked));
+        }
+    }
     public Boolean HtmlChecked {
         get => htmlChecked;
         set {
@@ -81,7 +89,7 @@ public class OutputVM : DependencyObject, IAsyncVM {
             OnPropertyChanged(nameof(RtbChecked));
         }
     }
-    public Boolean RtbChecked => XmlChecked || HtmlSourceChecked;
+    public Boolean RtbChecked => XmlChecked || HtmlSourceChecked || MdSourceChecked;
 
     public FlowDocument Document {
         get => document;
@@ -103,6 +111,13 @@ public class OutputVM : DependencyObject, IAsyncVM {
 
         if (HtmlChecked) {
             await renderHtml(cmd, module);
+        } else if (MdSourceChecked) {
+            var t = new MarkDownProcessor();
+            var rawMd = await t.GenerateViewAsync(cmd, module);
+            var para = new Paragraph();
+            para.Inlines.Add(new Run(rawMd));
+            Document = new FlowDocument();
+            Document.Blocks.Add(para);
         } else {
             IEnumerable<XmlToken> data = XmlChecked
                 ? await generateXml(cmd, module)
