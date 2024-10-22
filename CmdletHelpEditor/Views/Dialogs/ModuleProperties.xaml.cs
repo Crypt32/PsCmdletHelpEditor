@@ -1,4 +1,12 @@
-﻿using System;
+﻿using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,13 +16,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModels;
-using PsCmdletHelpEditor.XmlRpc;
-using PsCmdletHelpEditor.XmlRpc.WordPress;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
 
 namespace CmdletHelpEditor.Views.Dialogs;

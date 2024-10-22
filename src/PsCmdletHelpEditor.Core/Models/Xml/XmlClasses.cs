@@ -1,12 +1,173 @@
-﻿using CmdletHelpEditor.API.Abstractions;
-using PsCmdletHelpEditor.Core.Models;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Management.Automation;
 using System.Xml.Serialization;
 
-namespace CmdletHelpEditor.API.Models;
-public class SupportInfo : ViewModelBase, ISupportInfo {
-    Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
+namespace PsCmdletHelpEditor.Core.Models.Xml;
+
+[XmlRoot("ModuleObject")]
+[XmlInclude(typeof(XmlPsCommand))]
+public class XmlPsModule : IPsModule {
+    [XmlAttribute("fVersion")]
+    public Double FormatVersion { get; set; }
+    public String Name { get; set; }
+    [XmlAttribute("type")]
+    public ModuleType ModuleType { get; set; }
+    public String Version { get; set; }
+    public String Description { get; set; }
+    [XmlAttribute("mclass")]
+    public String ModuleClass { get; set; }
+    public String ModulePath { get; set; }
+    [XmlAttribute("useSupports")]
+    public Boolean UseSupports { get; set; }
+    public Boolean HasManifest { get; set; }
+    public XmlRpcProviderInformation? Provider { get; set; }
+    public Boolean OverridePostCount { get; set; }
+    public Int32? FetchPostCount { get; set; }
+    public String ExtraHeader { get; set; }
+    public String ExtraFooter { get; set; }
+    // editor
+    [XmlArrayItem("CmdletObject")]
+    public List<XmlPsCommand> Cmdlets { get; set; }
+    [XmlIgnore]
+    public String ProjectPath { get; set; }
+
+
+    public IReadOnlyList<IPsCommandInfo> GetCmdlets() {
+        return Cmdlets;
+    }
+    public IXmlRpcProviderInformation? GetXmlRpcProviderInfo() {
+        return Provider;
+    }
+}
+
+public class XmlRpcProviderInformation : IXmlRpcProviderInformation {
+    public String ProviderName { get; set; }
+    public String ProviderURL { get; set; }
+    public BlogInfo Blog { get; set; }
+    public String UserName { get; set; }
+    public String Password { get; set; }
+    public Int32 FetchPostCount { get; set; }
+}
+
+[XmlInclude(typeof(XmlCommandParameterSet))]
+[XmlInclude(typeof(XmlPsCommandParameterDescription))]
+[XmlInclude(typeof(XmlPsExample))]
+[XmlInclude(typeof(XmlPsRelatedLink))]
+public class XmlPsCommand : IPsCommandInfo {
+    public String Name { get; set; }
+    [XmlAttribute("verb")]
+    public String Verb { get; set; }
+    [XmlAttribute("noun")]
+    public String Noun { get; set; }
+    public List<String> Syntax { get; set; }
+    public XmlPsGeneralDescription GeneralHelp { get; set; }
+    [XmlArrayItem("CommandParameterSetInfo2")]
+    public List<XmlCommandParameterSet> ParamSets { get; set; } = [];
+    [XmlArrayItem("ParameterDescription")]
+    public List<XmlPsCommandParameterDescription> Parameters { get; set; } = [];
+    [XmlArrayItem("Example")]
+    public List<XmlPsExample> Examples { get; set; } = [];
+    [XmlArrayItem("RelatedLink")]
+    public List<XmlPsRelatedLink> RelatedLinks { get; set; } = [];
+    public XmlPsCommandSupportInfo? SupportInformation { get; set; }
+    public String? ExtraHeader { get; set; }
+    public String? ExtraFooter { get; set; }
+    public Boolean Publish { get; set; }
+    public String? URL { get; set; }
+    public String? ArticleIDString { get; set; }
+
+    public IPsCommandGeneralDescription GetDescription() {
+        return GeneralHelp;
+    }
+    public IPsCommandSupportInfo? GetSupportInfo() {
+        return SupportInformation;
+    }
+    public IReadOnlyList<IPsCommandParameterSetInfo> GetParameterSets() {
+        return ParamSets;
+    }
+    public IReadOnlyList<IPsCommandParameterDescription> GetParameters() {
+        return Parameters;
+    }
+    public IReadOnlyList<IPsCommandExample> GetExamples() {
+        return Examples;
+    }
+    public IReadOnlyList<IPsCommandRelatedLink> GetRelatedLinks() {
+        return RelatedLinks;
+    }
+}
+
+public class XmlPsGeneralDescription : IPsCommandGeneralDescription {
+    public String Synopsis { get; set; }
+    public String Description { get; set; }
+    public String Notes { get; set; }
+    public String InputType { get; set; }
+    public String InputUrl { get; set; }
+    public String ReturnType { get; set; }
+    public String ReturnUrl { get; set; }
+    public String InputTypeDescription { get; set; }
+    public String ReturnTypeDescription { get; set; }
+}
+
+public class XmlCommandParameterSet : IPsCommandParameterSetInfo {
+    [XmlAttribute]
+    public String Name { get; set; }
+    [XmlAttribute("Params")]
+    public List<String> Parameters { get; set; }
+}
+
+public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
+    public String Name { get; set; } = null!;
+    [XmlAttribute("type")]
+    public String Type { get; set; } = null!;
+    [XmlAttribute("varLen")]
+    public Boolean AcceptsArray { get; set; }
+    [XmlAttribute("required")]
+    public Boolean Mandatory { get; set; }
+    [XmlAttribute("dynamic")]
+    public Boolean Dynamic { get; set; }
+    [XmlAttribute("pipeRemaining")]
+    public Boolean RemainingArgs { get; set; }
+    [XmlAttribute("pipe")]
+    public Boolean Pipeline { get; set; }
+    [XmlAttribute("pipeProp")]
+    public Boolean PipelinePropertyName { get; set; }
+    [XmlAttribute("globbing")]
+    public Boolean Globbing { get; set; }
+    [XmlAttribute("isPos")]
+    public Boolean Positional { get; set; }
+    [XmlAttribute("pos")]
+    public String? Position { get; set; }
+    [XmlIgnore]
+    public PsCommandParameterOption Options { get; set; }
+    public String Description { get; set; } = null!;
+    public String? DefaultValue { get; set; }
+
+    public List<String> Attributes { get; set; } = [];
+    public List<String> Aliases { get; set; } = [];
+
+    public ICollection<String> GetAttributes() {
+        return Attributes;
+    }
+    public ICollection<String> GetAliases() {
+        return Aliases;
+    }
+}
+
+public class XmlPsRelatedLink : IPsCommandRelatedLink {
+    public String LinkText { get; set; } = null!;
+    public String? LinkUrl { get; set; }
+}
+
+public class XmlPsExample : IPsCommandExample {
+    public String Name { get; set; } = null!;
+    public String Cmd { get; set; } = null!;
+    public String? Description { get; set; }
+    public String? Output { get; set; }
+}
+
+public class XmlPsCommandSupportInfo : IPsCommandSupportInfo {
+    Boolean ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
         w2k3, w2k3s, w2k3e, w2k3d,
         w2k8, w2k8s, w2k8e, w2k8d,
@@ -31,22 +192,10 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
     }
     [XmlIgnore]
     public WinOsVersionSupport WinOsVersion { get; set; }
-    [XmlAttribute(nameof(ad))]
-    public Boolean ADChecked {
-        get => ad;
-        set {
-            ad = value;
-            OnPropertyChanged(nameof(ADChecked));
-        }
-    }
-    [XmlAttribute(nameof(rsat))]
-    public Boolean RsatChecked {
-        get => rsat;
-        set {
-            rsat = value;
-            OnPropertyChanged(nameof(RsatChecked));
-        }
-    }
+    [XmlAttribute("ad")]
+    public Boolean ADChecked { get; set; }
+    [XmlAttribute("rsat")]
+    public Boolean RsatChecked { get; set; }
     [XmlAttribute(nameof(ps2))]
     public Boolean Ps2Checked {
         get => ps2;
@@ -55,7 +204,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps2) {
                 PsVersion = PsVersionSupport.Ps20;
             }
-            OnPropertyChanged(nameof(Ps2Checked));
         }
     }
     [XmlAttribute(nameof(ps3))]
@@ -66,7 +214,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps3) {
                 PsVersion = PsVersionSupport.Ps30;
             }
-            OnPropertyChanged(nameof(Ps3Checked));
         }
     }
     [XmlAttribute(nameof(ps4))]
@@ -77,7 +224,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps4) {
                 PsVersion = PsVersionSupport.Ps40;
             }
-            OnPropertyChanged(nameof(Ps4Checked));
         }
     }
     [XmlAttribute(nameof(ps5))]
@@ -88,7 +234,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps5) {
                 PsVersion = PsVersionSupport.Ps50;
             }
-            OnPropertyChanged(nameof(Ps5Checked));
         }
     }
     [XmlAttribute(nameof(ps51))]
@@ -99,7 +244,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps51) {
                 PsVersion = PsVersionSupport.Ps51;
             }
-            OnPropertyChanged(nameof(Ps51Checked));
         }
     }
     [XmlAttribute(nameof(ps60))]
@@ -110,7 +254,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps60) {
                 PsVersion = PsVersionSupport.Ps60;
             }
-            OnPropertyChanged(nameof(Ps60Checked));
         }
     }
     [XmlAttribute(nameof(ps61))]
@@ -121,7 +264,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps61) {
                 PsVersion = PsVersionSupport.Ps61;
             }
-            OnPropertyChanged(nameof(Ps61Checked));
         }
     }
     [XmlAttribute(nameof(wxp))]
@@ -134,7 +276,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.WinXP;
             }
-            OnPropertyChanged(nameof(WinXpChecked));
         }
     }
     [XmlAttribute(nameof(wv))]
@@ -147,7 +288,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.WinVista;
             }
-            OnPropertyChanged(nameof(WinVistaChecked));
         }
     }
     [XmlAttribute(nameof(w7))]
@@ -160,7 +300,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win7;
             }
-            OnPropertyChanged(nameof(Win7Checked));
         }
     }
     [XmlAttribute(nameof(w8))]
@@ -173,7 +312,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win8;
             }
-            OnPropertyChanged(nameof(Win8Checked));
         }
     }
     [XmlAttribute(nameof(w81))]
@@ -186,7 +324,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win81;
             }
-            OnPropertyChanged(nameof(Win81Checked));
         }
     }
     [XmlAttribute(nameof(w10))]
@@ -199,7 +336,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win10;
             }
-            OnPropertyChanged(nameof(Win10Checked));
         }
     }
     [XmlAttribute(nameof(w11))]
@@ -212,7 +348,6 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win11;
             }
-            OnPropertyChanged(nameof(Win11Checked));
         }
     }
     [XmlIgnore]
@@ -223,24 +358,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k3) {
                 WinOsVersion |= WinOsVersionSupport.Win2003;
                 w2k3s = w2k3e = w2k3d = true;
-                foreach (String str in new[] {
-                                                  nameof(Win2003StdChecked),
-                                                  nameof(Win2003EEChecked),
-                                                  nameof(Win2003DCChecked)
-                                              }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2003;
                 w2k3s = w2k3e = w2k3d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2003Checked),
-                                             nameof(Win2003StdChecked),
-                                             nameof(Win2003EEChecked),
-                                             nameof(Win2003DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -253,14 +373,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2003Std;
                 if (Win2003EEChecked && Win2003DCChecked) {
                     w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2003Std;
                 w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k3e))]
@@ -272,14 +389,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2003EE;
                 if (Win2003StdChecked && Win2003DCChecked) {
                     w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2003EE;
                 w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003EEChecked));
         }
     }
     [XmlAttribute(nameof(w2k3d))]
@@ -291,14 +405,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2003DC;
                 if (Win2003StdChecked && Win2003EEChecked) {
                     w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2003DC;
                 w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003DCChecked));
         }
     }
     [XmlIgnore]
@@ -309,24 +420,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k8) {
                 WinOsVersion |= WinOsVersionSupport.Win2008;
                 w2k8s = w2k8e = w2k8d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2008StdChecked),
-                                                 nameof(Win2008EEChecked),
-                                                 nameof(Win2008DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008;
                 w2k8s = w2k8e = w2k8d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2008Checked),
-                                             nameof(Win2008StdChecked),
-                                             nameof(Win2008EEChecked),
-                                             nameof(Win2008DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -339,14 +435,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008Std;
                 if (Win2008EEChecked && Win2008DCChecked) {
                     w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008Std;
                 w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k8e))]
@@ -358,14 +451,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008EE;
                 if (Win2008StdChecked && Win2008DCChecked) {
                     w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008EE;
                 w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008EEChecked));
         }
     }
     [XmlAttribute(nameof(w2k8d))]
@@ -377,14 +467,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008DC;
                 if (Win2008StdChecked && Win2008EEChecked) {
                     w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008DC;
                 w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008DCChecked));
         }
     }
     [XmlIgnore]
@@ -395,24 +482,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k8r2) {
                 WinOsVersion |= WinOsVersionSupport.Win2008R2;
                 w2k8r2s = w2k8r2e = w2k8r2d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2008R2StdChecked),
-                                                 nameof(Win2008R2EEChecked),
-                                                 nameof(Win2008R2DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008R2;
                 w2k8r2s = w2k8r2e = w2k8r2d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2008R2Checked),
-                                             nameof(Win2008R2StdChecked),
-                                             nameof(Win2008R2EEChecked),
-                                             nameof(Win2008R2DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -425,14 +497,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008R2Std;
                 if (Win2008R2EEChecked && Win2008R2DCChecked) {
                     w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008R2Std;
                 w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k8r2e))]
@@ -444,14 +513,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008R2EE;
                 if (Win2008R2StdChecked && Win2008R2DCChecked) {
                     w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008R2EE;
                 w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2EEChecked));
         }
     }
     [XmlAttribute(nameof(w2k8r2d))]
@@ -463,14 +529,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2008R2DC;
                 if (Win2008R2StdChecked && Win2008R2EEChecked) {
                     w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2008R2DC;
                 w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2DCChecked));
         }
     }
     [XmlIgnore]
@@ -481,22 +544,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k12) {
                 WinOsVersion |= WinOsVersionSupport.Win2012;
                 w2k12s = w2k12d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2012StdChecked),
-                                                 nameof(Win2012DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012;
                 w2k12s = w2k12d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2012Checked),
-                                             nameof(Win2012StdChecked),
-                                             nameof(Win2012DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -509,14 +559,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2012Std;
                 if (Win2012DCChecked) {
                     w2k12 = true;
-                    OnPropertyChanged(nameof(Win2012Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012Std;
                 w2k12 = false;
-                OnPropertyChanged(nameof(Win2012Checked));
             }
-            OnPropertyChanged(nameof(Win2012StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k12d))]
@@ -528,14 +575,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2012DC;
                 if (Win2012StdChecked) {
                     w2k12 = true;
-                    OnPropertyChanged(nameof(Win2012Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012DC;
                 w2k12 = false;
-                OnPropertyChanged(nameof(Win2012Checked));
             }
-            OnPropertyChanged(nameof(Win2012DCChecked));
         }
     }
     [XmlIgnore]
@@ -546,22 +590,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k12r2) {
                 WinOsVersion |= WinOsVersionSupport.Win2012R2;
                 w2k12r2s = w2k12r2d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2012R2StdChecked),
-                                                 nameof(Win2012R2DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012R2;
                 w2k12r2s = w2k12r2d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2012R2Checked),
-                                             nameof(Win2012R2StdChecked),
-                                             nameof(Win2012R2DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -574,14 +605,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2012R2Std;
                 if (Win2012R2DCChecked) {
                     w2k12r2 = true;
-                    OnPropertyChanged(nameof(Win2012R2Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012R2Std;
                 w2k12r2 = false;
-                OnPropertyChanged(nameof(Win2012R2Checked));
             }
-            OnPropertyChanged(nameof(Win2012R2StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k12r2d))]
@@ -593,14 +621,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2012R2DC;
                 if (Win2012R2StdChecked) {
                     w2k12r2 = true;
-                    OnPropertyChanged(nameof(Win2012R2Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2012R2DC;
                 w2k12r2 = false;
-                OnPropertyChanged(nameof(Win2012R2Checked));
             }
-            OnPropertyChanged(nameof(Win2012R2DCChecked));
         }
     }
     [XmlIgnore]
@@ -611,22 +636,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k16) {
                 WinOsVersion |= WinOsVersionSupport.Win2016;
                 w2k16s = w2k16d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2016StdChecked),
-                                                 nameof(Win2016DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2016;
                 w2k16s = w2k16d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2016Checked),
-                                             nameof(Win2016StdChecked),
-                                             nameof(Win2016DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -639,14 +651,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2016Std;
                 if (Win2016DCChecked) {
                     w2k16 = true;
-                    OnPropertyChanged(nameof(Win2016Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2016Std;
                 w2k16 = false;
-                OnPropertyChanged(nameof(Win2016Checked));
             }
-            OnPropertyChanged(nameof(Win2016StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k16d))]
@@ -658,14 +667,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2016DC;
                 if (Win2016StdChecked) {
                     w2k16 = true;
-                    OnPropertyChanged(nameof(Win2016Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2016DC;
                 w2k16 = false;
-                OnPropertyChanged(nameof(Win2016Checked));
             }
-            OnPropertyChanged(nameof(Win2016DCChecked));
         }
     }
     [XmlIgnore]
@@ -676,22 +682,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k19) {
                 WinOsVersion |= WinOsVersionSupport.Win2019;
                 w2k19s = w2k19d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2019StdChecked),
-                                                 nameof(Win2019DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2019;
                 w2k19s = w2k19d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2019Checked),
-                                             nameof(Win2019StdChecked),
-                                             nameof(Win2019DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -704,14 +697,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2019Std;
                 if (Win2019DCChecked) {
                     w2k19 = true;
-                    OnPropertyChanged(nameof(Win2019Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2019Std;
                 w2k19 = false;
-                OnPropertyChanged(nameof(Win2019Checked));
             }
-            OnPropertyChanged(nameof(Win2019StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k19d))]
@@ -723,14 +713,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2019DC;
                 if (Win2019StdChecked) {
                     w2k19 = true;
-                    OnPropertyChanged(nameof(Win2019Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2019DC;
                 w2k19 = false;
-                OnPropertyChanged(nameof(Win2019Checked));
             }
-            OnPropertyChanged(nameof(Win2019DCChecked));
         }
     }
 
@@ -742,22 +729,9 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (w2k22) {
                 WinOsVersion |= WinOsVersionSupport.Win2022;
                 w2k22s = w2k22d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2022StdChecked),
-                                                 nameof(Win2022DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2022;
                 w2k22s = w2k22d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2022Checked),
-                                             nameof(Win2022StdChecked),
-                                             nameof(Win2022DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
             }
         }
     }
@@ -770,14 +744,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2022Std;
                 if (Win2022DCChecked) {
                     w2k22 = true;
-                    OnPropertyChanged(nameof(Win2022Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2022Std;
                 w2k22 = false;
-                OnPropertyChanged(nameof(Win2022Checked));
             }
-            OnPropertyChanged(nameof(Win2022StdChecked));
         }
     }
     [XmlAttribute(nameof(w2k22d))]
@@ -789,18 +760,11 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 WinOsVersion |= WinOsVersionSupport.Win2022DC;
                 if (Win2022StdChecked) {
                     w2k22 = true;
-                    OnPropertyChanged(nameof(Win2022Checked));
                 }
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win2022DC;
                 w2k22 = false;
-                OnPropertyChanged(nameof(Win2022Checked));
             }
-            OnPropertyChanged(nameof(Win2022DCChecked));
         }
-    }
-
-    public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
-        WinOsVersion = winOsVersion;
     }
 }

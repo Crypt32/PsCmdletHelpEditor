@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CmdletHelpEditor.API.Abstractions;
+namespace PsCmdletHelpEditor.Core.Models;
 
 public interface IBlogInfo {
     String BlogID { get; set; }

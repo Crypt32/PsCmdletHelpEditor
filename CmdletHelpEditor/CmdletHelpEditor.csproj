@@ -166,7 +166,6 @@
     <Compile Include="Abstract\IProgressBar.cs" />
     <Compile Include="Abstract\IPsProcessor.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
-    <Compile Include="API\Abstractions\IBlogInfo.cs" />
     <Compile Include="API\Abstractions\IParameterSetInfo.cs" />
     <Compile Include="API\Abstractions\IPsExample.cs" />
     <Compile Include="API\Abstractions\IPsRelatedLink.cs" />
@@ -177,16 +176,14 @@
     <Compile Include="API\Contracts\XmlCmdParameterSetInfo.cs" />
     <Compile Include="API\Contracts\XmlCmdRelatedLink.cs" />
     <Compile Include="API\Contracts\XmlCmdSupportInfo.cs" />
-    <Compile Include="API\Contracts\XmlMwBlogInfo.cs" />
     <Compile Include="API\Contracts\XmlMwProviderInfo.cs" />
     <Compile Include="API\Contracts\XmlPsCmdlet.cs" />
     <Compile Include="API\Contracts\XmlPsModule.cs" />
-    <Compile Include="API\Models\BlogInfo.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
-    <Compile Include="API\Models\PsVersionSupport.cs" />
+    <Compile Include="API\Models\XmlMwBlogInfo.cs" />
     <Compile Include="API\Templates\XmlMamlTemplate.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -565,6 +562,10 @@
     <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
       <Project>{2fae87f8-bee9-4be7-9f9d-5d795f2de205}</Project>
       <Name>PsCmdletHelpEditor.XmlRpc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\PsCmdletHelpEditor.Core\PsCmdletHelpEditor.Core.csproj">
+      <Project>{3304C0B1-32AE-4DD0-BBD6-C858E1E206D4}</Project>
+      <Name>PsCmdletHelpEditor.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

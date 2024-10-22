@@ -1,7 +1,7 @@
 ﻿using System;
-using CmdletHelpEditor.API.Abstractions;
+using PsCmdletHelpEditor.Core.Models;
 
-namespace CmdletHelpEditor.API.Contracts;
+namespace CmdletHelpEditor.API.Models;
 public class XmlMwBlogInfo : IBlogInfo {
     public String BlogID { get; set; }
     public String BlogName { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CmdletHelpEditor.API.Models;
+using System;
 
 namespace CmdletHelpEditor.API.Contracts;
 

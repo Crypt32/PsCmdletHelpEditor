@@ -1,8 +1,8 @@
-﻿using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 
-namespace CmdletHelpEditor.API.Abstractions;
-public interface ISupportInfo {
+namespace PsCmdletHelpEditor.Core.Models;
+
+public interface IPsCommandSupportInfo {
     PsVersionSupport PsVersion { get; set; }
     WinOsVersionSupport WinOsVersion { get; set; }
     Boolean ADChecked { get; set; }

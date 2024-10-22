@@ -1,23 +1,22 @@
-﻿using System;
+﻿using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
     public static ModuleObject ReadProjectFile(String path) {
-        ModuleObject module;
         XmlAttributeOverrides overrides = XmlFormatConverter.GetOverrides(path, out Double version);
         using var fs = new FileStream(path, FileMode.Open);
         XmlSerializer serializer = overrides == null
             ? new XmlSerializer(typeof(ModuleObject))
             : new XmlSerializer(typeof(ModuleObject), overrides);
-        module = (ModuleObject)serializer.Deserialize(fs);
+        var module = (ModuleObject)serializer.Deserialize(fs);
         module.ProjectPath = path;
         module.FormatVersion = version;
 

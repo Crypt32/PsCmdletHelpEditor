@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CmdletHelpEditor.API.Tools;
+using PsCmdletHelpEditor.Core.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
+using System;
 using System.ComponentModel;
 using System.Security;
 using System.Xml.Serialization;
-using CmdletHelpEditor.API.Tools;
-using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace CmdletHelpEditor.API.Models;
 

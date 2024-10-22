@@ -1,4 +1,9 @@
-﻿using System;
+﻿using CmdletHelpEditor.API.Abstractions;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Utility;
+using CodeKicker.BBCode;
+using PsCmdletHelpEditor.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,10 +11,6 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CmdletHelpEditor.API.Abstractions;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Utility;
-using CodeKicker.BBCode;
 
 namespace CmdletHelpEditor.API.Tools;
 
