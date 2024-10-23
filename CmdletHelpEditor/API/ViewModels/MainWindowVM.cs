@@ -1,12 +1,12 @@
-﻿using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.Properties;
-using CmdletHelpEditor.Views.UserControls;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.Properties;
+using CmdletHelpEditor.Views.UserControls;
 
 namespace CmdletHelpEditor.API.ViewModels;
 public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {

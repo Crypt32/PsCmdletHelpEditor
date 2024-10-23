@@ -132,11 +132,11 @@ public class OutputVM : DependencyObject, IAsyncVM {
     Boolean canGenerateView(Object obj) {
         return !IsBusy;
     }
-    async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
+    static async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
         String rawXml = await XmlProcessor.XmlGenerateHelp(new[] { cmdlet }, null, module.IsOffline);
         return XmlTokenizer.LoopTokenize(XElement.Parse(rawXml).ToString());
     }
-    async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
+    static async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
         var htmlProcessor = new HtmlProcessorV2();
         String rawHtml = await htmlProcessor.GenerateViewAsync(cmdlet, module);
         return XmlTokenizer.LoopTokenize(XElement.Parse("<div>" + rawHtml + "</div>").ToString());

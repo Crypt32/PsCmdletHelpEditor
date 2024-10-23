@@ -23,7 +23,7 @@ public class EditorVM : ViewModelBase {
         set {
             currentCmdlet = value;
             ParamIndex = -1;
-            OnPropertyChanged(nameof(CurrentCmdlet));
+            OnPropertyChanged();
             ExampleContext.SetCmdlet(currentCmdlet);
             RelatedLinkContext.SetCmdlet(currentCmdlet);
         }
@@ -32,7 +32,7 @@ public class EditorVM : ViewModelBase {
         get => paramIndex;
         set {
             paramIndex = value;
-            OnPropertyChanged(nameof(ParamIndex));
+            OnPropertyChanged();
         }
     }
 }

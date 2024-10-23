@@ -121,7 +121,8 @@
             </controls1:ClosableTabControl.Resources>
             <controls1:ClosableTabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}"/>
+                    <TextBlock Text="{Binding Header}"
+                               ToolTip="{Binding Path=ToolTipText}"/>
                 </DataTemplate>
             </controls1:ClosableTabControl.ItemTemplate>
         </controls1:ClosableTabControl>
