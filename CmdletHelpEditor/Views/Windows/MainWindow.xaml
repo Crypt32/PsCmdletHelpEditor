@@ -104,6 +104,9 @@
                                       Style="{StaticResource ScrollableTabControl}"/>-->
         <controls1:ClosableTabControl ItemsSource="{Binding Documents}"
                                       SelectedItem="{Binding SelectedDocument}"
+                                      ShowNewTabButton="True"
+                                      AddTabCommand="{Binding CommandManager.AddTabCommand}"
+                                      CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                       Style="{StaticResource ScrollableTabControl}">
             <controls1:ClosableTabControl.Resources>
                 <DataTemplate DataType="{x:Type vm:BlankDocumentVM}">
