@@ -1,4 +1,14 @@
-﻿using System;
+﻿using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.Views.UserControls;
+using CmdletHelpEditor.Views.Windows;
+using Microsoft.Win32;
+using PsCmdletHelpEditor.Core.Models;
+using SysadminsLV.WPF.OfficeTheme.Controls;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,15 +19,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.Views.UserControls;
-using CmdletHelpEditor.Views.Windows;
-using Microsoft.Win32;
-using SysadminsLV.WPF.OfficeTheme.Controls;
-using SysadminsLV.WPF.OfficeTheme.Toolkit;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
 
 namespace CmdletHelpEditor.API.ViewModels;
@@ -171,13 +172,14 @@ public class AppCommands {
     }
 
     async Task loadModules(Object o, CancellationToken token) {
+        await loadModules2(o, token);
         // method call from ICommand is allowed only when module selector is active
         // so skip checks.
         ClosableModuleItem previousTab = _mwvm.SelectedTab;
         UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
         _mwvm.Modules.Clear();
         try {
-            await _psProcessor.EnumModules(o == null);
+            await _psProcessor.EnumModulesAsync(o == null);
 
             foreach (ModuleObject item in _psProcessor.ModuleList) {
                 _mwvm.Modules.Add(item);
@@ -187,6 +189,20 @@ public class AppCommands {
             previousTab.ErrorInfo = e.Message;
         }
         UIManager.ShowModuleList(previousTab);
+    }
+    async Task loadModules2(Object o, CancellationToken token) {
+        var vm = new ModuleListDocument() {
+            IsBusy = true
+        };
+        Int32 index = _mwvm.Documents.IndexOf(_mwvm.SelectedDocument);
+        _mwvm.Documents[index] = vm;
+        _mwvm.SelectedDocument = vm;
+        IEnumerable<PsModuleInfo> modules = await _psProcessor.EnumModulesAsync(o == null);
+        foreach (PsModuleInfo moduleInfo in modules) {
+            vm.ModuleList.Add(moduleInfo);
+        }
+
+        vm.IsBusy = false;
     }
     async Task loadModuleFromFile(Object o, CancellationToken token) {
         // method call from ICommand is allowed only when module selector is active
@@ -200,7 +216,7 @@ public class AppCommands {
         if (result != true) { return; }
         UIManager.ShowBusy(previousTab, Strings.InfoModuleLoading);
         try {
-            ModuleObject module = await _psProcessor.GetModuleFromFile(dlg.FileName);
+            ModuleObject module = await _psProcessor.GetModuleFromFileAsync(dlg.FileName);
             if (module != null && !_mwvm.Modules.Contains(module)) {
                 _mwvm.Modules.Add(module);
                 module.ModulePath = dlg.FileName;
@@ -224,7 +240,7 @@ public class AppCommands {
         tab.EditorContext.CurrentCmdlet = null;
         var nativeCmdlets = new List<CmdletObject>();
         try {
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdlets(tab.Module, cmd, false);
+            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(tab.Module, cmd, false);
             nativeCmdlets.AddRange(data);
             tab.Module.CompareCmdlets(nativeCmdlets);
         } catch (Exception e) {
@@ -250,6 +266,7 @@ public class AppCommands {
         return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
     }
     Boolean canLoadModuleList(Object obj) {
+        return true;
         return ((Grid)_mwvm.SelectedTab?.Content)?.Children[0] is ModuleSelectorControl;
     }
     static Boolean canImportFromHelp(Object obj) {
@@ -328,7 +345,7 @@ public class AppCommands {
         }
         UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
         try {
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdlets(_mwvm.SelectedModule, cmd, importCBH);
+            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(_mwvm.SelectedModule, cmd, importCBH);
             _mwvm.SelectedModule.Cmdlets.Clear();
             foreach (CmdletObject item in data) {
                 _mwvm.SelectedModule.Cmdlets.Add(item);

@@ -57,12 +57,15 @@
     <Compile Include="Models\IPsCommandRelatedLink.cs" />
     <Compile Include="Models\IPsCommandSupportInfo.cs" />
     <Compile Include="Models\PsCommandParameterOption.cs" />
+    <Compile Include="Models\PsModuleInfo.cs" />
     <Compile Include="Models\PsVersionSupport.cs" />
     <Compile Include="Models\WinOsVersionSupport.cs" />
     <Compile Include="Models\IPsModule.cs" />
     <Compile Include="Models\IXmlRpcProviderInformation.cs" />
     <Compile Include="Models\Xml\XmlClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\PowerShellProcessor.cs" />
+    <Compile Include="Services\IPowerShellProcessor.cs" />
     <Compile Include="Services\XmlFormatConverter.cs" />
     <Compile Include="Services\XmlProjectService.cs" />
   </ItemGroup>

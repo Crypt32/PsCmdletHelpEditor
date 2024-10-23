@@ -212,6 +212,7 @@
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
     <Compile Include="API\ViewModels\ProgressBarVM.cs" />
     <Compile Include="API\ViewModels\PsModuleItem.cs" />
+    <Compile Include="API\ViewModels\TabDocumentVM.cs" />
     <Compile Include="API\ViewModels\UIManager.cs" />
     <Compile Include="API\ViewModels\FormatCommands.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
