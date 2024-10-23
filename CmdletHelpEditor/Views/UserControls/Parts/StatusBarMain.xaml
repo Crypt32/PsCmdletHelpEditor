@@ -15,7 +15,7 @@
         <Style x:Key="ImgStatus" TargetType="Image">
             <Setter Property="Source" Value="/Images/Statuses/bad_16x16.png"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding SelectedTab.ErrorInfo}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding SelectedDocument.ErrorInfo, FallbackValue={x:Null}}" Value="{x:Null}">
                     <Setter Property="Source" Value="/Images/Statuses/ok_16x16.png"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -47,7 +47,9 @@
     </TextBlock>
     <Separator/>
     <StatusBarItem>
-        <Image Width="16" Style="{StaticResource ImgStatus}" ToolTip="{Binding SelectedTab.ErrorInfo}"/>
+        <Image Width="16"
+               Style="{StaticResource ImgStatus}"
+               ToolTip="{Binding SelectedDocument.ErrorInfo, FallbackValue={x:Null}}"/>
     </StatusBarItem>
     <Separator/>
     <StatusBarItem>

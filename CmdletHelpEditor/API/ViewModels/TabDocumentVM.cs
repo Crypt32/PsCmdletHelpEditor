@@ -10,8 +10,8 @@ namespace CmdletHelpEditor.API.ViewModels;
 
 public abstract class TabDocumentVM : AsyncViewModel {
     const String UNTITLED = "untitled";
-    String path, fileName;
 
+    String errorInfo, path, fileName;
     Boolean isModified, suppressModified, isSaved;
 
     protected TabDocumentVM() {
@@ -66,6 +66,13 @@ public abstract class TabDocumentVM : AsyncViewModel {
             OnPropertyChanged();
         }
     }
+    public String ErrorInfo {
+        get => errorInfo;
+        set {
+            errorInfo = value;
+            OnPropertyChanged();
+        }
+    }
 
     protected Boolean SupportsSave { get; set; }
 
@@ -100,6 +107,9 @@ public class HelpProjectDocument : TabDocumentVM {
         set {
             module = value;
             OnPropertyChanged();
+            if (module is not null) {
+                EditorContext = new EditorVM(module);
+            }
         }
     }
 }

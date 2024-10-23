@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -10,12 +11,9 @@ using CmdletHelpEditor.Views.UserControls;
 
 namespace CmdletHelpEditor.API.ViewModels;
 public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
-    Visibility pbVisible;
-    Double pbProgress;
-    String busyControlText;
     Int32? psVersion;
     ClosableModuleItem selectedTab;
-    TabDocumentVM selectedDocument;
+    TabDocumentVM? selectedDocument;
 
     public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
         DataSource = dataSource;
@@ -28,6 +26,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
     }
     void initialize() {
         Documents.Add(new BlankDocumentVM());
+        SelectedDocument = Documents[0];
         // TODO: remove
         Panel content = new Grid();
         ClosableModuleItem cti = new ClosableModuleItem {
@@ -72,7 +71,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         get => (ModuleObject)GetValue(SelectedModuleProperty);
         set => SetValue(SelectedModuleProperty, value);
     }
-    public TabDocumentVM SelectedDocument {
+    public TabDocumentVM? SelectedDocument {
         get => selectedDocument;
         set {
             selectedDocument = value;
