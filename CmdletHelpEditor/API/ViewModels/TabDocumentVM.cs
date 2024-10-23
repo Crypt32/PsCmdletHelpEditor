@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
+using CmdletHelpEditor.API.Models;
 using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
@@ -86,7 +87,19 @@ public class ModuleListDocument : TabDocumentVM {
             OnPropertyChanged();
         }
     }
-}
-public class HelpProjectDocument {
 
+    internal MainWindowVM MWVM { get; set; }
+}
+public class HelpProjectDocument : TabDocumentVM {
+    ModuleObject module;
+
+    public EditorVM EditorContext { get; set; }
+
+    public ModuleObject Module {
+        get => module;
+        set {
+            module = value;
+            OnPropertyChanged();
+        }
+    }
 }

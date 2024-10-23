@@ -7,8 +7,8 @@
         xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
         xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
         xmlns:parts="clr-namespace:CmdletHelpEditor.Views.UserControls.Parts"
-        xmlns:controls1="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
-        xmlns:userControls="clr-namespace:CmdletHelpEditor.Views.UserControls"
+        xmlns:ctrl="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
+        xmlns:uc="clr-namespace:CmdletHelpEditor.Views.UserControls"
         x:Name="Window"
         Title="PowerShell Cmdlet Help Editor"
         Height="600"
@@ -102,29 +102,38 @@
                                       CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                       AddTabCommand="{Binding CommandManager.AddTabCommand}"
                                       Style="{StaticResource ScrollableTabControl}"/>-->
-        <controls1:ClosableTabControl ItemsSource="{Binding Documents}"
+        <ctrl:ClosableTabControl ItemsSource="{Binding Documents}"
                                       SelectedItem="{Binding SelectedDocument}"
                                       ShowNewTabButton="True"
                                       AddTabCommand="{Binding CommandManager.AddTabCommand}"
                                       CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                       Style="{StaticResource ScrollableTabControl}">
-            <controls1:ClosableTabControl.Resources>
+            <ctrl:ClosableTabControl.Resources>
                 <DataTemplate DataType="{x:Type vm:BlankDocumentVM}">
-                    <userControls:StartUserControl/>
+                    <uc:StartUserControl/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ModuleListDocument}">
-                    <Grid>
-                        <userControls:ModuleSelectorControl/>
-                        <controls1:LoadingSpinner IsShown="{Binding IsBusy}"/>
-                    </Grid>
+                    <uc:ModuleSelectorControl/>
                 </DataTemplate>
-            </controls1:ClosableTabControl.Resources>
-            <controls1:ClosableTabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:HelpProjectDocument}">
+                    <uc:EditorControl/>
+                </DataTemplate>
+            </ctrl:ClosableTabControl.Resources>
+            <ctrl:ClosableTabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Header}"
                                ToolTip="{Binding Path=ToolTipText}"/>
                 </DataTemplate>
-            </controls1:ClosableTabControl.ItemTemplate>
-        </controls1:ClosableTabControl>
+            </ctrl:ClosableTabControl.ItemTemplate>
+            <ctrl:ClosableTabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <ContentPresenter Content="{Binding}"/>
+                        <ctrl:LoadingSpinner d:DataContext="{d:DesignInstance vm:TabDocumentVM}"
+                                             IsShown="{Binding IsBusy}"/>
+                    </Grid>
+                </DataTemplate>
+            </ctrl:ClosableTabControl.ContentTemplate>
+        </ctrl:ClosableTabControl>
     </DockPanel>
 </Window>

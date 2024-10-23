@@ -5,23 +5,47 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.Properties;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Models;
+/// <summary>
+/// Stub interface for PS Processor
+/// </summary>
+public interface IModuleInfo {
+    /// <summary>
+    /// Gets or sets value if module is offline (not installed).
+    /// </summary>
+    Boolean IsOffline { get; set; }
+    /// <summary>
+    /// Returns PowerShell module/snap-in command retrieval invocation string.
+    /// </summary>
+    /// <param name="commandTypes">A comma-separated string with applicable PowerShell command types, such as cmdlets, functions, etc.</param>
+    /// <returns>PowerShell invocation string.</returns>
+    String GetInvocationString(String commandTypes);
+}
 [XmlInclude(typeof(CmdletObject))]
-public class ModuleObject : INotifyPropertyChanged {
+public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
     String projectPath, extraHeader, extraFooter;
     Int32? fetchPostCount;
     Double formatVersion;
     ProviderInformation provider;
-    ObservableCollection<CmdletObject> cmdlets;
+    CmdletObject selectedCmdlet;
+    ObservableCollection<CmdletObject> cmdlets = [];
 
-    public ModuleObject() {
-        Cmdlets = new ObservableCollection<CmdletObject>();
+    public ModuleObject() { }
+    public ModuleObject(PsModuleInfo moduleInfo) {
+        Name = moduleInfo.Name;
+        ModuleType = moduleInfo.ModuleType;
+        Version = moduleInfo.Version;
+        Description = moduleInfo.Description;
+        ModuleClass = moduleInfo.ModuleClass;
+        HasManifest = moduleInfo.HasManifest;
     }
 
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
@@ -51,7 +75,7 @@ public class ModuleObject : INotifyPropertyChanged {
         get => formatVersion;
         set {
             formatVersion = value;
-            OnPropertyChanged(nameof(UpgradeRequired), false);
+            OnPropertyChanged(nameof(UpgradeRequired));
         }
     }
     public String Name { get; set; }
@@ -77,7 +101,7 @@ public class ModuleObject : INotifyPropertyChanged {
         get => projectPath;
         set {
             projectPath = value;
-            OnPropertyChanged(nameof(ProjectPath), false);
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -88,8 +112,8 @@ public class ModuleObject : INotifyPropertyChanged {
             ModuleStatus = isOffline
                 ? "Offline"
                 : "Online";
-            OnPropertyChanged(nameof(ModuleStatus), false);
-            OnPropertyChanged(nameof(UpgradeRequired), false);
+            OnPropertyChanged(nameof(ModuleStatus));
+            OnPropertyChanged(nameof(UpgradeRequired));
         }
     }
     [XmlIgnore]
@@ -102,7 +126,7 @@ public class ModuleObject : INotifyPropertyChanged {
         get => useOnlineProvider;
         set {
             useOnlineProvider = value;
-            OnPropertyChanged(nameof(UseOnlineProvider), false);
+            OnPropertyChanged(nameof(UseOnlineProvider));
         }
     }
     public Boolean HasManifest { get; set; }
@@ -153,6 +177,13 @@ public class ModuleObject : INotifyPropertyChanged {
             if (cmdlets != null) {
                 cmdlets.CollectionChanged += cmdletsOnCollectionChanged;
             }
+        }
+    }
+    public CmdletObject SelectedCmdlet {
+        get => selectedCmdlet;
+        set {
+            selectedCmdlet = value;
+            OnPropertyChanged();
         }
     }
 
@@ -206,11 +237,11 @@ public class ModuleObject : INotifyPropertyChanged {
     public override String ToString() {
         return Name;
     }
-    
+
     public override Boolean Equals(Object obj) {
         if (ReferenceEquals(null, obj)) { return false; }
         if (ReferenceEquals(this, obj)) { return true; }
-        return obj.GetType() == GetType() && Equals((ModuleObject) obj);
+        return obj.GetType() == GetType() && Equals((ModuleObject)obj);
     }
     protected Boolean Equals(ModuleObject other) {
         return String.Equals(Name, other.Name) && String.Equals(Version, other.Version);
@@ -223,14 +254,14 @@ public class ModuleObject : INotifyPropertyChanged {
         }
     }
 
-    void OnPropertyChanged(String name, Boolean markUnsaved) {
+    void OnPropertyChanged([CallerMemberName] String propertyName = null, Boolean markUnsaved = false) {
         PropertyChangedEventHandler handler = PropertyChanged;
         if (handler != null) {
             if (markUnsaved) {
                 SavePendingEventHandler handler2 = PendingSave;
                 handler2?.Invoke(this, new SavePendingEventArgs());
             }
-            handler(this, new PropertyChangedEventArgs(name));
+            handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
     public event PropertyChangedEventHandler PropertyChanged;

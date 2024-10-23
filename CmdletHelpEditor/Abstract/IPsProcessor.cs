@@ -1,8 +1,8 @@
-﻿using CmdletHelpEditor.API.Models;
-using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.Abstract;
 public interface IPsProcessor {
@@ -11,6 +11,6 @@ public interface IPsProcessor {
 
     Task<Int32?> GetPsVersionAsync();
     Task<IEnumerable<PsModuleInfo>> EnumModulesAsync(Boolean force);
-    Task<IEnumerable<CmdletObject>> EnumCmdletsAsync(ModuleObject module, String cmds, Boolean fromCBH);
+    Task<IEnumerable<CmdletObject>> EnumCmdletsAsync(IModuleInfo module, String commandTypes, Boolean fromCBH);
     Task<ModuleObject> GetModuleFromFileAsync(String path);
 }

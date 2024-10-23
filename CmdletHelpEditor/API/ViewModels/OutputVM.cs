@@ -20,7 +20,7 @@ public class OutputVM : DependencyObject, IAsyncVM {
     FlowDocument document;
     Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlChecked, textChecked, isBusy;
 
-    public OutputVM(ClosableModuleItem parent) {
+    public OutputVM(ModuleObject parent) {
         _msgBox = App.Container.Resolve<IMsgBox>();
         XmlChecked = true;
         Tab = parent;
@@ -29,7 +29,7 @@ public class OutputVM : DependencyObject, IAsyncVM {
 
     public IAsyncCommand GenerateOutputCommand { get; }
 
-    public ClosableModuleItem Tab { get; }
+    public ModuleObject Tab { get; }
 
     // dependency property is required for HtmlText property
     public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(
@@ -100,28 +100,27 @@ public class OutputVM : DependencyObject, IAsyncVM {
     }
 
     async Task generateOutput(Object obj, CancellationToken cancellationToken) {
-        CmdletObject cmd = Tab.EditorContext.CurrentCmdlet;
-        ModuleObject module = Tab.Module;
+        CmdletObject cmd = Tab.SelectedCmdlet;
         if (cmd == null) { return; }
-        if (XmlChecked && module.UpgradeRequired) {
+        if (XmlChecked && Tab.UpgradeRequired) {
             _msgBox.ShowWarning("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.");
             return;
         }
         IsBusy = true;
 
         if (HtmlChecked) {
-            await renderHtml(cmd, module);
+            await renderHtml(cmd, Tab);
         } else if (MdSourceChecked) {
             var t = new MarkDownProcessor();
-            var rawMd = await t.GenerateViewAsync(cmd, module);
+            var rawMd = await t.GenerateViewAsync(cmd, Tab);
             var para = new Paragraph();
             para.Inlines.Add(new Run(rawMd));
             Document = new FlowDocument();
             Document.Blocks.Add(para);
         } else {
             IEnumerable<XmlToken> data = XmlChecked
-                ? await generateXml(cmd, module)
-                : await generateHtmlSource(cmd, module);
+                ? await generateXml(cmd, Tab)
+                : await generateHtmlSource(cmd, Tab);
             var para = new Paragraph();
             para.Inlines.AddRange(colorizeSource(data));
             Document = new FlowDocument();

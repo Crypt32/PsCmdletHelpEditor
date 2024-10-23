@@ -4,14 +4,16 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.ViewModels;
 public class EditorVM : ViewModelBase {
+    readonly ModuleObject module;
     Int32 paramIndex = -1;
     CmdletObject currentCmdlet;
 
-    public EditorVM(ClosableModuleItem parent) {
+    public EditorVM(ModuleObject selectedModule) {
+        module = selectedModule;
         ParamContext = new ParamVM();
         RelatedLinkContext = new RelatedLinkVM();
         ExampleContext = new ExampleVM();
-        OutputContext = new OutputVM(parent);
+        OutputContext = new OutputVM(selectedModule);
     }
 
     public ParamVM ParamContext { get; set; }
@@ -21,7 +23,7 @@ public class EditorVM : ViewModelBase {
     public CmdletObject CurrentCmdlet {
         get => currentCmdlet;
         set {
-            currentCmdlet = value;
+            module.SelectedCmdlet = currentCmdlet = value;
             ParamIndex = -1;
             OnPropertyChanged();
             ExampleContext.SetCmdlet(currentCmdlet);

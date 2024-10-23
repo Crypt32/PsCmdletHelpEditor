@@ -38,7 +38,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         };
         content.Children.Add(new StartUserControl());
         cti.Content = content;
-        cti.EditorContext = new EditorVM(cti);
+        cti.EditorContext = new EditorVM(cti.Module);
         Tabs.Add(cti);
         SelectedTab = cti;
     }

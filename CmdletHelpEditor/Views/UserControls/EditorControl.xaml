@@ -4,12 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
              xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              xmlns:uc="clr-namespace:CmdletHelpEditor.Views.UserControls"
              mc:Ignorable="d"
              Background="{StaticResource PanelBackgroundBrush}"
-             d:DataContext="{d:DesignInstance models:ClosableModuleItem}">
+             d:DataContext="{d:DesignInstance vm:HelpProjectDocument}">
     <UserControl.Resources>
         <converters:NullToBooleanConverter x:Key="ToBooleanConverter"/>
         <Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
@@ -87,8 +86,8 @@
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=Module.UseSupports}" Value="True" />
-                                        <Condition Binding="{Binding Path=EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}" Value="True" />
+                                        <Condition Binding="{Binding Module.UseSupports}" Value="True" />
+                                        <Condition Binding="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}" Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>

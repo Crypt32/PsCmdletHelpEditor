@@ -1,13 +1,13 @@
-﻿using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.Properties;
-using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Threading.Tasks;
+using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.Properties;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 class PowerShellProcessor : IPsProcessor {
@@ -110,7 +110,7 @@ class PowerShellProcessor : IPsProcessor {
     public Task<IEnumerable<PsModuleInfo>> EnumModulesAsync(Boolean force) {
         return Task.Factory.StartNew(() => EnumModules(force));
     }
-    static IEnumerable<CmdletObject> enumCmdlets(ModuleObject module, String commandTypes, Boolean fromCBH) {
+    static IEnumerable<CmdletObject> enumCmdlets(IModuleInfo module, String commandTypes, Boolean fromCBH) {
         module.IsOffline = false;
         using PowerShell ps = PowerShell.Create();
         ps.AddScript(module.GetInvocationString(commandTypes));
@@ -124,7 +124,7 @@ class PowerShellProcessor : IPsProcessor {
             throw;
         }
     }
-    public Task<IEnumerable<CmdletObject>> EnumCmdletsAsync(ModuleObject module, String commandTypes, Boolean fromCBH) {
+    public Task<IEnumerable<CmdletObject>> EnumCmdletsAsync(IModuleInfo module, String commandTypes, Boolean fromCBH) {
         return Task.Factory.StartNew(() => enumCmdlets(module, commandTypes, fromCBH));
     }
     public Task<ModuleObject> GetModuleFromFileAsync(String path) {
