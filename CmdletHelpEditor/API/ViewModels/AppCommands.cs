@@ -72,18 +72,30 @@ public class AppCommands {
         return obj != null;
     }
     void addTab(Object obj) {
+        addTab2(obj);
         ClosableModuleItem tab = UIManager.GenerateTab();
         _mwvm.Tabs.Add(tab);
         tab.Focus();
     }
+    void addTab2(Object o) {
+        var vm = new BlankDocumentVM();
+        _mwvm.Documents.Add(vm);
+        _mwvm.SelectedDocument = vm;
+    }
     void closeTab(Object obj) {
-        if (!(obj is ClosableModuleItem)) { return; }
+        closeTab2(obj);
+        if (!(obj is ClosableModuleItem tab)) { return; }
         if (_mwvm.SelectedTab.IsSaved) {
-            _mwvm.Tabs.Remove((ClosableModuleItem)obj);
+            _mwvm.Tabs.Remove(tab);
         } else {
-            if (testSaved((ClosableModuleItem)obj)) {
-                _mwvm.Tabs.Remove((ClosableModuleItem)obj);
+            if (testSaved(tab)) {
+                _mwvm.Tabs.Remove(tab);
             }
+        }
+    }
+    void closeTab2(Object o) {
+        if (_mwvm.SelectedDocument is not null) {
+            _mwvm.Documents.Remove(_mwvm.SelectedDocument);
         }
     }
     // toolbar/menu commands
@@ -100,6 +112,9 @@ public class AppCommands {
         tab.Module = null;
         LoadModulesCommand.Execute(true);
         tab.Header = "untitled";
+    }
+    void newProject2(Object o) {
+
     }
     void saveProjectFile(Object obj) {
         String path;
