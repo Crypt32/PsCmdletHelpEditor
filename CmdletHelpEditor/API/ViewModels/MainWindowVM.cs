@@ -18,18 +18,17 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
     TabDocumentVM selectedDocument;
 
     public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
-        Documents.Add(new BlankDocumentVM());
         DataSource = dataSource;
         ProgressBar = progressBar;
         DataSource.ModuleList.Add(new PsModuleItem());
         //Settings.Default.Reload();
-        Modules = new ObservableCollection<ModuleObject>();
-        Tabs = new ObservableCollection<ClosableModuleItem>();
         CommandManager = new AppCommands(this);
         ConfigContext = new ConfigVM();
         initialize();
     }
     void initialize() {
+        Documents.Add(new BlankDocumentVM());
+        // TODO: remove
         Panel content = new Grid();
         ClosableModuleItem cti = new ClosableModuleItem {
             Header = "untitled",
@@ -56,8 +55,8 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
 
     // data definitions
     public ObservableCollection<TabDocumentVM> Documents { get; } = [];
-    public ObservableCollection<ModuleObject> Modules { get; set; }
-    public ObservableCollection<ClosableModuleItem> Tabs { get; set; }
+    public ObservableCollection<ModuleObject> Modules { get; } = [];
+    public ObservableCollection<ClosableModuleItem> Tabs { get; } = [];
     public IDataSource DataSource { get; }
     public IProgressBar ProgressBar { get; }
 
@@ -67,23 +66,6 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         typeof(ModuleObject),
         typeof(MainWindowVM),
         new PropertyMetadata(null));
-
-    // status bar
-    public static readonly DependencyProperty PbVisibleProperty = DependencyProperty.Register(
-        nameof(PbVisible),
-        typeof(Visibility),
-        typeof(MainWindowVM),
-        new PropertyMetadata(Visibility.Collapsed));
-    public static readonly DependencyProperty PbProgressProperty = DependencyProperty.Register(
-        nameof(PbProgress),
-        typeof(Double),
-        typeof(MainWindowVM),
-        new PropertyMetadata((Double)0));
-    public static readonly DependencyProperty BusyControlTextProperty = DependencyProperty.Register(
-        nameof(BusyControlText),
-        typeof(String),
-        typeof(MainWindowVM),
-        new PropertyMetadata(String.Empty));
 
     // objects
     public ModuleObject SelectedModule {
@@ -111,27 +93,6 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
                     break;
             }
             OnPropertyChanged(nameof(PsVersion));
-        }
-    }
-    public Visibility PbVisible {
-        get => pbVisible;
-        set {
-            pbVisible = value;
-            OnPropertyChanged(nameof(PbVisible));
-        }
-    }
-    public Double PbProgress {
-        get => pbProgress;
-        set {
-            pbProgress = value;
-            OnPropertyChanged(nameof(PbProgress));
-        }
-    }
-    public String BusyControlText {
-        get => busyControlText;
-        set {
-            busyControlText = value;
-            OnPropertyChanged(nameof(BusyControlText));
         }
     }
     public ClosableModuleItem SelectedTab {

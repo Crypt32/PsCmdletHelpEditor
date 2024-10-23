@@ -3,10 +3,10 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-           xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+           xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
            mc:Ignorable="d"
            Style="{StaticResource {x:Type StatusBar}}"
-           d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
+           d:DataContext="{d:DesignInstance vm:MainWindowVM}">
     <StatusBar.Resources>
         <Style x:Key="StatusBarTextBlock" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="NoWrap"/>
@@ -20,34 +20,41 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Separator" BasedOn="{StaticResource {x:Type Separator}}">
+            <Setter Property="BorderBrush" Value="#93B0D5"/>
+            <Setter Property="BorderThickness" Value="1,0,0,0"/>
+        </Style>
     </StatusBar.Resources>
     <StatusBarItem>
-        <TextBlock Style="{StaticResource ResourceKey=StatusBarTextBlock}"
-                   Text="Module: ">
+        <TextBlock Style="{StaticResource StatusBarTextBlock}">
+            <Run Text="Module:"/>
             <Run Text="{Binding SelectedTab.Module.Name}"
                  ToolTip="{Binding SelectedTab.Module.Name}"/>
         </TextBlock>
     </StatusBarItem>
-    <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
+    <Separator/>
     <StatusBarItem>
         <TextBlock MinWidth="100"
                    MaxWidth="400"
-                   Style="{StaticResource ResourceKey=StatusBarTextBlock}"
+                   Style="{StaticResource StatusBarTextBlock}"
                    Text="{Binding SelectedModule.ProjectPath}"
                    ToolTip="{Binding SelectedModule.ProjectPath}"/>
     </StatusBarItem>
-    <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
+    <Separator/>
     <TextBlock>
         <Run Text="Commands: "/>
         <Run Text="{Binding SelectedTab.Module.Cmdlets.Count, Mode=OneWay}"/>
     </TextBlock>
-    <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
+    <Separator/>
     <StatusBarItem>
         <Image Width="16" Style="{StaticResource ImgStatus}" ToolTip="{Binding SelectedTab.ErrorInfo}"/>
     </StatusBarItem>
-    <Separator BorderBrush="#93B0D5" BorderThickness="1,0,0,0"/>
+    <Separator/>
     <StatusBarItem>
-        <TextBlock Text="PowerShell host version: "><Run Text="{Binding PsVersion}"/></TextBlock>
+        <TextBlock>
+            <Run Text="PowerShell host version:"/>
+            <Run Text="{Binding PsVersion}"/>
+        </TextBlock>
     </StatusBarItem>
     <StatusBarItem>
         <ProgressBar Height="20"
@@ -57,6 +64,9 @@
     </StatusBarItem>
     <Separator/>
     <StatusBarItem>
-        <TextBlock Text="Status: "><Run Text="{Binding SelectedTab.Module.ModuleStatus, Mode=OneWay}"/></TextBlock>
+        <TextBlock>
+            <Run Text="Status: "/>
+            <Run Text="{Binding SelectedTab.Module.ModuleStatus, Mode=OneWay}"/>
+        </TextBlock>
     </StatusBarItem>
 </StatusBar>
