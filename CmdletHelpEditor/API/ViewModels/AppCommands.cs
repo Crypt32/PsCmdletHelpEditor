@@ -15,7 +15,6 @@ using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
-using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
@@ -275,18 +274,12 @@ public class AppCommands {
         }
         UIManager.ShowModuleList(previousTab);
     }
-    async Task loadModules(Object? o, CancellationToken token) {
+    Task loadModules(Object? o, CancellationToken token) {
         var vm = new ModuleListDocument {
-            IsBusy = true,
             MWVM = _mwvm
         };
         swapTabDocument(vm);
-        IEnumerable<PsModuleInfo> modules = await _psProcessor.EnumModulesAsync(o == null);
-        foreach (PsModuleInfo moduleInfo in modules) {
-            vm.ModuleList.Add(moduleInfo);
-        }
-
-        vm.IsBusy = false;
+        return vm.ReloadModules(o == null);
     }
     async Task loadModuleFromFile(Object? o, CancellationToken token) {
         // method call from ICommand is allowed only when module selector is active
@@ -386,7 +379,8 @@ public class AppCommands {
                !(((Grid)_mwvm.SelectedTab.Content).Children[0] is LoadingSpinner);
     }
     Boolean canSave(Object? obj) {
-        return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
+        return _mwvm.SelectedDocument is HelpProjectDocument;
+        //return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
     }
     Boolean canLoadModuleList(Object? obj) {
         if (_mwvm.SelectedDocument is HelpProjectDocument helpProject) {
@@ -588,7 +582,7 @@ public class AppCommands {
     }
 
     void swapTabDocument(TabDocumentVM newDocument) {
-        if (_mwvm.SelectedDocument == null) {
+        if (_mwvm.SelectedDocument is null or HelpProjectDocument) {
             _mwvm.Documents.Add(newDocument);
         } else {
             Int32 index = _mwvm.Documents.IndexOf(_mwvm.SelectedDocument);

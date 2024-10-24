@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
@@ -95,6 +98,16 @@ public class ModuleListDocument : TabDocumentVM {
         }
     }
 
+    public async Task ReloadModules(Boolean force) {
+        IsBusy = true;
+        ModuleList.Clear();
+        var psProcessor = new PowerShellProcessor();
+        IEnumerable<PsModuleInfo> modules = await psProcessor.EnumModulesAsync(force);
+        foreach (PsModuleInfo moduleInfo in modules) {
+            ModuleList.Add(moduleInfo);
+        }
+        IsBusy = false;
+    }
     internal MainWindowVM MWVM { get; set; }
 }
 public class HelpProjectDocument : TabDocumentVM {
