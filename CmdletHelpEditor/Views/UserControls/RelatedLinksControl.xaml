@@ -62,7 +62,7 @@
                 <Button Grid.Row="2"
                         VerticalAlignment="Top"
                         Width="24"
-                        Command="{Binding EditorContext.RelatedLinkContext.DownLinkCommad}"
+                        Command="{Binding EditorContext.RelatedLinkContext.DownLinkCommand}"
                         ToolTip="Move related link down">
                     <Image Source="/Images/down_32x32.png"/>
                 </Button>
