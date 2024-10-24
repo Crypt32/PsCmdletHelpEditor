@@ -5,93 +5,92 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="700">
-	<Grid>
-		<RichTextBox IsReadOnly="True"
-					 IsReadOnlyCaretVisible="False"
-					 VerticalScrollBarVisibility="Auto"
-					 ContextMenu="{x:Null}"
-					 Focusable="False"
-					 Cursor="Arrow">
-			<FlowDocument>
-				<Paragraph FontSize="24" BorderThickness="0,0,0,1" BorderBrush="Gray">
-					Welcome to the
-					<Run FontWeight="Bold" Text="PowerShell Cmdlet Help Editor"/> !
-				</Paragraph>
-				<Paragraph FontSize="15">
-					To start work with the editor, you can start new or open existing project.
-				</Paragraph>
-				<Paragraph FontSize="15">
-					In order to start a new project, do the following:
-				</Paragraph>
-				<List FontSize="15">
-					<ListItem>
-						<Paragraph>
-							Press
-							<Run FontWeight="Bold" Text="File -> New"/> (or press
-							<Run FontWeight="Bold" Text="Ctrl + N"/> )
+    <RichTextBox IsReadOnly="True"
+                 IsReadOnlyCaretVisible="False"
+                 VerticalScrollBarVisibility="Auto"
+                 ContextMenu="{x:Null}"
+                 Focusable="False"
+                 Cursor="Arrow">
+        <FlowDocument>
+            <Paragraph FontSize="24" BorderThickness="0,0,0,1" BorderBrush="Gray">
+                Welcome to the
+                <Run FontWeight="Bold" Text="PowerShell Cmdlet Help Editor"/> !
+            </Paragraph>
+            <Paragraph FontSize="15">
+                To start work with the editor, you can start new or open existing project.
+            </Paragraph>
+            <Paragraph FontSize="15">
+                In order to start a new project, do the following:
+            </Paragraph>
+            <List FontSize="15">
+                <ListItem>
+                    <Paragraph>
+                        Press
+                        <Run FontWeight="Bold" Text="File -> New"/> (or press
+                        <Run FontWeight="Bold" Text="Ctrl + N"/> )
 							to load a list of installed PowerShell modules
-						</Paragraph>
-					</ListItem>
-					<ListItem>
-						<Paragraph>
-							When the list is loaded, select and double-click the module to create new project.
-						</Paragraph>
-					</ListItem>
-				</List>
-				<Paragraph FontSize="15">
-					Use the following steps to open existing help project:
-				</Paragraph>
-				<List FontSize="15">
-					<ListItem>
-						<Paragraph>
-							Press
-							<Run FontWeight="Bold" Text="File -> Open"/> (or press
-							<Run FontWeight="Bold" Text="Ctrl + O"/> )
+                    </Paragraph>
+                </ListItem>
+                <ListItem>
+                    <Paragraph>
+                        When the list is loaded, select and double-click the module to create new project.
+                    </Paragraph>
+                </ListItem>
+            </List>
+            <Paragraph FontSize="15">
+                Use the following steps to open existing help project:
+            </Paragraph>
+            <List FontSize="15">
+                <ListItem>
+                    <Paragraph>
+                        Press
+                        <Run FontWeight="Bold" Text="File -> Open"/> (or press
+                        <Run FontWeight="Bold" Text="Ctrl + O"/> )
 							and select a project file (.pshproj)
-						</Paragraph>
-					</ListItem>
-					<ListItem>
-						<Paragraph>
-							The module (and its commands) will be automatically loaded.
-						</Paragraph>
-					</ListItem>
-				</List>
-				<Paragraph FontSize="15">
-					In the case if you want to work with existing help file (.xml), you can import existing
+                    </Paragraph>
+                </ListItem>
+                <ListItem>
+                    <Paragraph>
+                        The module (and its commands) will be automatically loaded.
+                    </Paragraph>
+                </ListItem>
+            </List>
+            <Paragraph FontSize="15">
+                In the case if you want to work with existing help file (.xml), you can import existing
 					help file to a new project:
-				</Paragraph>
-				<List FontSize="15">
-					<ListItem>
-						<Paragraph>
-							Press
-							<Run FontWeight="Bold" Text="File -> New"/> (or <Run FontWeight="Bold" Text="Ctrl + N"/>)
+            </Paragraph>
+            <List FontSize="15">
+                <ListItem>
+                    <Paragraph>
+                        Press
+                        <Run FontWeight="Bold" Text="File -> New"/> (or
+                        <Run FontWeight="Bold" Text="Ctrl + N"/> )
 							to create new project. Wait while the module list is loaded;
-						</Paragraph>
-					</ListItem>
-					<ListItem>
-						<Paragraph>
-							When the list is loaded, select the desired module and click
-							<Run FontWeight="Bold" Text="Actions -> Import from XML Help file"/> and select
+                    </Paragraph>
+                </ListItem>
+                <ListItem>
+                    <Paragraph>
+                        When the list is loaded, select the desired module and click
+                        <Run FontWeight="Bold" Text="Actions -> Import from XML Help file"/> and select
 							existing help file;
-						</Paragraph>
-					</ListItem>
-					<ListItem>
-						<Paragraph>
-							Press
-							<Run FontWeight="Bold" Text="File -> Save"/> (or press
-							<Run FontWeight="Bold" Text="Ctrl + S"/> )
+                    </Paragraph>
+                </ListItem>
+                <ListItem>
+                    <Paragraph>
+                        Press
+                        <Run FontWeight="Bold" Text="File -> Save"/> (or press
+                        <Run FontWeight="Bold" Text="Ctrl + S"/> )
 							to save help project to a Help Editor native project file.
-						</Paragraph>
-					</ListItem>
-					<ListItem>
-						<Paragraph>
-							If you need to generate help file (.xml), just press
-							<Run FontWeight="Bold" Text="Actions -> Publish XML Help to a file"/>
-							and save XML file to a module folder.
-						</Paragraph>
-					</ListItem>
-				</List>
-			</FlowDocument>
-		</RichTextBox>
-	</Grid>
+                    </Paragraph>
+                </ListItem>
+                <ListItem>
+                    <Paragraph>
+                        If you need to generate help file (.xml), just press
+                        <Run FontWeight="Bold" Text="Actions -> Publish XML Help to a file"/>
+                        and save XML file to a module folder.
+                    </Paragraph>
+                </ListItem>
+            </List>
+        </FlowDocument>
+    </RichTextBox>
 </UserControl>
