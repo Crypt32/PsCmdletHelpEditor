@@ -1,17 +1,18 @@
-﻿using CmdletHelpEditor.Abstract;
+﻿using System;
+using System.ComponentModel;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Properties;
-using System;
-using System.ComponentModel;
+using PsCmdletHelpEditor.Core.Services;
 
 namespace CmdletHelpEditor.Views.Windows;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow {
-    readonly IPsProcessor _psProcessor;
+    readonly IPowerShellProcessor _psProcessor;
 
-    public MainWindow(IMainWindowVM dataContext, IPsProcessor psProcessor) {
+    public MainWindow(IMainWindowVM dataContext, IPowerShellProcessor psProcessor) {
         DataContext = dataContext;
         _psProcessor = psProcessor;
         InitializeComponent();

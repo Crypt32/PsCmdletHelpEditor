@@ -128,7 +128,8 @@
                     <Grid>
                         <ContentPresenter Content="{Binding}"/>
                         <ctrl:LoadingSpinner d:DataContext="{d:DesignInstance vm:TabDocumentVM}"
-                                             IsShown="{Binding IsBusy}"/>
+                                             IsShown="{Binding IsBusy}"
+                                             Text="{Binding SpinnerText}"/>
                     </Grid>
                 </DataTemplate>
             </ctrl:ClosableTabControl.ContentTemplate>

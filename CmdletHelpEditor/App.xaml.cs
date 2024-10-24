@@ -4,6 +4,7 @@ using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
+using PsCmdletHelpEditor.Core.Services;
 using Unity;
 
 namespace CmdletHelpEditor;
@@ -31,7 +32,8 @@ public partial class App {
     void configureServices() {
         Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
         Container.RegisterSingleton<IDataSource, DataSource>();
-        Container.RegisterSingleton<IPsProcessor, PowerShellProcessor>();
+        Container.RegisterSingleton<IPsProcessorLegacy, PowerShellProcessorLegacy>();
+        Container.RegisterSingleton<IPowerShellProcessor, PowerShellProcessor>();
         Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
         Container.RegisterSingleton<IMsgBox, MsgBoxClass>();
         Container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();

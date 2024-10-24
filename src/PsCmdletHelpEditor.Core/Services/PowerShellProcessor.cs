@@ -1,10 +1,10 @@
-﻿using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Threading.Tasks;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace PsCmdletHelpEditor.Core.Services;
 
@@ -19,24 +19,22 @@ public class PowerShellProcessor : IPowerShellProcessor {
     ];
     static readonly List<PsModuleInfo> _moduleList = [];
 
-    Int32? psVersion;
-
+    public Int32? PsVersion { get; private set; }
     public Task<Int32?> GetPsVersionAsync() {
         return Task.Factory.StartNew(getPsVersion);
     }
     Int32? getPsVersion() {
-        PowerShell ps = PowerShell.Create();
+        using PowerShell ps = PowerShell.Create();
         ps.AddScript("$PSVersionTable.PSVersion.Major");
-        psVersion = (Int32?)ps.Invoke()[0].BaseObject;
-        ps.Dispose();
+        PsVersion = (Int32?)ps.Invoke()[0].BaseObject;
 
-        return psVersion;
+        return PsVersion;
     }
     public Task<IEnumerable<PsModuleInfo>> EnumModulesAsync(Boolean force) {
         return Task.Factory.StartNew(() => enumModulesAsync(force));
     }
-    IEnumerable<PsModuleInfo> enumModulesAsync(Boolean force) {
-        if (!force) {
+    static IEnumerable<PsModuleInfo> enumModulesAsync(Boolean force) {
+        if (!force || _moduleList.Count > 0) {
             return _moduleList;
         }
 
@@ -80,5 +78,21 @@ public class PowerShellProcessor : IPowerShellProcessor {
             Description = psObject.Members["Description"].Value.ToString(),
             ModuleClass = "Snapin"
         });
+    }
+    public Task<PsModuleInfo> GetModuleInfoFromFile(String path) {
+        return Task.Factory.StartNew(() => getModuleInfoFromFile(path));
+    }
+    static PsModuleInfo getModuleInfoFromFile(String path) {
+        using PowerShell ps = PowerShell.Create();
+        ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
+        List<PSObject> psModule = ps.Invoke().ToList();
+        return new PsModuleInfo {
+            Name = (String)psModule[0].Members["Name"].Value,
+            ModuleType = (ModuleType)psModule[0].Members["ModuleType"].Value,
+            Version = psModule[0].Members["Version"].Value.ToString(),
+            Description = (String)psModule[0].Members["Description"].Value,
+            ModuleClass = "External",
+            ModulePath = path
+        };
     }
 }

@@ -1,13 +1,15 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
 using PsCmdletHelpEditor.Core.Models;
-using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using PowerShellProcessor = PsCmdletHelpEditor.Core.Services.PowerShellProcessor;
 
 namespace CmdletHelpEditor.API.ViewModels;
 
@@ -85,12 +87,12 @@ public abstract class TabDocumentVM : AsyncViewModel {
         return SupportsSave;
     }
 }
-public class BlankDocumentVM : TabDocumentVM;
-public class ModuleListDocument : TabDocumentVM {
-    PsModuleInfo selectedModule;
+public sealed class BlankDocumentVM : TabDocumentVM;
+public sealed class ModuleListDocument : TabDocumentVM {
+    PsModuleInfo? selectedModule;
 
-    public ObservableCollection<PsModuleInfo> ModuleList { get; } = [];
-    public PsModuleInfo SelectedModule {
+    public static ObservableCollection<PsModuleInfo> ModuleList { get; } = [];
+    public PsModuleInfo? SelectedModule {
         get => selectedModule;
         set {
             selectedModule = value;
@@ -99,23 +101,23 @@ public class ModuleListDocument : TabDocumentVM {
     }
 
     public async Task ReloadModules(Boolean force) {
-        IsBusy = true;
+        StartSpinner(Strings.InfoModuleListLoading);
         ModuleList.Clear();
         var psProcessor = new PowerShellProcessor();
         IEnumerable<PsModuleInfo> modules = await psProcessor.EnumModulesAsync(force);
         foreach (PsModuleInfo moduleInfo in modules) {
             ModuleList.Add(moduleInfo);
         }
-        IsBusy = false;
+        StopSpinner();
     }
     internal MainWindowVM MWVM { get; set; }
 }
-public class HelpProjectDocument : TabDocumentVM {
-    ModuleObject module;
+public sealed class HelpProjectDocument : TabDocumentVM {
+    ModuleObject? module;
 
-    public EditorVM EditorContext { get; set; }
+    public EditorVM EditorContext { get; private set; }
 
-    public ModuleObject Module {
+    public ModuleObject? Module {
         get => module;
         set {
             module = value;

@@ -62,7 +62,7 @@ class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
         }
         Double duration = 100.0 / cmdlets.Count;
         ProgressBar.Start();
-        IsBusy = true;
+        StartSpinner();
         PublishCaption = "Stop";
         foreach (OnlinePublishEntry cmdlet in cmdlets) {
             if (stopRequested) {
@@ -86,7 +86,7 @@ class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
             ProgressBar.Progress += duration;
         }
         ProgressBar.End();
-        IsBusy = false;
+        StopSpinner();
         PublishCaption = "Publish";
     }
     async Task retry(Object o, CancellationToken token) {

@@ -10,7 +10,8 @@ using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
-class PowerShellProcessor : IPsProcessor {
+[Obsolete]
+class PowerShellProcessorLegacy : IPsProcessorLegacy {
     static readonly IList<String> _excludedModules = new List<String> {
         "Microsoft.PowerShell.Core",
         "Microsoft.PowerShell.Host",
@@ -127,8 +128,24 @@ class PowerShellProcessor : IPsProcessor {
     public Task<IEnumerable<CmdletObject>> EnumCmdletsAsync(IModuleInfo module, String commandTypes, Boolean fromCBH) {
         return Task.Factory.StartNew(() => enumCmdlets(module, commandTypes, fromCBH));
     }
+    public Task<PsModuleInfo> GetModuleInfoFromFile(String path) {
+        return Task.Factory.StartNew(() => getModuleInfoFromFile(path));
+    }
+    static PsModuleInfo getModuleInfoFromFile(String path) {
+        using PowerShell ps = PowerShell.Create();
+        ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
+        List<PSObject> psModule = ps.Invoke().ToList();
+        return new PsModuleInfo {
+            Name = (String)psModule[0].Members["Name"].Value,
+            ModuleType = (ModuleType)psModule[0].Members["ModuleType"].Value,
+            Version = psModule[0].Members["Version"].Value.ToString(),
+            Description = (String)psModule[0].Members["Description"].Value,
+            ModuleClass = "External",
+            ModulePath = path
+        };
+    }
     public Task<ModuleObject> GetModuleFromFileAsync(String path) {
-        return Task<ModuleObject>.Factory.StartNew(() => getModuleFromFile(path));
+        return Task.Factory.StartNew(() => getModuleFromFile(path));
     }
     static ModuleObject getModuleFromFile(String path) {
         using PowerShell ps = PowerShell.Create();

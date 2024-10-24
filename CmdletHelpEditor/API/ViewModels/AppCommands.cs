@@ -15,6 +15,7 @@ using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
+using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
@@ -24,61 +25,105 @@ namespace CmdletHelpEditor.API.ViewModels;
 
 public class AppCommands {
     readonly MainWindowVM _mwvm;
-    readonly IPsProcessor _psProcessor;
+    readonly IPsProcessorLegacy _psProcessorLegacy;
+    readonly IPowerShellProcessor _psProcessor;
     readonly IProgressBar _progressBar;
     readonly IMsgBox _msgBox;
     Boolean alreadyRaised;
 
     public AppCommands(MainWindowVM parent) {
-        _psProcessor = App.Container.Resolve<IPsProcessor>();
+        _psProcessorLegacy = App.Container.Resolve<IPsProcessorLegacy>();
+        _psProcessor = App.Container.Resolve<IPowerShellProcessor>();
         _progressBar = App.Container.Resolve<IProgressBar>();
         _mwvm = parent;
-        CloseTabCommand = new RelayCommand(closeTab, canCloseTab);
-        LoadModulesCommand = new AsyncCommand(loadModules, canLoadModuleList);
-        LoadFromFileCommand = new AsyncCommand(loadModuleFromFile, canLoadModuleList);
-        ImportFromXmlHelpCommand = new RelayCommand(importFromXmlHelp, canImportFromHelp);
-        PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
-        ImportFromCBHelpCommand = new RelayCommand(importFromCommentHelp, canImportFromHelp);
+
         NewCommand = new RelayCommand(addTab);
         OpenCommand = new AsyncCommand(openProject);
         SaveCommand = new RelayCommand(saveProjectFile, canSave);
+        CloseTabCommand = new RelayCommand(closeTab, canCloseTab);
         CloseAppCommand = new RelayCommand<CancelEventArgs>(closeApp);
+        LoadModulesCommand = new AsyncCommand(loadModules);
+        LoadFromFileCommand = new AsyncCommand(loadModuleFromManifest);
+        ImportFromXmlHelpCommand = new RelayCommand(importFromXmlHelp, canImportFromHelp);
+        ImportFromCBHelpCommand = new RelayCommand(importFromCommentHelp, canImportFromHelp);
+        PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
         PublishOnlineCommand = new RelayCommand(publishOnline, canPublishOnline);
         _msgBox = App.Container.Resolve<IMsgBox>();
     }
-    public ICommand CloseTabCommand { get; }
+
+    #region New Tab command
 
     public ICommand NewCommand { get; }
-    public IAsyncCommand OpenCommand { get; }
-    public ICommand SaveCommand { get; }
-    public ICommand CloseAppCommand { get; }
-    public IAsyncCommand LoadModulesCommand { get; }
-    public ICommand LoadFromFileCommand { get; }
-    public ICommand ImportFromXmlHelpCommand { get; }
-    public ICommand ImportFromCBHelpCommand { get; }
-    public ICommand PublishHelpCommand { get; }
-    public static ICommand CopyToClipCommand => new RelayCommand(CopyToClipboard, CanCopyClipboard);
-    public ICommand PublishOnlineCommand { get; }
-
-    static void CopyToClipboard(Object? obj) {
-        if (obj == null) { return; }
-        Clipboard.SetText((String)obj);
-    }
-    static Boolean CanCopyClipboard(Object? obj) {
-        return obj != null;
-    }
-    void addTabOld(Object? obj) {
-        ClosableModuleItem tab = UIManager.GenerateTab();
-        _mwvm.Tabs.Add(tab);
-        tab.Focus();
-    }
     void addTab(Object? o) {
         var vm = new BlankDocumentVM();
         _mwvm.Documents.Add(vm);
         _mwvm.SelectedDocument = vm;
     }
 
-    #region Close Tab(s)
+    #endregion
+
+    #region Open Project command
+
+    public IAsyncCommand OpenCommand { get; }
+
+    async Task openProject(Object? obj, CancellationToken token) {
+        if (getOpenProjectFilePath(obj as String, out String? path)) {
+            HelpProjectDocument? vm = null;
+            try {
+                vm = new HelpProjectDocument {
+                    Path = path!,
+                    Module = FileProcessor.ReadProjectFile(path)
+                };
+                vm.StartSpinner();
+            } catch (Exception ex) {
+                _msgBox.ShowError("Read error", ex.Message);
+            }
+            if (_mwvm.SelectedDocument is not BlankDocumentVM) {
+                addTab(null);
+            }
+            swapTabDocument(vm);
+            await loadCmdletsForProject2(vm);
+            vm.StopSpinner();
+        }
+    }
+    async Task loadCmdletsForProject2(HelpProjectDocument tab) {
+        String cmd = Utils.GetCommandTypes();
+        if (String.IsNullOrEmpty(cmd)) {
+            _msgBox.ShowError("Error", Strings.E_EmptyCmds);
+            return;
+        }
+        if (FileProcessor.FindModule(tab.Module.Name)) {
+            tab.Module.ModulePath = null;
+        }
+        tab.ErrorInfo = null;
+        tab.EditorContext.CurrentCmdlet = null;
+        var nativeCmdlets = new List<CmdletObject>();
+        try {
+            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(tab.Module, cmd, false);
+            nativeCmdlets.AddRange(data);
+            tab.Module.CompareCmdlets(nativeCmdlets);
+        } catch (Exception e) {
+            String message = $"""
+                              {e.Message}
+
+                              You still can use the module project in offline mode
+                              However certain functionality may not be available.
+
+                              """;
+            _msgBox.ShowError("Error while loading cmdlets", message);
+            tab.ErrorInfo = e.Message;
+            foreach (CmdletObject cmdlet in tab.Module.Cmdlets) {
+                cmdlet.GeneralHelp.Status = ItemStatus.Missing;
+            }
+        }
+    }
+
+    #endregion
+
+    public ICommand SaveCommand { get; }
+
+    #region Close Tab(s) commands
+    public ICommand CloseTabCommand { get; }
 
     void closeTab(Object? o) {
         if (o is null) {
@@ -149,6 +194,53 @@ public class AppCommands {
 
     #endregion
 
+    public ICommand CloseAppCommand { get; }
+
+    #region Load Modules commands
+
+    public IAsyncCommand LoadModulesCommand { get; }
+
+    Task loadModules(Object? o, CancellationToken token) {
+        var vm = new ModuleListDocument {
+            MWVM = _mwvm
+        };
+        swapTabDocument(vm);
+        return vm.ReloadModules(true);
+    }
+    
+
+    #endregion
+
+    public ICommand LoadFromFileCommand { get; }
+    public ICommand ImportFromXmlHelpCommand { get; }
+    public ICommand ImportFromCBHelpCommand { get; }
+    public ICommand PublishHelpCommand { get; }
+
+    #region Copy To Clipboard command
+
+    public static ICommand CopyToClipCommand => new RelayCommand(copyToClipboard, canCopyClipboard);
+    static void copyToClipboard(Object? obj) {
+        if (obj == null) { return; }
+        Clipboard.SetText((String)obj);
+    }
+    static Boolean canCopyClipboard(Object? obj) {
+        return obj != null;
+    }
+
+    #endregion
+
+    public ICommand PublishOnlineCommand { get; }
+
+    
+    void addTabOld(Object? obj) {
+        ClosableModuleItem tab = UIManager.GenerateTab();
+        _mwvm.Tabs.Add(tab);
+        tab.Focus();
+    }
+
+
+
+
     // toolbar/menu commands
     void newProject(Object? obj) {
         if (!testSaved(_mwvm.SelectedTab)) {
@@ -199,8 +291,7 @@ public class AppCommands {
         _mwvm.SelectedTab.Header = new FileInfo(path).Name;
         try {
             FileProcessor.SaveProjectFile(_mwvm.SelectedTab, path);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             _msgBox.ShowError("Save error", e.Message);
             _mwvm.SelectedTab.ErrorInfo = e.Message;
         }
@@ -244,8 +335,7 @@ public class AppCommands {
         if (result == true) {
             try {
                 await module.PublishHelpFile(dlg.FileName, _progressBar);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 _msgBox.ShowError("XML Write error", e.Message);
             }
         }
@@ -255,32 +345,7 @@ public class AppCommands {
         dlg.Show();
     }
 
-    async Task loadModulesOld(Object? o, CancellationToken token) {
-        // method call from ICommand is allowed only when module selector is active
-        // so skip checks.
-        ClosableModuleItem previousTab = _mwvm.SelectedTab;
-        UIManager.ShowBusy(previousTab, Strings.InfoModuleListLoading);
-        _mwvm.Modules.Clear();
-        try {
-            await _psProcessor.EnumModulesAsync(o == null);
 
-            foreach (ModuleObject item in _psProcessor.ModuleList) {
-                _mwvm.Modules.Add(item);
-            }
-        }
-        catch (Exception e) {
-            _msgBox.ShowError("Error", e.Message);
-            previousTab.ErrorInfo = e.Message;
-        }
-        UIManager.ShowModuleList(previousTab);
-    }
-    Task loadModules(Object? o, CancellationToken token) {
-        var vm = new ModuleListDocument {
-            MWVM = _mwvm
-        };
-        swapTabDocument(vm);
-        return vm.ReloadModules(o == null);
-    }
     async Task loadModuleFromFile(Object? o, CancellationToken token) {
         // method call from ICommand is allowed only when module selector is active
         // so skip checks.
@@ -293,17 +358,43 @@ public class AppCommands {
         if (result != true) { return; }
         UIManager.ShowBusy(previousTab, Strings.InfoModuleLoading);
         try {
-            ModuleObject module = await _psProcessor.GetModuleFromFileAsync(dlg.FileName);
+            ModuleObject module = await _psProcessorLegacy.GetModuleFromFileAsync(dlg.FileName);
             if (module != null && !_mwvm.Modules.Contains(module)) {
                 _mwvm.Modules.Add(module);
                 module.ModulePath = dlg.FileName;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             _msgBox.ShowError("Import error", e.Message);
             previousTab.ErrorInfo = e.Message;
         }
         UIManager.ShowModuleList(previousTab);
+    }
+    async Task loadModuleFromManifest(Object? o, CancellationToken token) {
+        await LoadModulesCommand.ExecuteAsync(false);
+        TabDocumentVM selectedDocument = _mwvm.SelectedDocument!;
+        var dlg = new OpenFileDialog {
+            DefaultExt = ".psm1",
+            Filter = "PowerShell module files (*.psm1, *.psd1)|*.psm1;*.psd1"
+        };
+        Boolean? result = dlg.ShowDialog();
+        if (result != true) {
+            return;
+        }
+        selectedDocument.StartSpinner(Strings.InfoModuleLoading);
+        try {
+            var moduleInfo = await _psProcessor.GetModuleInfoFromFile(dlg.FileName);
+            if (!ModuleListDocument.ModuleList.Any(x => x.Name.Equals(moduleInfo.Name))) {
+                ModuleListDocument.ModuleList.Add(moduleInfo);
+            }
+        } catch (Exception e) {
+            _msgBox.ShowError("Import error", e.Message);
+            //previousTab.ErrorInfo = e.Message;
+        }
+        selectedDocument.StopSpinner();
+    }
+    Boolean canLoadModuleList(Object? obj) {
+        return false;
+        //return ((Grid)_mwvm.SelectedTab?.Content)?.Children[0] is ModuleSelectorControl;
     }
     async Task loadCmdletsForProject(ClosableModuleItem tab) {
         String cmd = Utils.GetCommandTypes();
@@ -318,42 +409,7 @@ public class AppCommands {
         tab.EditorContext.CurrentCmdlet = null;
         var nativeCmdlets = new List<CmdletObject>();
         try {
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(tab.Module, cmd, false);
-            nativeCmdlets.AddRange(data);
-            tab.Module.CompareCmdlets(nativeCmdlets);
-        }
-        catch (Exception e) {
-            String message = $"""
-                              {e.Message}
-
-                              You still can use the module project in offline mode
-                              However certain functionality may not be available.
-
-                              """;
-            _msgBox.ShowError("Error while loading cmdlets", message);
-            tab.ErrorInfo = e.Message;
-            foreach (CmdletObject cmdlet in tab.Module.Cmdlets) {
-                cmdlet.GeneralHelp.Status = ItemStatus.Missing;
-            }
-        }
-        finally {
-            UIManager.ShowEditor(tab);
-        }
-    }
-    async Task loadCmdletsForProject2(HelpProjectDocument tab) {
-        String cmd = Utils.GetCommandTypes();
-        if (String.IsNullOrEmpty(cmd)) {
-            _msgBox.ShowError("Error", Strings.E_EmptyCmds);
-            return;
-        }
-        if (FileProcessor.FindModule(tab.Module.Name)) {
-            tab.Module.ModulePath = null;
-        }
-        tab.ErrorInfo = null;
-        tab.EditorContext.CurrentCmdlet = null;
-        var nativeCmdlets = new List<CmdletObject>();
-        try {
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(tab.Module, cmd, false);
+            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(tab.Module, cmd, false);
             nativeCmdlets.AddRange(data);
             tab.Module.CompareCmdlets(nativeCmdlets);
         } catch (Exception e) {
@@ -369,8 +425,11 @@ public class AppCommands {
             foreach (CmdletObject cmdlet in tab.Module.Cmdlets) {
                 cmdlet.GeneralHelp.Status = ItemStatus.Missing;
             }
+        } finally {
+            UIManager.ShowEditor(tab);
         }
     }
+    
 
     // predicate
     Boolean canOpen(Object? obj) {
@@ -382,14 +441,7 @@ public class AppCommands {
         return _mwvm.SelectedDocument is HelpProjectDocument;
         //return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
     }
-    Boolean canLoadModuleList(Object? obj) {
-        if (_mwvm.SelectedDocument is HelpProjectDocument helpProject) {
-            return !helpProject.IsModified;
-        }
 
-        return true;
-        //return ((Grid)_mwvm.SelectedTab?.Content)?.Children[0] is ModuleSelectorControl;
-    }
     static Boolean canImportFromHelp(Object? obj) {
         return obj != null;
     }
@@ -413,7 +465,7 @@ public class AppCommands {
         return true;
     }
     Boolean testSaved2(HelpProjectDocument? tab) {
-        if (tab == null || tab.IsSaved || tab.Module == null) {
+        if (tab is not { IsModified: true } || tab.Module == null) {
             return true;
         }
         _mwvm.SelectedDocument = tab;
@@ -468,52 +520,15 @@ public class AppCommands {
             ModuleObject module = FileProcessor.ReadProjectFile(fileName);
             tab!.Module = module;
             loadCmdletsForProject(tab);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             _msgBox.ShowError("Read error", e.Message);
         }
     }
     public void OpenProject(String path) {
         OpenCommand.ExecuteAsync(path);
     }
-    static Boolean getOpenProjectFilePath(String? suggestedPath, out String? path) {
-        if (suggestedPath is not null) {
-            path = suggestedPath;
-            return true;
-        }
-        path = null;
-        var dlg = new OpenFileDialog {
-            DefaultExt = ".pshproj",
-            Filter = "PowerShell Help Project file (.pshproj)|*.pshproj"
-        };
-        Boolean? result = dlg.ShowDialog();
-        if (result == true) {
-            path = dlg.FileName;
-        }
+    
 
-        return result ?? false;
-    }
-    async Task openProject(Object? obj, CancellationToken token) {
-        if (getOpenProjectFilePath(obj as String, out String? path)) {
-            HelpProjectDocument? vm = null;
-            try {
-                vm = new HelpProjectDocument {
-                    Path = path!,
-                    Module = FileProcessor.ReadProjectFile(path),
-                    IsBusy = true
-                };
-            }
-            catch (Exception ex) {
-                _msgBox.ShowError("Read error", ex.Message);
-            }
-            if (_mwvm.SelectedDocument is not BlankDocumentVM) {
-                addTab(null);
-            }
-            swapTabDocument(vm);
-            await loadCmdletsForProject2(vm);
-            vm.IsBusy = false;
-        }
-    }
     public async void LoadCmdlets(Object? helpPath, Boolean importCBH) {
         ClosableModuleItem previousTab = _mwvm.SelectedTab;
         UIElement previousElement = ((Grid)previousTab.Content).Children[0];
@@ -524,7 +539,7 @@ public class AppCommands {
         }
         UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
         try {
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(_mwvm.SelectedModule, cmd, importCBH);
+            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(_mwvm.SelectedModule, cmd, importCBH);
             _mwvm.SelectedModule.Cmdlets.Clear();
             foreach (CmdletObject item in data) {
                 _mwvm.SelectedModule.Cmdlets.Add(item);
@@ -533,16 +548,14 @@ public class AppCommands {
                 _mwvm.SelectedModule.ImportedFromHelp = true;
                 try {
                     XmlProcessor.ImportFromXml((String)helpPath, _mwvm.SelectedModule);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     _msgBox.ShowError("Error", ex.Message);
                 }
             }
             previousTab.Module = _mwvm.SelectedModule;
             _mwvm.SelectedModule = null;
             UIManager.ShowEditor(previousTab);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             _msgBox.ShowError("Error while loading cmdlets", e.Message);
             _mwvm.SelectedTab.ErrorInfo = e.Message;
             UIManager.RestoreControl(previousTab, previousElement);
@@ -559,7 +572,7 @@ public class AppCommands {
         try {
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
             var module = new ModuleObject(moduleInfo);
-            IEnumerable<CmdletObject> data = await _psProcessor.EnumCmdletsAsync(module, cmd, importFromCBH);
+            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(module, cmd, importFromCBH);
             foreach (CmdletObject item in data) {
                 module.Cmdlets.Add(item);
             }
@@ -572,14 +585,14 @@ public class AppCommands {
                 }
             }
             vm.Module = module;
-            vm.EditorContext = new EditorVM(module);
             swapTabDocument(vm);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             _msgBox.ShowError("Error while loading cmdlets", ex.Message);
             _mwvm.SelectedDocument!.ErrorInfo = ex.Message;
         }
     }
+
+    #region other functions
 
     void swapTabDocument(TabDocumentVM newDocument) {
         if (_mwvm.SelectedDocument is null or HelpProjectDocument) {
@@ -590,4 +603,23 @@ public class AppCommands {
         }
         _mwvm.SelectedDocument = newDocument;
     }
+    static Boolean getOpenProjectFilePath(String? suggestedPath, out String? path) {
+        if (suggestedPath is not null) {
+            path = suggestedPath;
+            return true;
+        }
+        path = null;
+        var dlg = new OpenFileDialog {
+                                         DefaultExt = ".pshproj",
+                                         Filter = "PowerShell Help Project file (.pshproj)|*.pshproj"
+                                     };
+        Boolean? result = dlg.ShowDialog();
+        if (result == true) {
+            path = dlg.FileName;
+        }
+
+        return result ?? false;
+    }
+
+    #endregion
 }
