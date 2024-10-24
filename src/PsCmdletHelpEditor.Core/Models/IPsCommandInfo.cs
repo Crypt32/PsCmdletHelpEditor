@@ -11,11 +11,11 @@ public interface IPsCommandInfo {
     /// <summary>
     /// Gets cmdlet verb.
     /// </summary>
-    String Verb { get; }
+    String? Verb { get; }
     /// <summary>
     /// Gets cmdlet noun.
     /// </summary>
-    String Noun { get; }
+    String? Noun { get; }
     /// <summary>
     /// Gets a list of cmdlet syntaxes, one per parameter set.
     /// </summary>
@@ -34,11 +34,6 @@ public interface IPsCommandInfo {
     /// </summary>
     /// <returns>Cmdlet description.</returns>
     IPsCommandGeneralDescription GetDescription();
-    /// <summary>
-    /// Gets optional command support info.
-    /// </summary>
-    /// <returns>Command support info.</returns>
-    IPsCommandSupportInfo? GetSupportInfo();
     /// <summary>
     /// Gets a collection of cmdlet parameter sets.
     /// </summary>
@@ -59,4 +54,9 @@ public interface IPsCommandInfo {
     /// </summary>
     /// <returns>A collection of cmdlet related links.</returns>
     IReadOnlyList<IPsCommandRelatedLink> GetRelatedLinks();
+    /// <summary>
+    /// Gets optional command support info.
+    /// </summary>
+    /// <returns>Command support info.</returns>
+    IPsCommandSupportInfo? GetSupportInfo();
 }

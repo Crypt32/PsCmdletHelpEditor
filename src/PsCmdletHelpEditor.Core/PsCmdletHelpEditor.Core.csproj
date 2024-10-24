@@ -56,6 +56,17 @@
     <Compile Include="Models\IPsCommandParameterSetInfo.cs" />
     <Compile Include="Models\IPsCommandRelatedLink.cs" />
     <Compile Include="Models\IPsCommandSupportInfo.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandExample.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandExampleCollection.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandGeneralDescription.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandParameter.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandParameterBase.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandParameterCollection.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandParameterSet.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandParameterSetCollection.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandRelatedLink.cs" />
+    <Compile Include="Models\PowerShellNative\PsCommandRelatedLinkCollection.cs" />
+    <Compile Include="Models\PsCommandInfo.cs" />
     <Compile Include="Models\PsCommandParameterOption.cs" />
     <Compile Include="Models\PsModuleInfo.cs" />
     <Compile Include="Models\PsVersionSupport.cs" />

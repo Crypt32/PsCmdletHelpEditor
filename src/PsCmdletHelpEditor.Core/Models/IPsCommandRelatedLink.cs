@@ -9,7 +9,7 @@ public interface IPsCommandRelatedLink {
     /// <summary>
     /// Gets link display text.
     /// </summary>
-    String LinkText { get; }
+    String? LinkText { get; }
     /// <summary>
     /// Gets optional link URL.
     /// </summary>

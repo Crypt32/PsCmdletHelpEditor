@@ -57,9 +57,9 @@ public class XmlRpcProviderInformation : IXmlRpcProviderInformation {
 public class XmlPsCommand : IPsCommandInfo {
     public String Name { get; set; }
     [XmlAttribute("verb")]
-    public String Verb { get; set; }
+    public String? Verb { get; set; }
     [XmlAttribute("noun")]
-    public String Noun { get; set; }
+    public String? Noun { get; set; }
     public List<String> Syntax { get; set; }
     public XmlPsGeneralDescription GeneralHelp { get; set; }
     [XmlArrayItem("CommandParameterSetInfo2")]
@@ -98,15 +98,15 @@ public class XmlPsCommand : IPsCommandInfo {
 }
 
 public class XmlPsGeneralDescription : IPsCommandGeneralDescription {
-    public String Synopsis { get; set; }
-    public String Description { get; set; }
+    public String? Synopsis { get; set; }
+    public String? Description { get; set; }
     public String Notes { get; set; }
-    public String InputType { get; set; }
-    public String InputUrl { get; set; }
-    public String ReturnType { get; set; }
-    public String ReturnUrl { get; set; }
-    public String InputTypeDescription { get; set; }
-    public String ReturnTypeDescription { get; set; }
+    public String? InputType { get; set; }
+    public String? InputUrl { get; set; }
+    public String? ReturnType { get; set; }
+    public String? ReturnUrl { get; set; }
+    public String? InputTypeDescription { get; set; }
+    public String? ReturnTypeDescription { get; set; }
 }
 
 public class XmlCommandParameterSet : IPsCommandParameterSetInfo {
@@ -114,6 +114,10 @@ public class XmlCommandParameterSet : IPsCommandParameterSetInfo {
     public String Name { get; set; }
     [XmlAttribute("Params")]
     public List<String> Parameters { get; set; }
+
+    public IReadOnlyList<String> GetParameters() {
+        return Parameters;
+    }
 }
 
 public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
@@ -140,28 +144,28 @@ public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
     public String? Position { get; set; }
     [XmlIgnore]
     public PsCommandParameterOption Options { get; set; }
-    public String Description { get; set; } = null!;
+    public String? Description { get; set; } = null!;
     public String? DefaultValue { get; set; }
 
     public List<String> Attributes { get; set; } = [];
     public List<String> Aliases { get; set; } = [];
 
-    public ICollection<String> GetAttributes() {
+    public IReadOnlyList<String> GetAttributes() {
         return Attributes;
     }
-    public ICollection<String> GetAliases() {
+    public IReadOnlyList<String> GetAliases() {
         return Aliases;
     }
 }
 
 public class XmlPsRelatedLink : IPsCommandRelatedLink {
-    public String LinkText { get; set; } = null!;
+    public String? LinkText { get; set; } = null!;
     public String? LinkUrl { get; set; }
 }
 
 public class XmlPsExample : IPsCommandExample {
     public String Name { get; set; } = null!;
-    public String Cmd { get; set; } = null!;
+    public String? Cmd { get; set; } = null!;
     public String? Description { get; set; }
     public String? Output { get; set; }
 }

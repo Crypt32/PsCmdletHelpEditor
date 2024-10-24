@@ -13,7 +13,7 @@ public interface IPsCommandExample {
     /// <summary>
     /// Gets example command or commands.
     /// </summary>
-    String Cmd { get; }
+    String? Cmd { get; }
     /// <summary>
     /// Gets optional example description.
     /// </summary>

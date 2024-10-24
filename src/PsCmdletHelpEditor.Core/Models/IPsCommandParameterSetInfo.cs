@@ -11,8 +11,12 @@ public interface IPsCommandParameterSetInfo {
     /// Gets parameter set name.
     /// </summary>
     String Name { get; }
+
     /// <summary>
     /// Gets a collection of parameters used in this parameter set.
     /// </summary>
-    List<String> Parameters { get; }
+    /// <returns>A collection of parameters used in this parameter set.</returns>
+    IReadOnlyList<String> GetParameters();
+
+
 }

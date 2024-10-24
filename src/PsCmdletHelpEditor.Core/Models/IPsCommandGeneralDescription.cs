@@ -9,11 +9,11 @@ public interface IPsCommandGeneralDescription {
     /// <summary>
     /// Gets command synopsis, or short description.
     /// </summary>
-    String Synopsis { get; }
+    String? Synopsis { get; }
     /// <summary>
     /// Gets command detailed description.
     /// </summary>
-    String Description { get; }
+    String? Description { get; }
     /// <summary>
     /// Gets optional notes.
     /// </summary>
@@ -21,25 +21,25 @@ public interface IPsCommandGeneralDescription {
     /// <summary>
     /// Gets semicolon delimited optional input types.
     /// </summary>
-    String InputType { get; }
+    String? InputType { get; }
     /// <summary>
     /// Gets semicolon delimited optional input type URLs.
     /// </summary>
-    String InputUrl { get; }
+    String? InputUrl { get; }
     /// <summary>
     /// Gets semicolon delimited optional return types.
     /// </summary>
-    String ReturnType { get; }
+    String? ReturnType { get; }
     /// <summary>
     /// Gets semicolon delimited optional return type URLs.
     /// </summary>
-    String ReturnUrl { get; }
+    String? ReturnUrl { get; }
     /// <summary>
     /// Gets semicolon delimited input type descriptions.
     /// </summary>
-    String InputTypeDescription { get; }
+    String? InputTypeDescription { get; }
     /// <summary>
     /// Gets semicolon delimited return type descriptions.
     /// </summary>
-    String ReturnTypeDescription { get; }
+    String? ReturnTypeDescription { get; }
 }

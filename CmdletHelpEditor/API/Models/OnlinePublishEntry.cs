@@ -11,21 +11,21 @@ class OnlinePublishEntry : ViewModelBase {
         get => cmdlet;
         set {
             cmdlet = value;
-            OnPropertyChanged(nameof(Cmdlet));
+            OnPropertyChanged();
         }
     }
     public OnlinePublishStatusEnum Status {
         get => status;
         set {
             status = value;
-            OnPropertyChanged(nameof(Status));
+            OnPropertyChanged();
         }
     }
     public String StatusText {
         get => statusText;
         set {
             statusText = value;
-            OnPropertyChanged(nameof(StatusText));
+            OnPropertyChanged();
         }
     }
 }
