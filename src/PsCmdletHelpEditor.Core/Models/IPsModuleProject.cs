@@ -4,7 +4,7 @@ using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models;
 
-public interface IPsModule {
+public interface IPsModuleProject {
     String Description { get; set; }
     String ExtraFooter { get; set; }
     String ExtraHeader { get; set; }

@@ -7,7 +7,7 @@ namespace PsCmdletHelpEditor.Core.Models.Xml;
 
 [XmlRoot("ModuleObject")]
 [XmlInclude(typeof(XmlPsCommand))]
-public class XmlPsModule : IPsModule {
+public class XmlPsModuleProject : IPsModuleProject {
     [XmlAttribute("fVersion")]
     public Double FormatVersion { get; set; }
     public String Name { get; set; }

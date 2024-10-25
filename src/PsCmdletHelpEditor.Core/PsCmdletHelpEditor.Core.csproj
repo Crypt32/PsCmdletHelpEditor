@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Models\BlogInfo.cs" />
     <Compile Include="Models\IBlogInfo.cs" />
+    <Compile Include="Models\IModuleInfo.cs" />
     <Compile Include="Models\IPsCommandInfo.cs" />
     <Compile Include="Models\IPsCommandExample.cs" />
     <Compile Include="Models\IPsCommandGeneralDescription.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="Models\PsModuleInfo.cs" />
     <Compile Include="Models\PsVersionSupport.cs" />
     <Compile Include="Models\WinOsVersionSupport.cs" />
-    <Compile Include="Models\IPsModule.cs" />
+    <Compile Include="Models\IPsModuleProject.cs" />
     <Compile Include="Models\IXmlRpcProviderInformation.cs" />
     <Compile Include="Models\Xml\XmlClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,25 +1,25 @@
-﻿using PsCmdletHelpEditor.Core.Models;
-using PsCmdletHelpEditor.Core.Models.Xml;
-using System;
+﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Services;
 public interface IProjectService {
-    IPsModule ReadProjectFile(String path);
+    IPsModuleProject ReadProjectFile(String path);
 }
 public class XmlProjectService {
-    public IPsModule ReadProjectFile(String path) {
-        XmlPsModule module;
+    public IPsModuleProject ReadProjectFile(String path) {
+        XmlPsModuleProject moduleProject;
         XmlAttributeOverrides? overrides = XmlFormatConverter.GetOverrides(path, out Double version);
         using var fs = new FileStream(path, FileMode.Open);
         XmlSerializer serializer = overrides == null
-            ? new XmlSerializer(typeof(XmlPsModule))
-            : new XmlSerializer(typeof(XmlPsModule), overrides);
-        module = (XmlPsModule)serializer.Deserialize(fs);
-        module.ProjectPath = path;
-        module.FormatVersion = version;
+            ? new XmlSerializer(typeof(XmlPsModuleProject))
+            : new XmlSerializer(typeof(XmlPsModuleProject), overrides);
+        moduleProject = (XmlPsModuleProject)serializer.Deserialize(fs);
+        moduleProject.ProjectPath = path;
+        moduleProject.FormatVersion = version;
 
-        return module;
+        return moduleProject;
     }
 }

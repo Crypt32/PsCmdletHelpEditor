@@ -36,7 +36,7 @@ static class XmlFormatConverter {
         foreach (String prop in new[] { "ModuleClass", "UseSupports" }) {
             legacyElements = new XmlAttributes();
             legacyElements.XmlElements.Add(new XmlElementAttribute(prop));
-            tbo.Add(typeof(XmlPsModule), prop, legacyElements);
+            tbo.Add(typeof(XmlPsModuleProject), prop, legacyElements);
         }
         foreach (String prop in new[] { "Verb", "Noun" }) {
             legacyElements = new XmlAttributes();

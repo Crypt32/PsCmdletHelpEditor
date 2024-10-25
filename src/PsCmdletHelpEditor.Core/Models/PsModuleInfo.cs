@@ -10,29 +10,31 @@ public class PsModuleInfo {
     /// <summary>
     /// Gets or sets module name.
     /// </summary>
-    public String Name { get; set; } = null!;
+    public String Name { get; internal set; } = null!;
     /// <summary>
     /// Gets or sets module type.
     /// </summary>
-    public ModuleType ModuleType { get; set; }
+    public ModuleType ModuleType { get; internal set; }
     /// <summary>
     /// Gets or sets module class.
     /// </summary>
-    public String ModuleClass { get; set; } = null!;
+    public String ModuleClass { get; internal set; } = null!;
     /// <summary>
     /// Gets or sets module version.
     /// </summary>
-    public String Version { get; set; } = null!;
+    public String Version { get; internal set; } = null!;
     /// <summary>
     /// Gets module description.
     /// </summary>
-    public String? Description { get; set; }
+    public String? Description { get; internal set; }
     /// <summary>
     /// Indicates if module has manifest file (.psm1 and/or .psd1)
     /// </summary>
-    public Boolean HasManifest { get; set; }
+    public Boolean HasManifest { get; internal set; }
     /// <summary>
     /// Gets optional module file location.
     /// </summary>
     public String? ModulePath { get; set; }
+
+
 }

@@ -15,6 +15,7 @@ using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.Views.Windows;
 using Microsoft.Win32;
+using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
@@ -382,7 +383,7 @@ public class AppCommands {
         }
         selectedDocument.StartSpinner(Strings.InfoModuleLoading);
         try {
-            var moduleInfo = await _psProcessor.GetModuleInfoFromFile(dlg.FileName);
+            PsModuleInfo moduleInfo = await _psProcessor.GetModuleInfoFromFileAsync(dlg.FileName);
             if (!ModuleListDocument.ModuleList.Any(x => x.Name.Equals(moduleInfo.Name))) {
                 ModuleListDocument.ModuleList.Add(moduleInfo);
             }
