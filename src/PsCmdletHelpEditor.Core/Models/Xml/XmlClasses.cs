@@ -17,6 +17,7 @@ public class XmlPsModuleProject : IPsModuleProject {
     public String Description { get; set; }
     [XmlAttribute("mclass")]
     public String ModuleClass { get; set; }
+    [XmlIgnore]
     public String ModulePath { get; set; }
     [XmlAttribute("useSupports")]
     public Boolean UseSupports { get; set; }
