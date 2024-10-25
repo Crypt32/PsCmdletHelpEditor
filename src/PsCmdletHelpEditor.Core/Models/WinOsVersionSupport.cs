@@ -72,6 +72,11 @@ public enum WinOsVersionSupport {
     Win2022Std   = 0x1000000,
     [Display(Name = "Windows Server 2022 Datacenter")]
     Win2022DC    = 0x2000000,
-    [Display(Name = "Windows Server 2022 Family")]
+    [Display(Name = "Windows Server 2025 Family")]
     Win2022      = Win2022Std | Win2022DC,
+    Win2025Std   = 0x4000000,
+    [Display(Name = "Windows Server 2025 Datacenter")]
+    Win2025DC    = 0x8000000,
+    [Display(Name = "Windows Server 2025 Family")]
+    Win2052      = Win2025Std | Win2025DC,
 }

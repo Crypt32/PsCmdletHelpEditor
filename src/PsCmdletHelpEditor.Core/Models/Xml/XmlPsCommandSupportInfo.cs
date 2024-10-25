@@ -3,16 +3,7 @@ using System.Xml.Serialization;
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-public class XmlPsSupportInfo {
-    [XmlAttribute("ad")]
-    public Boolean RequiresAD { get; set; }
-    [XmlAttribute("rsat")]
-    public Boolean RequiresRSAT { get; set; }
-    [XmlAttribute("minPsVersion")]
-    public Int32 PsVersionAsInt { get; set; }
-    [XmlAttribute("winOsSupport")]
-    public Int32 WinOsVersionAsInt { get; set; }
-}
+[Obsolete]
 public class XmlPsCommandSupportInfo : IPsCommandSupportInfo {
     Boolean ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
@@ -40,9 +31,9 @@ public class XmlPsCommandSupportInfo : IPsCommandSupportInfo {
     [XmlIgnore]
     public WinOsVersionSupport WinOsVersion { get; set; }
     [XmlAttribute("ad")]
-    public Boolean ADChecked { get; set; }
+    public Boolean RequiresAD { get; set; }
     [XmlAttribute("rsat")]
-    public Boolean RsatChecked { get; set; }
+    public Boolean RequiresRSAT { get; set; }
     [XmlAttribute(nameof(ps2))]
     public Boolean Ps2Checked {
         get => ps2;

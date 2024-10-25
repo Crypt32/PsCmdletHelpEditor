@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using CmdletHelpEditor.API.Abstractions;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class CommandParameterSetInfo2 : IParameterSetInfo {
+public class CommandParameterSetInfo2 {
     [XmlAttribute]
     public String Name { get; set; }
     [XmlAttribute("Params")]

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Xml.Serialization;
-using CmdletHelpEditor.API.Abstractions;
 using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
-public class SupportInfo : ViewModelBase, ISupportInfo {
+public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
         w2k3, w2k3s, w2k3e, w2k3d,
@@ -32,7 +31,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
     [XmlIgnore]
     public WinOsVersionSupport WinOsVersion { get; set; }
     [XmlAttribute(nameof(ad))]
-    public Boolean ADChecked {
+    public Boolean RequiresAD {
         get => ad;
         set {
             ad = value;
@@ -40,7 +39,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
         }
     }
     [XmlAttribute(nameof(rsat))]
-    public Boolean RsatChecked {
+    public Boolean RequiresRSAT {
         get => rsat;
         set {
             rsat = value;

@@ -4,10 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+             xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
+             d:DataContext="{d:DesignInstance vm:MainWindowVM}">
     <UserControl.Resources>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -23,7 +23,7 @@
             </HeaderedContentControl.Header>
             <CheckBox Content="Requires Active Directory"
                       Margin="5,0,0,0"
-                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.ADChecked}"/>
+                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresAD}"/>
         </HeaderedContentControl>
         <HeaderedContentControl>
             <HeaderedContentControl.Header>
@@ -33,7 +33,7 @@
             </HeaderedContentControl.Header>
             <CheckBox Content="Requires Remote Server Administration Tools"
                       Margin="5,0,0,0"
-                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RsatChecked}" />
+                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresRSAT}" />
         </HeaderedContentControl>
         <HeaderedContentControl>
             <HeaderedContentControl.Header>

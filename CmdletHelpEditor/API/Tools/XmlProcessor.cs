@@ -314,8 +314,8 @@ class XmlProcessor {
                 if (tempNode.Attributes == null) { continue; }
                 Boolean value = Convert.ToBoolean(tempNode.Attributes["value"].Value);
                 switch (tempNode.Attributes["name"].Value.ToLower()) {
-                    case "adrequired": currentCmdlet.SupportInformation.ADChecked = value; break;
-                    case "rsatrequired": currentCmdlet.SupportInformation.RsatChecked = value; break;
+                    case "adrequired": currentCmdlet.SupportInformation.RequiresAD = value; break;
+                    case "rsatrequired": currentCmdlet.SupportInformation.RequiresRSAT = value; break;
                     case "ps2": currentCmdlet.SupportInformation.Ps2Checked = value; break;
                     case "ps3": currentCmdlet.SupportInformation.Ps3Checked = value; break;
                     case "ps4": currentCmdlet.SupportInformation.Ps4Checked = value; break;

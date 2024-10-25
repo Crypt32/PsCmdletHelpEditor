@@ -14,7 +14,7 @@ public class XmlPsCommand : IPsCommandInfo {
     public String? Verb { get; set; }
     [XmlAttribute("noun")]
     public String? Noun { get; set; }
-    public List<String> Syntax { get; set; }
+    public List<String> Syntax { get; set; } = [];
     [XmlElement("GeneralHelp")]
     public XmlPsCommandGeneralDescription GeneralHelp { get; set; }
     [XmlArrayItem("CommandParameterSetInfo2")]
@@ -26,7 +26,7 @@ public class XmlPsCommand : IPsCommandInfo {
     [XmlArrayItem("RelatedLink")]
     public List<XmlPsRelatedLink> RelatedLinks { get; set; } = [];
     [XmlElement("SupportInformation")]
-    public XmlPsCommandSupportInfo? SupportInformation { get; set; }
+    public XmlPsSupportInfo? SupportInformation { get; set; }
     // advanced
     public String? ExtraHeader { get; set; }
     public String? ExtraFooter { get; set; }

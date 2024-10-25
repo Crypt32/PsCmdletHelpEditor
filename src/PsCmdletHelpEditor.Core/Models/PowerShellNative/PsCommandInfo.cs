@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-namespace PsCmdletHelpEditor.Core.Models;
+namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
 class PsCommandInfo : IPsCommandInfo {
     readonly PsCommandParameterSetCollection _paramSets = new();
@@ -12,7 +11,7 @@ class PsCommandInfo : IPsCommandInfo {
     readonly PsCommandExampleCollection _examples = new();
     readonly PsCommandRelatedLinkCollection _relatedLinks = new();
     readonly List<String> _syntax = [];
-    PsCommandGeneralDescription generalDescription;
+    PsCommandGeneralDescription? generalDescription;
 
     PsCommandInfo() { }
 
@@ -44,7 +43,7 @@ class PsCommandInfo : IPsCommandInfo {
     }
 
     public void ImportCommentBasedHelp(PSObject cbh) {
-        generalDescription.ImportCommentBasedHelp(cbh);
+        generalDescription!.ImportCommentBasedHelp(cbh);
         _examples.ImportCommentBasedHelp(cbh);
         _relatedLinks.ImportCommentBasedHelp(cbh);
     }
@@ -70,7 +69,7 @@ class PsCommandInfo : IPsCommandInfo {
 
         // last condition is just sanity check if command includes comment-based help and if it is worth to move on.
         if (includeCommentBasedHelp
-            // TODO: this 'syn' is custom member added by editor.
+            // this 'syn' is custom member added by editor.
             && cmdlet.Members["syn"].Value is PSObject cbh
             && cbh.Members["Synopsis"] is not null
             && cbh.Members["Description"] is not null) {

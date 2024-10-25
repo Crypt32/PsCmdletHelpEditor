@@ -166,8 +166,6 @@
     <Compile Include="Abstract\IProgressBar.cs" />
     <Compile Include="Abstract\IPsProcessorLegacy.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
-    <Compile Include="API\Abstractions\IParameterSetInfo.cs" />
-    <Compile Include="API\Abstractions\ISupportInfo.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />

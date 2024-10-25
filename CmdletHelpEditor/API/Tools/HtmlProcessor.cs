@@ -6,7 +6,6 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CmdletHelpEditor.API.Abstractions;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Utility;
 using CodeKicker.BBCode;
@@ -357,12 +356,12 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
         }
         SB.AppendLine("</p>");
     }
-    static void htmlGenerateSupports(ISupportInfo supportInfo, ref StringBuilder SB) {
+    static void htmlGenerateSupports(IPsCommandSupportInfo supportInfo, ref StringBuilder SB) {
         String currentHtml = String.Empty;
-        if (supportInfo.ADChecked) {
+        if (supportInfo.RequiresAD) {
             currentHtml += "<div class=\"alert alert-warning\">This command is not available in non-domain environments</div>" + _nl;
         }
-        if (supportInfo.RsatChecked) {
+        if (supportInfo.RequiresRSAT) {
             currentHtml += "<div class=\"alert alert-warning\">This command requires installed Remote Server Administration Tools (RSAT)</div>" + _nl;
         }
         SB = new StringBuilder(currentHtml + SB);

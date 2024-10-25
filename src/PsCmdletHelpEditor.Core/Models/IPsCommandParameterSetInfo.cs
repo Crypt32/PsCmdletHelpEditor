@@ -17,6 +17,4 @@ public interface IPsCommandParameterSetInfo {
     /// </summary>
     /// <returns>A collection of parameters used in this parameter set.</returns>
     IReadOnlyList<String> GetParameters();
-
-
 }

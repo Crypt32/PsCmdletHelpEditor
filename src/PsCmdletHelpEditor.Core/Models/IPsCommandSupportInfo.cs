@@ -3,8 +3,8 @@
 namespace PsCmdletHelpEditor.Core.Models;
 
 public interface IPsCommandSupportInfo {
-    PsVersionSupport PsVersion { get; set; }
-    WinOsVersionSupport WinOsVersion { get; set; }
-    Boolean ADChecked { get; set; }
-    Boolean RsatChecked { get; set; }
+    PsVersionSupport PsVersion { get; }
+    WinOsVersionSupport WinOsVersion { get; }
+    Boolean RequiresAD { get; }
+    Boolean RequiresRSAT { get; }
 }

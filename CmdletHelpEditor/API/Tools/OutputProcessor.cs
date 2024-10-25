@@ -6,7 +6,6 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CmdletHelpEditor.API.Abstractions;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Utility;
 using CodeKicker.BBCode;
@@ -170,10 +169,12 @@ abstract class OutputProcessor {
         SB.AppendLine(GenerateH3("&lt;CommonParameters&gt;"));
         String link = GenerateHyperLink("https://go.microsoft.com/fwlink/?LinkID=113216", "https://go.microsoft.com/fwlink/?LinkID=113216");
         String br = HandleNewLine ? "<br/>" : String.Empty;
-        SB.AppendLine(GenerateParagraph(@$"This cmdlet supports the common parameters: Verbose, Debug,{br}
-ErrorAction, ErrorVariable, InformationAction, InformationVariable,{br}
-WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.{br}
-For more information, see about_CommonParameters ({link})"));
+        SB.AppendLine(GenerateParagraph($"""
+                                         This cmdlet supports the common parameters: Verbose, Debug,{br}
+                                         ErrorAction, ErrorVariable, InformationAction, InformationVariable,{br}
+                                         WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.{br}
+                                         For more information, see about_CommonParameters ({link})
+                                         """));
     }
     void htmlGenerateInputTypes(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Inputs"));
@@ -260,12 +261,12 @@ For more information, see about_CommonParameters ({link})"));
         }
         SB.AppendLine(GenerateParagraph(content.ToString()));
     }
-    void htmlGenerateSupports(ISupportInfo supportInfo, ref StringBuilder SB) {
+    void htmlGenerateSupports(IPsCommandSupportInfo supportInfo, ref StringBuilder SB) {
         var header = new StringBuilder();
-        if (supportInfo.ADChecked) {
+        if (supportInfo.RequiresAD) {
             header.AppendLine("<div class=\"alert alert-warning\">This command is not available in non-domain environments</div>");
         }
-        if (supportInfo.RsatChecked) {
+        if (supportInfo.RequiresAD) {
             header.AppendLine("<div class=\"alert alert-warning\">This command requires installed Remote Server Administration Tools (RSAT)</div>");
         }
         SB = new StringBuilder(header.ToString() + SB);
