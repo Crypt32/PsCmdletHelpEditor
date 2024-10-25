@@ -12,6 +12,7 @@ class PsCommandInfo : IPsCommandInfo {
     readonly PsCommandRelatedLinkCollection _relatedLinks = new();
     readonly List<String> _syntax = [];
     PsCommandGeneralDescription? generalDescription;
+    IPsCommandSupportInfo? supportInfo;
 
     PsCommandInfo() { }
 
@@ -39,7 +40,7 @@ class PsCommandInfo : IPsCommandInfo {
         return _relatedLinks;
     }
     public IPsCommandSupportInfo? GetSupportInfo() {
-        throw new NotImplementedException();
+        return supportInfo;
     }
 
     public void ImportCommentBasedHelp(PSObject cbh) {
