@@ -544,17 +544,17 @@
     <Resource Include="Images\Statuses\warn_16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CodeKicker.BBCode\CodeKicker.BBCode.csproj">
+    <ProjectReference Include="..\src\CodeKicker.BBCode\CodeKicker.BBCode.csproj">
       <Project>{1c8a5fb6-633a-43bd-b1b7-75a0ddc308f5}</Project>
       <Name>CodeKicker.BBCode</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
-      <Project>{2fae87f8-bee9-4be7-9f9d-5d795f2de205}</Project>
-      <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
     <ProjectReference Include="..\src\PsCmdletHelpEditor.Core\PsCmdletHelpEditor.Core.csproj">
       <Project>{3304C0B1-32AE-4DD0-BBD6-C858E1E206D4}</Project>
       <Name>PsCmdletHelpEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj">
+      <Project>{2fae87f8-bee9-4be7-9f9d-5d795f2de205}</Project>
+      <Name>PsCmdletHelpEditor.XmlRpc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
