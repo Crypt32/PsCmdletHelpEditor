@@ -1,12 +1,12 @@
-﻿using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using PsCmdletHelpEditor.Core.Models;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
 class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
@@ -24,8 +24,8 @@ class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
 
     public ObservableCollection<ProviderInformation> Providers { get; }
         = new ObservableCollection<ProviderInformation>();
-    public ObservableCollection<BlogInfo> WebSites { get; }
-        = new ObservableCollection<BlogInfo>();
+    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; }
+        = new ObservableCollection<XmlRpcBlogInfo>();
 
     public Boolean UseSupports {
         get => useSupports;

@@ -1,17 +1,17 @@
-﻿using CmdletHelpEditor.API.Tools;
-using PsCmdletHelpEditor.Core.Models;
-using SysadminsLV.WPF.OfficeTheme.Toolkit;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Security;
 using System.Xml.Serialization;
+using CmdletHelpEditor.API.Tools;
+using PsCmdletHelpEditor.Core.Models;
+using SysadminsLV.WPF.OfficeTheme.Toolkit;
 
 namespace CmdletHelpEditor.API.Models;
 
 public class ProviderInformation : INotifyPropertyChanged {
     String provName, url, userName, password;
     Int32 postCount = 50;
-    BlogInfo blog;
+    XmlRpcBlogInfo blog;
 
     public String ProviderName {
         get => provName;
@@ -27,7 +27,7 @@ public class ProviderInformation : INotifyPropertyChanged {
             OnPropertyChanged(nameof(ProviderURL));
         }
     }
-    public BlogInfo Blog {
+    public XmlRpcBlogInfo Blog {
         get => blog;
         set {
             blog = value;

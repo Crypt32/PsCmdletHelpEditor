@@ -1,179 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Management.Automation;
 using System.Xml.Serialization;
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-[XmlRoot("ModuleObject")]
-[XmlInclude(typeof(XmlPsCommand))]
-public class XmlPsModuleProject : IPsModuleProject {
-    [XmlAttribute("fVersion")]
-    public Double FormatVersion { get; set; }
-    public String Name { get; set; }
-    [XmlAttribute("type")]
-    public ModuleType ModuleType { get; set; }
-    public String Version { get; set; }
-    public String Description { get; set; }
-    [XmlAttribute("mclass")]
-    public String ModuleClass { get; set; }
-    [XmlIgnore]
-    public String ModulePath { get; set; }
-    [XmlAttribute("useSupports")]
-    public Boolean UseSupports { get; set; }
-    public Boolean HasManifest { get; set; }
-    public XmlRpcProviderInformation? Provider { get; set; }
-    public Boolean OverridePostCount { get; set; }
-    public Int32? FetchPostCount { get; set; }
-    public String ExtraHeader { get; set; }
-    public String ExtraFooter { get; set; }
-    // editor
-    [XmlArrayItem("CmdletObject")]
-    public List<XmlPsCommand> Cmdlets { get; set; }
-    [XmlIgnore]
-    public String ProjectPath { get; set; }
-
-
-    public IReadOnlyList<IPsCommandInfo> GetCmdlets() {
-        return Cmdlets;
-    }
-    public IXmlRpcProviderInformation? GetXmlRpcProviderInfo() {
-        return Provider;
-    }
+public class XmlPsSupportInfo {
+    [XmlAttribute("ad")]
+    public Boolean RequiresAD { get; set; }
+    [XmlAttribute("rsat")]
+    public Boolean RequiresRSAT { get; set; }
+    [XmlAttribute("minPsVersion")]
+    public Int32 PsVersionAsInt { get; set; }
+    [XmlAttribute("winOsSupport")]
+    public Int32 WinOsVersionAsInt { get; set; }
 }
-
-public class XmlRpcProviderInformation : IXmlRpcProviderInformation {
-    public String ProviderName { get; set; }
-    public String ProviderURL { get; set; }
-    public BlogInfo Blog { get; set; }
-    public String UserName { get; set; }
-    public String Password { get; set; }
-    public Int32 FetchPostCount { get; set; }
-}
-
-[XmlInclude(typeof(XmlCommandParameterSet))]
-[XmlInclude(typeof(XmlPsCommandParameterDescription))]
-[XmlInclude(typeof(XmlPsExample))]
-[XmlInclude(typeof(XmlPsRelatedLink))]
-public class XmlPsCommand : IPsCommandInfo {
-    public String Name { get; set; }
-    [XmlAttribute("verb")]
-    public String? Verb { get; set; }
-    [XmlAttribute("noun")]
-    public String? Noun { get; set; }
-    public List<String> Syntax { get; set; }
-    public XmlPsGeneralDescription GeneralHelp { get; set; }
-    [XmlArrayItem("CommandParameterSetInfo2")]
-    public List<XmlCommandParameterSet> ParamSets { get; set; } = [];
-    [XmlArrayItem("ParameterDescription")]
-    public List<XmlPsCommandParameterDescription> Parameters { get; set; } = [];
-    [XmlArrayItem("Example")]
-    public List<XmlPsExample> Examples { get; set; } = [];
-    [XmlArrayItem("RelatedLink")]
-    public List<XmlPsRelatedLink> RelatedLinks { get; set; } = [];
-    public XmlPsCommandSupportInfo? SupportInformation { get; set; }
-    public String? ExtraHeader { get; set; }
-    public String? ExtraFooter { get; set; }
-    public Boolean Publish { get; set; }
-    public String? URL { get; set; }
-    public String? ArticleIDString { get; set; }
-
-    public IPsCommandGeneralDescription GetDescription() {
-        return GeneralHelp;
-    }
-    public IReadOnlyList<String> GetSyntax() {
-        return Syntax;
-    }
-    public IPsCommandSupportInfo? GetSupportInfo() {
-        return SupportInformation;
-    }
-    public IReadOnlyList<IPsCommandParameterSetInfo> GetParameterSets() {
-        return ParamSets;
-    }
-    public IReadOnlyList<IPsCommandParameterDescription> GetParameters() {
-        return Parameters;
-    }
-    public IReadOnlyList<IPsCommandExample> GetExamples() {
-        return Examples;
-    }
-    public IReadOnlyList<IPsCommandRelatedLink> GetRelatedLinks() {
-        return RelatedLinks;
-    }
-}
-
-public class XmlPsGeneralDescription : IPsCommandGeneralDescription {
-    public String? Synopsis { get; set; }
-    public String? Description { get; set; }
-    public String Notes { get; set; }
-    public String? InputType { get; set; }
-    public String? InputUrl { get; set; }
-    public String? ReturnType { get; set; }
-    public String? ReturnUrl { get; set; }
-    public String? InputTypeDescription { get; set; }
-    public String? ReturnTypeDescription { get; set; }
-}
-
-public class XmlCommandParameterSet : IPsCommandParameterSetInfo {
-    [XmlAttribute]
-    public String Name { get; set; }
-    [XmlAttribute("Params")]
-    public List<String> Parameters { get; set; }
-
-    public IReadOnlyList<String> GetParameters() {
-        return Parameters;
-    }
-}
-
-public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
-    public String Name { get; set; } = null!;
-    [XmlAttribute("type")]
-    public String Type { get; set; } = null!;
-    [XmlAttribute("varLen")]
-    public Boolean AcceptsArray { get; set; }
-    [XmlAttribute("required")]
-    public Boolean Mandatory { get; set; }
-    [XmlAttribute("dynamic")]
-    public Boolean Dynamic { get; set; }
-    [XmlAttribute("pipeRemaining")]
-    public Boolean RemainingArgs { get; set; }
-    [XmlAttribute("pipe")]
-    public Boolean Pipeline { get; set; }
-    [XmlAttribute("pipeProp")]
-    public Boolean PipelinePropertyName { get; set; }
-    [XmlAttribute("globbing")]
-    public Boolean Globbing { get; set; }
-    [XmlAttribute("isPos")]
-    public Boolean Positional { get; set; }
-    [XmlAttribute("pos")]
-    public String? Position { get; set; }
-    [XmlIgnore]
-    public PsCommandParameterOption Options { get; set; }
-    public String? Description { get; set; } = null!;
-    public String? DefaultValue { get; set; }
-
-    public List<String> Attributes { get; set; } = [];
-    public List<String> Aliases { get; set; } = [];
-
-    public IReadOnlyList<String> GetAttributes() {
-        return Attributes;
-    }
-    public IReadOnlyList<String> GetAliases() {
-        return Aliases;
-    }
-}
-
-public class XmlPsRelatedLink : IPsCommandRelatedLink {
-    public String? LinkText { get; set; } = null!;
-    public String? LinkUrl { get; set; }
-}
-
-public class XmlPsExample : IPsCommandExample {
-    public String Name { get; set; } = null!;
-    public String? Cmd { get; set; } = null!;
-    public String? Description { get; set; }
-    public String? Output { get; set; }
-}
-
 public class XmlPsCommandSupportInfo : IPsCommandSupportInfo {
     Boolean ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,

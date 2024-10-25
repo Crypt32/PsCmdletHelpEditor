@@ -1,12 +1,4 @@
-﻿using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.ViewModels;
-using PsCmdletHelpEditor.Core.Models;
-using PsCmdletHelpEditor.XmlRpc;
-using PsCmdletHelpEditor.XmlRpc.WordPress;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -16,7 +8,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.XmlRpc;
+using PsCmdletHelpEditor.XmlRpc.WordPress;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
+using XmlRpcBlogInfo = PsCmdletHelpEditor.Core.Models.XmlRpcBlogInfo;
 
 namespace CmdletHelpEditor.Views.Dialogs;
 
@@ -37,7 +37,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         UseProviderCommand = new RelayCommand(UseProviderChanged);
         UseSupports = _mwvm.SelectedTab.Module.UseSupports;
         Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
-        WebSites = new ObservableCollection<BlogInfo>();
+        WebSites = new ObservableCollection<XmlRpcBlogInfo>();
         InitializeComponent();
         if (context.SelectedTab.Module.Provider != null) {
             blogger = Utils.InitializeBlogger(context.SelectedTab.Module.Provider);
@@ -62,7 +62,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
     public ICommand UseProviderCommand { get; set; }
 
     public ObservableCollection<ProviderInformation> Providers { get; set; }
-    public ObservableCollection<BlogInfo> WebSites { get; set; }
+    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; set; }
 
     public Boolean UseSupports {
         get => useSupports;
@@ -118,11 +118,11 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         SetPassword();
         blogger = Utils.InitializeBlogger(ProviderInfo);
         try {
-            IEnumerable<XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
+            IEnumerable<PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
             if (blogs == null) { return; }
             WebSites.Clear();
-            foreach (XmlRpcBlogInfo blog in blogs) {
-                var blogInfo = new BlogInfo {
+            foreach (PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo blog in blogs) {
+                var blogInfo = new XmlRpcBlogInfo {
                                          BlogID = blog.BlogID,
                                          BlogName = blog.BlogName,
                                          URL = blog.URL

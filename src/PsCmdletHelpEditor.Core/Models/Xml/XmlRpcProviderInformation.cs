@@ -1,12 +1,11 @@
-﻿using CmdletHelpEditor.API.Models;
-using System;
+﻿using System;
 
-namespace CmdletHelpEditor.API.Contracts;
+namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-public class XmlMwProviderInfo {
+public class XmlRpcProviderInformation : IXmlRpcProviderInformation {
     public String ProviderName { get; set; }
     public String ProviderURL { get; set; }
-    public XmlMwBlogInfo Blog { get; set; }
+    public XmlRpcBlogInfo Blog { get; set; }
     public String UserName { get; set; }
     public String Password { get; set; }
     public Int32 FetchPostCount { get; set; }
