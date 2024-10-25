@@ -8,7 +8,7 @@ namespace CmdletHelpEditor.API.ViewModels;
 public class ExampleVM : ViewModelBase {
     Boolean exampleTextBoxEnabled;
     CmdletObject cmdlet;
-    Example currentExample;
+    PsCommandExampleVM currentExample;
 
     public ExampleVM() {
         NewExampleCommand = new RelayCommand(newExample, canNewExample);
@@ -28,7 +28,7 @@ public class ExampleVM : ViewModelBase {
             OnPropertyChanged();
         }
     }
-    public Example CurrentExample {
+    public PsCommandExampleVM CurrentExample {
         get => currentExample;
         set {
             currentExample = value;
@@ -38,7 +38,7 @@ public class ExampleVM : ViewModelBase {
     }
 
     void newExample(Object obj) {
-        var example = new Example {
+        var example = new PsCommandExampleVM {
             Name = $"Example {cmdlet.Examples.Count + 1}"
         };
         cmdlet.Examples.Add(example);
@@ -59,7 +59,7 @@ public class ExampleVM : ViewModelBase {
     }
     void upExample(Object obj) {
         Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
-        Example temp = cmdlet.Examples[old - 1];
+        PsCommandExampleVM temp = cmdlet.Examples[old - 1];
         cmdlet.Examples[old - 1] = CurrentExample;
         cmdlet.Examples[old] = temp;
         CurrentExample = cmdlet.Examples[old - 1];
@@ -69,7 +69,7 @@ public class ExampleVM : ViewModelBase {
     }
     void downExample(Object obj) {
         Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
-        Example temp = cmdlet.Examples[old + 1];
+        PsCommandExampleVM temp = cmdlet.Examples[old + 1];
         cmdlet.Examples[old + 1] = CurrentExample;
         cmdlet.Examples[old] = temp;
         CurrentExample = cmdlet.Examples[old + 1];

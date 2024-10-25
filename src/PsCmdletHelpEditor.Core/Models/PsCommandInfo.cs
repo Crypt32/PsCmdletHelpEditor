@@ -19,7 +19,6 @@ class PsCommandInfo : IPsCommandInfo {
     public String Name { get; private set; } = null!;
     public String? Verb { get; private set; }
     public String? Noun { get; private set; }
-    public List<String> Syntax { get; } = [];
     public String? ExtraHeader { get; }
     public String? ExtraFooter { get; }
     public IPsCommandGeneralDescription GetDescription() {
@@ -40,7 +39,9 @@ class PsCommandInfo : IPsCommandInfo {
     public IReadOnlyList<IPsCommandRelatedLink> GetRelatedLinks() {
         return _relatedLinks;
     }
-    public IPsCommandSupportInfo? GetSupportInfo() { throw new NotImplementedException(); }
+    public IPsCommandSupportInfo? GetSupportInfo() {
+        throw new NotImplementedException();
+    }
 
     public void ImportCommentBasedHelp(PSObject cbh) {
         generalDescription.ImportCommentBasedHelp(cbh);

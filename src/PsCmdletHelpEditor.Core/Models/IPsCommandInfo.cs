@@ -17,10 +17,6 @@ public interface IPsCommandInfo {
     /// </summary>
     String? Noun { get; }
     /// <summary>
-    /// Gets a list of cmdlet syntaxes, one per parameter set.
-    /// </summary>
-    List<String> Syntax { get; }
-    /// <summary>
     /// Gets optional help header.
     /// </summary>
     String? ExtraHeader { get; }
@@ -34,6 +30,11 @@ public interface IPsCommandInfo {
     /// </summary>
     /// <returns>Cmdlet description.</returns>
     IPsCommandGeneralDescription GetDescription();
+    /// <summary>
+    /// Gets a collection of command syntaxes, one per parameter set.
+    /// </summary>
+    /// <returns>Command syntaxes.</returns>
+    IReadOnlyList<String> GetSyntax();
     /// <summary>
     /// Gets a collection of cmdlet parameter sets.
     /// </summary>

@@ -6,35 +6,32 @@ using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Xml.Serialization;
+using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
-[XmlInclude(typeof(ParameterDescription))]
-[XmlInclude(typeof(Example))]
-[XmlInclude(typeof(RelatedLink))]
+[XmlInclude(typeof(PsCommandParameterVM))]
+[XmlInclude(typeof(PsCommandExampleVM))]
+[XmlInclude(typeof(PsCommandRelatedLinkVM))]
 [XmlInclude(typeof(CommandParameterSetInfo2))]
 public class CmdletObject : ViewModelBase {
     String extraHeader, extraFooter, url, articleID;
     Boolean publish;
     SupportInfo supportInfo;
-    GeneralDescription generalHelp;
-    BindingList<ParameterDescription> parameters;
-    ObservableCollection<Example> exampleList;
-    ObservableCollection<RelatedLink> linkList;
-    readonly List<String> _excludedParams = new List<String> {
-            "verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
-            "warningvariable", "warningaction", "pipelinevariable", "informationaction",
-            "informationvariable"
-        };
+    PsCommandGeneralDescriptionVM generalHelp;
+    BindingList<PsCommandParameterVM> parameters;
+    ObservableCollection<PsCommandExampleVM> exampleList;
+    ObservableCollection<PsCommandRelatedLinkVM> linkList;
+    readonly List<String> _excludedParams = [
+        "verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
+        "warningvariable", "warningaction", "pipelinevariable", "informationaction",
+        "informationvariable"
+    ];
 
     public CmdletObject() {
         initialize();
-        Examples = new ObservableCollection<Example>();
-        RelatedLinks = new ObservableCollection<RelatedLink>();
-    }
-
-    void OnBindingListChanged(Object Sender, ListChangedEventArgs ChangedEventArgs) {
-        OnPropertyChanged("nested2");
+        Examples = [];
+        RelatedLinks = [];
     }
 
     public CmdletObject(PSObject cmdlet, Boolean contentBasedHelp) : this() {
@@ -46,7 +43,7 @@ public class CmdletObject : ViewModelBase {
     }
     public CmdletObject(String name) : this() {
         Name = name;
-        GeneralHelp = new GeneralDescription { Status = ItemStatus.Missing };
+        GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.Missing };
     }
 
     public String Name { get; set; }
@@ -55,7 +52,7 @@ public class CmdletObject : ViewModelBase {
     [XmlAttribute("noun")]
     public String Noun { get; set; }
     public List<String> Syntax { get; set; }
-    public GeneralDescription GeneralHelp {
+    public PsCommandGeneralDescriptionVM GeneralHelp {
         get => generalHelp;
         set {
             if (generalHelp != null) {
@@ -70,7 +67,7 @@ public class CmdletObject : ViewModelBase {
     [XmlIgnore]
     public List<CommandParameterSetInfo> ParameterSets { get; set; }
     public List<CommandParameterSetInfo2> ParamSets { get; set; }
-    public BindingList<ParameterDescription> Parameters {
+    public BindingList<PsCommandParameterVM> Parameters {
         get => parameters;
         set {
             if (parameters != null) {
@@ -83,23 +80,23 @@ public class CmdletObject : ViewModelBase {
             }
         }
     }
-    public ObservableCollection<Example> Examples {
+    public ObservableCollection<PsCommandExampleVM> Examples {
         get => exampleList;
         set {
             if (exampleList != null) {
                 exampleList.CollectionChanged -= childOnCollectionChanged;
             }
-            exampleList = value ?? new ObservableCollection<Example>();
+            exampleList = value ?? [];
             exampleList.CollectionChanged += childOnCollectionChanged;
         }
     }
-    public ObservableCollection<RelatedLink> RelatedLinks {
+    public ObservableCollection<PsCommandRelatedLinkVM> RelatedLinks {
         get => linkList;
         set {
             if (linkList != null) {
                 linkList.CollectionChanged -= childOnCollectionChanged;
             }
-            linkList = value ?? new ObservableCollection<RelatedLink>();
+            linkList = value ?? [];
             linkList.CollectionChanged += childOnCollectionChanged;
         }
     }
@@ -153,13 +150,16 @@ public class CmdletObject : ViewModelBase {
         }
     }
     void initialize() {
-        ParamSets = new List<CommandParameterSetInfo2>();
-        Parameters = new BindingList<ParameterDescription>();
-        Examples = new ObservableCollection<Example>();
-        RelatedLinks = new ObservableCollection<RelatedLink>();
+        ParamSets = [];
+        Parameters = [];
+        Examples = [];
+        RelatedLinks = [];
     }
 
     #region nested object event handlers
+    void OnBindingListChanged(Object Sender, ListChangedEventArgs ChangedEventArgs) {
+        OnPropertyChanged("nested2");
+    }
     void childOnCollectionChanged(Object sender, NotifyCollectionChangedEventArgs e) {
         switch (e.Action) {
             case NotifyCollectionChangedAction.Add:
@@ -185,15 +185,15 @@ public class CmdletObject : ViewModelBase {
         Name = (String)cmdlet.Members["Name"].Value;
         Verb = (String)cmdlet.Members["Verb"].Value;
         Noun = (String)cmdlet.Members["Noun"].Value;
-        GeneralHelp = new GeneralDescription {Status = ItemStatus.New};
-        Parameters = new BindingList<ParameterDescription>();
-        ParamSets = new List<CommandParameterSetInfo2>();
+        GeneralHelp = new PsCommandGeneralDescriptionVM {Status = ItemStatus.New};
+        Parameters = [];
+        ParamSets = [];
         getParameterSets(cmdlet);
         getParameters();
         getOutputTypes(cmdlet);
         getSyntax(cmdlet);
-        RelatedLinks = new ObservableCollection<RelatedLink>();
-        Examples = new ObservableCollection<Example>();
+        RelatedLinks = [];
+        Examples = [];
         SupportInformation = new SupportInfo();
     }
     void initializeFromHelp(PSObject cmdlet) {
@@ -243,13 +243,13 @@ public class CmdletObject : ViewModelBase {
             if (types.Members["inputType"].Value is PSObject value) {
                 iType.Add(value);
             } else {
-                iType = new List<PSObject>((PSObject[])types.Members["inputType"].Value);
+                iType = [..(PSObject[])types.Members["inputType"].Value];
             }
         } else {
             if (types.Members["returnValue"].Value is PSObject value) {
                 iType.Add(value);
             } else {
-                iType = new List<PSObject>((PSObject[])types.Members["returnValue"].Value);
+                iType = [..(PSObject[])types.Members["returnValue"].Value];
             }
         }
         
@@ -294,7 +294,7 @@ public class CmdletObject : ViewModelBase {
     void importParamHelp(PSObject helpParameters) {
         var paras = new List<PSObject>();
         if (!(helpParameters.Members["parameter"].Value is PSObject)) {
-            paras = new List<PSObject>((PSObject[])helpParameters.Members["parameter"].Value);
+            paras = [..(PSObject[])helpParameters.Members["parameter"].Value];
         } else {
             paras.Add((PSObject)helpParameters.Members["parameter"].Value);
         }
@@ -303,7 +303,7 @@ public class CmdletObject : ViewModelBase {
             String description = ((PSObject[]) param.Members["Description"].Value)
             .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
             String defaultValue = (String)((PSObject)param.Members["defaultValue"].Value).BaseObject;
-            ParameterDescription currentParam = Parameters.Single(x => x.Name == name);
+            PsCommandParameterVM currentParam = Parameters.Single(x => x.Name == name);
             currentParam.Description = description;
             currentParam.DefaultValue = defaultValue;
         }
@@ -311,7 +311,7 @@ public class CmdletObject : ViewModelBase {
     void importExamples(PSObject example) {
         var examples = new List<PSObject>();
         if (!(example.Members["example"].Value is PSObject)) {
-            examples = new List<PSObject>((PSObject[])example.Members["example"].Value);
+            examples = [..(PSObject[])example.Members["example"].Value];
         } else {
             examples.Add((PSObject)example.Members["example"].Value);
         }
@@ -320,7 +320,7 @@ public class CmdletObject : ViewModelBase {
             String code = (String)((PSObject)ex.Members["code"].Value).BaseObject;
             String description = ((PSObject[])ex.Members["remarks"].Value)
             .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-            Examples.Add(new Example {
+            Examples.Add(new PsCommandExampleVM {
                 Name = title,
                 Cmd = code,
                 Description = description
@@ -330,23 +330,23 @@ public class CmdletObject : ViewModelBase {
     void importRelinks(PSObject relink) {
         var relinks = new List<PSObject>();
         if (!(relink.Members["navigationLink"].Value is PSObject)) {
-            relinks = new List<PSObject>((PSObject[])relink.Members["navigationLink"].Value);
+            relinks = [..(PSObject[])relink.Members["navigationLink"].Value];
         } else {
             relinks.Add((PSObject)relink.Members["navigationLink"].Value);
         }
         foreach (PSObject link in relinks) {
             String linkText = ((String)((PSObject)link.Members["linkText"].Value).BaseObject).Replace("-", String.Empty).Trim();
             String uri = (String)((PSObject)link.Members["uri"].Value).BaseObject;
-            RelatedLinks.Add(new RelatedLink {
+            RelatedLinks.Add(new PsCommandRelatedLinkVM {
                 LinkText = linkText,
                 LinkUrl = uri
             });
         }
     }
     void getParameterSets(PSObject cmdlet) {
-        ParameterSets = new List<CommandParameterSetInfo>();
+        ParameterSets = [];
         if (cmdlet.Members["ParameterSets"].Value != null) {
-            ParameterSets = new List<CommandParameterSetInfo>((ReadOnlyCollection<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value);
+            ParameterSets = [..(ReadOnlyCollection<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value];
             foreach (CommandParameterSetInfo paramInfo in ParameterSets) {
                 var info = new CommandParameterSetInfo2 { Name = paramInfo.Name };
                 foreach (CommandParameterInfo param in paramInfo.Parameters) {
@@ -360,8 +360,8 @@ public class CmdletObject : ViewModelBase {
         if (ParameterSets.Count == 0) { return; }
         foreach (CommandParameterSetInfo paramSet in ParameterSets) {
             if (paramSet.Parameters.Count == 0) { return; }
-                foreach (CommandParameterInfo param in from param in paramSet.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new ParameterDescription(param) where !Parameters.Contains(para) select param) {
-                    Parameters.Add(new ParameterDescription(param));
+                foreach (CommandParameterInfo param in from param in paramSet.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new PsCommandParameterVM(param) where !Parameters.Contains(para) select param) {
+                    Parameters.Add(new PsCommandParameterVM(param));
             }
         }
     }
@@ -374,7 +374,7 @@ public class CmdletObject : ViewModelBase {
         GeneralHelp.ReturnType = joined;
     }
     void getSyntax(PSObject cmdlet) {
-        Syntax = new List<String>();
+        Syntax = [];
         foreach (CommandParameterSetInfo paramSet in ParameterSets) {
             String syntaxItem = Convert.ToString(cmdlet.Members["name"].Value);
             foreach (CommandParameterInfo item in paramSet.Parameters) {
@@ -383,7 +383,7 @@ public class CmdletObject : ViewModelBase {
                 // fetch param type
                 String paramType = String.Empty;
                 CommandParameterInfo item1 = item;
-                foreach (ParameterDescription param in Parameters.Where(param => item1.Name == param.Name)) {
+                foreach (PsCommandParameterVM param in Parameters.Where(param => item1.Name == param.Name)) {
                     paramType = param.Type;
                 }
                 // fetch ValidateSet attribute
@@ -448,24 +448,59 @@ public class CmdletObject : ViewModelBase {
             }
         }
         // process active non-processed parameters. They are new parameters
-        foreach (ParameterDescription param in sourceCmdlet.Parameters.Where(param => !processed.Contains(param.Name))) {
+        foreach (PsCommandParameterVM param in sourceCmdlet.Parameters.Where(param => !processed.Contains(param.Name))) {
            Parameters.Add(param);
         }
     }
 
+    public static CmdletObject FromCommandInfo(IPsCommandInfo commandInfo) {
+        var retValue = new CmdletObject();
+        retValue.initialize();
+        retValue.Name = commandInfo.Name;
+        retValue.Verb = commandInfo.Verb;
+        retValue.Noun = commandInfo.Verb;
+        retValue.ExtraHeader = commandInfo.ExtraHeader;
+        retValue.ExtraFooter = commandInfo.ExtraFooter;
+        retValue.Syntax.AddRange(commandInfo.GetSyntax());
+        retValue.GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.New };
+        retValue.GeneralHelp.ImportFromCommandInfo(commandInfo.GetDescription());
+        foreach (IPsCommandParameterDescription param in commandInfo.GetParameters()) {
+            retValue.Parameters.Add(PsCommandParameterVM.ImportFromCommandInfo(param));
+        }
+        foreach (IPsCommandParameterSetInfo paramSet in commandInfo.GetParameterSets()) {
+            retValue.ParamSets.Add(CommandParameterSetInfo2.FromCommandInfo(paramSet));
+        }
+        foreach (IPsCommandExample example in commandInfo.GetExamples()) {
+            retValue.Examples.Add(PsCommandExampleVM.FromCommandInfo(example));
+        }
+
+        foreach (IPsCommandRelatedLink relatedLink in commandInfo.GetRelatedLinks()) {
+            retValue.RelatedLinks.Add(PsCommandRelatedLinkVM.FromCommandInfo(relatedLink));
+        }
+
+        return retValue;
+    }
+
+    #region ToString
+
     public override String ToString() {
         return Name;
     }
+
+    #endregion
+
+    #region Equals
+
     public override Boolean Equals(Object obj) {
         return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
                                                obj.GetType() == GetType() && Equals((CmdletObject)obj));
     }
-
     protected Boolean Equals(CmdletObject other) {
         return String.Equals(Name, other.Name);
     }
-
     public override Int32 GetHashCode() {
         return Name != null ? Name.GetHashCode() : 0;
     }
+
+    #endregion
 }

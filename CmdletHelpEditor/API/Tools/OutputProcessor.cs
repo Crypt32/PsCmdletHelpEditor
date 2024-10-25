@@ -1,9 +1,4 @@
-﻿using CmdletHelpEditor.API.Abstractions;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Utility;
-using CodeKicker.BBCode;
-using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,6 +6,11 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CmdletHelpEditor.API.Abstractions;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Utility;
+using CodeKicker.BBCode;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 
@@ -83,7 +83,7 @@ abstract class OutputProcessor {
     /// </summary>
     /// <param name="param">Cmdlet parameter.</param>
     /// <returns>Markup.</returns>
-    protected abstract String GenerateParamTable(ParameterDescription param);
+    protected abstract String GenerateParamTable(PsCommandParameterVM param);
 
     String escape(String content) {
         return EscapeHtml ? SecurityElement.Escape(content) : content;
@@ -157,7 +157,7 @@ abstract class OutputProcessor {
     }
     void htmlGenerateParams(BBCodeParser rules, StringBuilder SB, IReadOnlyList<CmdletObject> cmdlets, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Parameters"));
-        foreach (ParameterDescription param in cmdlet.Parameters) {
+        foreach (PsCommandParameterVM param in cmdlet.Parameters) {
             String paramNameContent = $"-{escape(param.Name)} <em style=\"font-weight: 100;\">&lt;{escape(param.Type)}&gt;</em>";
             SB.AppendLine(GenerateH3(paramNameContent));
             if (!String.IsNullOrEmpty(param.Description)) {
@@ -221,7 +221,7 @@ For more information, see about_CommonParameters ({link})"));
     void htmlGenerateExamples(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
         SB.AppendLine(GenerateH2("Examples"));
         for (Int32 index = 0; index < cmdlet.Examples.Count; index++) {
-            Example example = cmdlet.Examples[index];
+            PsCommandExampleVM example = cmdlet.Examples[index];
             String name = String.IsNullOrEmpty(example.Name)
                 ? $"Example {index + 1}"
                 : example.Name;
@@ -251,7 +251,7 @@ For more information, see about_CommonParameters ({link})"));
         }
 
         var content = new StringBuilder();
-        foreach (RelatedLink link in cmdlet.RelatedLinks.Where(x => !x.LinkText.Equals("online version:", StringComparison.OrdinalIgnoreCase))) {
+        foreach (PsCommandRelatedLinkVM link in cmdlet.RelatedLinks.Where(x => !x.LinkText.Equals("online version:", StringComparison.OrdinalIgnoreCase))) {
             content.Append(rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets)));
             if (!String.IsNullOrEmpty(link.LinkUrl)) {
                 content.Append(GenerateHyperLink(link.LinkText, link.LinkUrl));

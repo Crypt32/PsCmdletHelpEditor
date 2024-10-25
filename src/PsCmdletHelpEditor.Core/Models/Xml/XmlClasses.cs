@@ -80,6 +80,9 @@ public class XmlPsCommand : IPsCommandInfo {
     public IPsCommandGeneralDescription GetDescription() {
         return GeneralHelp;
     }
+    public IReadOnlyList<String> GetSyntax() {
+        return Syntax;
+    }
     public IPsCommandSupportInfo? GetSupportInfo() {
         return SupportInformation;
     }

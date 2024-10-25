@@ -1,14 +1,15 @@
 ﻿using System;
 using CmdletHelpEditor.API.Abstractions;
+using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class RelatedLink : ViewModelBase, IPsRelatedLink {
+public class PsCommandRelatedLinkVM : ViewModelBase, IPsRelatedLink {
     readonly Int32 _uid;
     String linkText, linkUrl;
 
-    public RelatedLink() {
+    public PsCommandRelatedLinkVM() {
         _uid = Guid.NewGuid().GetHashCode();
     }
 
@@ -17,7 +18,7 @@ public class RelatedLink : ViewModelBase, IPsRelatedLink {
         set {
             if (linkText != value) {
                 linkText = value;
-                OnPropertyChanged(nameof(LinkText));
+                OnPropertyChanged();
             }
         }
     }
@@ -26,17 +27,24 @@ public class RelatedLink : ViewModelBase, IPsRelatedLink {
         set {
             if (linkUrl != value) {
                 linkUrl = value;
-                OnPropertyChanged(nameof(LinkUrl));
+                OnPropertyChanged();
             }
         }
     }
 
-    public override Boolean Equals(Object obj) {
-        return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
-                                               obj.GetType() == this.GetType() && Equals((RelatedLink)obj));
+    public static PsCommandRelatedLinkVM FromCommandInfo(IPsCommandRelatedLink relatedLink) {
+        return new PsCommandRelatedLinkVM {
+            LinkText = relatedLink.LinkText,
+            LinkUrl = relatedLink.LinkUrl,
+        };
     }
 
-    protected Boolean Equals(RelatedLink other) {
+    public override Boolean Equals(Object obj) {
+        return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
+                                               obj.GetType() == this.GetType() && Equals((PsCommandRelatedLinkVM)obj));
+    }
+
+    protected Boolean Equals(PsCommandRelatedLinkVM other) {
         return _uid == other._uid;
     }
 

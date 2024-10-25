@@ -83,7 +83,7 @@ class MarkDownProcessor : OutputProcessor {
     protected override String GenerateListItem(String content) {
         return "- " + content;
     }
-    protected override String GenerateParamTable(ParameterDescription param) {
+    protected override String GenerateParamTable(PsCommandParameterVM param) {
         return $@"
 Property|Value
 -|-

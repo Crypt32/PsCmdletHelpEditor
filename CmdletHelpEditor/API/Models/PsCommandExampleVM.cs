@@ -1,14 +1,15 @@
 ﻿using System;
 using CmdletHelpEditor.API.Abstractions;
+using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class Example : ViewModelBase, IPsExample {
+public class PsCommandExampleVM : ViewModelBase, IPsExample {
     String name, cmd, description, output;
     readonly Int32 _uid;
 
-    public Example() {
+    public PsCommandExampleVM() {
         _uid = Guid.NewGuid().GetHashCode();
     }
     public String Name {
@@ -16,7 +17,7 @@ public class Example : ViewModelBase, IPsExample {
         set {
             if (name != value) {
                 name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
     }
@@ -34,7 +35,7 @@ public class Example : ViewModelBase, IPsExample {
         set {
             if (description != value) {
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
     }
@@ -43,17 +44,26 @@ public class Example : ViewModelBase, IPsExample {
         set {
             if (output != value) {
                 output = value;
-                OnPropertyChanged(nameof(Output));
+                OnPropertyChanged();
             }
         }
     }
 
-    public override Boolean Equals(Object obj) {
-        return !ReferenceEquals(null, obj) &&
-               (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Example)obj));
+    public static PsCommandExampleVM FromCommandInfo(IPsCommandExample example) {
+        return new PsCommandExampleVM {
+            Name = example.Name,
+            Cmd = example.Cmd,
+            Description = example.Description,
+            Output = example.Output,
+        };
     }
 
-    protected Boolean Equals(Example other) {
+    public override Boolean Equals(Object obj) {
+        return !ReferenceEquals(null, obj) &&
+               (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((PsCommandExampleVM)obj));
+    }
+
+    protected Boolean Equals(PsCommandExampleVM other) {
         return _uid == other._uid;
     }
 

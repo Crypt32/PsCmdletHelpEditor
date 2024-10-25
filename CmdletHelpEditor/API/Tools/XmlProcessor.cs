@@ -134,7 +134,7 @@ class XmlProcessor {
     static void readParameters(IEnumerable paramNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
         if (paramNodes == null) { return; }
         foreach (XmlNode paramNode in paramNodes) {
-            var foundParam = new ParameterDescription();
+            var foundParam = new PsCommandParameterVM();
             XmlNode tempNode = paramNode.SelectSingleNode("maml:name", ns);
             if (tempNode == null) { continue; }
             Boolean isFound = false;
@@ -162,7 +162,7 @@ class XmlProcessor {
                 tempNode = paramNode.SelectSingleNode("@globbing", ns);
                 currentCmdlet.Parameters[paramIndex].Globbing = tempNode != null && tempNode.Value.ToLower().Trim() == "true";
             } else {
-                ParameterDescription newParam = new ParameterDescription {
+                PsCommandParameterVM newParam = new PsCommandParameterVM {
                     Name = tempNode.InnerText.Trim()
                 };
                 tempNode = paramNode.SelectSingleNode("maml:description", ns);
@@ -252,7 +252,7 @@ class XmlProcessor {
     static void readExamples(IEnumerable exampleNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
         if (exampleNodes == null) { return; }
         foreach (XmlNode exampleNode in exampleNodes) {
-            var example = new Example();
+            var example = new PsCommandExampleVM();
             // Example name
             XmlNode tempNode = exampleNode.SelectSingleNode("maml:title", ns);
             if (tempNode != null) {
@@ -291,7 +291,7 @@ class XmlProcessor {
     static void readLinks(IEnumerable linkNodes, XmlNamespaceManager ns, CmdletObject currentCmdlet) {
         if (linkNodes == null) { return; }
         foreach (XmlNode linkNode in linkNodes) {
-            var link = new RelatedLink();
+            var link = new PsCommandRelatedLinkVM();
             // Link name
             XmlNode tempNode = linkNode.SelectSingleNode("maml:linkText", ns);
             if (tempNode != null) {
@@ -385,7 +385,7 @@ class XmlProcessor {
             }
             SB.Append("</command:syntax><command:parameters>");
             if (cmdlet.Parameters.Count > 0) {
-                foreach (ParameterDescription item in cmdlet.Parameters.Where(item => item.Status != ItemStatus.Missing)) {
+                foreach (PsCommandParameterVM item in cmdlet.Parameters.Where(item => item.Status != ItemStatus.Missing)) {
                     SB.Append(xmlGenerateParameter(bbRules, item));
                 }
             }
@@ -428,9 +428,9 @@ class XmlProcessor {
                     continue;
                 }
 
-                ParameterDescription param = null;
+                PsCommandParameterVM param = null;
                 String setParam = paramSetParam;
-                foreach (ParameterDescription parameter in cmdlet.Parameters.Where(x => String.Equals(x.Name, setParam, StringComparison.CurrentCultureIgnoreCase))) {
+                foreach (PsCommandParameterVM parameter in cmdlet.Parameters.Where(x => String.Equals(x.Name, setParam, StringComparison.CurrentCultureIgnoreCase))) {
                     param = parameter;
                 }
                 if (param == null) {
@@ -472,7 +472,7 @@ class XmlProcessor {
             SB.Append("</command:syntaxItem>");
         }
     }
-    static String xmlGenerateParameter(BBCodeParser bbRules, ParameterDescription param) {
+    static String xmlGenerateParameter(BBCodeParser bbRules, PsCommandParameterVM param) {
         String paramValueRequired = "true";
         if (param.Type.ToLower() == "boolean" || param.Type.ToLower() == "switchparameter") {
             paramValueRequired = "false";

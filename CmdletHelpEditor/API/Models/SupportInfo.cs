@@ -1,8 +1,8 @@
-﻿using CmdletHelpEditor.API.Abstractions;
+﻿using System;
+using System.Xml.Serialization;
+using CmdletHelpEditor.API.Abstractions;
 using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
-using System;
-using System.Xml.Serialization;
 
 namespace CmdletHelpEditor.API.Models;
 public class SupportInfo : ViewModelBase, ISupportInfo {
@@ -36,7 +36,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
         get => ad;
         set {
             ad = value;
-            OnPropertyChanged(nameof(ADChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(rsat))]
@@ -44,7 +44,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
         get => rsat;
         set {
             rsat = value;
-            OnPropertyChanged(nameof(RsatChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps2))]
@@ -55,7 +55,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps2) {
                 PsVersion = PsVersionSupport.Ps20;
             }
-            OnPropertyChanged(nameof(Ps2Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps3))]
@@ -66,7 +66,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps3) {
                 PsVersion = PsVersionSupport.Ps30;
             }
-            OnPropertyChanged(nameof(Ps3Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps4))]
@@ -77,7 +77,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps4) {
                 PsVersion = PsVersionSupport.Ps40;
             }
-            OnPropertyChanged(nameof(Ps4Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps5))]
@@ -88,7 +88,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps5) {
                 PsVersion = PsVersionSupport.Ps50;
             }
-            OnPropertyChanged(nameof(Ps5Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps51))]
@@ -99,7 +99,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps51) {
                 PsVersion = PsVersionSupport.Ps51;
             }
-            OnPropertyChanged(nameof(Ps51Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps60))]
@@ -110,7 +110,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps60) {
                 PsVersion = PsVersionSupport.Ps60;
             }
-            OnPropertyChanged(nameof(Ps60Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(ps61))]
@@ -121,7 +121,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             if (ps61) {
                 PsVersion = PsVersionSupport.Ps61;
             }
-            OnPropertyChanged(nameof(Ps61Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(wxp))]
@@ -134,7 +134,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.WinXP;
             }
-            OnPropertyChanged(nameof(WinXpChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(wv))]
@@ -147,7 +147,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.WinVista;
             }
-            OnPropertyChanged(nameof(WinVistaChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w7))]
@@ -160,7 +160,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win7;
             }
-            OnPropertyChanged(nameof(Win7Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w8))]
@@ -173,7 +173,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win8;
             }
-            OnPropertyChanged(nameof(Win8Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w81))]
@@ -186,7 +186,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win81;
             }
-            OnPropertyChanged(nameof(Win81Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w10))]
@@ -199,7 +199,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win10;
             }
-            OnPropertyChanged(nameof(Win10Checked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w11))]
@@ -212,7 +212,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
             } else {
                 WinOsVersion &= ~WinOsVersionSupport.Win11;
             }
-            OnPropertyChanged(nameof(Win11Checked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -260,7 +260,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k3e))]
@@ -279,7 +279,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003EEChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k3d))]
@@ -298,7 +298,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
-            OnPropertyChanged(nameof(Win2003DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -346,7 +346,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k8e))]
@@ -365,7 +365,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008EEChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k8d))]
@@ -384,7 +384,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
-            OnPropertyChanged(nameof(Win2008DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -432,7 +432,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k8r2e))]
@@ -451,7 +451,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2EEChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k8r2d))]
@@ -470,7 +470,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged(nameof(Win2008R2DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -516,7 +516,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k12 = false;
                 OnPropertyChanged(nameof(Win2012Checked));
             }
-            OnPropertyChanged(nameof(Win2012StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k12d))]
@@ -535,7 +535,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k12 = false;
                 OnPropertyChanged(nameof(Win2012Checked));
             }
-            OnPropertyChanged(nameof(Win2012DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -581,7 +581,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k12r2 = false;
                 OnPropertyChanged(nameof(Win2012R2Checked));
             }
-            OnPropertyChanged(nameof(Win2012R2StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k12r2d))]
@@ -600,7 +600,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k12r2 = false;
                 OnPropertyChanged(nameof(Win2012R2Checked));
             }
-            OnPropertyChanged(nameof(Win2012R2DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -646,7 +646,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k16 = false;
                 OnPropertyChanged(nameof(Win2016Checked));
             }
-            OnPropertyChanged(nameof(Win2016StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k16d))]
@@ -665,7 +665,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k16 = false;
                 OnPropertyChanged(nameof(Win2016Checked));
             }
-            OnPropertyChanged(nameof(Win2016DCChecked));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -711,7 +711,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k19 = false;
                 OnPropertyChanged(nameof(Win2019Checked));
             }
-            OnPropertyChanged(nameof(Win2019StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k19d))]
@@ -730,7 +730,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k19 = false;
                 OnPropertyChanged(nameof(Win2019Checked));
             }
-            OnPropertyChanged(nameof(Win2019DCChecked));
+            OnPropertyChanged();
         }
     }
 
@@ -777,7 +777,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k22 = false;
                 OnPropertyChanged(nameof(Win2022Checked));
             }
-            OnPropertyChanged(nameof(Win2022StdChecked));
+            OnPropertyChanged();
         }
     }
     [XmlAttribute(nameof(w2k22d))]
@@ -796,7 +796,7 @@ public class SupportInfo : ViewModelBase, ISupportInfo {
                 w2k22 = false;
                 OnPropertyChanged(nameof(Win2022Checked));
             }
-            OnPropertyChanged(nameof(Win2022DCChecked));
+            OnPropertyChanged();
         }
     }
 

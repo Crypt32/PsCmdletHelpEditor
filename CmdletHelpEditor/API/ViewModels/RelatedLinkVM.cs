@@ -8,7 +8,7 @@ namespace CmdletHelpEditor.API.ViewModels;
 public class RelatedLinkVM : ViewModelBase {
     Boolean linkTextBoxEnabled;
     CmdletObject cmdlet;
-    RelatedLink currentRelink;
+    PsCommandRelatedLinkVM currentRelink;
 
 
     public RelatedLinkVM() {
@@ -29,7 +29,7 @@ public class RelatedLinkVM : ViewModelBase {
             OnPropertyChanged();
         }
     }
-    public RelatedLink CurrentRelink {
+    public PsCommandRelatedLinkVM CurrentRelink {
         get => currentRelink;
         set {
             currentRelink = value;
@@ -39,7 +39,7 @@ public class RelatedLinkVM : ViewModelBase {
     }
 
     void newLink(Object obj) {
-        var link = new RelatedLink { LinkText = "<Link>" };
+        var link = new PsCommandRelatedLinkVM { LinkText = "<Link>" };
         cmdlet.RelatedLinks.Add(link);
         CurrentRelink = link;
     }
@@ -58,7 +58,7 @@ public class RelatedLinkVM : ViewModelBase {
     }
     void upLink(Object obj) {
         Int32 old = cmdlet.RelatedLinks.IndexOf(CurrentRelink);
-        RelatedLink temp = cmdlet.RelatedLinks[old - 1];
+        PsCommandRelatedLinkVM temp = cmdlet.RelatedLinks[old - 1];
         cmdlet.RelatedLinks[old - 1] = CurrentRelink;
         cmdlet.RelatedLinks[old] = temp;
         CurrentRelink = cmdlet.RelatedLinks[old - 1];
@@ -68,7 +68,7 @@ public class RelatedLinkVM : ViewModelBase {
     }
     void downLink(Object obj) {
         Int32 old = cmdlet.RelatedLinks.IndexOf(CurrentRelink);
-        RelatedLink temp = cmdlet.RelatedLinks[old + 1];
+        PsCommandRelatedLinkVM temp = cmdlet.RelatedLinks[old + 1];
         cmdlet.RelatedLinks[old + 1] = CurrentRelink;
         cmdlet.RelatedLinks[old] = temp;
         CurrentRelink = cmdlet.RelatedLinks[old + 1];

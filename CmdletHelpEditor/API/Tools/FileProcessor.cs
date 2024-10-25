@@ -1,12 +1,12 @@
-﻿using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
@@ -32,7 +32,7 @@ static class FileProcessor {
                 if (cmdlet.GeneralHelp.Status == ItemStatus.Missing) {
                     tab.Module.Cmdlets.Remove(cmdlet);
                 } else {
-                    foreach (ParameterDescription parameter in cmdlet.Parameters.ToArray().Where(x => x.Status == ItemStatus.Missing)) {
+                    foreach (PsCommandParameterVM parameter in cmdlet.Parameters.ToArray().Where(x => x.Status == ItemStatus.Missing)) {
                         cmdlet.Parameters.Remove(parameter);
                     }
                 }

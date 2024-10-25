@@ -1,9 +1,4 @@
-﻿using CmdletHelpEditor.API.Abstractions;
-using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Utility;
-using CodeKicker.BBCode;
-using PsCmdletHelpEditor.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,6 +6,11 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CmdletHelpEditor.API.Abstractions;
+using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Utility;
+using CodeKicker.BBCode;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 
@@ -86,7 +86,7 @@ class HtmlProcessorV2 : OutputProcessor {
     protected override String GenerateListItem(String content) {
         return "<li>" + content + "</li>";
     }
-    protected override String GenerateParamTable(ParameterDescription param) {
+    protected override String GenerateParamTable(PsCommandParameterVM param) {
         return $@"
 <table style=""margin-left: 40px;width: auto;"" class=""table table-condensed table-bordered"">
   <tbody>
@@ -226,7 +226,7 @@ static class HtmlProcessor {
     }
     static void htmlGenerateParams(BBCodeParser rules, StringBuilder SB, IReadOnlyList<CmdletObject> cmdlets, CmdletObject cmdlet) {
         SB.AppendLine("<h2>Parameters</h2>");
-        foreach (ParameterDescription param in cmdlet.Parameters) {
+        foreach (PsCommandParameterVM param in cmdlet.Parameters) {
             SB.AppendLine($"<h3>-{SecurityElement.Escape(param.Name)} <em style=\"font-weight: 100;\">&lt;{SecurityElement.Escape(param.Type)}&gt;</em></h3>");
             if (!String.IsNullOrEmpty(param.Description)) {
                 String str = rules.ToHtml(generateHtmlLink(param.Description, cmdlets));
@@ -318,7 +318,7 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
     static void htmlGenerateExamples(BBCodeParser rules, StringBuilder SB, CmdletObject cmdlet) {
         SB.AppendLine("<h2>Examples</h2>");
         for (Int32 index = 0; index < cmdlet.Examples.Count; index++) {
-            Example example = cmdlet.Examples[index];
+            PsCommandExampleVM example = cmdlet.Examples[index];
             String name = String.IsNullOrEmpty(example.Name)
                 ? $"Example {index + 1}"
                 : example.Name;
@@ -348,7 +348,7 @@ For more information, see about_CommonParameters (<a href=""https://go.microsoft
         }
 
         SB.AppendLine("<p style=\"margin-left: 40px;\">");
-        foreach (RelatedLink link in cmdlet.RelatedLinks.Where(x => !x.LinkText.Equals("online version:", StringComparison.OrdinalIgnoreCase))) {
+        foreach (PsCommandRelatedLinkVM link in cmdlet.RelatedLinks.Where(x => !x.LinkText.Equals("online version:", StringComparison.OrdinalIgnoreCase))) {
             SB.Append("    " + rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets)));
             if (!String.IsNullOrEmpty(link.LinkUrl)) {
                 SB.Append($"    <a href=\"{link.LinkUrl}\">{link.LinkUrl}</a>");

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Xml.Serialization;
+using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
-public class GeneralDescription : ViewModelBase {
+public class PsCommandGeneralDescriptionVM : ViewModelBase {
     String synopsis, description, notes, inputType, inputUrl, inputDescription, returnType, returnUrl, returnDescription;
     ItemStatus status = ItemStatus.New;
 
@@ -13,7 +14,7 @@ public class GeneralDescription : ViewModelBase {
             if (synopsis != value) {
                 synopsis = value;
                 status = ItemStatus.Incomplete;
-                OnPropertyChanged(nameof(Synopsis));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(Status));
             }
         }
@@ -24,7 +25,7 @@ public class GeneralDescription : ViewModelBase {
             if (description != value) {
                 description = value;
                 status = ItemStatus.Incomplete;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(Status));
             }
         }
@@ -34,7 +35,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (notes != value) {
                 notes = value;
-                OnPropertyChanged(nameof(Notes));
+                OnPropertyChanged();
             }
         }
     }
@@ -43,7 +44,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (inputType != value) {
                 inputType = value;
-                OnPropertyChanged(nameof(InputType));
+                OnPropertyChanged();
             }
         }
     }
@@ -52,7 +53,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (inputUrl != value) {
                 inputUrl = value;
-                OnPropertyChanged(nameof(InputUrl));
+                OnPropertyChanged();
             }
         }
     }
@@ -61,7 +62,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (inputDescription != value) {
                 inputDescription = value;
-                OnPropertyChanged(nameof(InputTypeDescription));
+                OnPropertyChanged();
             }
         }
     }
@@ -70,7 +71,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (returnType != value) {
                 returnType = value;
-                OnPropertyChanged(nameof(ReturnType));
+                OnPropertyChanged();
             }
         }
     }
@@ -79,7 +80,7 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (returnUrl != value) {
                 returnUrl = value;
-                OnPropertyChanged(nameof(ReturnUrl));
+                OnPropertyChanged();
             }
         }
     }
@@ -88,21 +89,35 @@ public class GeneralDescription : ViewModelBase {
         set {
             if (returnDescription != value) {
                 returnDescription = value;
-                OnPropertyChanged(nameof(ReturnTypeDescription));
+                OnPropertyChanged();
             }
         }
     }
     [XmlIgnore]
     public ItemStatus Status {
         get {
-            if (status == ItemStatus.Missing || status == ItemStatus.New) { return status; }
+            if (status is ItemStatus.Missing or ItemStatus.New) {
+                return status;
+            }
             return status = String.IsNullOrEmpty(Description) || String.IsNullOrEmpty(Synopsis)
                             ? ItemStatus.Incomplete
                             : ItemStatus.Valid;
         }
         set {
             status = value;
-            OnPropertyChanged("Status");
+            OnPropertyChanged();
         }
+    }
+
+    public void ImportFromCommandInfo(IPsCommandGeneralDescription generalDescription) {
+        Synopsis = generalDescription.Synopsis;
+        Description = generalDescription.Description;
+        Notes = generalDescription.Notes;
+        InputType = generalDescription.InputType;
+        InputUrl = generalDescription.InputUrl;
+        InputTypeDescription = generalDescription.InputTypeDescription;
+        ReturnType = generalDescription.ReturnType;
+        ReturnUrl = generalDescription.ReturnUrl;
+        ReturnTypeDescription = generalDescription.ReturnTypeDescription;
     }
 }

@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Xml.Serialization;
+using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
-public class ParameterDescription : ViewModelBase {
+public class PsCommandParameterVM : ViewModelBase {
     String description, defaultValue;
     Boolean globbing;
     ItemStatus status = ItemStatus.New;
 
-    public ParameterDescription() {
+    public PsCommandParameterVM() {
         Status = ItemStatus.Missing;
-        Attributes = new List<String>();
-        Aliases = new List<String>();
     }
-    public ParameterDescription(CommandParameterInfo param) : this() {
+    public PsCommandParameterVM(CommandParameterInfo param) : this() {
         initialize(param);
     }
 
@@ -38,15 +37,15 @@ public class ParameterDescription : ViewModelBase {
     public Boolean Positional { get; set; }
     [XmlAttribute("pos")]
     public String Position { get; set; }
-    public List<String> Attributes { get; set; }
-    public List<String> Aliases { get; set; }
+    public List<String> Attributes { get; set; } = [];
+    public List<String> Aliases { get; set; } = [];
     public String Description {
         get => description ?? String.Empty;
         set {
             if (description != value) {
                 description = value;
                 status = ItemStatus.Incomplete;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(Status));
             }
         }
@@ -56,7 +55,7 @@ public class ParameterDescription : ViewModelBase {
         set {
             if (defaultValue != value) {
                 defaultValue = value;
-                OnPropertyChanged(nameof(DefaultValue));
+                OnPropertyChanged();
             }
         }
     }
@@ -65,18 +64,39 @@ public class ParameterDescription : ViewModelBase {
         get => globbing;
         set {
             globbing = value;
-            OnPropertyChanged(nameof(Globbing));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
     public ItemStatus Status {
         get {
-            if (status == ItemStatus.Missing || status == ItemStatus.New) { return status; }
+            if (status is ItemStatus.Missing or ItemStatus.New) { return status; }
             return String.IsNullOrEmpty(Description)
                 ? ItemStatus.Incomplete
                 : ItemStatus.Valid;
         }
         set => status = value;
+    }
+
+    public static PsCommandParameterVM ImportFromCommandInfo(IPsCommandParameterDescription param) {
+        var retValue = new PsCommandParameterVM {
+            Name = param.Name,
+            Type = param.Type,
+            AcceptsArray = (param.Options & PsCommandParameterOption.AcceptsArray) != 0,
+            Mandatory = (param.Options & PsCommandParameterOption.Mandatory) != 0,
+            Globbing = (param.Options & PsCommandParameterOption.AcceptsWildcards) != 0,
+            Dynamic = (param.Options & PsCommandParameterOption.Dynamic) != 0,
+            RemainingArgs = (param.Options & PsCommandParameterOption.RemainingArgs) != 0,
+            Pipeline = (param.Options & PsCommandParameterOption.Pipeline) != 0,
+            PipelinePropertyName = (param.Options & PsCommandParameterOption.PipelinePropertyName) != 0,
+            Positional = (param.Options & PsCommandParameterOption.Positional) != 0,
+            Position = param.Position,
+            Description = param.Description
+        };
+        retValue.Attributes.AddRange(param.GetAttributes());
+        retValue.Aliases.AddRange(param.GetAliases());
+
+        return retValue;
     }
 
     void initialize(CommandParameterInfo param) {
@@ -147,7 +167,7 @@ public class ParameterDescription : ViewModelBase {
             return "false";
         }
     }
-    Boolean Equals(ParameterDescription other) {
+    Boolean Equals(PsCommandParameterVM other) {
         return String.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
             String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
     }
@@ -159,6 +179,6 @@ public class ParameterDescription : ViewModelBase {
     public override Boolean Equals(Object obj) {
         if (ReferenceEquals(null, obj)) { return false; }
         if (ReferenceEquals(this, obj)) { return true; }
-        return obj is ParameterDescription other && Equals(other);
+        return obj is PsCommandParameterVM other && Equals(other);
     }
 }
