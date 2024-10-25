@@ -45,4 +45,20 @@ public interface IPowerShellProcessor {
     /// <param name="path">Path to PowerShell module manifest file (.psm1 or .psd1).</param>
     /// <returns>PowerShell module metadata.</returns>
     PsModuleInfo GetModuleInfoFromFile(String path);
+    /// <summary>
+    /// Enumerates commands for specified module, command types asynchronously.
+    /// </summary>
+    /// <param name="moduleInfo">Module info to load commands for.</param>
+    /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
+    /// <param name="includeCBH">Specifies whether to include comment-based help for each loaded command. Default is <c>false</c>.</param>
+    /// <returns>A collection of commands.</returns>
+    Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false);
+    /// <summary>
+    /// Enumerates commands for specified module, command types synchronously.
+    /// </summary>
+    /// <param name="moduleInfo">Module info to load commands for.</param>
+    /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
+    /// <param name="includeCBH">Specifies whether to include comment-based help for each loaded command. Default is <c>false</c>.</param>
+    /// <returns>A collection of commands.</returns>
+    IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false);
 }

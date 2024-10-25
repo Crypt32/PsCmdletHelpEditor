@@ -96,5 +96,21 @@ public class PowerShellProcessor : IPowerShellProcessor {
             ModulePath = path
         };
     }
-
+    
+    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
+        return Task.Factory.StartNew(() => EnumCommands(moduleInfo, commandTypes, includeCBH));
+    }
+    public IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
+        moduleInfo.IsOffline = false;
+        using PowerShell ps = PowerShell.Create();
+        ps.AddScript(moduleInfo.GetInvocationString(commandTypes));
+        try {
+            return ps.Invoke()
+                .Where(x => (CommandTypes)x.Members["CommandType"].Value != CommandTypes.Alias)
+                .Select(x => PsCommandInfo.FromCommandInfo(x, includeCBH));
+        } catch {
+            moduleInfo.IsOffline = true;
+            throw;
+        }
+    }
 }
