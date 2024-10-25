@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
@@ -11,8 +12,9 @@ class PsCommandInfo : IPsCommandInfo {
     readonly PsCommandExampleCollection _examples = new();
     readonly PsCommandRelatedLinkCollection _relatedLinks = new();
     readonly List<String> _syntax = [];
+    PsCommandGeneralDescription generalDescription;
 
-    PsCommandGeneralDescription generalDescription = new();
+    PsCommandInfo() { }
 
     public String Name { get; private set; } = null!;
     public String? Verb { get; private set; }
@@ -23,7 +25,9 @@ class PsCommandInfo : IPsCommandInfo {
     public IPsCommandGeneralDescription GetDescription() {
         return generalDescription;
     }
-    public IReadOnlyList<String> GetSyntax() { throw new NotImplementedException(); }
+    public IReadOnlyList<String> GetSyntax() {
+        return _syntax;
+    }
     public IReadOnlyList<IPsCommandParameterSetInfo> GetParameterSets() {
         return _paramSets;
     }
@@ -38,12 +42,10 @@ class PsCommandInfo : IPsCommandInfo {
     }
     public IPsCommandSupportInfo? GetSupportInfo() { throw new NotImplementedException(); }
 
-    void generateSyntax() {
-
-    }
-
     public void ImportCommentBasedHelp(PSObject cbh) {
-
+        generalDescription.ImportCommentBasedHelp(cbh);
+        _examples.ImportCommentBasedHelp(cbh);
+        _relatedLinks.ImportCommentBasedHelp(cbh);
     }
 
     /// <summary>
@@ -61,9 +63,17 @@ class PsCommandInfo : IPsCommandInfo {
         };
         retValue._paramSets.FromCmdlet(cmdlet);
         retValue._params.FromCmdlet(cmdlet);
+        // prepend syntax with command name as syntax generator doesn't have access to command name.
+        // Though leading space is provided.
+        retValue._syntax.AddRange(retValue._paramSets.GetParamSetSyntax().Select(x => retValue.Name + x));
 
-        if (includeCommentBasedHelp) {
-            retValue.ImportCommentBasedHelp(cmdlet);
+        // last condition is just sanity check if command includes comment-based help and if it is worth to move on.
+        if (includeCommentBasedHelp
+            // TODO: this 'syn' is custom member added by editor.
+            && cmdlet.Members["syn"].Value is PSObject cbh
+            && cbh.Members["Synopsis"] is not null
+            && cbh.Members["Description"] is not null) {
+            retValue.ImportCommentBasedHelp(cbh);
         }
 
         return retValue;

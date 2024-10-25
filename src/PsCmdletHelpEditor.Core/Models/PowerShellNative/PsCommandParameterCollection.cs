@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-class PsCommandParameterCollection : PsCommandParameterBase, IReadOnlyList<PsCommandParameter> {
-    readonly List<PsCommandParameter> _list = [];
+class PsCommandParameterCollection : PsCommandParameterCollectionBase<PsCommandParameter> {
+    readonly Dictionary<String, PsCommandParameter> _dictionary = new(StringComparer.OrdinalIgnoreCase);
 
-    /// <inheritdoc />
-    public Int32 Count { get; set; }
-    /// <inheritdoc />
-    public PsCommandParameter this[Int32 index] => _list[index];
+    public void ImportCommentBasedHelp(PSObject cbh) {
+        if (cbh.Members["parameters"] is not null) {
+            var cbhParams = new List<PSObject>();
+            if (cbh.Members["parameter"].Value is PSObject singleValue) {
+                cbhParams.Add(singleValue);
+            } else if (cbh.Members["parameter"].Value is PSObject[] multiValue) {
+                cbhParams.AddRange(multiValue);
+            }
 
-    /// <inheritdoc />
-    public IEnumerator<PsCommandParameter> GetEnumerator() {
-        return _list.GetEnumerator();
+            foreach (PSObject cbhParam in cbhParams) {
+                String name = (String)((PSObject)cbhParam.Members["name"].Value).BaseObject;
+                if (_dictionary.TryGetValue(name, out PsCommandParameter param)) {
+                    param.ImportCommentBasedHelp(cbhParam);
+                }
+            }
+        }
     }
-    /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator() {
-        return GetEnumerator();
-    }
-
     public void FromCmdlet(PSObject cmdlet) {
         if (cmdlet.Members["ParameterSets"].Value != null) {
             var paramSets = new List<CommandParameterSetInfo>((IEnumerable<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value);
@@ -31,8 +33,9 @@ class PsCommandParameterCollection : PsCommandParameterBase, IReadOnlyList<PsCom
 
                 foreach (CommandParameterInfo param in paramSet.Parameters.Where(param => !ExcludedParameters.Contains(param.Name, StringComparer.OrdinalIgnoreCase))) {
                     var psParam = PsCommandParameter.FromCmdlet(param);
-                    if (!_list.Contains(psParam)) {
-                        _list.Add(psParam);
+                    if (!InternalList.Contains(psParam)) {
+                        InternalList.Add(psParam);
+                        _dictionary[psParam.Name] = psParam;
                     }
                 }
             }

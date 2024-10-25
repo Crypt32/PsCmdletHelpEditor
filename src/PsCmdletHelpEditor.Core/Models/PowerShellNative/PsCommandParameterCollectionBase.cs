@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-abstract class PsCommandParameterBase {
+abstract class PsCommandParameterCollectionBase<T> : ReadOnlyCollectionBase<T> {
     protected static List<String> ExcludedParameters = [
         "Verbose",
         "Debug",

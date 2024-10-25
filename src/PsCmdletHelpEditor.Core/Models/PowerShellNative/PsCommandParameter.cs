@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
@@ -67,6 +68,12 @@ class PsCommandParameter : IPsCommandParameterDescription {
         }
     }
 
+    public void ImportCommentBasedHelp(PSObject cbh) {
+        Description = ((PSObject[])cbh.Members["Description"].Value)
+            .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine)
+            .TrimEnd();
+        DefaultValue = (String)((PSObject)cbh.Members["defaultValue"].Value).BaseObject;
+    }
     public static PsCommandParameter FromCmdlet(CommandParameterInfo parameter) {
         var retValue = new PsCommandParameter {
             Name = parameter.Name,

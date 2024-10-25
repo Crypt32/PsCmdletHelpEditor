@@ -386,7 +386,7 @@ public class CmdletObject : ViewModelBase {
                 foreach (ParameterDescription param in Parameters.Where(param => item1.Name == param.Name)) {
                     paramType = param.Type;
                 }
-                // fetch VelidateSet attribute
+                // fetch ValidateSet attribute
                 String validateSet = String.Empty;
                 foreach (Attribute attribute in item.Attributes) {
                     Boolean found = false;

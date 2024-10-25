@@ -4,7 +4,7 @@ using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-class PsCommandExample : IPsCommandExample{
+class PsCommandExample : IPsCommandExample {
     public String Name { get; set; } = null!;
     public String? Cmd { get; set; }
     public String? Description { get; set; }
@@ -18,9 +18,9 @@ class PsCommandExample : IPsCommandExample{
             .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine);
 
         return new PsCommandExample {
-                                        Name = title,
-                                        Cmd = code,
-                                        Description = description
-                                    };
+            Name = title,
+            Cmd = code,
+            Description = description
+        };
     }
 }

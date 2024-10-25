@@ -1,33 +1,42 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Text;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-class PsCommandParameterSetCollection : IReadOnlyList<PsCommandParameterSet> {
-    readonly List<PsCommandParameterSet> _list = [];
+class PsCommandParameterSetCollection : PsCommandParameterCollectionBase<PsCommandParameterSet> {
+    readonly Dictionary<String, CommandParameterInfo> _dictionary = new(StringComparer.OrdinalIgnoreCase);
 
-    /// <inheritdoc />
-    public Int32 Count { get; set; }
-    /// <inheritdoc />
-    public PsCommandParameterSet this[Int32 index] => _list[index];
+    public CommandParameterInfo? GetParameterByName(String paramName) {
+        _dictionary.TryGetValue(paramName, out CommandParameterInfo value);
 
-    /// <inheritdoc />
-    public IEnumerator<PsCommandParameterSet> GetEnumerator() {
-        return _list.GetEnumerator();
+        return value;
     }
-    /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator() {
-        return GetEnumerator();
+    public IEnumerable<String> GetParamSetSyntax() {
+        var retValue = new List<String>();
+        var sb = new StringBuilder();
+        foreach (PsCommandParameterSet paramSet in InternalList) {
+            sb.Clear();
+            foreach (String paramSetParameter in paramSet.GetParameters()) {
+                var paramInfo = _dictionary[paramSetParameter];
+                sb.Append(paramInfo.GetCommandSyntax());
+            }
+            retValue.Add(sb.ToString());
+        }
+
+        return retValue;
     }
 
     public void FromCmdlet(PSObject cmdlet) {
-        _list.Clear();
+        InternalList.Clear();
         if (cmdlet.Members["ParameterSets"].Value != null) {
             var paramSets = (IEnumerable<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value;
             foreach (CommandParameterSetInfo paramSet in paramSets) {
-                _list.Add(PsCommandParameterSet.FromCmdlet(paramSet));
+                foreach (CommandParameterInfo paramInfo in paramSet.Parameters) {
+                    _dictionary[paramInfo.Name] = paramInfo;
+                }
+                InternalList.Add(PsCommandParameterSet.FromCmdlet(paramSet));
             }
         }
     }
