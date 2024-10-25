@@ -1,11 +1,10 @@
 ﻿using System;
-using CmdletHelpEditor.API.Abstractions;
 using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class PsCommandExampleVM : ViewModelBase, IPsExample {
+public class PsCommandExampleVM : ViewModelBase, IPsCommandExample {
     String name, cmd, description, output;
     readonly Int32 _uid;
 

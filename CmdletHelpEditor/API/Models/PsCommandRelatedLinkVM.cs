@@ -1,11 +1,10 @@
 ﻿using System;
-using CmdletHelpEditor.API.Abstractions;
 using PsCmdletHelpEditor.Core.Models;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class PsCommandRelatedLinkVM : ViewModelBase, IPsRelatedLink {
+public class PsCommandRelatedLinkVM : ViewModelBase, IPsCommandRelatedLink {
     readonly Int32 _uid;
     String linkText, linkUrl;
 

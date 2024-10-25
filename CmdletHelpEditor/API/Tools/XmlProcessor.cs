@@ -9,10 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Abstractions;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Templates;
 using CodeKicker.BBCode;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 class XmlProcessor {
@@ -396,11 +396,11 @@ class XmlProcessor {
             SB.AppendFormat(XmlMamlTemplate.Note,
                 generateParagraphs(cmdlet.GeneralHelp.Notes, bbRules));
             SB.Append("<command:examples>");
-            foreach (IPsExample item in cmdlet.Examples) {
+            foreach (IPsCommandExample item in cmdlet.Examples) {
                 SB.Append(xmlGenerateExamples(bbRules, item));
             }
             SB.Append("</command:examples><maml:relatedLinks>");
-            foreach (IPsRelatedLink link in cmdlet.RelatedLinks) {
+            foreach (IPsCommandRelatedLink link in cmdlet.RelatedLinks) {
                 SB.AppendFormat(XmlMamlTemplate.RelatedLink,
                     SecurityElement.Escape(link.LinkText),
                     SecurityElement.Escape(link.LinkUrl));
@@ -536,7 +536,7 @@ class XmlProcessor {
         SB.Append("	</command:returnValues>");
         return SB.ToString();
     }
-    static String xmlGenerateExamples(BBCodeParser bbRules, IPsExample example) {
+    static String xmlGenerateExamples(BBCodeParser bbRules, IPsCommandExample example) {
         return String.Format(XmlMamlTemplate.Example,
             SecurityElement.Escape(example.Name),
             SecurityElement.Escape(example.Cmd),
