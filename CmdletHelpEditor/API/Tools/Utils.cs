@@ -23,7 +23,10 @@ static class Utils {
             }
         };
     }
-    public static String GetCommandTypes() {
+    public static String GetCommandTypesString() {
+        return String.Join(",", GetCommandTypes());
+    }
+    public static IEnumerable<String> GetCommandTypes() {
         var psProcessor = App.Container.Resolve<IPowerShellProcessor>();
         List<String> commandTypes = new List<String>();
         if (Settings.Default.FunctionChecked) { commandTypes.Add("Function"); }
@@ -33,12 +36,8 @@ static class Utils {
         if (Settings.Default.ScriptChecked) { commandTypes.Add("Script"); }
         if (psProcessor.PsVersion >= 3 && Settings.Default.WorkflowChecked) { commandTypes.Add("Workflow"); }
         if (psProcessor.PsVersion >= 4 && Settings.Default.ApplicationChecked) { commandTypes.Add("Application"); }
-        try {
-            return String.Join(",", commandTypes);
-        } catch {
-            return null;
-        }
-        
+
+        return commandTypes;
     }
     public static WpXmlRpcClient InitializeBlogger(ProviderInformation provInfo) {
         if (

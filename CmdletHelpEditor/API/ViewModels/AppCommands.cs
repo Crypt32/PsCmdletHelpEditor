@@ -88,7 +88,7 @@ public class AppCommands {
         }
     }
     async Task loadCmdletsForProject2(HelpProjectDocument tab) {
-        String cmd = Utils.GetCommandTypes();
+        String cmd = Utils.GetCommandTypesString();
         if (String.IsNullOrEmpty(cmd)) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
@@ -398,7 +398,7 @@ public class AppCommands {
         //return ((Grid)_mwvm.SelectedTab?.Content)?.Children[0] is ModuleSelectorControl;
     }
     async Task loadCmdletsForProject(ClosableModuleItem tab) {
-        String cmd = Utils.GetCommandTypes();
+        String cmd = Utils.GetCommandTypesString();
         if (String.IsNullOrEmpty(cmd)) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
@@ -533,7 +533,7 @@ public class AppCommands {
     public async void LoadCmdlets(Object? helpPath, Boolean importCBH) {
         ClosableModuleItem previousTab = _mwvm.SelectedTab;
         UIElement previousElement = ((Grid)previousTab.Content).Children[0];
-        String cmd = Utils.GetCommandTypes();
+        String cmd = Utils.GetCommandTypesString();
         if (String.IsNullOrEmpty(cmd)) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
@@ -564,7 +564,7 @@ public class AppCommands {
     }
     public async Task LoadCmdletsAsync(String? helpPath, Boolean importFromCBH) {
         var vm = new HelpProjectDocument();
-        String cmd = Utils.GetCommandTypes();
+        String cmd = Utils.GetCommandTypesString();
         if (String.IsNullOrEmpty(cmd)) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
