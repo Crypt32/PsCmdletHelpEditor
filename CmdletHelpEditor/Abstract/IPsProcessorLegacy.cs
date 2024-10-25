@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.Abstract;
 [Obsolete]

@@ -13,21 +13,7 @@ using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Models;
-/// <summary>
-/// Stub interface for PS Processor
-/// </summary>
-public interface IModuleInfo {
-    /// <summary>
-    /// Gets or sets value if module is offline (not installed).
-    /// </summary>
-    Boolean IsOffline { get; set; }
-    /// <summary>
-    /// Returns PowerShell module/snap-in command retrieval invocation string.
-    /// </summary>
-    /// <param name="commandTypes">A comma-separated string with applicable PowerShell command types, such as cmdlets, functions, etc.</param>
-    /// <returns>PowerShell invocation string.</returns>
-    String GetInvocationString(String commandTypes);
-}
+
 [XmlInclude(typeof(CmdletObject))]
 public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
@@ -46,6 +32,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         Description = moduleInfo.Description;
         ModuleClass = moduleInfo.ModuleClass;
         HasManifest = moduleInfo.HasManifest;
+        ModulePath = moduleInfo.ModulePath;
     }
 
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
