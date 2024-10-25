@@ -48,6 +48,10 @@ public class PsModuleInfo {
     /// Gets optional module file location.
     /// </summary>
     public String? ModulePath { get; set; }
+    /// <summary>
+    /// Gets value if PowerShell module is offline. If set to <c>true</c>, then module help content
+    /// is available, however there is no such module installed on a system.
+    /// </summary>
     public Boolean IsOffline { get; internal set; }
 
     public String GetInvocationString(IEnumerable<String> commandTypes) {
