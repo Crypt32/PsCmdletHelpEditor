@@ -187,7 +187,6 @@
     <Compile Include="API\Converters\MultiParamConverter.cs" />
     <Compile Include="API\Tools\ParserType.cs" />
     <Compile Include="API\Tools\Strings.cs" />
-    <Compile Include="API\Tools\CryptExtensions.cs" />
     <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
     <Compile Include="API\ViewModels\AsyncViewModel.cs" />
@@ -220,9 +219,6 @@
     <Compile Include="API\Tools\PowerShellProcessorLegacy.cs" />
     <Compile Include="API\Tools\Utils.cs" />
     <Compile Include="API\Tools\XmlProcessor.cs" />
-    <Compile Include="API\Tools\XmlToken.cs" />
-    <Compile Include="API\Tools\XmlTokenEnum.cs" />
-    <Compile Include="API\Tools\XmlTokenizer.cs" />
     <Compile Include="API\ViewModels\ParamVM.cs" />
     <Compile Include="API\ViewModels\ExampleVM.cs" />
     <Compile Include="API\ViewModels\RelatedLinkVM.cs" />

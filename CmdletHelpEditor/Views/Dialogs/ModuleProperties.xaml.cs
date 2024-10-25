@@ -12,6 +12,7 @@ using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
+using PsCmdletHelpEditor.Core.Utils;
 using PsCmdletHelpEditor.XmlRpc;
 using PsCmdletHelpEditor.XmlRpc.WordPress;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;

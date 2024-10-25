@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
+using PsCmdletHelpEditor.Core.Services.Formatters;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
 
