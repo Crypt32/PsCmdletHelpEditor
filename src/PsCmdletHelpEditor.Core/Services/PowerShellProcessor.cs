@@ -20,10 +20,11 @@ public class PowerShellProcessor : IPowerShellProcessor {
     static readonly List<PsModuleInfo> _moduleList = [];
 
     public Int32? PsVersion { get; private set; }
+
     public Task<Int32?> GetPsVersionAsync() {
-        return Task.Factory.StartNew(getPsVersion);
+        return Task.Factory.StartNew(GetPsVersion);
     }
-    Int32? getPsVersion() {
+    public Int32? GetPsVersion() {
         using PowerShell ps = PowerShell.Create();
         ps.AddScript("$PSVersionTable.PSVersion.Major");
         PsVersion = (Int32?)ps.Invoke()[0].BaseObject;
@@ -31,9 +32,9 @@ public class PowerShellProcessor : IPowerShellProcessor {
         return PsVersion;
     }
     public Task<IEnumerable<PsModuleInfo>> EnumModulesAsync(Boolean force) {
-        return Task.Factory.StartNew(() => enumModulesAsync(force));
+        return Task.Factory.StartNew(() => EnumModules(force));
     }
-    static IEnumerable<PsModuleInfo> enumModulesAsync(Boolean force) {
+    public IEnumerable<PsModuleInfo> EnumModules(Boolean force) {
         if (!force || _moduleList.Count > 0) {
             return _moduleList;
         }
@@ -79,10 +80,10 @@ public class PowerShellProcessor : IPowerShellProcessor {
             ModuleClass = "Snapin"
         });
     }
-    public Task<PsModuleInfo> GetModuleInfoFromFile(String path) {
-        return Task.Factory.StartNew(() => getModuleInfoFromFile(path));
+    public Task<PsModuleInfo> GetModuleInfoFromFileAsync(String path) {
+        return Task.Factory.StartNew(() => GetModuleInfoFromFile(path));
     }
-    static PsModuleInfo getModuleInfoFromFile(String path) {
+    public PsModuleInfo GetModuleInfoFromFile(String path) {
         using PowerShell ps = PowerShell.Create();
         ps.AddCommand("Import-Module").AddParameter("Name", path).AddParameter("PassThru");
         List<PSObject> psModule = ps.Invoke().ToList();
@@ -95,4 +96,5 @@ public class PowerShellProcessor : IPowerShellProcessor {
             ModulePath = path
         };
     }
+
 }
