@@ -6,8 +6,8 @@ namespace PsCmdletHelpEditor.Core.Models.Xml;
 
 [XmlInclude(typeof(XmlPsCommandParameterSet))]
 [XmlInclude(typeof(XmlPsCommandParameterDescription))]
-[XmlInclude(typeof(XmlPsExample))]
-[XmlInclude(typeof(XmlPsRelatedLink))]
+[XmlInclude(typeof(XmlPsCommandExample))]
+[XmlInclude(typeof(XmlPsCommandRelatedLink))]
 public class XmlPsCommand : IPsCommandInfo {
     public String Name { get; set; }
     [XmlAttribute("verb")]
@@ -22,11 +22,11 @@ public class XmlPsCommand : IPsCommandInfo {
     [XmlArrayItem("ParameterDescription")]
     public List<XmlPsCommandParameterDescription> Parameters { get; set; } = [];
     [XmlArrayItem("Example")]
-    public List<XmlPsExample> Examples { get; set; } = [];
+    public List<XmlPsCommandExample> Examples { get; set; } = [];
     [XmlArrayItem("RelatedLink")]
-    public List<XmlPsRelatedLink> RelatedLinks { get; set; } = [];
+    public List<XmlPsCommandRelatedLink> RelatedLinks { get; set; } = [];
     [XmlElement("SupportInformation")]
-    public XmlPsSupportInfo? SupportInformation { get; set; }
+    public XmlPsCommandSupportInfo? SupportInformation { get; set; }
     // advanced
     public String? ExtraHeader { get; set; }
     public String? ExtraFooter { get; set; }

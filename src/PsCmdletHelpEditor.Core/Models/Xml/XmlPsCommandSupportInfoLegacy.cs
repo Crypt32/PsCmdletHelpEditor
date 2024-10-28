@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
 [Obsolete]
-public class XmlPsCommandSupportInfo : IPsCommandSupportInfo {
+public class XmlPsCommandSupportInfoLegacy : IPsCommandSupportInfo {
     Boolean ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
         w2k3, w2k3s, w2k3e, w2k3d,

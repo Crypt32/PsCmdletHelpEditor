@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-public class XmlPsSupportInfo : IPsCommandSupportInfo{
+public class XmlPsCommandSupportInfo : IPsCommandSupportInfo{
     [XmlAttribute("ad")]
     public Boolean RequiresAD { get; set; }
     [XmlAttribute("rsat")]

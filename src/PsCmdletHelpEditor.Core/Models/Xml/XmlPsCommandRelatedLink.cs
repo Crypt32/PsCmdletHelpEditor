@@ -2,7 +2,7 @@
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-public class XmlPsRelatedLink : IPsCommandRelatedLink {
+public class XmlPsCommandRelatedLink : IPsCommandRelatedLink {
     public String? LinkText { get; set; } = null!;
     public String? LinkUrl { get; set; }
 }
