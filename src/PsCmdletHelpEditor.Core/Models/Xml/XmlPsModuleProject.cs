@@ -29,7 +29,7 @@ public class XmlPsModuleProject : IPsModuleProject {
     public String ExtraFooter { get; set; }
     // editor
     [XmlArrayItem("CmdletObject")]
-    public List<XmlPsCommand> Cmdlets { get; set; }
+    public List<XmlPsCommand> Cmdlets { get; set; } = [];
     [XmlIgnore]
     public String ProjectPath { get; set; }
 

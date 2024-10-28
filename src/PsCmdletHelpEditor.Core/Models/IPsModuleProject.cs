@@ -18,7 +18,7 @@ public interface IPsModuleProject {
     Boolean OverridePostCount { get; set; }
     Boolean UseSupports { get; set; }
     String Version { get; set; }
-    String ProjectPath { get; }
+    String ProjectPath { get; set; }
 
     IReadOnlyList<IPsCommandInfo> GetCmdlets();
     IXmlRpcProviderInformation? GetXmlRpcProviderInfo();

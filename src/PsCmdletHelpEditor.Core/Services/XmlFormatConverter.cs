@@ -9,10 +9,9 @@ namespace PsCmdletHelpEditor.Core.Services;
 static class XmlFormatConverter {
     public static XmlAttributeOverrides? GetOverrides(String path, out Double fVersion) {
         fVersion = GetFormatVersion(path);
-        if (fVersion.Equals(0.0)) {
-            return getV0();
-        }
-        return null;
+        return fVersion.Equals(0d)
+            ? getV0()
+            : null;
     }
     // version checker
     static Double GetFormatVersion(String file) {

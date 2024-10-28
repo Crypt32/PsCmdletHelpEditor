@@ -209,7 +209,6 @@
     <Compile Include="API\Models\CmdletObject.cs" />
     <Compile Include="API\Models\PsCommandExampleVM.cs" />
     <Compile Include="API\Models\PsCommandGeneralDescriptionVM.cs" />
-    <Compile Include="API\Models\ItemStatus.cs" />
     <Compile Include="API\Models\ModuleObject.cs" />
     <Compile Include="API\Models\PsCommandParameterVM.cs" />
     <Compile Include="API\Models\PsCommandRelatedLinkVM.cs" />

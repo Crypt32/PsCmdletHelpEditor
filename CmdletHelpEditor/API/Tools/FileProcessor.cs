@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
