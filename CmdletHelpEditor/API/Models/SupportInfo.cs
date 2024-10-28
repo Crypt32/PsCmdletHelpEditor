@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
+// TODO: need to refactor entire class
 public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
@@ -14,7 +16,8 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         w2k12r2, w2k12r2s, w2k12r2d,
         w2k16, w2k16s, w2k16d,
         w2k19, w2k19s, w2k19d,
-        w2k22, w2k22s, w2k22d;
+        w2k22, w2k22s, w2k22d,
+        w2k25, w2k25s, w2k25d;
 
     [XmlAttribute("minPsVersion")]
     public Int32 PsVersionAsInt {
@@ -801,5 +804,100 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
 
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
         WinOsVersion = winOsVersion;
+    }
+    public XmlPsCommandSupportInfo ToXml() {
+        var retValue = new XmlPsCommandSupportInfo {
+            PsVersionAsInt = PsVersionAsInt,
+            RequiresAD = RequiresAD,
+            RequiresRSAT = RequiresRSAT
+        };
+        var os = WinOsVersionSupport.None;
+        if (wxp) {
+            os |= WinOsVersionSupport.WinXP;
+        }
+        if (wv) {
+            os |= WinOsVersionSupport.WinVista;
+        }
+        if (w7) {
+            os |= WinOsVersionSupport.Win7;
+        }
+        if (w8) {
+            os |= WinOsVersionSupport.Win8;
+        }
+        if (w81) {
+            os |= WinOsVersionSupport.Win81;
+        }
+        if (w10) {
+            os |= WinOsVersionSupport.Win10;
+        }
+        if (w11) {
+            os |= WinOsVersionSupport.Win11;
+        }
+        if (w2k3s) {
+            os |= WinOsVersionSupport.Win2003Std;
+        }
+        if (w2k3e) {
+            os |= WinOsVersionSupport.Win2003EE;
+        }
+        if (w2k3d) {
+            os |= WinOsVersionSupport.Win2003DC;
+        }
+        if (w2k8s) {
+            os |= WinOsVersionSupport.Win2008Std;
+        }
+        if (w2k8e) {
+            os |= WinOsVersionSupport.Win2008EE;
+        }
+        if (w2k8d) {
+            os |= WinOsVersionSupport.Win2008DC;
+        }
+        if (w2k8r2s) {
+            os |= WinOsVersionSupport.Win2008R2Std;
+        }
+        if (w2k8r2e) {
+            os |= WinOsVersionSupport.Win2008R2EE;
+        }
+        if (w2k8r2d) {
+            os |= WinOsVersionSupport.Win2008R2DC;
+        }
+        if (w2k12s) {
+            os |= WinOsVersionSupport.Win2012Std;
+        }
+        if (w2k12d) {
+            os |= WinOsVersionSupport.Win2012DC;
+        }
+        if (w2k12r2s) {
+            os |= WinOsVersionSupport.Win2012R2Std;
+        }
+        if (w2k12r2d) {
+            os |= WinOsVersionSupport.Win2012R2DC;
+        }
+        if (w2k16s) {
+            os |= WinOsVersionSupport.Win2016Std;
+        }
+        if (w2k16d) {
+            os |= WinOsVersionSupport.Win2016DC;
+        }
+        if (w2k19s) {
+            os |= WinOsVersionSupport.Win2019Std;
+        }
+        if (w2k19d) {
+            os |= WinOsVersionSupport.Win2019DC;
+        }
+        if (w2k22s) {
+            os |= WinOsVersionSupport.Win2022Std;
+        }
+        if (w2k22d) {
+            os |= WinOsVersionSupport.Win2022DC;
+        }
+        if (w2k25s) {
+            os |= WinOsVersionSupport.Win2025Std;
+        }
+        if (w2k25d) {
+            os |= WinOsVersionSupport.Win2025DC;
+        }
+        retValue.WinOsVersionAsInt = (Int32)os;
+
+        return retValue;
     }
 }

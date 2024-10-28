@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
@@ -119,5 +120,19 @@ public class PsCommandGeneralDescriptionVM : ViewModelBase {
         ReturnType = generalDescription.ReturnType;
         ReturnUrl = generalDescription.ReturnUrl;
         ReturnTypeDescription = generalDescription.ReturnTypeDescription;
+    }
+
+    public XmlPsCommandGeneralDescription ToXml() {
+        return new XmlPsCommandGeneralDescription {
+            Synopsis = Synopsis,
+            Description = Description,
+            Notes = Notes,
+            InputType = InputType,
+            InputUrl = InputUrl,
+            InputTypeDescription = InputTypeDescription,
+            ReturnType = ReturnType,
+            ReturnUrl = ReturnUrl,
+            ReturnTypeDescription = ReturnTypeDescription,
+        };
     }
 }

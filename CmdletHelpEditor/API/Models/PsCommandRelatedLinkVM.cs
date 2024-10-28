@@ -1,5 +1,6 @@
 ﻿using System;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
@@ -31,12 +32,21 @@ public class PsCommandRelatedLinkVM : ViewModelBase, IPsCommandRelatedLink {
         }
     }
 
+    public XmlPsCommandRelatedLink ToXml() {
+        return new XmlPsCommandRelatedLink {
+            LinkText = LinkText,
+            LinkUrl = LinkUrl,
+        };
+    }
+
     public static PsCommandRelatedLinkVM FromCommandInfo(IPsCommandRelatedLink relatedLink) {
         return new PsCommandRelatedLinkVM {
             LinkText = relatedLink.LinkText,
             LinkUrl = relatedLink.LinkUrl,
         };
     }
+
+    #region Equals
 
     public override Boolean Equals(Object obj) {
         return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
@@ -52,4 +62,6 @@ public class PsCommandRelatedLinkVM : ViewModelBase, IPsCommandRelatedLink {
             return _uid.GetHashCode() * 397;
         }
     }
+
+    #endregion
 }

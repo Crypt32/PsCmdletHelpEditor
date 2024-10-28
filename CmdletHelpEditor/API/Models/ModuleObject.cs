@@ -11,6 +11,7 @@ using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace CmdletHelpEditor.API.Models;
 
@@ -113,7 +114,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         get => useOnlineProvider;
         set {
             useOnlineProvider = value;
-            OnPropertyChanged(nameof(UseOnlineProvider));
+            OnPropertyChanged();
         }
     }
     public Boolean HasManifest { get; set; }
@@ -186,7 +187,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         foreach (CmdletObject cmdlet in Cmdlets) {
             Int32 activeCmdletIndex = cmdlets.IndexOf(cmdlet);
             if (activeCmdletIndex >= 0) {
-                // update syntax, parametersets and parameter information from active cmdlet to project
+                // update syntax, parameter sets and parameter information from active cmdlet to project
                 cmdlet.Syntax = cmdlets[activeCmdletIndex].Syntax;
                 cmdlet.ParameterSets = cmdlets[activeCmdletIndex].ParameterSets;
                 cmdlet.UpdateParamSets();
@@ -221,9 +222,33 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         return String.Format(Resources.ipmoTemplate, args);
     }
 
+    public XmlPsModuleProject ToXml() {
+        return new XmlPsModuleProject {
+            Name = Name,
+            FormatVersion = FormatVersion,
+            ModuleType = ModuleType,
+            ModuleClass = ModuleClass,
+            Version = Version,
+            Description = Description,
+            ModulePath = ModulePath,
+            UseSupports = UseSupports,
+            HasManifest = HasManifest,
+            OverridePostCount = OverridePostCount,
+            FetchPostCount = FetchPostCount,
+            ExtraHeader = ExtraHeader,
+            ExtraFooter = ExtraFooter,
+            Cmdlets = Cmdlets
+                .Where(x => x.GeneralHelp.Status != ItemStatus.Missing)
+                .Select(x => x.ToXml())
+                .ToList()
+        };
+    }
+
     public override String ToString() {
         return Name;
     }
+
+    #region Equals
 
     public override Boolean Equals(Object obj) {
         if (ReferenceEquals(null, obj)) { return false; }
@@ -240,6 +265,8 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             return hashCode;
         }
     }
+
+    #endregion
 
     void OnPropertyChanged([CallerMemberName] String propertyName = null, Boolean markUnsaved = false) {
         PropertyChangedEventHandler handler = PropertyChanged;

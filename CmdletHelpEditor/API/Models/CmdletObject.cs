@@ -7,6 +7,7 @@ using System.Linq;
 using System.Management.Automation;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
@@ -451,6 +452,28 @@ public class CmdletObject : ViewModelBase {
         foreach (PsCommandParameterVM param in sourceCmdlet.Parameters.Where(param => !processed.Contains(param.Name))) {
            Parameters.Add(param);
         }
+    }
+    public XmlPsCommand ToXml() {
+        return new XmlPsCommand {
+            Name = Name,
+            Verb = Verb,
+            Noun = Noun,
+            Syntax = Syntax,
+            ExtraHeader = ExtraHeader,
+            ExtraFooter = ExtraFooter,
+            GeneralHelp = GeneralHelp.ToXml(),
+            ParamSets = ParamSets.Select(x => x.ToXml()).ToList(),
+            Parameters = Parameters
+                .Where(x => x.Status != ItemStatus.Missing)
+                .Select(x => x.ToXml())
+                .ToList(),
+            Examples = Examples.Select(x => x.ToXml()).ToList(),
+            RelatedLinks = RelatedLinks.Select(x => x.ToXml()).ToList(),
+            SupportInformation = SupportInformation.ToXml(),
+            Publish = Publish,
+            URL = URL,
+            ArticleIDString = ArticleIDString
+        };
     }
 
     public static CmdletObject FromCommandInfo(IPsCommandInfo commandInfo) {

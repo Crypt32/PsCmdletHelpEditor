@@ -1,5 +1,6 @@
 ﻿using System;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
@@ -48,6 +49,15 @@ public class PsCommandExampleVM : ViewModelBase, IPsCommandExample {
         }
     }
 
+    public XmlPsCommandExample ToXml() {
+        return new XmlPsCommandExample {
+            Name = Name,
+            Cmd = Cmd,
+            Description = Description,
+            Output = Output
+        };
+    }
+
     public static PsCommandExampleVM FromCommandInfo(IPsCommandExample example) {
         return new PsCommandExampleVM {
             Name = example.Name,
@@ -56,6 +66,8 @@ public class PsCommandExampleVM : ViewModelBase, IPsCommandExample {
             Output = example.Output,
         };
     }
+
+    #region Equals
 
     public override Boolean Equals(Object obj) {
         return !ReferenceEquals(null, obj) &&
@@ -71,4 +83,6 @@ public class PsCommandExampleVM : ViewModelBase, IPsCommandExample {
             return _uid.GetHashCode() * 397;
         }
     }
+
+    #endregion
 }

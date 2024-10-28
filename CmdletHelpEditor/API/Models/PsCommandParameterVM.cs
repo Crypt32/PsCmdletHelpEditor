@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Management.Automation;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
@@ -76,6 +77,26 @@ public class PsCommandParameterVM : ViewModelBase {
                 : ItemStatus.Valid;
         }
         set => status = value;
+    }
+
+    public XmlPsCommandParameterDescription ToXml() {
+        return new XmlPsCommandParameterDescription {
+            Name = Name,
+            Type = Type,
+            AcceptsArray = AcceptsArray,
+            Mandatory = Mandatory,
+            Dynamic = Dynamic,
+            RemainingArgs = RemainingArgs,
+            Pipeline = Pipeline,
+            PipelinePropertyName = PipelinePropertyName,
+            Globbing = Globbing,
+            Positional = Positional,
+            Position = Position,
+            Description = Description,
+            DefaultValue = DefaultValue,
+            Aliases = Aliases,
+            Attributes = Attributes
+        };
     }
 
     public static PsCommandParameterVM ImportFromCommandInfo(IPsCommandParameterDescription param) {
@@ -167,18 +188,23 @@ public class PsCommandParameterVM : ViewModelBase {
             return "false";
         }
     }
+
+    #region Equals
+
+    public override Boolean Equals(Object obj) {
+        if (ReferenceEquals(null, obj)) { return false; }
+        if (ReferenceEquals(this, obj)) { return true; }
+        return obj is PsCommandParameterVM other && Equals(other);
+    }
     Boolean Equals(PsCommandParameterVM other) {
         return String.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
-            String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
+               String.Equals(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
     }
     public override Int32 GetHashCode() {
         unchecked {
             return (Name.GetHashCode() * 397) ^ Type.GetHashCode();
         }
     }
-    public override Boolean Equals(Object obj) {
-        if (ReferenceEquals(null, obj)) { return false; }
-        if (ReferenceEquals(this, obj)) { return true; }
-        return obj is PsCommandParameterVM other && Equals(other);
-    }
+
+    #endregion
 }
