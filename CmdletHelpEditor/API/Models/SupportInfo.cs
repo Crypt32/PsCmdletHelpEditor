@@ -802,6 +802,72 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         }
     }
 
+    [XmlIgnore]
+    public Boolean Win2025Checked {
+        get => w2k25;
+        set {
+            w2k25 = value;
+            if (w2k25) {
+                WinOsVersion |= WinOsVersionSupport.Win2025;
+                w2k25s = w2k25d = true;
+                foreach (String str in new[] {
+                                                 nameof(Win2025StdChecked),
+                                                 nameof(Win2025DCChecked)
+                                             }) {
+                    OnPropertyChanged(str);
+                }
+            } else {
+                WinOsVersion &= ~WinOsVersionSupport.Win2025;
+                w2k25s = w2k25d = false;
+            }
+            foreach (String str in new[] {
+                                             nameof(Win2025Checked),
+                                             nameof(Win2025StdChecked),
+                                             nameof(Win2025DCChecked)
+                                         }) {
+                OnPropertyChanged(str);
+            }
+        }
+    }
+    [XmlAttribute(nameof(w2k25s))]
+    public Boolean Win2025StdChecked {
+        get => w2k25s;
+        set {
+            w2k25s = value;
+            if (w2k25s) {
+                WinOsVersion |= WinOsVersionSupport.Win2025Std;
+                if (Win2025DCChecked) {
+                    w2k25 = true;
+                    OnPropertyChanged(nameof(Win2025Checked));
+                }
+            } else {
+                WinOsVersion &= ~WinOsVersionSupport.Win2025Std;
+                w2k25 = false;
+                OnPropertyChanged(nameof(Win2025Checked));
+            }
+            OnPropertyChanged();
+        }
+    }
+    [XmlAttribute(nameof(w2k25d))]
+    public Boolean Win2025DCChecked {
+        get => w2k25d;
+        set {
+            w2k25d = value;
+            if (w2k25d) {
+                WinOsVersion |= WinOsVersionSupport.Win2025DC;
+                if (Win2025StdChecked) {
+                    w2k25 = true;
+                    OnPropertyChanged(nameof(Win2025Checked));
+                }
+            } else {
+                WinOsVersion &= ~WinOsVersionSupport.Win2025DC;
+                w2k25 = false;
+                OnPropertyChanged(nameof(Win2025Checked));
+            }
+            OnPropertyChanged();
+        }
+    }
+
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
         WinOsVersion = winOsVersion;
     }
