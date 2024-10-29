@@ -7,6 +7,32 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Services\MAML\MamlCommandDetailsTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandErrorsTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandExampleTeamplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandInputTypesTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandNotesTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandParamTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandParamValueTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandRelatedLinkTemplate.hbs" />
+    <None Remove="Services\MAML\MamlCommandReturnTypes.hbs" />
+    <None Remove="Services\MAML\MamlCommandSyntaxTemplate.hbs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Services\MAML\MamlCommandDetailsTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandErrorsTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandExampleTeamplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandInputTypesTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandNotesTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandParamTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandParamValueTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandRelatedLinkTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandReturnTypes.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandSyntaxTemplate.hbs">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.ComponentModel.DataAnnotations.dll</HintPath>
     </Reference>
