@@ -1,14 +1,15 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Security;
 using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Utils;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 
-public class ProviderInformation : INotifyPropertyChanged {
+public class ProviderInformation : ViewModelBase, IXmlRpcProviderInformation {
     String provName, url, userName, password;
     Int32 postCount = 50;
     XmlRpcBlogInfo blog;
@@ -17,28 +18,28 @@ public class ProviderInformation : INotifyPropertyChanged {
         get => provName;
         set {
             provName = value;
-            OnPropertyChanged(nameof(ProviderName));
+            OnPropertyChanged();
         }
     }
     public String ProviderURL {
         get => url;
         set {
             url = value;
-            OnPropertyChanged(nameof(ProviderURL));
+            OnPropertyChanged();
         }
     }
     public XmlRpcBlogInfo Blog {
         get => blog;
         set {
             blog = value;
-            OnPropertyChanged(nameof(Blog));
+            OnPropertyChanged();
         }
     }
     public String UserName {
         get => userName;
         set {
             userName = value;
-            OnPropertyChanged(nameof(UserName));
+            OnPropertyChanged();
         }
     }
     public String Password {
@@ -51,7 +52,7 @@ public class ProviderInformation : INotifyPropertyChanged {
                 MsgBox.Show("Error", e.Message);
                 SecurePassword = null;
             }
-            OnPropertyChanged(nameof(Password));
+            OnPropertyChanged();
         }
     }
     [XmlIgnore]
@@ -60,15 +61,32 @@ public class ProviderInformation : INotifyPropertyChanged {
         get => postCount;
         set {
             postCount = value;
-            OnPropertyChanged(nameof(FetchPostCount));
+            OnPropertyChanged();
         }
     }
 
-    void OnPropertyChanged(String name) {
-        PropertyChangedEventHandler handler = PropertyChanged;
-        handler?.Invoke(this, new PropertyChangedEventArgs(name));
+    public XmlRpcProviderInformation ToXmlObject() {
+        return new XmlRpcProviderInformation {
+            ProviderName = ProviderName,
+            ProviderURL = ProviderURL,
+            Blog = Blog,
+            UserName = UserName,
+            Password = Password,
+            FetchPostCount = FetchPostCount
+        };
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
+    public static ProviderInformation? FromProviderInfo(IXmlRpcProviderInformation providerInfo) {
+        if (providerInfo == null) {
+            return null;
+        }
+        return new ProviderInformation {
+            ProviderName = providerInfo.ProviderName,
+            ProviderURL = providerInfo.ProviderURL,
+            Blog = providerInfo.Blog,
+            UserName = providerInfo.UserName,
+            Password = providerInfo.Password,
+            FetchPostCount = providerInfo.FetchPostCount
+        };
+    }
 }

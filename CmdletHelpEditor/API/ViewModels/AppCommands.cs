@@ -572,7 +572,7 @@ public class AppCommands {
 
         try {
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
-            var module = new ModuleObject(moduleInfo);
+            var module = ModuleObject.FromPsModuleInfo(moduleInfo);
             IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(module, cmd, importFromCBH);
             foreach (CmdletObject item in data) {
                 module.Cmdlets.Add(item);

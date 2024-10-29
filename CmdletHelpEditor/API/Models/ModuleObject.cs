@@ -25,17 +25,6 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     CmdletObject selectedCmdlet;
     ObservableCollection<CmdletObject> cmdlets = [];
 
-    public ModuleObject() { }
-    public ModuleObject(PsModuleInfo moduleInfo) {
-        Name = moduleInfo.Name;
-        ModuleType = moduleInfo.ModuleType;
-        Version = moduleInfo.Version;
-        Description = moduleInfo.Description;
-        ModuleClass = moduleInfo.ModuleClass;
-        HasManifest = moduleInfo.HasManifest;
-        ModulePath = moduleInfo.ModulePath;
-    }
-
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
         switch (e.Action) {
             case NotifyCollectionChangedAction.Add:
@@ -240,13 +229,50 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             Cmdlets = Cmdlets
                 .Where(x => x.GeneralHelp.Status != ItemStatus.Missing)
                 .Select(x => x.ToXmlObject())
-                .ToList()
+                .ToList(),
+            Provider = Provider?.ToXmlObject()
         };
     }
+
+    public static ModuleObject FromPsModuleInfo(PsModuleInfo moduleInfo) {
+        return new ModuleObject {
+            Name = moduleInfo.Name,
+            ModuleType = moduleInfo.ModuleType,
+            Version = moduleInfo.Version,
+            Description = moduleInfo.Description,
+            ModuleClass = moduleInfo.ModuleClass,
+            HasManifest = moduleInfo.HasManifest,
+            ModulePath = moduleInfo.ModulePath
+        };
+    }
+    public static ModuleObject FromProjectInfo(IPsModuleProject project) {
+        return new ModuleObject {
+            Name = project.Name,
+            FormatVersion = project.FormatVersion,
+            ModuleType = project.ModuleType,
+            ModuleClass = project.ModuleClass,
+            Version = project.Version,
+            Description = project.Description,
+            ModulePath = project.ModulePath,
+            UseSupports = project.UseSupports,
+            HasManifest = project.HasManifest,
+            ProjectPath = project.ProjectPath,
+            Provider = ProviderInformation.FromProviderInfo(project.GetXmlRpcProviderInfo()),
+            OverridePostCount = project.OverridePostCount,
+            FetchPostCount = project.FetchPostCount,
+            ExtraHeader = project.ExtraHeader,
+            ExtraFooter = project.ExtraFooter,
+            Cmdlets = new ObservableCollection<CmdletObject>(project.GetCmdlets().Select(CmdletObject.FromCommandInfo))
+        };
+    }
+
+    #region ToString
 
     public override String ToString() {
         return Name;
     }
+
+    #endregion
 
     #region Equals
 
