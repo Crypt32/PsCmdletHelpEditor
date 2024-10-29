@@ -1,9 +1,9 @@
 ﻿using System;
+using PsCmdletHelpEditor.Core;
 
 namespace CmdletHelpEditor.Abstract;
 
-public interface IProgressBar {
-    Double Progress { get; set; }
+public interface IProgressBar : IProgress {
     String ProgressText { get; set; }
     Boolean IsRunning { get; }
 
