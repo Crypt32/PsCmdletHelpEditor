@@ -11,7 +11,7 @@ using PsCmdletHelpEditor.Core.Utils;
 
 namespace PsCmdletHelpEditor.Core.Services.MAML;
 
-public class PsMamlService {
+public class PsMamlService : IMamlService {
     const String MAML_COMMAND_SYNTAX_TEMPLATE       = "MamlCommandSyntaxTemplate.hbs";
     const String MAML_COMMAND_DETAILS_TEMPLATE      = "MamlCommandDetailsTemplate.hbs";
     const String MAML_COMMAND_NOTES_TEMPLATE        = "MamlCommandNotesTemplate.hbs";
@@ -24,7 +24,7 @@ public class PsMamlService {
     const String MAML_COMMAND_RELATED_LINK_TEMPLATE = "MamlCommandRelatedLinkTemplate.hbs";
     
 
-    public static async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb, BBCodeParser bbRules) {
+    public async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb, BBCodeParser bbRules) {
         if (cmdlets.Count == 0) {
             return String.Empty;
         }
