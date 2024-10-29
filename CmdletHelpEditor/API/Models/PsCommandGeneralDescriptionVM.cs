@@ -122,7 +122,7 @@ public class PsCommandGeneralDescriptionVM : ViewModelBase {
         ReturnTypeDescription = generalDescription.ReturnTypeDescription;
     }
 
-    public XmlPsCommandGeneralDescription ToXml() {
+    public XmlPsCommandGeneralDescription ToXmlObject() {
         return new XmlPsCommandGeneralDescription {
             Synopsis = Synopsis,
             Description = Description,

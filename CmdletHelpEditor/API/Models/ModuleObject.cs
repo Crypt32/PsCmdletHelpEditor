@@ -222,7 +222,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         return String.Format(Resources.ipmoTemplate, args);
     }
 
-    public XmlPsModuleProject ToXml() {
+    public XmlPsModuleProject ToXmlObject() {
         return new XmlPsModuleProject {
             Name = Name,
             FormatVersion = FormatVersion,
@@ -239,7 +239,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             ExtraFooter = ExtraFooter,
             Cmdlets = Cmdlets
                 .Where(x => x.GeneralHelp.Status != ItemStatus.Missing)
-                .Select(x => x.ToXml())
+                .Select(x => x.ToXmlObject())
                 .ToList()
         };
     }

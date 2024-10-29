@@ -49,7 +49,7 @@ public class PsCommandExampleVM : ViewModelBase, IPsCommandExample {
         }
     }
 
-    public XmlPsCommandExample ToXml() {
+    public XmlPsCommandExample ToXmlObject() {
         return new XmlPsCommandExample {
             Name = Name,
             Cmd = Cmd,

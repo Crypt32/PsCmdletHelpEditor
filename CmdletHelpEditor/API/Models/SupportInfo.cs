@@ -805,7 +805,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
         WinOsVersion = winOsVersion;
     }
-    public XmlPsCommandSupportInfo ToXml() {
+    public XmlPsCommandSupportInfo ToXmlObject() {
         var retValue = new XmlPsCommandSupportInfo {
             PsVersionAsInt = PsVersionAsInt,
             RequiresAD = RequiresAD,

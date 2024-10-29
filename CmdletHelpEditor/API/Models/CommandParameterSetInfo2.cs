@@ -12,7 +12,7 @@ public class CommandParameterSetInfo2 {
     [XmlAttribute("Params")]
     public List<String> Parameters { get; set; } = [];
 
-    public XmlPsCommandParameterSet ToXml() {
+    public XmlPsCommandParameterSet ToXmlObject() {
         return new XmlPsCommandParameterSet {
             Name = Name,
             Parameters = Parameters

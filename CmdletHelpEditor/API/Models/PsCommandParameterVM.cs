@@ -79,7 +79,7 @@ public class PsCommandParameterVM : ViewModelBase {
         set => status = value;
     }
 
-    public XmlPsCommandParameterDescription ToXml() {
+    public XmlPsCommandParameterDescription ToXmlObject() {
         return new XmlPsCommandParameterDescription {
             Name = Name,
             Type = Type,

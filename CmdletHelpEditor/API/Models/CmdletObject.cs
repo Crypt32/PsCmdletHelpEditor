@@ -453,7 +453,7 @@ public class CmdletObject : ViewModelBase {
            Parameters.Add(param);
         }
     }
-    public XmlPsCommand ToXml() {
+    public XmlPsCommand ToXmlObject() {
         return new XmlPsCommand {
             Name = Name,
             Verb = Verb,
@@ -461,15 +461,15 @@ public class CmdletObject : ViewModelBase {
             Syntax = Syntax,
             ExtraHeader = ExtraHeader,
             ExtraFooter = ExtraFooter,
-            GeneralHelp = GeneralHelp.ToXml(),
-            ParamSets = ParamSets.Select(x => x.ToXml()).ToList(),
+            GeneralHelp = GeneralHelp.ToXmlObject(),
+            ParamSets = ParamSets.Select(x => x.ToXmlObject()).ToList(),
             Parameters = Parameters
                 .Where(x => x.Status != ItemStatus.Missing)
-                .Select(x => x.ToXml())
+                .Select(x => x.ToXmlObject())
                 .ToList(),
-            Examples = Examples.Select(x => x.ToXml()).ToList(),
-            RelatedLinks = RelatedLinks.Select(x => x.ToXml()).ToList(),
-            SupportInformation = SupportInformation.ToXml(),
+            Examples = Examples.Select(x => x.ToXmlObject()).ToList(),
+            RelatedLinks = RelatedLinks.Select(x => x.ToXmlObject()).ToList(),
+            SupportInformation = SupportInformation.ToXmlObject(),
             Publish = Publish,
             URL = URL,
             ArticleIDString = ArticleIDString

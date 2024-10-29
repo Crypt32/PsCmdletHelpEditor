@@ -32,7 +32,7 @@ public class PsCommandRelatedLinkVM : ViewModelBase, IPsCommandRelatedLink {
         }
     }
 
-    public XmlPsCommandRelatedLink ToXml() {
+    public XmlPsCommandRelatedLink ToXmlObject() {
         return new XmlPsCommandRelatedLink {
             LinkText = LinkText,
             LinkUrl = LinkUrl,
