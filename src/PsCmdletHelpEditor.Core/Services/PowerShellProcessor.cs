@@ -114,4 +114,15 @@ public class PowerShellProcessor : IPowerShellProcessor {
             throw;
         }
     }
+    public Boolean TestModuleExist(String moduleName) {
+        String? modulePaths = Environment.GetEnvironmentVariable("PSModulePath", EnvironmentVariableTarget.Process);
+        if (String.IsNullOrEmpty(modulePaths)) {
+            return false;
+        }
+        return modulePaths
+            .Split([';'], StringSplitOptions.RemoveEmptyEntries)
+            .Select(path => new DirectoryInfo(path))
+            .Where(x => x.Exists)
+            .Any(dir => dir.EnumerateDirectories(moduleName).Any());
+    }
 }

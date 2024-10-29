@@ -61,4 +61,10 @@ public interface IPowerShellProcessor {
     /// <param name="includeCBH">Specifies whether to include comment-based help for each loaded command. Default is <c>false</c>.</param>
     /// <returns>A collection of commands.</returns>
     IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false);
+    /// <summary>
+    /// Determines if specified PowerShell module exist in any PowerShell 
+    /// </summary>
+    /// <param name="moduleName"></param>
+    /// <returns></returns>
+    Boolean TestModuleExist(String moduleName);
 }

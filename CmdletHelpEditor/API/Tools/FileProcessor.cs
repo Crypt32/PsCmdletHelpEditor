@@ -11,18 +11,6 @@ using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
-    public static ModuleObject ReadProjectFile(String path) {
-        XmlAttributeOverrides overrides = XmlFormatConverter.GetOverrides(path, out Double version);
-        using var fs = new FileStream(path, FileMode.Open);
-        XmlSerializer serializer = overrides == null
-            ? new XmlSerializer(typeof(ModuleObject))
-            : new XmlSerializer(typeof(ModuleObject), overrides);
-        var module = (ModuleObject)serializer.Deserialize(fs);
-        module.ProjectPath = path;
-        module.FormatVersion = version;
-
-        return module;
-    }
     public static void SaveProjectFile(ClosableModuleItem tab, String path) {
         using var fs = new FileStream(path, FileMode.Create);
         tab.Module.ProjectPath = path;
@@ -58,15 +46,6 @@ static class FileProcessor {
             tab.Module.FormatVersion = oldVersion;
             throw;
         }
-    }
-    public static Boolean FindModule(String moduleName) {
-        String modulePaths = Environment.GetEnvironmentVariable("PSModulePath", EnvironmentVariableTarget.Process);
-        if (String.IsNullOrEmpty(modulePaths)) { return false; }
-        return modulePaths
-            .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-            .Select(path => new DirectoryInfo(path))
-            .Where(x => x.Exists)
-            .Any(dir => dir.EnumerateDirectories(moduleName).Any());
     }
 
     public static async Task PublishHelpFile(this ModuleObject module, String path, IProgressBar pb) {

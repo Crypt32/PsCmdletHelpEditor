@@ -26,6 +26,7 @@ public class AppCommands {
     readonly MainWindowVM _mwvm;
     readonly IPsProcessorLegacy _psProcessorLegacy;
     readonly IPowerShellProcessor _psProcessor;
+    readonly IPsHelpProjectFileHandler _fileService;
     readonly IProgressBar _progressBar;
     readonly IMsgBox _msgBox;
     Boolean alreadyRaised;
@@ -33,6 +34,7 @@ public class AppCommands {
     public AppCommands(MainWindowVM parent) {
         _psProcessorLegacy = App.Container.Resolve<IPsProcessorLegacy>();
         _psProcessor = App.Container.Resolve<IPowerShellProcessor>();
+        _fileService = App.Container.Resolve<IPsHelpProjectFileHandler>();
         _progressBar = App.Container.Resolve<IProgressBar>();
         _mwvm = parent;
 
@@ -66,12 +68,13 @@ public class AppCommands {
     public IAsyncCommand OpenCommand { get; }
 
     async Task openProject(Object? obj, CancellationToken token) {
-        if (getOpenProjectFilePath(obj as String, out String? path)) {
+        if (getOpenProjectFilePath(obj as String, out String? projectPath)) {
             HelpProjectDocument? vm = null;
             try {
+                IPsModuleProject project = _fileService.ReadProjectFile(projectPath);
                 vm = new HelpProjectDocument {
-                    Path = path!,
-                    Module = FileProcessor.ReadProjectFile(path)
+                    Path = projectPath,
+                    Module = ModuleObject.FromProjectInfo(project)
                 };
                 vm.StartSpinner();
             } catch (Exception ex) {
@@ -91,7 +94,7 @@ public class AppCommands {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
-        if (FileProcessor.FindModule(tab.Module.Name)) {
+        if (_psProcessor.TestModuleExist(tab.Module.Name)) {
             tab.Module.ModulePath = null;
         }
         tab.ErrorInfo = null;
@@ -385,7 +388,7 @@ public class AppCommands {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
-        if (FileProcessor.FindModule(tab.Module.Name)) {
+        if (_psProcessor.TestModuleExist(tab.Module.Name)) {
             tab.Module.ModulePath = null;
         }
         tab.ErrorInfo = null;
@@ -487,7 +490,7 @@ public class AppCommands {
         ClosableModuleItem? tab = _mwvm.SelectedTab;
         UIManager.ShowBusy(tab, Strings.InfoCmdletsLoading);
         try {
-            ModuleObject module = FileProcessor.ReadProjectFile(fileName);
+            ModuleObject module = ModuleObject.FromProjectInfo(_fileService.ReadProjectFile(fileName));
             tab!.Module = module;
             loadCmdletsForProject(tab);
         } catch (Exception e) {
