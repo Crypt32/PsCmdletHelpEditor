@@ -26,8 +26,6 @@ public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
     public Boolean Positional { get; set; }
     [XmlAttribute("pos")]
     public String? Position { get; set; }
-    [XmlIgnore]
-    public PsCommandParameterOption Options { get; set; }
     public String? Description { get; set; } = null!;
     public String? DefaultValue { get; set; }
 

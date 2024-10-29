@@ -103,14 +103,14 @@ public class PsCommandParameterVM : ViewModelBase {
         var retValue = new PsCommandParameterVM {
             Name = param.Name,
             Type = param.Type,
-            AcceptsArray = (param.Options & PsCommandParameterOption.AcceptsArray) != 0,
-            Mandatory = (param.Options & PsCommandParameterOption.Mandatory) != 0,
-            Globbing = (param.Options & PsCommandParameterOption.AcceptsWildcards) != 0,
-            Dynamic = (param.Options & PsCommandParameterOption.Dynamic) != 0,
-            RemainingArgs = (param.Options & PsCommandParameterOption.RemainingArgs) != 0,
-            Pipeline = (param.Options & PsCommandParameterOption.Pipeline) != 0,
-            PipelinePropertyName = (param.Options & PsCommandParameterOption.PipelinePropertyName) != 0,
-            Positional = (param.Options & PsCommandParameterOption.Positional) != 0,
+            AcceptsArray = param.AcceptsArray,
+            Mandatory = param.Mandatory,
+            Globbing = param.Globbing,
+            Dynamic = param.Dynamic,
+            RemainingArgs = param.RemainingArgs,
+            Pipeline = param.Pipeline,
+            PipelinePropertyName = param.PipelinePropertyName,
+            Positional = param.Positional,
             Position = param.Position,
             Description = param.Description
         };

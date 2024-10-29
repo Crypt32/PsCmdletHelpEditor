@@ -17,17 +17,46 @@ public interface IPsCommandParameterDescription {
     /// </summary>
     String? Description { get; }
     /// <summary>
-    /// Gets optional parameter default value.
+    /// Indicates if parameter accepts a collection of values.
     /// </summary>
-    String? DefaultValue { get; }
+    Boolean AcceptsArray { get; }
+    /// <summary>
+    /// Indicates if parameter is mandatory.
+    /// </summary>
+    Boolean Mandatory { get; }
+    /// <summary>
+    /// Indicates if parameter is dynamic.
+    /// </summary>
+    Boolean Dynamic { get; }
+    /// <summary>
+    /// Indicates if parameter accepts value from remaining args.
+    /// </summary>
+    Boolean RemainingArgs { get; }
+    /// <summary>
+    /// Indicates if parameter accepts value from pipeline.
+    /// </summary>
+    Boolean Pipeline { get; }
+    /// <summary>
+    /// Indicates if parameter accepts value from pipeline by matching property name
+    /// (when property name in pipeline object match parameter name).
+    /// </summary>
+    Boolean PipelinePropertyName { get; }
+    /// <summary>
+    /// Indicates if parameter accepts wildcards.
+    /// </summary>
+    Boolean Globbing { get; }
+    /// <summary>
+    /// Indicates if parameter is positional.
+    /// </summary>
+    Boolean Positional { get; }
     /// <summary>
     /// Gets parameter position. Can be a number or string if parameter is named.
     /// </summary>
     String Position { get; }
     /// <summary>
-    /// Gets parameter options.
+    /// Gets optional parameter default value.
     /// </summary>
-    PsCommandParameterOption Options { get; }
+    String? DefaultValue { get; }
 
     /// <summary>
     /// Gets a collection of parameter attributes (type names).

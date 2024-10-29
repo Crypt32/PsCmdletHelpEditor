@@ -14,9 +14,16 @@ class PsCommandParameter : IPsCommandParameterDescription {
     public String Name { get; private set; } = null!;
     public String Type { get; private set; } = String.Empty;
     public String? Description { get; private set; }
+    public Boolean AcceptsArray { get; private set; }
+    public Boolean Mandatory { get; private set; }
+    public Boolean Dynamic { get; private set; }
+    public Boolean RemainingArgs { get; private set; }
+    public Boolean Pipeline { get; private set; }
+    public Boolean PipelinePropertyName { get; private set; }
+    public Boolean Globbing { get; private set; }
+    public Boolean Positional { get; private set; }
     public String? DefaultValue { get; private set; }
     public String Position { get; private set; } = String.Empty;
-    public PsCommandParameterOption Options { get; private set; }
     public IReadOnlyList<String> GetAttributes() {
         return _attributes;
     }
@@ -29,7 +36,7 @@ class PsCommandParameter : IPsCommandParameterDescription {
         String genericType = String.Empty;
         String[] tokens;
         if (underlyingType.Contains("[")) {
-            Options |= PsCommandParameterOption.AcceptsArray;
+            AcceptsArray = true;
         }
         if (underlyingType.Contains("[") && !underlyingType.Contains("[]")) {
             tokens = underlyingType.Split('[');
@@ -44,29 +51,6 @@ class PsCommandParameter : IPsCommandParameterDescription {
             Type += "[" + genericType + "]";
         }
     }
-    void setOptions(CommandParameterInfo parameter) {
-        if (parameter.IsMandatory) {
-            Options |= PsCommandParameterOption.Mandatory;
-        }
-        if (parameter.IsDynamic) {
-            Options |= PsCommandParameterOption.Dynamic;
-        }
-        if (parameter.ValueFromPipeline) {
-            Options |= PsCommandParameterOption.Pipeline;
-        }
-        if (parameter.ValueFromPipelineByPropertyName) {
-            Options |= PsCommandParameterOption.PipelinePropertyName;
-        }
-        if (parameter.ValueFromRemainingArguments) {
-            Options |= PsCommandParameterOption.RemainingArgs;
-        }
-        if (parameter.Position >= 0) {
-            Options |= PsCommandParameterOption.Positional;
-            Position = parameter.Position.ToString();
-        } else {
-            Position = "named";
-        }
-    }
 
     public void ImportCommentBasedHelp(PSObject cbh) {
         Description = ((PSObject[])cbh.Members["Description"].Value)
@@ -77,11 +61,16 @@ class PsCommandParameter : IPsCommandParameterDescription {
     public static PsCommandParameter FromCmdlet(CommandParameterInfo parameter) {
         var retValue = new PsCommandParameter {
             Name = parameter.Name,
-            Description = parameter.HelpMessage
+            Description = parameter.HelpMessage,
+            Mandatory = parameter.IsMandatory,
+            Dynamic = parameter.IsDynamic,
+            Pipeline = parameter.ValueFromPipeline,
+            PipelinePropertyName = parameter.ValueFromPipelineByPropertyName,
+            RemainingArgs = parameter.ValueFromRemainingArguments,
+            Positional = parameter.Position >= 0,
+            Position = parameter.Position >= 0 ? parameter.Position.ToString() : "named"
         };
-        
         retValue.setParameterType(parameter);
-        retValue.setOptions(parameter);
         
         // process attributes
         if (parameter.Attributes.Count > 0) {
