@@ -45,7 +45,7 @@ class XmlProcessor {
         return retValue.TrimEnd();
     }
     // reader
-    public static void ImportFromXml(String file, ModuleObject moduleObject) {
+    public static void ImportFromMaml(String file, ModuleObject moduleObject) {
         if (String.IsNullOrEmpty(file)) { return; }
         var fileInfo = new FileInfo(file);
         String supDocPath = fileInfo.DirectoryName + "\\" + moduleObject.Name + ".supports.xml";

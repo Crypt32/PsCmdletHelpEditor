@@ -13,6 +13,6 @@ public partial class ModuleSelectorControl {
 
     async void lvModulesMouseDoubleClick(Object sender, MouseButtonEventArgs e) {
         //((MainWindowVM)DataContext).CommandManager.LoadCmdlets(null, false);
-        await ((ModuleListDocument)DataContext).MWVM.CommandManager.LoadCmdletsAsync(null, false);
+        await ((ModuleListDocument)DataContext).MWVM.CommandManager.LoadCommandsAsync(null, false);
     }
 }

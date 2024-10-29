@@ -3,10 +3,9 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-          xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+          xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
           mc:Ignorable="d"
-          d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
+          d:DataContext="{d:DesignInstance vm:MainWindowVM}"
           Header="_Actions">
     <MenuItem Header="_Reload Modules"
               InputGestureText="F5"
@@ -25,9 +24,9 @@
     </MenuItem>
     <Separator/>
     <MenuItem Header="Import from comment-based help"
-              Command="{Binding CommandManager.ImportFromCBHelpCommand}"
+              Command="{Binding CommandManager.ImportFromCommentBasedHelpCommand}"
               CommandParameter="{Binding SelectedModule}"/>
     <MenuItem Header="Import from XML Help file"
-              Command="{Binding CommandManager.ImportFromXmlHelpCommand}"
+              Command="{Binding CommandManager.ImportFromMamlCommand}"
               CommandParameter="{Binding SelectedModule}"/>
 </MenuItem>

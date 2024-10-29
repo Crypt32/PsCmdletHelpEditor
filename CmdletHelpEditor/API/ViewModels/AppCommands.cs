@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
@@ -45,8 +43,8 @@ public class AppCommands {
         CloseAppCommand = new RelayCommand<CancelEventArgs>(closeApp);
         LoadModulesCommand = new AsyncCommand(loadModules);
         LoadFromFileCommand = new AsyncCommand(loadModuleFromManifest);
-        ImportFromXmlHelpCommand = new RelayCommand(importFromXmlHelp, canImportFromHelp);
-        ImportFromCBHelpCommand = new RelayCommand(importFromCommentHelp, canImportFromHelp);
+        ImportFromMamlCommand = new AsyncCommand(importFromMamlHelp, canImportFromHelp);
+        ImportFromCommentBasedHelpCommand = new AsyncCommand(importFromCommentBasedHelp, canImportFromHelp);
         PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
         PublishOnlineCommand = new RelayCommand(publishOnline, canPublishOnline);
         _msgBox = App.Container.Resolve<IMsgBox>();
@@ -230,8 +228,6 @@ public class AppCommands {
     #endregion
 
     public ICommand LoadFromFileCommand { get; }
-    public ICommand ImportFromXmlHelpCommand { get; }
-    public ICommand ImportFromCBHelpCommand { get; }
     public ICommand PublishHelpCommand { get; }
 
     #region Copy To Clipboard command
@@ -256,24 +252,7 @@ public class AppCommands {
         tab.Focus();
     }
 
-
-
-
     // toolbar/menu commands
-    void newProject(Object? obj) {
-        if (!testSaved(_mwvm.SelectedTab)) {
-            return;
-        }
-        if (_mwvm.SelectedTab == null) {
-            addTabOld(null);
-        }
-
-        ClosableModuleItem tab = _mwvm.SelectedTab;
-        Debug.Assert(tab != null, "tab != null");
-        tab.Module = null;
-        LoadModulesCommand.Execute(true);
-        tab.Header = "untitled";
-    }
     public Boolean RequestFileSave(TabDocumentVM tab) {
         MessageBoxResult result = MsgBox.Show(
             "Unsaved Data",
@@ -314,18 +293,30 @@ public class AppCommands {
             _mwvm.SelectedTab.ErrorInfo = e.Message;
         }
     }
-    
-    void importFromXmlHelp(Object? obj) {
-        var module = (ModuleObject)obj;
+
+    #region Import external help (MAML, CBH)
+
+    public IAsyncCommand ImportFromMamlCommand { get; }
+    public IAsyncCommand ImportFromCommentBasedHelpCommand { get; }
+    Task importFromMamlHelp(Object? o, CancellationToken token) {
+        var module = (ModuleObject)o!;
         var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
-        } else { return; }
-        LoadCmdlets(dlg.FileName, false);
+        } else {
+            return Task.CompletedTask;
+        }
+        return LoadCommandsAsync(dlg.FileName, false);
     }
-    void importFromCommentHelp(Object? obj) {
-        LoadCmdlets(null, true);
+    Task importFromCommentBasedHelp(Object? o, CancellationToken token) {
+        return LoadCommandsAsync(null, true);
     }
+    static Boolean canImportFromHelp(Object? obj) {
+        return obj != null;
+    }
+    
+    #endregion
+
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((ClosableModuleItem)o).Module;
         var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(_mwvm.SelectedTab.Module.Name);
@@ -424,19 +415,12 @@ public class AppCommands {
     
 
     // predicate
-    Boolean canOpen(Object? obj) {
-        return _mwvm.SelectedTab == null ||
-               ((Grid)_mwvm.SelectedTab.Content).Children.Count == 0 ||
-               !(((Grid)_mwvm.SelectedTab.Content).Children[0] is LoadingSpinner);
-    }
     Boolean canSave(Object? obj) {
         return _mwvm.SelectedDocument is HelpProjectDocument;
         //return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
     }
 
-    static Boolean canImportFromHelp(Object? obj) {
-        return obj != null;
-    }
+    
     static Boolean canPublish(Object? obj) {
         return ((ClosableModuleItem)obj)?.Module != null && ((ClosableModuleItem)obj).Module.Cmdlets.Count > 0;
     }
@@ -486,7 +470,7 @@ public class AppCommands {
     }
 
     // public
-    public void OpenProject2(Object? obj) {
+    void OpenProject2(Object? obj) {
         String fileName;
         
         if (obj == null) {
@@ -513,41 +497,9 @@ public class AppCommands {
     public void OpenProject(String path) {
         OpenCommand.ExecuteAsync(path);
     }
-    
 
-    public async void LoadCmdlets(Object? helpPath, Boolean importCBH) {
-        ClosableModuleItem previousTab = _mwvm.SelectedTab;
-        UIElement previousElement = ((Grid)previousTab.Content).Children[0];
-        String cmd = Utils.GetCommandTypesString();
-        if (String.IsNullOrEmpty(cmd)) {
-            _msgBox.ShowError("Error", Strings.E_EmptyCmds);
-            return;
-        }
-        UIManager.ShowBusy(previousTab, Strings.InfoCmdletsLoading);
-        try {
-            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(_mwvm.SelectedModule, cmd, importCBH);
-            _mwvm.SelectedModule.Cmdlets.Clear();
-            foreach (CmdletObject item in data) {
-                _mwvm.SelectedModule.Cmdlets.Add(item);
-            }
-            if (helpPath != null) {
-                _mwvm.SelectedModule.ImportedFromHelp = true;
-                try {
-                    XmlProcessor.ImportFromXml((String)helpPath, _mwvm.SelectedModule);
-                } catch (Exception ex) {
-                    _msgBox.ShowError("Error", ex.Message);
-                }
-            }
-            previousTab.Module = _mwvm.SelectedModule;
-            _mwvm.SelectedModule = null;
-            UIManager.ShowEditor(previousTab);
-        } catch (Exception e) {
-            _msgBox.ShowError("Error while loading cmdlets", e.Message);
-            _mwvm.SelectedTab.ErrorInfo = e.Message;
-            UIManager.RestoreControl(previousTab, previousElement);
-        }
-    }
-    public async Task LoadCmdletsAsync(String? helpPath, Boolean importFromCBH) {
+
+    public async Task LoadCommandsAsync(String? helpPath, Boolean importFromCBH) {
         var vm = new HelpProjectDocument();
         var cmd = Utils.GetCommandTypes();
         if (cmd.Count == 0) {
@@ -565,7 +517,7 @@ public class AppCommands {
             if (helpPath != null) {
                 module.ImportedFromHelp = true;
                 try {
-                    XmlProcessor.ImportFromXml(helpPath, module);
+                    XmlProcessor.ImportFromMaml(helpPath, module);
                 } catch (Exception ex) {
                     _msgBox.ShowError("Error", ex.Message);
                 }

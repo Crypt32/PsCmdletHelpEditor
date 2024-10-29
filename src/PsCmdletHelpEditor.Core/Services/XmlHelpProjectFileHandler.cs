@@ -46,13 +46,4 @@ public class XmlHelpProjectFileHandler : IPsHelpProjectFileHandler {
             throw;
         }
     }
-    static XmlPsModuleProject ToXmlPsModuleProject(IPsModuleProject project) {
-        var retValue = new XmlPsModuleProject {
-            FormatVersion = project.FormatVersion,
-            Name = project.Name
-
-        };
-
-        return retValue;
-    }
 }
