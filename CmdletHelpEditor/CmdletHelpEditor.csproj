@@ -179,6 +179,7 @@
     <Compile Include="API\Tools\MarkDownProcessor.cs" />
     <Compile Include="API\Tools\OutputProcessor.cs" />
     <Compile Include="API\Tools\XmlFormatConverter.cs" />
+    <Compile Include="API\Utility\NativeDialogFactory.cs" />
     <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
     <Compile Include="API\Utility\SavePendingEventHandler.cs" />

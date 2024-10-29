@@ -13,8 +13,8 @@ using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
+using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.Views.Windows;
-using Microsoft.Win32;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Controls;
@@ -195,7 +195,24 @@ public class AppCommands {
 
     #endregion
 
+    #region Close App
+
     public ICommand CloseAppCommand { get; }
+    void closeApp(CancelEventArgs? e) {
+        if (e == null) {
+            Boolean canClose = _mwvm.Tabs.Where(tab => !tab.IsSaved).All(testSaved);
+            if (canClose) {
+                alreadyRaised = true;
+                Application.Current.Shutdown();
+            }
+        } else {
+            if (!alreadyRaised) {
+                e.Cancel = !_mwvm.Tabs.Where(tab => !tab.IsSaved).All(testSaved);
+            }
+        }
+    }
+
+    #endregion
 
     #region Load Modules commands
 
@@ -297,26 +314,10 @@ public class AppCommands {
             _mwvm.SelectedTab.ErrorInfo = e.Message;
         }
     }
-    void closeApp(CancelEventArgs? e) {
-        if (e == null) {
-            Boolean canClose = _mwvm.Tabs.Where(tab => !tab.IsSaved).All(testSaved);
-            if (canClose) {
-                alreadyRaised = true;
-                Application.Current.Shutdown();
-            }
-        } else {
-            if (!alreadyRaised) {
-                e.Cancel = !_mwvm.Tabs.Where(tab => !tab.IsSaved).All(testSaved);
-            }
-        }
-    }
+    
     void importFromXmlHelp(Object? obj) {
         var module = (ModuleObject)obj;
-        var dlg = new OpenFileDialog {
-            FileName = module.Name + ".Help.xml",
-            DefaultExt = ".xml",
-            Filter = "PowerShell Help Xml files (.xml)|*.xml"
-        };
+        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
         } else { return; }
@@ -327,11 +328,7 @@ public class AppCommands {
     }
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((ClosableModuleItem)o).Module;
-        var dlg = new SaveFileDialog {
-            FileName = _mwvm.SelectedTab.Module.Name + ".Help.xml",
-            DefaultExt = ".xml",
-            Filter = "PowerShell Help Xml files (.xml)|*.xml"
-        };
+        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(_mwvm.SelectedTab.Module.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             try {
@@ -351,10 +348,7 @@ public class AppCommands {
         // method call from ICommand is allowed only when module selector is active
         // so skip checks.
         ClosableModuleItem previousTab = _mwvm.SelectedTab;
-        var dlg = new OpenFileDialog {
-            DefaultExt = ".psm1",
-            Filter = "PowerShell module files (*.psm1, *.psd1)|*.psm1;*.psd1"
-        };
+        var dlg = NativeDialogFactory.CreateOpenPsManifestDialog();
         Boolean? result = dlg.ShowDialog();
         if (result != true) { return; }
         UIManager.ShowBusy(previousTab, Strings.InfoModuleLoading);
@@ -373,10 +367,7 @@ public class AppCommands {
     async Task loadModuleFromManifest(Object? o, CancellationToken token) {
         await LoadModulesCommand.ExecuteAsync(false);
         TabDocumentVM selectedDocument = _mwvm.SelectedDocument!;
-        var dlg = new OpenFileDialog {
-            DefaultExt = ".psm1",
-            Filter = "PowerShell module files (*.psm1, *.psd1)|*.psm1;*.psd1"
-        };
+        var dlg = NativeDialogFactory.CreateOpenPsManifestDialog();
         Boolean? result = dlg.ShowDialog();
         if (result != true) {
             return;
@@ -482,11 +473,7 @@ public class AppCommands {
         return true;
     }
     Boolean getSaveFileName(out String? path) {
-        var dlg = new SaveFileDialog {
-            FileName = _mwvm.SelectedTab.Module.Name + ".Help.pshproj",
-            DefaultExt = ".pshproj",
-            Filter = "PowerShell Help Project file (.pshproj)|*.pshproj"
-        };
+        var dlg = NativeDialogFactory.CreateSaveHelpProjectDialog(_mwvm.SelectedTab.Module.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             path = dlg.FileName;
@@ -501,11 +488,9 @@ public class AppCommands {
     // public
     public void OpenProject2(Object? obj) {
         String fileName;
-        var dlg = new OpenFileDialog {
-            DefaultExt = ".pshproj",
-            Filter = "PowerShell Help Project file (.pshproj)|*.pshproj"
-        };
+        
         if (obj == null) {
+            var dlg = NativeDialogFactory.CreateOpenHelpProjectDialog();
             Boolean? result = dlg.ShowDialog();
             if (result != true) {
                 return;
@@ -564,8 +549,8 @@ public class AppCommands {
     }
     public async Task LoadCmdletsAsync(String? helpPath, Boolean importFromCBH) {
         var vm = new HelpProjectDocument();
-        String cmd = Utils.GetCommandTypesString();
-        if (String.IsNullOrEmpty(cmd)) {
+        var cmd = Utils.GetCommandTypes();
+        if (cmd.Count == 0) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
@@ -573,9 +558,9 @@ public class AppCommands {
         try {
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
             var module = ModuleObject.FromPsModuleInfo(moduleInfo);
-            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(module, cmd, importFromCBH);
-            foreach (CmdletObject item in data) {
-                module.Cmdlets.Add(item);
+            IEnumerable<IPsCommandInfo> data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, importFromCBH);
+            foreach (IPsCommandInfo commandInfo in data) {
+                module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
             if (helpPath != null) {
                 module.ImportedFromHelp = true;
@@ -610,10 +595,7 @@ public class AppCommands {
             return true;
         }
         path = null;
-        var dlg = new OpenFileDialog {
-                                         DefaultExt = ".pshproj",
-                                         Filter = "PowerShell Help Project file (.pshproj)|*.pshproj"
-                                     };
+        var dlg = NativeDialogFactory.CreateOpenHelpProjectDialog();
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             path = dlg.FileName;

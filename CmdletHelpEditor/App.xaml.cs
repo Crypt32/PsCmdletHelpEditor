@@ -37,5 +37,6 @@ public partial class App {
         Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
         Container.RegisterSingleton<IMsgBox, MsgBoxClass>();
         Container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
+        Container.RegisterType<IPsHelpProjectFileHandler, XmlHelpProjectFileHandler>();
     }
 }

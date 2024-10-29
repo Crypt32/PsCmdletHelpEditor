@@ -26,9 +26,9 @@ static class Utils {
     public static String GetCommandTypesString() {
         return String.Join(",", GetCommandTypes());
     }
-    public static IEnumerable<String> GetCommandTypes() {
+    public static IReadOnlyList<String> GetCommandTypes() {
         var psProcessor = App.Container.Resolve<IPowerShellProcessor>();
-        List<String> commandTypes = new List<String>();
+        List<String> commandTypes = [];
         if (Settings.Default.FunctionChecked) { commandTypes.Add("Function"); }
         if (Settings.Default.FilterChecked) { commandTypes.Add("Filter"); }
         if (Settings.Default.CmdletChecked) { commandTypes.Add("Cmdlet"); }
