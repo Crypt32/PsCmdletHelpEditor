@@ -5,6 +5,7 @@ using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
 using PsCmdletHelpEditor.Core.Services;
+using PsCmdletHelpEditor.Core.Services.MAML;
 using Unity;
 
 namespace CmdletHelpEditor;
@@ -38,5 +39,6 @@ public partial class App {
         Container.RegisterSingleton<IMsgBox, MsgBoxClass>();
         Container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
         Container.RegisterType<IPsHelpProjectFileHandler, XmlHelpProjectFileHandler>();
+        Container.RegisterType<IMamlService, PsMamlService>();
     }
 }
