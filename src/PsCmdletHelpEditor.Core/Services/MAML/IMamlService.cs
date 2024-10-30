@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CodeKicker.BBCode;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace PsCmdletHelpEditor.Core.Services.MAML;
@@ -15,7 +14,6 @@ public interface IMamlService {
     /// </summary>
     /// <param name="cmdlets">A collection of commands to export.</param>
     /// <param name="pb">Optional progress bar.</param>
-    /// <param name="bbRules">BB-code parser.</param>
     /// <returns>XML string.</returns>
-    Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb, BBCodeParser bbRules);
+    Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb);
 }

@@ -13,6 +13,8 @@ using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Templates;
 using CodeKicker.BBCode;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Services.MAML;
+using Unity;
 
 namespace CmdletHelpEditor.API.Tools;
 class XmlProcessor {
@@ -351,7 +353,14 @@ class XmlProcessor {
     }
 
     // writer
-    public static async Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
+    // TODO: stub method, needed to access BB parser from HtmlProcessor. Need to sort this out as well.
+    public static Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
+        var mamlService = App.Container.Resolve<IMamlService>();
+        var bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
+
+        return mamlService.XmlGenerateHelp(cmdlets.Select(x => x.ToXmlObject()).Cast<IPsCommandInfo>().ToList(), pb);
+    }
+    static async Task<String> XmlGenerateHelpOld(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
         List<CmdletObject> cmdletsToProcess = isOffline
             ? new List<CmdletObject>(cmdlets)
             : new List<CmdletObject>(cmdlets.Where(x => x.GeneralHelp.Status != ItemStatus.Missing));

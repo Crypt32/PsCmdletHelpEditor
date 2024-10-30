@@ -22,9 +22,21 @@ public class PsMamlService : IMamlService {
     const String MAML_COMMAND_PARAM_VALUE_TEMPLATE  = "MamlCommandParamValueTemplate.hbs";
     const String MAML_COMMAND_EXAMPLE_TEMPLATE      = "MamlCommandExampleTeamplate.hbs";
     const String MAML_COMMAND_RELATED_LINK_TEMPLATE = "MamlCommandRelatedLinkTemplate.hbs";
+
+    readonly BBCodeParser _bbRules = new(ErrorMode.ErrorFree, null, [
+        new BBTag("br", String.Empty, String.Empty),
+        new BBTag("b", String.Empty, String.Empty),
+        new BBTag("i", String.Empty, String.Empty),
+        new BBTag("u", String.Empty, String.Empty),
+        new BBTag("s", String.Empty, String.Empty),
+        new BBTag("url", "", "", new BBAttribute("",""),new BBAttribute("","")),
+        new BBTag("quote", "", "", new BBAttribute("",""),new BBAttribute("","")),
+        new BBTag("pre", "", "", new BBAttribute("",""),new BBAttribute("","")),
+        new BBTag("color", "", "", new BBAttribute("",""),new BBAttribute("",""))
+    ]);
     
 
-    public async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb, BBCodeParser bbRules) {
+    public async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb) {
         if (cmdlets.Count == 0) {
             return String.Empty;
         }
@@ -34,7 +46,7 @@ public class PsMamlService : IMamlService {
         }
         var sb = new StringBuilder("<helpItems schema=\"maml\">");
         foreach (IPsCommandInfo cmdlet in cmdlets) {
-            await xmlGenerateBodyAsync(bbRules, sb, cmdlet);
+            await xmlGenerateBodyAsync(_bbRules, sb, cmdlet);
             if (pb != null) {
                 pb.Progress += duration;
             }
