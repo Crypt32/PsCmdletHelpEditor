@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Services.MAML;
+using Unity;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
@@ -58,9 +60,10 @@ static class FileProcessor {
             ConformanceLevel = ConformanceLevel.Document
         };
         try {
+            var mamlService = App.Container.Resolve<IMamlService>();
             using var writer = XmlWriter.Create(path, settings);
             await writer.WriteStartDocumentAsync();
-            await writer.WriteRawAsync(await XmlProcessor.XmlGenerateHelp(module.Cmdlets, pb, module.IsOffline));
+            await writer.WriteRawAsync(await mamlService.XmlGenerateHelp(module.ToXmlObject().GetCmdlets().ToList(), pb));
         } finally {
             pb.End();
         }

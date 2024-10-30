@@ -7,6 +7,7 @@ namespace CmdletHelpEditor.API.Tools;
 /// <summary>
 /// Represents Markdown source markup generator.
 /// </summary>
+[Obsolete("Obsolete", true)]
 class MarkDownProcessor : OutputProcessor {
     static readonly Char[] _escapeChars = new[] {
             '#', '{', '}', '[', ']', '<', '>', '*', '+', '-', '|', '\\', '`', '_',

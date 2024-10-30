@@ -13,6 +13,7 @@ using PsCmdletHelpEditor.Core.Models;
 
 namespace CmdletHelpEditor.API.Tools;
 
+[Obsolete("Obsolete.", true)]
 class HtmlProcessorV2 : OutputProcessor {
 
     public HtmlProcessorV2() {
@@ -113,7 +114,7 @@ class HtmlProcessorV2 : OutputProcessor {
 </table>";
     }
 }
-
+[Obsolete("Obsolete", true)]
 static class HtmlProcessor {
     static readonly String _nl = Environment.NewLine;
     public static BBCodeParser GetParser(ParserType type) {

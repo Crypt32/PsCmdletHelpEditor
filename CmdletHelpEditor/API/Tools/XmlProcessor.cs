@@ -18,16 +18,19 @@ using Unity;
 
 namespace CmdletHelpEditor.API.Tools;
 class XmlProcessor {
-    readonly IProgressBar _progressBar;
-    readonly BBCodeParser _bbRules;
-
-    public XmlProcessor(IProgressBar progressBar) {
-        _progressBar = progressBar;
-        _bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
-    }
-
+    static readonly BBCodeParser bbRules = new(ErrorMode.ErrorFree, null, [
+        new BBTag("br", String.Empty, String.Empty),
+    new BBTag("b", String.Empty, String.Empty),
+    new BBTag("i", String.Empty, String.Empty),
+    new BBTag("u", String.Empty, String.Empty),
+    new BBTag("s", String.Empty, String.Empty),
+    new BBTag("url", "", "", new BBAttribute("",""),new BBAttribute("","")),
+    new BBTag("quote", "", "", new BBAttribute("",""),new BBAttribute("","")),
+    new BBTag("pre", "", "", new BBAttribute("",""),new BBAttribute("","")),
+    new BBTag("color", "", "", new BBAttribute("",""),new BBAttribute("",""))
+        ]);
     // general
-    static String generateParagraphs(String input, BBCodeParser bbRules) {
+    static String generateParagraphs(String input) {
         if (String.IsNullOrEmpty(input)) {
             return "<maml:para />";
         }
@@ -356,7 +359,6 @@ class XmlProcessor {
     // TODO: stub method, needed to access BB parser from HtmlProcessor. Need to sort this out as well.
     public static Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
         var mamlService = App.Container.Resolve<IMamlService>();
-        var bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
 
         return mamlService.XmlGenerateHelp(cmdlets.Select(x => x.ToXmlObject()).Cast<IPsCommandInfo>().ToList(), pb);
     }
@@ -365,14 +367,13 @@ class XmlProcessor {
             ? new List<CmdletObject>(cmdlets)
             : new List<CmdletObject>(cmdlets.Where(x => x.GeneralHelp.Status != ItemStatus.Missing));
         if (cmdletsToProcess.Count == 0) { return String.Empty; }
-        BBCodeParser bbRules = new HtmlProcessorV2().GetParser(ParserType.Clear);
         Double duration = 0;
         if (pb != null) {
             duration = 100.0 / cmdletsToProcess.Count;
         }
         var sb = new StringBuilder("<helpItems schema=\"maml\">");
         foreach (CmdletObject cmdlet in cmdletsToProcess) {
-            await xmlGenerateBody(bbRules, sb, cmdlet);
+            await xmlGenerateBody(sb, cmdlet);
             if (pb != null) {
                 pb.Progress += duration;
             }
@@ -380,17 +381,17 @@ class XmlProcessor {
         sb.Append("</helpItems>");
         return sb.ToString();
     }
-    static Task xmlGenerateBody(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
+    static Task xmlGenerateBody(StringBuilder SB, CmdletObject cmdlet) {
         return Task.Factory.StartNew(() => {
             SB.Append("<command:command xmlns:maml=\"http://schemas.microsoft.com/maml/2004/10\" xmlns:command=\"http://schemas.microsoft.com/maml/dev/command/2004/10\" xmlns:dev=\"http://schemas.microsoft.com/maml/dev/2004/10\" xmlns:MSHelp=\"http://msdn.microsoft.com/mshelp\">");
-            SB.Append(xmlGenerateCmdletDetail(bbRules, cmdlet));
+            SB.Append(xmlGenerateCmdletDetail(cmdlet));
             SB.Append("<command:syntax>");
             // if current cmdlet hasn't parameters, then just write single syntaxItem
             if (cmdlet.Parameters.Count == 0) {
                 SB.AppendFormat(XmlMamlTemplate.CommandSyntax,
                     SecurityElement.Escape(cmdlet.Name));
             } else {
-                xmlGenerateParameterSyntax(bbRules, SB, cmdlet);
+                xmlGenerateParameterSyntax(SB, cmdlet);
             }
             SB.Append("</command:syntax><command:parameters>");
             if (cmdlet.Parameters.Count > 0) {
@@ -399,14 +400,14 @@ class XmlProcessor {
                 }
             }
             SB.Append("</command:parameters>");
-            SB.Append(xmlGenerateInputTypes(bbRules, cmdlet));
-            SB.Append(xmlGenerateReturnTypes(bbRules, cmdlet));
+            SB.Append(xmlGenerateInputTypes(cmdlet));
+            SB.Append(xmlGenerateReturnTypes(cmdlet));
             SB.Append(XmlMamlTemplate.Error);
             SB.AppendFormat(XmlMamlTemplate.Note,
-                generateParagraphs(cmdlet.GeneralHelp.Notes, bbRules));
+                generateParagraphs(cmdlet.GeneralHelp.Notes));
             SB.Append("<command:examples>");
             foreach (IPsCommandExample item in cmdlet.Examples) {
-                SB.Append(xmlGenerateExamples(bbRules, item));
+                SB.Append(xmlGenerateExamples(item));
             }
             SB.Append("</command:examples><maml:relatedLinks>");
             foreach (IPsCommandRelatedLink link in cmdlet.RelatedLinks) {
@@ -417,15 +418,15 @@ class XmlProcessor {
             SB.Append("</maml:relatedLinks></command:command>");
         });
     }
-    static String xmlGenerateCmdletDetail(BBCodeParser bbRules, CmdletObject cmdlet) {
+    static String xmlGenerateCmdletDetail(CmdletObject cmdlet) {
         return String.Format(XmlMamlTemplate.Details,
             SecurityElement.Escape(cmdlet.Name),
-            generateParagraphs(cmdlet.GeneralHelp.Synopsis, bbRules),
+            generateParagraphs(cmdlet.GeneralHelp.Synopsis),
             SecurityElement.Escape(cmdlet.Verb),
             SecurityElement.Escape(cmdlet.Noun),
-            generateParagraphs(cmdlet.GeneralHelp.Description, bbRules));
+            generateParagraphs(cmdlet.GeneralHelp.Description));
     }
-    static void xmlGenerateParameterSyntax(BBCodeParser bbRules, StringBuilder SB, CmdletObject cmdlet) {
+    static void xmlGenerateParameterSyntax(StringBuilder SB, CmdletObject cmdlet) {
         String[] exclude = {
             "verbose","debug","erroraction","warningaction","errorvariable","warningvariable","outvariable","outbuffer","pipelinevariable"
         };
@@ -464,7 +465,7 @@ class XmlProcessor {
                 SB.Append("\" position=\"" + param.Position + "\">");
                 SB.Append("<maml:name>" + SecurityElement.Escape(param.Name) + "</maml:name>");
                 SB.Append("<maml:description>");
-                SB.Append(generateParagraphs(param.Description, bbRules));
+                SB.Append(generateParagraphs(param.Description));
                 SB.Append("</maml:description>");
                 SB.Append("<command:parameterValue ");
                 String paramValueRequired = "true";
@@ -510,12 +511,12 @@ class XmlProcessor {
             pipelineInput,
             param.Position,
             SecurityElement.Escape(param.Name),
-            generateParagraphs(param.Description, bbRules),
+            generateParagraphs(param.Description),
             paramValue,
             SecurityElement.Escape(param.Type),
             SecurityElement.Escape(param.DefaultValue));
     }
-    static String xmlGenerateInputTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
+    static String xmlGenerateInputTypes(CmdletObject cmdlet) {
         var inputTypes = new List<String>(cmdlet.GeneralHelp.InputType.Split(';'));
         var inputUrls = new List<String>(cmdlet.GeneralHelp.InputUrl.Split(';'));
         var inputDescription = new List<String>(cmdlet.GeneralHelp.InputTypeDescription.Split(';'));
@@ -525,12 +526,12 @@ class XmlProcessor {
             SB.AppendFormat(XmlMamlTemplate.InputType,
                 bbRules.ToHtml(inputTypes[index], true),
                 bbRules.ToHtml(inputUrls[index], true),
-                generateParagraphs(inputDescription[index], bbRules));
+                generateParagraphs(inputDescription[index]));
         }
         SB.Append("	</command:inputTypes>");
         return SB.ToString();
     }
-    static String xmlGenerateReturnTypes(BBCodeParser bbRules, CmdletObject cmdlet) {
+    static String xmlGenerateReturnTypes(CmdletObject cmdlet) {
         var returnTypes = new List<String>(cmdlet.GeneralHelp.ReturnType.Split(';'));
         var returnUrls = new List<String>(cmdlet.GeneralHelp.ReturnUrl.Split(';'));
         var returnDescription = new List<String>(cmdlet.GeneralHelp.ReturnTypeDescription.Split(';'));
@@ -540,16 +541,16 @@ class XmlProcessor {
             SB.AppendFormat(XmlMamlTemplate.ReturnType,
                 bbRules.ToHtml(returnTypes[index], true),
                 bbRules.ToHtml(returnUrls[index], true),
-                generateParagraphs(returnDescription[index], bbRules));
+                generateParagraphs(returnDescription[index]));
         }
         SB.Append("	</command:returnValues>");
         return SB.ToString();
     }
-    static String xmlGenerateExamples(BBCodeParser bbRules, IPsCommandExample example) {
+    static String xmlGenerateExamples(IPsCommandExample example) {
         return String.Format(XmlMamlTemplate.Example,
             SecurityElement.Escape(example.Name),
             SecurityElement.Escape(example.Cmd),
-            generateParagraphs(example.Description, bbRules),
+            generateParagraphs(example.Description),
             SecurityElement.Escape(example.Output));
     }
 }

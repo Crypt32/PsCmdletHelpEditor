@@ -9,8 +9,8 @@ using System.Windows.Media;
 using System.Xml.Linq;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
-using CmdletHelpEditor.API.Tools;
 using PsCmdletHelpEditor.Core.Services.Formatters;
+using PsCmdletHelpEditor.Core.Services.MAML;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
 
@@ -112,8 +112,8 @@ public class OutputVM : DependencyObject, IAsyncVM {
         if (HtmlChecked) {
             await renderHtml(cmd, Tab);
         } else if (MdSourceChecked) {
-            var t = new MarkDownProcessor();
-            var rawMd = await t.GenerateViewAsync(cmd, Tab);
+            var t = OutputFormatterFactory.GetMarkdownFormatter();
+            var rawMd = await t.GenerateViewAsync(cmd.ToXmlObject(), Tab.ToXmlObject());
             var para = new Paragraph();
             para.Inlines.Add(new Run(rawMd));
             Document = new FlowDocument();
@@ -133,17 +133,18 @@ public class OutputVM : DependencyObject, IAsyncVM {
         return !IsBusy;
     }
     static async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
-        String rawXml = await XmlProcessor.XmlGenerateHelp(new[] { cmdlet }, null, module.IsOffline);
+        var mamlService = App.Container.Resolve<IMamlService>();
+        String rawXml = await mamlService.XmlGenerateHelp([cmdlet.ToXmlObject()], null);
         return XmlTokenizer.LoopTokenize(XElement.Parse(rawXml).ToString());
     }
     static async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
-        var htmlProcessor = new HtmlProcessorV2();
-        String rawHtml = await htmlProcessor.GenerateViewAsync(cmdlet, module);
+        var htmlProcessor = OutputFormatterFactory.GetHtmlFormatter();
+        String rawHtml = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
         return XmlTokenizer.LoopTokenize(XElement.Parse("<div>" + rawHtml + "</div>").ToString());
     }
     async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
-        var htmlProcessor = new HtmlProcessorV2();
-        HtmlText = await htmlProcessor.GenerateViewAsync(cmdlet, module);
+        var htmlProcessor = OutputFormatterFactory.GetHtmlFormatter();
+        HtmlText = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
         HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, HtmlText, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
     }
     static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {
