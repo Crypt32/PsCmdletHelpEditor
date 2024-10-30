@@ -19,8 +19,11 @@ class PsCommandInfo : IPsCommandInfo {
     public String Name { get; private set; } = null!;
     public String? Verb { get; private set; }
     public String? Noun { get; private set; }
-    public String? ExtraHeader { get; }
-    public String? ExtraFooter { get; }
+    public String? ExtraHeader => null;
+    public String? ExtraFooter => null;
+    public Boolean Publish => false;
+    public String? URL => null;
+    public String? ArticleIDString => null;
     public IPsCommandGeneralDescription GetDescription() {
         return generalDescription;
     }

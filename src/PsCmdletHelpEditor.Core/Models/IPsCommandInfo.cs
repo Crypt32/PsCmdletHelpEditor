@@ -24,6 +24,18 @@ public interface IPsCommandInfo {
     /// Gets optional help footer.
     /// </summary>
     String? ExtraFooter { get; }
+    /// <summary>
+    /// Determines if command is published online. If set to <c>false</c>, other members may be null.
+    /// </summary>
+    Boolean Publish { get; }
+    /// <summary>
+    /// Gets online article URL.
+    /// </summary>
+    String? URL { get; }
+    /// <summary>
+    /// Gets online article ID.
+    /// </summary>
+    String? ArticleIDString { get; }
 
     /// <summary>
     /// Gets cmdlet description.
