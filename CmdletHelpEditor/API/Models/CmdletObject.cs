@@ -52,7 +52,7 @@ public class CmdletObject : ViewModelBase {
     public String Verb { get; set; }
     [XmlAttribute("noun")]
     public String Noun { get; set; }
-    public List<String> Syntax { get; set; }
+    public List<String> Syntax { get; set; } = [];
     public PsCommandGeneralDescriptionVM GeneralHelp {
         get => generalHelp;
         set {
@@ -469,7 +469,7 @@ public class CmdletObject : ViewModelBase {
                 .ToList(),
             Examples = Examples.Select(x => x.ToXmlObject()).ToList(),
             RelatedLinks = RelatedLinks.Select(x => x.ToXmlObject()).ToList(),
-            SupportInformation = SupportInformation.ToXmlObject(),
+            SupportInformation = SupportInformation?.ToXmlObject(),
             Publish = Publish,
             URL = URL,
             ArticleIDString = ArticleIDString

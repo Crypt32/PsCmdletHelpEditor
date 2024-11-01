@@ -53,9 +53,9 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
         if (cbh.Members[containerName] is null) {
             return;
         }
-        if (cbh.Members[memberName].Value is PSObject value) {
+        if (cbh.Members[memberName]?.Value is PSObject value) {
             iType.Add(value);
-        } else if (cbh.Members[memberName].Value is PSObject[] multiValue) {
+        } else if (cbh.Members[memberName]?.Value is PSObject[] multiValue) {
             iType.AddRange(multiValue);
         }
 

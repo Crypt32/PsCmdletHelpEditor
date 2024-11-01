@@ -13,7 +13,7 @@ public class PsCommandParameterVM : ViewModelBase {
     ItemStatus status = ItemStatus.New;
 
     public PsCommandParameterVM() {
-        Status = ItemStatus.Missing;
+        //Status = ItemStatus.New;
     }
     public PsCommandParameterVM(CommandParameterInfo param) : this() {
         initialize(param);
