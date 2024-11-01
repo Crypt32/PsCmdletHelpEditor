@@ -252,9 +252,6 @@
     <Compile Include="Views\UserControls\GeneralControl.xaml.cs">
       <DependentUpon>GeneralControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\MainTabViewUC.xaml.cs">
-      <DependentUpon>MainTabViewUC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\UserControls\ModuleSelectorControl.xaml.cs">
       <DependentUpon>ModuleSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -315,10 +312,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\AdvancedCmdletUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\MainTabViewUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
