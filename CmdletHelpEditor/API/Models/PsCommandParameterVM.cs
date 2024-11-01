@@ -114,6 +114,9 @@ public class PsCommandParameterVM : ViewModelBase {
             Position = param.Position,
             Description = param.Description
         };
+        if (param.IsOrphaned) {
+            retValue.Status = ItemStatus.Missing;
+        }
         retValue.Attributes.AddRange(param.GetAttributes());
         retValue.Aliases.AddRange(param.GetAliases());
 

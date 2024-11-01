@@ -57,6 +57,11 @@ public interface IPsCommandParameterDescription {
     /// Gets optional parameter default value.
     /// </summary>
     String? DefaultValue { get; }
+    /// <summary>
+    /// Determines if parameter is orphaned. When set to <c>true</c>, then parameter exists in project/MAML help,
+    /// however online command does not have this parameter.
+    /// </summary>
+    Boolean IsOrphaned { get; }
 
     /// <summary>
     /// Gets a collection of parameter attributes (type names).

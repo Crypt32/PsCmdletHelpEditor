@@ -63,7 +63,7 @@ static class FileProcessor {
             var mamlService = App.Container.Resolve<IMamlService>();
             using var writer = XmlWriter.Create(path, settings);
             await writer.WriteStartDocumentAsync();
-            await writer.WriteRawAsync(await mamlService.XmlGenerateHelp(module.ToXmlObject().GetCmdlets().ToList(), pb));
+            await writer.WriteRawAsync(await mamlService.ExportMamlHelp(module.ToXmlObject().GetCmdlets().ToList(), pb));
         } finally {
             pb.End();
         }

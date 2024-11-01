@@ -35,8 +35,10 @@ public class PsMamlService : IMamlService {
         new BBTag("color", "", "", new BBAttribute("",""),new BBAttribute("",""))
     ]);
     
+    #region Export MAML
 
     public async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb) {
+    public async Task<String> ExportMamlHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb) {
         if (cmdlets.Count == 0) {
             return String.Empty;
         }
@@ -238,4 +240,6 @@ public class PsMamlService : IMamlService {
         }
         return "<maml:para>" + String.Join("</maml:para><maml:para>", temp) + "</maml:para>";
     }
+
+    #endregion
 }

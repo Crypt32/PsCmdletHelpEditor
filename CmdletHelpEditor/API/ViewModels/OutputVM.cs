@@ -134,7 +134,7 @@ public class OutputVM : DependencyObject, IAsyncVM {
     }
     static async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
         var mamlService = App.Container.Resolve<IMamlService>();
-        String rawXml = await mamlService.XmlGenerateHelp([cmdlet.ToXmlObject()], null);
+        String rawXml = await mamlService.ExportMamlHelp([cmdlet.ToXmlObject()], null);
         return XmlTokenizer.LoopTokenize(XElement.Parse(rawXml).ToString());
     }
     static async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {

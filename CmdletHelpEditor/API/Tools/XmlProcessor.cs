@@ -357,10 +357,10 @@ class XmlProcessor {
 
     // writer
     // TODO: stub method, needed to access BB parser from HtmlProcessor. Need to sort this out as well.
-    public static Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
+    static Task<String> XmlGenerateHelp(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
         var mamlService = App.Container.Resolve<IMamlService>();
 
-        return mamlService.XmlGenerateHelp(cmdlets.Select(x => x.ToXmlObject()).Cast<IPsCommandInfo>().ToList(), pb);
+        return mamlService.ExportMamlHelp(cmdlets.Select(x => x.ToXmlObject()).Cast<IPsCommandInfo>().ToList(), pb);
     }
     static async Task<String> XmlGenerateHelpOld(IEnumerable<CmdletObject> cmdlets, IProgressBar pb, Boolean isOffline) {
         List<CmdletObject> cmdletsToProcess = isOffline

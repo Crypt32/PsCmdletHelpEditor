@@ -501,7 +501,6 @@ public class AppCommands {
         OpenCommand.ExecuteAsync(path);
     }
 
-
     public async Task LoadCommandsAsync(String? helpPath, Boolean importFromCBH) {
         var vm = new HelpProjectDocument();
         var cmd = Utils.GetCommandTypes();
@@ -512,7 +511,7 @@ public class AppCommands {
 
         try {
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
-            var module = ModuleObject.FromPsModuleInfo(moduleInfo);
+            ModuleObject? module = ModuleObject.FromPsModuleInfo(moduleInfo);
             IEnumerable<IPsCommandInfo> data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, importFromCBH);
             foreach (IPsCommandInfo commandInfo in data) {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));

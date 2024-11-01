@@ -24,6 +24,7 @@ class PsCommandParameter : IPsCommandParameterDescription {
     public Boolean Positional { get; private set; }
     public String? DefaultValue { get; private set; }
     public String Position { get; private set; } = String.Empty;
+    public Boolean IsOrphaned { get; private set; }
     public IReadOnlyList<String> GetAttributes() {
         return _attributes;
     }

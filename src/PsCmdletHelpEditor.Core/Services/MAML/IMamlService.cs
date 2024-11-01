@@ -15,5 +15,5 @@ public interface IMamlService {
     /// <param name="cmdlets">A collection of commands to export.</param>
     /// <param name="pb">Optional progress bar.</param>
     /// <returns>XML string.</returns>
-    Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb);
+    Task<String> ExportMamlHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb);
 }
