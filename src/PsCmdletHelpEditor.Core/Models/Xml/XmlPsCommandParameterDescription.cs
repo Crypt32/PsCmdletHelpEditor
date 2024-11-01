@@ -28,6 +28,7 @@ public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
     public String? Position { get; set; }
     public String? Description { get; set; } = null!;
     public String? DefaultValue { get; set; }
+    public Boolean IsOrphaned { get; set; }
 
     public List<String> Attributes { get; set; } = [];
     public List<String> Aliases { get; set; } = [];
