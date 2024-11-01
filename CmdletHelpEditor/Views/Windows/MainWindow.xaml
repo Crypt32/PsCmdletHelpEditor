@@ -104,6 +104,7 @@
                                       Style="{StaticResource ScrollableTabControl}"/>-->
         <ctrl:ClosableTabControl ItemsSource="{Binding Documents}"
                                  SelectedItem="{Binding SelectedDocument}"
+                                 ShowNewTabButton="True"
                                  AddTabCommand="{Binding NewTabCommand}"
                                  CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                  Style="{StaticResource ScrollableTabControl}">
