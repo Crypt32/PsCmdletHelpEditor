@@ -5,8 +5,10 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using CodeKicker.BBCode;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Utils;
 
 namespace PsCmdletHelpEditor.Core.Services.MAML;
@@ -34,10 +36,27 @@ public class PsMamlService : IMamlService {
         new BBTag("pre", "", "", new BBAttribute("",""),new BBAttribute("","")),
         new BBTag("color", "", "", new BBAttribute("",""),new BBAttribute("",""))
     ]);
-    
+
+    internal IDictionary<String, MamlXmlNode> GetMamlHelpFromFile(String filePath) {
+        var dictionary = new Dictionary<String, MamlXmlNode>(StringComparer.OrdinalIgnoreCase);
+        var doc = new MamlXmlDocument();
+        doc.Load(filePath);
+        MamlXmlNodeList commandNodes = doc.SelectNodes("//command:command")
+                                        ?? throw new XmlException("Error while reading XML.\nThe help file does not contain 'Command' node.");
+        foreach (MamlXmlNode node in commandNodes) {
+            MamlXmlNode? nameNode = node.SelectSingleNode("command:details/command:name");
+            if (nameNode is null) {
+                continue;
+            }
+            String name = nameNode.InnerText;
+            dictionary[name] = node;
+        }
+
+        return dictionary;
+    }
+
     #region Export MAML
 
-    public async Task<String> XmlGenerateHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb) {
     public async Task<String> ExportMamlHelp(ICollection<IPsCommandInfo> cmdlets, IProgress? pb) {
         if (cmdlets.Count == 0) {
             return String.Empty;
@@ -63,7 +82,7 @@ public class PsMamlService : IMamlService {
         sb.Append("<command:command xmlns:maml=\"http://schemas.microsoft.com/maml/2004/10\" xmlns:command=\"http://schemas.microsoft.com/maml/dev/command/2004/10\" xmlns:dev=\"http://schemas.microsoft.com/maml/dev/2004/10\" xmlns:MSHelp=\"http://msdn.microsoft.com/mshelp\">");
         sb.Append(xmlGenerateCmdletDetail(bbRules, cmdlet));
         sb.Append("<command:syntax>");
-        IReadOnlyList<IPsCommandParameterDescription> parameters = cmdlet.GetParameters();
+        IReadOnlyList<IPsCommandParameter> parameters = cmdlet.GetParameters();
         // if current cmdlet hasn't parameters, then just write single syntaxItem
         if (parameters.Count == 0) {
             sb.AppendFormat(EmbeddedResourceReader.ReadFileAsString(MAML_COMMAND_SYNTAX_TEMPLATE),
@@ -73,7 +92,7 @@ public class PsMamlService : IMamlService {
         }
         sb.Append("</command:syntax><command:parameters>");
         if (parameters.Count > 0) {
-            foreach (IPsCommandParameterDescription param in parameters) {
+            foreach (IPsCommandParameter param in parameters) {
                 sb.Append(xmlGenerateParameter(bbRules, param));
             }
         }
@@ -115,7 +134,7 @@ public class PsMamlService : IMamlService {
                     continue;
                 }
 
-                IPsCommandParameterDescription? param = cmdlet
+                IPsCommandParameter? param = cmdlet
                     .GetParameters()
                     .FirstOrDefault(x => String.Equals(x.Name, paramSetParam, StringComparison.CurrentCultureIgnoreCase));
                 if (param == null) {
@@ -157,7 +176,7 @@ public class PsMamlService : IMamlService {
             SB.Append("</command:syntaxItem>");
         }
     }
-    static String xmlGenerateParameter(BBCodeParser bbRules, IPsCommandParameterDescription param) {
+    static String xmlGenerateParameter(BBCodeParser bbRules, IPsCommandParameter param) {
         String paramValueRequired = "true";
         if (param.Type.ToLower() == "boolean" || param.Type.ToLower() == "switchparameter") {
             paramValueRequired = "false";

@@ -487,7 +487,10 @@ public class CmdletObject : ViewModelBase {
         retValue.Syntax.AddRange(commandInfo.GetSyntax());
         retValue.GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.New };
         retValue.GeneralHelp.ImportFromCommandInfo(commandInfo.GetDescription());
-        foreach (IPsCommandParameterDescription param in commandInfo.GetParameters()) {
+        if (commandInfo.IsOrphaned) {
+            retValue.GeneralHelp.Status = ItemStatus.Missing;
+        }
+        foreach (IPsCommandParameter param in commandInfo.GetParameters()) {
             retValue.Parameters.Add(PsCommandParameterVM.ImportFromCommandInfo(param));
         }
         foreach (IPsCommandParameterSetInfo paramSet in commandInfo.GetParameterSets()) {

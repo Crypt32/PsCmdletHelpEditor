@@ -36,6 +36,11 @@ public interface IPsCommandInfo {
     /// Gets online article ID.
     /// </summary>
     String? ArticleIDString { get; }
+    /// <summary>
+    /// Determines if command is orphaned. When set to <c>true</c>, then parameter exists in project/MAML help,
+    /// however online module does not have this command.
+    /// </summary>
+    Boolean IsOrphaned { get; }
 
     /// <summary>
     /// Gets cmdlet description.
@@ -56,7 +61,7 @@ public interface IPsCommandInfo {
     /// Gets a collection of cmdlet parameters.
     /// </summary>
     /// <returns>A collection of cmdlet parameters.</returns>
-    IReadOnlyList<IPsCommandParameterDescription> GetParameters();
+    IReadOnlyList<IPsCommandParameter> GetParameters();
     /// <summary>
     /// Gets a collection of cmdlet examples.
     /// </summary>

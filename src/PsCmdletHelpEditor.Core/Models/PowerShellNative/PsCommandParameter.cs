@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
-class PsCommandParameter : IPsCommandParameterDescription {
+class PsCommandParameter : IPsCommandParameter {
     readonly List<String> _attributes = [];
     readonly List<String> _aliases = [];
 
@@ -53,11 +54,69 @@ class PsCommandParameter : IPsCommandParameterDescription {
         }
     }
 
+    void importMamlHelp(MamlXmlNode node, Boolean overwrite = false) {
+        var tempNode = node.SelectSingleNode("maml:description");
+        if (tempNode != null) {
+            Description = tempNode.ChildNodes.ReadMamlParagraphs();
+        }
+        // Default value
+        tempNode = node.SelectSingleNode("dev:defaultValue");
+        if (tempNode != null) {
+            DefaultValue = tempNode.InnerText;
+        }
+        // Globbing (aka wildcards)
+        tempNode = node.SelectSingleNode("@globbing");
+        if (tempNode != null) {
+            Globbing = Convert.ToBoolean(tempNode.InnerText);
+        }
+        if (overwrite) {
+            IsOrphaned = true;
+            // pipeline input
+            tempNode = node.SelectSingleNode("@pipelineInput");
+            if (tempNode != null) {
+                if (tempNode.InnerText.Contains("true") || tempNode.InnerText.Contains("ByValue")) {
+                    Pipeline = true;
+                }
+                if (tempNode.InnerText.Contains("ByPropertyName")) {
+                    PipelinePropertyName = true;
+                }
+            }
+            // Parameter position
+            tempNode = node.SelectSingleNode("@position");
+            if (tempNode != null) {
+                Position = tempNode.InnerText.ToLower();
+                if (Position.ToLower() != "named") {
+                    Positional = true;
+                }
+            }
+            // Mandatory
+            tempNode = node.SelectSingleNode("@required");
+            if (tempNode != null && Convert.ToBoolean(tempNode.InnerText)) {
+                Mandatory = true;
+            }
+            // Parameter type
+            tempNode = node.SelectSingleNode("dev:type/maml:name");
+            if (tempNode != null) {
+                Type = tempNode.InnerText.ToLower();
+            }
+        }
+    }
+
     public void ImportCommentBasedHelp(PSObject cbh) {
         Description = ((PSObject[])cbh.Members["Description"].Value)
             .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine)
             .TrimEnd();
         DefaultValue = (String)((PSObject)cbh.Members["defaultValue"].Value).BaseObject;
+    }
+    public void ImportMamlHelp(MamlXmlNode commandNode) {
+        importMamlHelp(commandNode);
+    }
+
+    public static PsCommandParameter FromMaml(String name, MamlXmlNode node) {
+        var retValue = new PsCommandParameter { Name = name };
+        retValue.importMamlHelp(node, true);
+
+        return retValue;
     }
     public static PsCommandParameter FromCmdlet(CommandParameterInfo parameter) {
         var retValue = new PsCommandParameter {

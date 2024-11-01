@@ -114,6 +114,26 @@ public class PowerShellProcessor : IPowerShellProcessor {
             throw;
         }
     }
+
+    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
+        return Task.Factory.StartNew(() => EnumCommands(moduleInfo, commandTypes, mamlHelpPath));
+    }
+    public IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
+        moduleInfo.IsOffline = false;
+        using PowerShell ps = PowerShell.Create();
+        ps.AddScript(moduleInfo.GetInvocationString(commandTypes));
+        try {
+            var commandList = new PsCommandInfoCollection();
+            var commands = ps.Invoke()
+                .Where(x => (CommandTypes)x.Members["CommandType"].Value != CommandTypes.Alias);
+            commandList.ImportFromCmdletList(commands, false, mamlHelpPath);
+
+            return commandList;
+        } catch {
+            moduleInfo.IsOffline = true;
+            throw;
+        }
+    }
     public Boolean TestModuleExist(String moduleName) {
         String? modulePaths = Environment.GetEnvironmentVariable("PSModulePath", EnvironmentVariableTarget.Process);
         if (String.IsNullOrEmpty(modulePaths)) {

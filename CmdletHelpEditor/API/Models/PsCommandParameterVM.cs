@@ -79,8 +79,8 @@ public class PsCommandParameterVM : ViewModelBase {
         set => status = value;
     }
 
-    public XmlPsCommandParameterDescription ToXmlObject() {
-        return new XmlPsCommandParameterDescription {
+    public XmlPsCommandParameter ToXmlObject() {
+        return new XmlPsCommandParameter {
             Name = Name,
             Type = Type,
             AcceptsArray = AcceptsArray,
@@ -99,7 +99,7 @@ public class PsCommandParameterVM : ViewModelBase {
         };
     }
 
-    public static PsCommandParameterVM ImportFromCommandInfo(IPsCommandParameterDescription param) {
+    public static PsCommandParameterVM ImportFromCommandInfo(IPsCommandParameter param) {
         var retValue = new PsCommandParameterVM {
             Name = param.Name,
             Type = param.Type,

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
 [XmlInclude(typeof(XmlPsCommandParameterSet))]
-[XmlInclude(typeof(XmlPsCommandParameterDescription))]
+[XmlInclude(typeof(XmlPsCommandParameter))]
 [XmlInclude(typeof(XmlPsCommandExample))]
 [XmlInclude(typeof(XmlPsCommandRelatedLink))]
 public class XmlPsCommand : IPsCommandInfo {
@@ -20,7 +20,7 @@ public class XmlPsCommand : IPsCommandInfo {
     [XmlArrayItem("CommandParameterSetInfo2")]
     public List<XmlPsCommandParameterSet> ParamSets { get; set; } = [];
     [XmlArrayItem("ParameterDescription")]
-    public List<XmlPsCommandParameterDescription> Parameters { get; set; } = [];
+    public List<XmlPsCommandParameter> Parameters { get; set; } = [];
     [XmlArrayItem("Example")]
     public List<XmlPsCommandExample> Examples { get; set; } = [];
     [XmlArrayItem("RelatedLink")]
@@ -34,6 +34,8 @@ public class XmlPsCommand : IPsCommandInfo {
     public Boolean Publish { get; set; }
     public String? URL { get; set; }
     public String? ArticleIDString { get; set; }
+    [XmlIgnore]
+    public Boolean IsOrphaned { get; }
 
     public IPsCommandGeneralDescription GetDescription() {
         return GeneralHelp;
@@ -47,7 +49,7 @@ public class XmlPsCommand : IPsCommandInfo {
     public IReadOnlyList<IPsCommandParameterSetInfo> GetParameterSets() {
         return ParamSets;
     }
-    public IReadOnlyList<IPsCommandParameterDescription> GetParameters() {
+    public IReadOnlyList<IPsCommandParameter> GetParameters() {
         return Parameters;
     }
     public IReadOnlyList<IPsCommandExample> GetExamples() {

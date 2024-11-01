@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 class PsCommandGeneralDescription : IPsCommandGeneralDescription{
@@ -17,20 +18,34 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
     public String? InputTypeDescription { get; private set; }
     public String? ReturnTypeDescription { get; private set; }
 
-    void importCbhSynopsis(PSObject cbh) {
+    void setTypes(IEnumerable<String> types, IEnumerable<String> urls, IEnumerable<String> descriptions, Boolean input) {
+        if (input) {
+            InputType = String.Join(";", types);
+            InputUrl = String.Join(";", urls);
+            InputTypeDescription = String.Join(";", descriptions);
+        } else {
+            ReturnType = String.Join(";", types);
+            ReturnUrl = String.Join(";", urls);
+            ReturnTypeDescription = String.Join(";", descriptions);
+        }
+    }
+         
+    #region Import from PS Object/Comment-based help
+
+    void importCbhSynopsisFromPsObject(PSObject cbh) {
         Synopsis = (String)cbh.Members["Synopsis"].Value;
     }
-    void importCbhDescription(PSObject cbh) {
+    void importCbhDescriptionFromPsObject(PSObject cbh) {
         Description = ((PSObject[])cbh.Members["Description"].Value)
             .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine)
             .TrimEnd();
     }
-    void importCbhNotes(PSObject cbh) {
+    void importCbhNotesFromPsObject(PSObject cbh) {
         if (cbh.Members["alertSet"].Value is PSObject note) {
             Notes = (String)((PSObject[])note.Members["alert"].Value)[0].Members["Text"].Value;
         }
     }
-    void importTypes(PSObject cbh, Boolean input) {
+    void importTypesFromPsObject(PSObject cbh, Boolean input) {
         var iType = new List<PSObject>();
         String memberName = input ? "inputType" : "returnValue";
         // e.g. inputTypes, returnValues
@@ -44,17 +59,17 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
             iType.AddRange(multiValue);
         }
 
-        var links = new List<String>();
+        var types = new List<String>();
         var urls = new List<String>();
         var descriptions = new List<String>();
 
         foreach (PSObject type in iType) {
             var internalType = (PSObject)type.Members["type"].Value;
             if (internalType.Properties["name"] is null) {
-                links.Add(String.Empty);
+                types.Add(String.Empty);
             } else {
                 var name = (PSObject)internalType.Members["name"].Value;
-                links.Add((String)name.BaseObject);
+                types.Add((String)name.BaseObject);
             }
             if (internalType.Properties["uri"] is null) {
                 urls.Add(String.Empty);
@@ -74,23 +89,79 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
                     : description.TrimEnd());
             }
         }
-        if (input) {
-            InputType = String.Join(";", links);
-            InputUrl = String.Join(";", urls);
-            InputTypeDescription = String.Join(";", descriptions);
-        } else {
-            ReturnType = String.Join(";", links);
-            ReturnUrl = String.Join(";", urls);
-            ReturnTypeDescription = String.Join(";", descriptions);
-        }
+        setTypes(types, urls, descriptions, input);
     }
 
+    #endregion
+
+    #region Import from MAML help
+
+    void importSynopsisFromMaml(MamlXmlNode commandNode) {
+        MamlXmlNode? tempNode = commandNode.SelectSingleNode("command:details/maml:description");
+        if (tempNode is not null) {
+            Synopsis = tempNode.ChildNodes.ReadMamlParagraphs();
+        }
+    }
+    void importDescriptionFromMaml(MamlXmlNode commandNode) {
+        MamlXmlNode? tempNode = commandNode.SelectSingleNode("maml:description");
+        if (tempNode is not null) {
+            Description = tempNode.ChildNodes.ReadMamlParagraphs();
+        }
+    }
+    void importNotesFromMaml(MamlXmlNode commandNode) {
+        MamlXmlNode? tempNode = commandNode.SelectSingleNode("maml:alertSet/maml:alert");
+        if (tempNode is not null) {
+            Description = tempNode.ChildNodes.ReadMamlParagraphs();
+        }
+    }
+    void importTypesFromMaml(MamlXmlNode commandNode, Boolean input) {
+        String topNodeName = input ? "inputType" : "returnValue";
+
+        MamlXmlNodeList? nodes = commandNode.SelectNodes($"command:inputTypes/command:{topNodeName}");
+        if (nodes is null) {
+            return;
+        }
+
+        List<String> types = [];
+        List<String> urls = [];
+        List<String> descriptions = [];
+        foreach (MamlXmlNode typeNode in nodes) {
+            MamlXmlNode? tempNode = typeNode.SelectSingleNode("dev:type/maml:name");
+            if (tempNode == null) { continue; }
+            types.Add(tempNode.InnerText);
+            tempNode = typeNode.SelectSingleNode("dev:type/maml:uri");
+            if (tempNode != null) {
+                urls.Add(tempNode.InnerText);
+            }
+            String descriptionNodes = String.Empty;
+            tempNode = typeNode.SelectSingleNode("dev:type/maml:description");
+            if (tempNode != null) {
+                descriptionNodes += tempNode.ChildNodes.ReadMamlParagraphs();
+            }
+            tempNode = typeNode.SelectSingleNode("maml:description");
+            if (tempNode != null) {
+                descriptionNodes += tempNode.ChildNodes;
+            }
+            descriptions.Add(descriptionNodes);
+        }
+        setTypes(types, urls, descriptions, input);
+    }
+
+    #endregion
+
     public void ImportCommentBasedHelp(PSObject cbh) {
-        importCbhSynopsis(cbh);
-        importCbhDescription(cbh);
-        importCbhNotes(cbh);
-        importTypes(cbh, true);
-        importTypes(cbh, false);
+        importCbhSynopsisFromPsObject(cbh);
+        importCbhDescriptionFromPsObject(cbh);
+        importCbhNotesFromPsObject(cbh);
+        importTypesFromPsObject(cbh, true);
+        importTypesFromPsObject(cbh, false);
+    }
+    public void ImportFromMamlHelp(MamlXmlNode commandNode) {
+        importSynopsisFromMaml(commandNode);
+        importDescriptionFromMaml(commandNode);
+        importNotesFromMaml(commandNode);
+        importTypesFromMaml(commandNode, true);
+        importTypesFromMaml(commandNode, false);
     }
 
     public static PsCommandGeneralDescription FromCmdlet(PSObject cmdlet) {

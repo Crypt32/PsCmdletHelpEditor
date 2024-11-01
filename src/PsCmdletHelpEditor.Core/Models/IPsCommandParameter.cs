@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PsCmdletHelpEditor.Core.Models;
 
-public interface IPsCommandParameterDescription {
+public interface IPsCommandParameter {
     /// <summary>
     /// Gets cmdlet parameter name.
     /// </summary>

@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
-public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
+public class XmlPsCommandParameter : IPsCommandParameter {
     public String Name { get; set; } = null!;
     [XmlAttribute("type")]
     public String Type { get; set; } = null!;
@@ -28,6 +28,7 @@ public class XmlPsCommandParameterDescription : IPsCommandParameterDescription {
     public String? Position { get; set; }
     public String? Description { get; set; } = null!;
     public String? DefaultValue { get; set; }
+    [XmlIgnore]
     public Boolean IsOrphaned { get; set; }
 
     public List<String> Attributes { get; set; } = [];

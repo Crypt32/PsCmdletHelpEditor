@@ -45,7 +45,7 @@ static class XmlFormatConverter {
         foreach (String prop in new[] { "Type", "AcceptsArray", "Mandatory", "Dynamic", "RemainingArgs", "Pipeline", "PipelinePropertyName", "Positional", "Position", "Globbing" }) {
             legacyElements = new XmlAttributes();
             legacyElements.XmlElements.Add(new XmlElementAttribute(prop));
-            tbo.Add(typeof(XmlPsCommandParameterDescription), prop, legacyElements);
+            tbo.Add(typeof(XmlPsCommandParameter), prop, legacyElements);
         }
         String[] strs = [
             "ADChecked","RsatChecked","Ps2Checked","Ps3Checked","Ps4Checked","Ps5Checked","WinXpChecked","WinVistaChecked","Win7Checked",

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
@@ -24,6 +25,7 @@ class PsCommandInfo : IPsCommandInfo {
     public Boolean Publish => false;
     public String? URL => null;
     public String? ArticleIDString => null;
+    public Boolean IsOrphaned { get; private set; }
     public IPsCommandGeneralDescription GetDescription() {
         return generalDescription;
     }
@@ -33,7 +35,7 @@ class PsCommandInfo : IPsCommandInfo {
     public IReadOnlyList<IPsCommandParameterSetInfo> GetParameterSets() {
         return _paramSets;
     }
-    public IReadOnlyList<IPsCommandParameterDescription> GetParameters() {
+    public IReadOnlyList<IPsCommandParameter> GetParameters() {
         return _params;
     }
     public IReadOnlyList<IPsCommandExample> GetExamples() {
@@ -50,6 +52,12 @@ class PsCommandInfo : IPsCommandInfo {
         generalDescription!.ImportCommentBasedHelp(cbh);
         _examples.ImportCommentBasedHelp(cbh);
         _relatedLinks.ImportCommentBasedHelp(cbh);
+    }
+    public void ImportMamlHelp(MamlXmlNode commandNode) {
+        generalDescription!.ImportFromMamlHelp(commandNode);
+        _params.ImportMamlHelp(commandNode);
+        _examples.ImportMamlHelp(commandNode);
+        _relatedLinks.ImportMamlHelp(commandNode);
     }
 
     /// <summary>
@@ -79,6 +87,23 @@ class PsCommandInfo : IPsCommandInfo {
             && cbh.Members["Description"] is not null) {
             retValue.ImportCommentBasedHelp(cbh);
         }
+
+        return retValue;
+    }
+    public static PsCommandInfo FromMamlHelp(String name, MamlXmlNode commandNode) {
+        var retValue = new PsCommandInfo {
+            Name = name,
+            IsOrphaned = true
+        };
+        MamlXmlNode? node = commandNode.SelectSingleNode("command:details/command:verb");
+        if (node is not null) {
+            retValue.Verb = node.InnerText;
+        }
+        node = commandNode.SelectSingleNode("command:details/command:noun");
+        if (node is not null) {
+            retValue.Noun = node.InnerText;
+        }
+        retValue.ImportMamlHelp(commandNode);
 
         return retValue;
     }

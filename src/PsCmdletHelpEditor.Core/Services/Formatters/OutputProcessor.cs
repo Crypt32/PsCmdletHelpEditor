@@ -81,7 +81,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     /// </summary>
     /// <param name="param">Cmdlet parameter.</param>
     /// <returns>Markup.</returns>
-    protected abstract String GenerateParamTable(IPsCommandParameterDescription param);
+    protected abstract String GenerateParamTable(IPsCommandParameter param);
 
     String escape(String? content) {
         return EscapeHtml ? SecurityElement.Escape(content) : content;
@@ -155,7 +155,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     }
     void htmlGenerateParams(BBCodeParser rules, StringBuilder SB, IReadOnlyList<IPsCommandInfo> cmdlets, IPsCommandInfo cmdlet) {
         SB.AppendLine(GenerateH2("Parameters"));
-        foreach (IPsCommandParameterDescription param in cmdlet.GetParameters()) {
+        foreach (IPsCommandParameter param in cmdlet.GetParameters()) {
             String paramNameContent = $"-{escape(param.Name)} <em style=\"font-weight: 100;\">&lt;{escape(param.Type)}&gt;</em>";
             SB.AppendLine(GenerateH3(paramNameContent));
             if (!String.IsNullOrEmpty(param.Description)) {

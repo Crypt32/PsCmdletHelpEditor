@@ -214,7 +214,6 @@
     <Compile Include="API\Models\PsCommandParameterVM.cs" />
     <Compile Include="API\Models\PsCommandRelatedLinkVM.cs" />
     <Compile Include="API\Models\SupportInfo.cs" />
-    <Compile Include="API\Tools\HtmlProcessor.cs" />
     <Compile Include="API\Converters\NullToBooleanConverter.cs" />
     <Compile Include="API\Tools\PowerShellProcessorLegacy.cs" />
     <Compile Include="API\Tools\Utils.cs" />

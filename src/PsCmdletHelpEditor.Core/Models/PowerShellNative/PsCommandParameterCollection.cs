@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
@@ -22,6 +23,27 @@ class PsCommandParameterCollection : PsCommandParameterCollectionBase<PsCommandP
                 if (_dictionary.TryGetValue(name, out PsCommandParameter param)) {
                     param.ImportCommentBasedHelp(cbhParam);
                 }
+            }
+        }
+    }
+    public void ImportMamlHelp(MamlXmlNode commandNode) {
+        MamlXmlNodeList? nodes = commandNode.SelectNodes("command:parameters/command:parameter");
+        if (nodes is null) {
+            return;
+        }
+
+        foreach (MamlXmlNode node in nodes) {
+            MamlXmlNode? tempNode = node.SelectSingleNode("maml:name");
+            if (tempNode is null) {
+                continue;
+            }
+            String name = tempNode.InnerText;
+            PsCommandParameter? param = InternalList.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (param is null) {
+                param = PsCommandParameter.FromMaml(name, node);
+                InternalList.Add(param);
+            } else {
+                param.ImportMamlHelp(commandNode);
             }
         }
     }

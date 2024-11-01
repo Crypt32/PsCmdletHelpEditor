@@ -46,7 +46,7 @@ public interface IPowerShellProcessor {
     /// <returns>PowerShell module metadata.</returns>
     PsModuleInfo GetModuleInfoFromFile(String path);
     /// <summary>
-    /// Enumerates commands for specified module, command types asynchronously.
+    /// Enumerates commands for specified module asynchronously and optionally imports comment-based help.
     /// </summary>
     /// <param name="moduleInfo">Module info to load commands for.</param>
     /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
@@ -54,13 +54,29 @@ public interface IPowerShellProcessor {
     /// <returns>A collection of commands.</returns>
     Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false);
     /// <summary>
-    /// Enumerates commands for specified module, command types synchronously.
+    /// Enumerates commands for specified module synchronously and optionally imports comment-based help.
     /// </summary>
     /// <param name="moduleInfo">Module info to load commands for.</param>
     /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
     /// <param name="includeCBH">Specifies whether to include comment-based help for each loaded command. Default is <c>false</c>.</param>
     /// <returns>A collection of commands.</returns>
     IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false);
+    /// <summary>
+    /// Enumerates commands for specified module asynchronously and imports help from existing MAML help file
+    /// </summary>
+    /// <param name="moduleInfo">Module info to load commands for.</param>
+    /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
+    /// <param name="mamlHelpPath">Path to MAML help file.</param>
+    /// <returns>A collection of module commands.</returns>
+    Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath);
+    /// <summary>
+    /// Enumerates commands for specified module synchronously and imports help from existing MAML help file
+    /// </summary>
+    /// <param name="moduleInfo">Module info to load commands for.</param>
+    /// <param name="commandTypes">A collection of PowerShell command types to load.</param>
+    /// <param name="mamlHelpPath">Path to MAML help file.</param>
+    /// <returns>A collection of module commands.</returns>
+    IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath);
     /// <summary>
     /// Determines if specified PowerShell module exist in any PowerShell 
     /// </summary>

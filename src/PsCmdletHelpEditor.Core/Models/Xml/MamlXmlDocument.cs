@@ -66,7 +66,7 @@ class MamlXmlNode(XmlNode Node, XmlNamespaceManager? Ns) : IEnumerable {
     }
 
     /// <inheritdoc cref="XmlNode.InnerText"/>
-    public String InnerText => Node.InnerText;
+    public String InnerText => Node.InnerText.Trim();
     /// <inheritdoc cref="XmlNode.ChildNodes"/>
     public MamlXmlNodeList ChildNodes {
         get {

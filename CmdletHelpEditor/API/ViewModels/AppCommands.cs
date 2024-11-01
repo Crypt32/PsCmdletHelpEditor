@@ -512,18 +512,17 @@ public class AppCommands {
         try {
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
             ModuleObject? module = ModuleObject.FromPsModuleInfo(moduleInfo);
-            IEnumerable<IPsCommandInfo> data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, importFromCBH);
+            IEnumerable<IPsCommandInfo> data;
+            if (!importFromCBH && helpPath is not null) {
+                module.ImportedFromHelp = true;
+                data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, helpPath);
+            } else {
+                data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, importFromCBH);
+            }
             foreach (IPsCommandInfo commandInfo in data) {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
-            if (helpPath != null) {
-                module.ImportedFromHelp = true;
-                try {
-                    XmlProcessor.ImportFromMaml(helpPath, module);
-                } catch (Exception ex) {
-                    _msgBox.ShowError("Error", ex.Message);
-                }
-            }
+
             vm.Module = module;
             swapTabDocument(vm);
         } catch (Exception ex) {

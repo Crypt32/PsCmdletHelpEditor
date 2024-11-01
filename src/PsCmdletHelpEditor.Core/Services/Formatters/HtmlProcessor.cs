@@ -75,7 +75,7 @@ class HtmlProcessor : OutputProcessor {
     protected override String GenerateListItem(String content) {
         return "<li>" + content + "</li>";
     }
-    protected override String GenerateParamTable(IPsCommandParameterDescription param) {
+    protected override String GenerateParamTable(IPsCommandParameter param) {
         return $"""
 
                 <table style="margin-left: 40px;width: auto;" class="table table-condensed table-bordered">

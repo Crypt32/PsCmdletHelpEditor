@@ -81,7 +81,7 @@ class MarkdownProcessor : OutputProcessor {
     protected override String GenerateListItem(String content) {
         return "- " + content;
     }
-    protected override String GenerateParamTable(IPsCommandParameterDescription param) {
+    protected override String GenerateParamTable(IPsCommandParameter param) {
         return $"""
 
                 Property|Value

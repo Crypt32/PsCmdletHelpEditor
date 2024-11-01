@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Management.Automation;
+using PsCmdletHelpEditor.Core.Models.Xml;
 
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
@@ -21,6 +22,54 @@ class PsCommandExample : IPsCommandExample {
             Name = title,
             Cmd = code,
             Description = description
+        };
+    }
+
+    public static PsCommandExample? FromMamlHelp(MamlXmlNode node) {
+        String? cmd = null;
+        String? description = null;
+        String? output = null;
+        MamlXmlNode? tempNode = node.SelectSingleNode("maml:title");
+        if (tempNode is null) {
+            return null;
+        }
+
+        String name = tempNode.InnerText.Replace("-", String.Empty);
+        if (String.IsNullOrEmpty(name)) {
+            name = "Unknown";
+        }
+        // Example command
+        tempNode = node.SelectSingleNode("dev:code");
+        if (tempNode != null) {
+            cmd = tempNode.InnerText;
+        }
+        // Example description
+        tempNode = node.SelectSingleNode("dev:remarks");
+        if (tempNode != null) {
+            Int32 NodeCount = 0;
+            foreach (MamlXmlNode descriptionNode in tempNode) {
+                switch (NodeCount) {
+                    case 0:
+                        description = descriptionNode.ChildNodes.ReadMamlParagraphs();
+                        break;
+                    case 3:
+                        output += descriptionNode.InnerText;
+                        break;
+                }
+                NodeCount++;
+            }
+        }
+        // Example output
+        tempNode = node.SelectSingleNode("command:commandLines");
+        if (tempNode != null) {
+            output += tempNode.InnerText;
+        }
+
+        return new PsCommandExample {
+            Name = name,
+            Cmd = cmd,
+            Description = description,
+            Output = output
         };
     }
 }
