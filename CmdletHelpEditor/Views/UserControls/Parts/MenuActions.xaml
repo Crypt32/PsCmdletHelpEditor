@@ -25,8 +25,8 @@
     <Separator/>
     <MenuItem Header="Import from comment-based help"
               Command="{Binding CommandManager.ImportFromCommentBasedHelpCommand}"
-              CommandParameter="{Binding SelectedModule}"/>
+              CommandParameter="{Binding SelectedDocument.SelectedModule, FallbackValue={x:Null}}"/>
     <MenuItem Header="Import from XML Help file"
               Command="{Binding CommandManager.ImportFromMamlCommand}"
-              CommandParameter="{Binding SelectedModule}"/>
+              CommandParameter="{Binding SelectedDocument.SelectedModule, FallbackValue={x:Null}}"/>
 </MenuItem>
