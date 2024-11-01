@@ -487,6 +487,9 @@ public class CmdletObject : ViewModelBase {
         retValue.Syntax.AddRange(commandInfo.GetSyntax());
         retValue.GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.New };
         retValue.GeneralHelp.ImportFromCommandInfo(commandInfo.GetDescription());
+        retValue.Publish = commandInfo.Publish;
+        retValue.URL = commandInfo.URL;
+        retValue.ArticleIDString = commandInfo.ArticleIDString;
         if (commandInfo.IsOrphaned) {
             retValue.GeneralHelp.Status = ItemStatus.Missing;
         }
