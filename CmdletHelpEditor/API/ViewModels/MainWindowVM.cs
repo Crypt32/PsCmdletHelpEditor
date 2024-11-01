@@ -2,12 +2,15 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.UserControls;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
 public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
@@ -16,6 +19,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
     TabDocumentVM? selectedDocument;
 
     public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
+        NewTabCommand = new RelayCommand(newTab);
         DataSource = dataSource;
         ProgressBar = progressBar;
         DataSource.ModuleList.Add(new PsModuleItem());
@@ -41,6 +45,8 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         Tabs.Add(cti);
         SelectedTab = cti;
     }
+
+    public ICommand NewTabCommand { get; }
 
     #region External properties
     public AppCommands CommandManager { get; set; }
@@ -75,7 +81,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         get => selectedDocument;
         set {
             selectedDocument = value;
-            OnPropertyChanged(nameof(SelectedDocument));
+            OnPropertyChanged();
         }
     }
     public Int32? PsVersion {
@@ -91,20 +97,26 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
                     Settings.Default.ConfigurationEnabled = true;
                     break;
             }
-            OnPropertyChanged(nameof(PsVersion));
+            OnPropertyChanged();
         }
     }
     public ClosableModuleItem SelectedTab {
         get => selectedTab;
         set {
             selectedTab = value;
-            OnPropertyChanged(nameof(SelectedTab));
+            OnPropertyChanged();
         }
     }
 
-    void OnPropertyChanged(String name) {
+    void newTab(Object? o) {
+        var vm = new BlankDocumentVM();
+        Documents.Add(vm);
+        SelectedDocument = vm;
+    }
+
+    void OnPropertyChanged([CallerMemberName] String? propertyName = null) {
         PropertyChangedEventHandler handler = PropertyChanged;
-        handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     public event PropertyChangedEventHandler PropertyChanged;
 }

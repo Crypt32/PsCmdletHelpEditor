@@ -28,7 +28,7 @@
         <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding CommandManager.NewCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding CommandManager.SaveCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding CommandManager.OpenCommand}"/>
-        <!--<KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding CommandManager.AddTabCommand}"/>-->
+        <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding NewTabCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedTab}"/>
         <!--Formatting-->
         <KeyBinding Modifiers="Ctrl" Key="B" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
@@ -104,6 +104,7 @@
                                       Style="{StaticResource ScrollableTabControl}"/>-->
         <ctrl:ClosableTabControl ItemsSource="{Binding Documents}"
                                  SelectedItem="{Binding SelectedDocument}"
+                                 AddTabCommand="{Binding NewTabCommand}"
                                  CloseTabCommand="{Binding CommandManager.CloseTabCommand}"
                                  Style="{StaticResource ScrollableTabControl}">
             <ctrl:ClosableTabControl.Resources>
