@@ -38,9 +38,9 @@ public class AppCommands {
         _progressBar = App.Container.Resolve<IProgressBar>();
         _mwvm = parent;
 
-        NewCommand = new RelayCommand(addTab);
-        OpenCommand = new AsyncCommand(openProject);
-        SaveCommand = new RelayCommand(saveProjectFile, canSave);
+        NewProjectCommand = new RelayCommand(addTab);
+        OpenProjectCommand = new AsyncCommand(openProject);
+        SaveProjectCommand = new RelayCommand(saveProjectFile, canSave);
         CloseTabCommand = new RelayCommand(closeTab, canCloseTab);
         CloseAppCommand = new RelayCommand<CancelEventArgs>(closeApp);
         LoadModulesCommand = new AsyncCommand(loadModules);
@@ -54,7 +54,7 @@ public class AppCommands {
 
     #region New Tab command
 
-    public ICommand NewCommand { get; }
+    public ICommand NewProjectCommand { get; }
     void addTab(Object? o) {
         var vm = new BlankDocumentVM();
         _mwvm.Documents.Add(vm);
@@ -65,7 +65,7 @@ public class AppCommands {
 
     #region Open Project command
 
-    public IAsyncCommand OpenCommand { get; }
+    public IAsyncCommand OpenProjectCommand { get; }
 
     async Task openProject(Object? obj, CancellationToken token) {
         if (getOpenProjectFilePath(obj as String, out String? projectPath)) {
@@ -122,7 +122,7 @@ public class AppCommands {
 
     #endregion
 
-    public ICommand SaveCommand { get; }
+    public ICommand SaveProjectCommand { get; }
 
     #region Close Tab(s) commands
     public ICommand CloseTabCommand { get; }
@@ -498,7 +498,7 @@ public class AppCommands {
         }
     }
     public void OpenProject(String path) {
-        OpenCommand.ExecuteAsync(path);
+        OpenProjectCommand.ExecuteAsync(path);
     }
 
     public async Task LoadCommandsAsync(String? helpPath, Boolean importFromCBH) {

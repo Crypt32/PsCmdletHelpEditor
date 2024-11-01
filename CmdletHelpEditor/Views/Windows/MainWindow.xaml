@@ -25,9 +25,9 @@
         <converters:MultiParamConverter x:Key="MultiParamConverter" />
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding CommandManager.NewCommand}"/>
-        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding CommandManager.SaveCommand}"/>
-        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding CommandManager.OpenCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding CommandManager.NewProjectCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding CommandManager.SaveProjectCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding CommandManager.OpenProjectCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding NewTabCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedTab}"/>
         <!--Formatting-->
