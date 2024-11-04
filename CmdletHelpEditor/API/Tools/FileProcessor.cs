@@ -13,15 +13,15 @@ using Unity;
 
 namespace CmdletHelpEditor.API.Tools;
 static class FileProcessor {
-    public static void SaveProjectFile(ClosableModuleItem tab, String path) {
+    public static void SaveProjectFile(ModuleObject tab, String path) {
         using var fs = new FileStream(path, FileMode.Create);
-        tab.Module.ProjectPath = path;
-        Double oldVersion = tab.Module.FormatVersion;
+        tab.ProjectPath = path;
+        Double oldVersion = tab.FormatVersion;
         // remove read stuff: obsolete cmdlets and parameters
-        if (!tab.Module.IsOffline) {
-            foreach (CmdletObject cmdlet in tab.Module.Cmdlets.ToArray()) {
+        if (!tab.IsOffline) {
+            foreach (CmdletObject cmdlet in tab.Cmdlets.ToArray()) {
                 if (cmdlet.GeneralHelp.Status == ItemStatus.Missing) {
-                    tab.Module.Cmdlets.Remove(cmdlet);
+                    tab.Cmdlets.Remove(cmdlet);
                 } else {
                     foreach (PsCommandParameterVM parameter in cmdlet.Parameters.ToArray().Where(x => x.Status == ItemStatus.Missing)) {
                         cmdlet.Parameters.Remove(parameter);
@@ -30,22 +30,21 @@ static class FileProcessor {
             }
         }
         // sort cmdlets by name
-        IEnumerable<CmdletObject> cmdlets = tab.Module.Cmdlets
+        IEnumerable<CmdletObject> cmdlets = tab.Cmdlets
             .OrderBy(x => x.Name)
             .ToList();
-        tab.Module.Cmdlets.Clear();
+        tab.Cmdlets.Clear();
         foreach (CmdletObject cmdlet in cmdlets) {
-            tab.Module.Cmdlets.Add(cmdlet);
+            tab.Cmdlets.Add(cmdlet);
         }
 
-        tab.Module.FormatVersion = Utils.CurrentFormatVersion;
+        tab.FormatVersion = Utils.CurrentFormatVersion;
         var serializer = new XmlSerializer(typeof(ModuleObject));
         try {
-            serializer.Serialize(fs, tab.Module);
-            tab.Module.ProjectPath = path;
-            tab.IsSaved = true;
+            serializer.Serialize(fs, tab);
+            tab.ProjectPath = path;
         } catch {
-            tab.Module.FormatVersion = oldVersion;
+            tab.FormatVersion = oldVersion;
             throw;
         }
     }

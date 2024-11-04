@@ -25,30 +25,29 @@ namespace CmdletHelpEditor.Views.Dialogs;
 /// Interaction logic for ModuleProperties.xaml
 /// </summary>
 public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
-    readonly MainWindowVM _mwvm;
-    readonly IMsgBox _msgbox;
+    readonly HelpProjectDocument _context;
+    readonly IMsgBox _msgBox;
 
     Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
     ProviderInformation providerInfo;
     WpXmlRpcClient blogger;
 
-    public ModuleProperties(MainWindowVM context) {
-        _mwvm = context;
-        _msgbox = App.Container.Resolve<IMsgBox>();
+    public ModuleProperties(HelpProjectDocument context) {
+        _context = context;
+        _msgBox = App.Container.Resolve<IMsgBox>();
         UseProviderCommand = new RelayCommand(UseProviderChanged);
-        UseSupports = _mwvm.SelectedTab.Module.UseSupports;
+        UseSupports = _context.Module!.UseSupports;
         Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
-        WebSites = new ObservableCollection<XmlRpcBlogInfo>();
         InitializeComponent();
-        if (context.SelectedTab.Module.Provider != null) {
-            blogger = Utils.InitializeBlogger(context.SelectedTab.Module.Provider);
+        if (_context.Module.Provider != null) {
+            blogger = Utils.InitializeBlogger(_context.Module.Provider);
             Providers.Clear();
-            Providers.Add(context.SelectedTab.Module.Provider);
-            WebSites.Add(context.SelectedTab.Module.Provider.Blog);
+            Providers.Add(_context.Module.Provider);
+            WebSites.Add(_context.Module.Provider.Blog);
             UseProvider = true;
             ProvSelected = true;
             UserEditable = true;
-            ProviderInfo = context.SelectedTab.Module.Provider;
+            ProviderInfo = _context.Module.Provider;
         }
     }
 
@@ -62,8 +61,8 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
 
     public ICommand UseProviderCommand { get; set; }
 
-    public ObservableCollection<ProviderInformation> Providers { get; set; }
-    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; set; }
+    public ObservableCollection<ProviderInformation> Providers { get; set; } = [];
+    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; set; } = [];
 
     public Boolean UseSupports {
         get => useSupports;
@@ -124,36 +123,38 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
             WebSites.Clear();
             foreach (PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo blog in blogs) {
                 var blogInfo = new XmlRpcBlogInfo {
-                                         BlogID = blog.BlogID,
-                                         BlogName = blog.BlogName,
-                                         URL = blog.URL
-                                     };
+                    BlogID = blog.BlogID,
+                    BlogName = blog.BlogName,
+                    URL = blog.URL
+                };
                 WebSites.Add(blogInfo);
             }
         } catch (Exception ex) {
-            _msgbox.ShowError("Error", ex.Message);
+            _msgBox.ShowError("Error", ex.Message);
         }
         BlogsLoaded = true;
     }
     async void FetchClick(Object Sender, RoutedEventArgs e) {
-        if (_mwvm.SelectedTab.Module.Provider == null) { return; }
+        if (_context.Module!.Provider is null) {
+            return;
+        }
         //List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, providerInfo.FetchPostCount);
         List<WpPost> posts = await blogger.GetRecentPostsAsync(providerInfo.FetchPostCount); // await MetaWeblogWrapper.GetPages(blogger, providerInfo.FetchPostCount);
-        foreach (CmdletObject cmdlet in _mwvm.SelectedTab.Module.Cmdlets) {
+        foreach (CmdletObject cmdlet in _context.Module.Cmdlets) {
             WpPost post = posts.FirstOrDefault(x => x.Title.Equals(cmdlet.Name));
             if (post != null) {
                 cmdlet.ArticleIDString = post.PostId;
                 cmdlet.URL = post.Permalink;
                 if (!Uri.IsWellFormedUriString(cmdlet.URL, UriKind.Absolute)) {
-                    var baseUrl = new Uri(_mwvm.SelectedTab.Module.Provider.ProviderURL);
+                    var baseUrl = new Uri(_context.Module.Provider.ProviderURL);
                     cmdlet.URL = $"{baseUrl.Scheme}://{baseUrl.DnsSafeHost}{cmdlet.URL}";
                 }
             }
         }
     }
     void SaveClick(Object Sender, RoutedEventArgs e) {
-        _mwvm.SelectedTab.Module.UseSupports = UseSupports;
-        _mwvm.SelectedTab.Module.Provider = UseProvider
+        _context.Module!.UseSupports = UseSupports;
+        _context.Module.Provider = UseProvider
             ? ProviderInfo
             : null;
     }
@@ -162,11 +163,11 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
     }
 
     void ProvSelectionChanged(Object Sender, SelectionChangedEventArgs e) {
-        UrlEditable = ProviderInfo != null && ProviderInfo.ProviderName == "Custom";
+        UrlEditable = ProviderInfo is { ProviderName: "Custom" };
         UserEditable = ProviderInfo != null && !String.IsNullOrEmpty(ProviderInfo.ProviderName);
     }
     void SetPassword() {
-        if (ProviderInfo.SecurePassword == null) {
+        if (ProviderInfo.SecurePassword is null) {
             ProviderInfo.Password = pwdBox.SecurePassword.EncryptPassword();
             pwdBox.Clear();
         }

@@ -17,7 +17,7 @@
     <Separator/>
     <MenuItem Header="Publish XML Help to file"
               Command="{Binding CommandManager.PublishHelpCommand}"
-              CommandParameter="{Binding SelectedTab}">
+              CommandParameter="{Binding SelectedDocument}">
         <MenuItem.Icon>
             <Image Source="/Images/Menu/xml_16x16.png"/>
         </MenuItem.Icon>

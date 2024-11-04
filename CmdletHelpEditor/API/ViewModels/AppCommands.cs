@@ -285,23 +285,25 @@ public class AppCommands {
     }
     void saveProjectFile(Object? obj) {
         String path;
+         HelpProjectDocument helpProject = (HelpProjectDocument)_mwvm.SelectedDocument!;
         // save
-        if (obj == null) {
-            if (!String.IsNullOrEmpty(_mwvm.SelectedTab.Module.ProjectPath)) {
-                path = _mwvm.SelectedTab.Module.ProjectPath;
+        if (obj is null) {
+            if (!String.IsNullOrEmpty(helpProject.Module!.ProjectPath)) {
+                path = helpProject.Module.ProjectPath;
             } else {
-                if (!getSaveFileName(_mwvm.SelectedTab.Module.Name, out path)) { return; }
+                if (!getSaveFileName(helpProject.Module.Name, out path)) { return; }
             }
         } else {
             // save as
-            if (!getSaveFileName(_mwvm.SelectedTab.Module.Name, out path)) { return; }
+            if (!getSaveFileName(helpProject.Module!.Name, out path)) { return; }
         }
-        _mwvm.SelectedTab.Header = new FileInfo(path).Name;
+        helpProject.Module.ProjectPath = new FileInfo(path).Name;
         try {
-            FileProcessor.SaveProjectFile(_mwvm.SelectedTab, path);
+            FileProcessor.SaveProjectFile(helpProject.Module, path);
+            helpProject.IsSaved = true;
         } catch (Exception e) {
             _msgBox.ShowError("Save error", e.Message);
-            _mwvm.SelectedTab.ErrorInfo = e.Message;
+            helpProject.ErrorInfo = e.Message;
         }
     }
 
@@ -330,7 +332,7 @@ public class AppCommands {
 
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((ClosableModuleItem)o).Module;
-        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(_mwvm.SelectedTab.Module.Name);
+        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(((HelpProjectDocument)_mwvm.SelectedDocument)!.Module!.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             try {
@@ -341,7 +343,7 @@ public class AppCommands {
         }
     }
     void publishOnline(Object? obj) {
-        var dlg = new OnlinePublishProgressWindow(_mwvm.SelectedTab.Module);
+        var dlg = new OnlinePublishProgressWindow(((HelpProjectDocument)_mwvm.SelectedDocument)!.Module);
         dlg.Show();
     }
 
@@ -383,7 +385,7 @@ public class AppCommands {
         return ((ClosableModuleItem)obj)?.Module != null && ((ClosableModuleItem)obj).Module.Cmdlets.Count > 0;
     }
     Boolean canPublishOnline(Object obj) {
-        return _mwvm.SelectedTab?.Module?.Provider != null;
+        return _mwvm.SelectedDocument is HelpProjectDocument { Module.Provider: not null };
     }
 
     // utility

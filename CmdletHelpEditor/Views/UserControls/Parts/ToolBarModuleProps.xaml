@@ -8,7 +8,7 @@
 		 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
 	<Button ToolTip="Module Properties"
 			Command="{Binding Source={x:Static viewModels:UIManager.ModulePropsCommand}}"
-			CommandParameter="{Binding SelectedTab}">
+			CommandParameter="{Binding SelectedDocument}">
 		<Image Width="16" Source="/Images/Menu/properties_16x16.png"/>
 	</Button>
 	<Button ToolTip="Publish All"

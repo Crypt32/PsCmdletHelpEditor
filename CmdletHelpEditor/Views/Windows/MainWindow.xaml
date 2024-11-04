@@ -29,7 +29,7 @@
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding CommandManager.SaveProjectCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding CommandManager.OpenProjectCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="T" Command="{Binding NewTabCommand}"/>
-        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedTab}"/>
+        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding CommandManager.CloseTabCommand}" CommandParameter="{Binding SelectedDocument}"/>
         <!--Formatting-->
         <KeyBinding Modifiers="Ctrl" Key="B" Command="{x:Static vm:FormatCommands.SetCommonFormatCommand}">
             <KeyBinding.CommandParameter>

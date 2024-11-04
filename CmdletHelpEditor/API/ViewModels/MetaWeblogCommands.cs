@@ -23,7 +23,7 @@ public static class MetaWeblogCommands {
         working = true;
         var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
         try {
-            await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, mwvm.SelectedTab.Module, null);
+            await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, ((HelpProjectDocument)mwvm.SelectedDocument)!.Module, null);
             msgBox.ShowInfo("Success", "The operation completed successfully.");
         } catch (Exception e) {
             msgBox.ShowError("Error", e.Message);
@@ -35,16 +35,16 @@ public static class MetaWeblogCommands {
         IProgressBar pb = App.Container.Resolve<IProgressBar>();
         var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
         pb.Start();
-        MetaWeblogWrapper.PublishAll(mwvm.SelectedTab.Module, pb);
+        MetaWeblogWrapper.PublishAll(((HelpProjectDocument)mwvm.SelectedDocument)!.Module, pb);
         pb.End();
         working = false;
     }
     static Boolean canPublish(Object obj) {
-        if (working) { return false; }
+        if (working) {
+            return false;
+        }
         var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-        return mwvm.SelectedTab != null &&
-               mwvm.SelectedTab.Module != null &&
-               mwvm.SelectedTab.Module.Provider != null &&
-               (!mwvm.SelectedTab.Module.IsOffline || !mwvm.SelectedTab.Module.UpgradeRequired);
+        return mwvm.SelectedDocument is HelpProjectDocument { Module.Provider: not null } helpProject
+               && (!helpProject.Module.IsOffline || !helpProject.Module.UpgradeRequired);
     }
 }

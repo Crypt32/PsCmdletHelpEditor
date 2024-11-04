@@ -31,10 +31,12 @@ public static class UIManager {
     }
     public static void ShowModuleProperties(Object obj) {
         Window mainWindow = Application.Current.MainWindow;
-        var ModulePropsDlg = new ModuleProperties((MainWindowVM)mainWindow?.DataContext) {
-            Owner = mainWindow
-        };
-        ModulePropsDlg.ShowDialog();
+        if (((MainWindowVM)mainWindow!.DataContext).SelectedDocument is HelpProjectDocument helpProject) {
+            var ModulePropsDlg = new ModuleProperties(helpProject) {
+                Owner = mainWindow
+            };
+            ModulePropsDlg.ShowDialog();
+        }
     }
 
     static void ShowToolBar(Object obj) {

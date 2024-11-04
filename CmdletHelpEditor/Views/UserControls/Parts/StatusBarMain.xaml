@@ -28,8 +28,8 @@
     <StatusBarItem>
         <TextBlock Style="{StaticResource StatusBarTextBlock}">
             <Run Text="Module:"/>
-            <Run Text="{Binding SelectedTab.Module.Name}"
-                 ToolTip="{Binding SelectedTab.Module.Name}"/>
+            <Run Text="{Binding SelectedDocument.Module.Name}"
+                 ToolTip="{Binding SelectedDocument.Module.Name}"/>
         </TextBlock>
     </StatusBarItem>
     <Separator/>
@@ -37,13 +37,13 @@
         <TextBlock MinWidth="100"
                    MaxWidth="400"
                    Style="{StaticResource StatusBarTextBlock}"
-                   Text="{Binding SelectedModule.ProjectPath}"
-                   ToolTip="{Binding SelectedModule.ProjectPath}"/>
+                   Text="{Binding SelectedDocument.ProjectPath}"
+                   ToolTip="{Binding SelectedDocument.ProjectPath}"/>
     </StatusBarItem>
     <Separator/>
     <TextBlock>
         <Run Text="Commands: "/>
-        <Run Text="{Binding SelectedTab.Module.Cmdlets.Count, Mode=OneWay}"/>
+        <Run Text="{Binding SelectedDocument.Module.Cmdlets.Count, Mode=OneWay}"/>
     </TextBlock>
     <Separator/>
     <StatusBarItem>
@@ -68,7 +68,7 @@
     <StatusBarItem>
         <TextBlock>
             <Run Text="Status: "/>
-            <Run Text="{Binding SelectedTab.Module.ModuleStatus, Mode=OneWay}"/>
+            <Run Text="{Binding SelectedDocument.Module.ModuleStatus, Mode=OneWay}"/>
         </TextBlock>
     </StatusBarItem>
 </StatusBar>
