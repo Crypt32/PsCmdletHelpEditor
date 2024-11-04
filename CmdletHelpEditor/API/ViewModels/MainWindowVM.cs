@@ -1,9 +1,6 @@
 ﻿#nullable enable
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
@@ -11,9 +8,10 @@ using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.UserControls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.ViewModels;
-public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindowVM {
+public class MainWindowVM : ViewModelBase, IMainWindowVM {
     Int32? psVersion;
     ClosableModuleItem selectedTab;
     TabDocumentVM? selectedDocument;
@@ -27,6 +25,7 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         CommandManager = new AppCommands(this);
         ConfigContext = new ConfigVM();
         initialize();
+        NewTabCommand.Execute(null);
     }
     void initialize() {
         Documents.Add(new BlankDocumentVM());
@@ -60,23 +59,10 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
 
     // data definitions
     public ObservableCollection<TabDocumentVM> Documents { get; } = [];
-    public ObservableCollection<ModuleObject> Modules { get; } = [];
     public ObservableCollection<ClosableModuleItem> Tabs { get; } = [];
     public IDataSource DataSource { get; }
     public IProgressBar ProgressBar { get; }
 
-    // must be dependency property.
-    public static readonly DependencyProperty SelectedModuleProperty = DependencyProperty.Register(
-        nameof(SelectedModule),
-        typeof(ModuleObject),
-        typeof(MainWindowVM),
-        new PropertyMetadata(null));
-
-    // objects
-    public ModuleObject SelectedModule {
-        get => (ModuleObject)GetValue(SelectedModuleProperty);
-        set => SetValue(SelectedModuleProperty, value);
-    }
     public TabDocumentVM? SelectedDocument {
         get => selectedDocument;
         set {
@@ -113,10 +99,4 @@ public class MainWindowVM : DependencyObject, INotifyPropertyChanged, IMainWindo
         Documents.Add(vm);
         SelectedDocument = vm;
     }
-
-    void OnPropertyChanged([CallerMemberName] String? propertyName = null) {
-        PropertyChangedEventHandler handler = PropertyChanged;
-        handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    public event PropertyChangedEventHandler PropertyChanged;
 }

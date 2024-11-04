@@ -5,10 +5,8 @@ using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.Dialogs;
-using CmdletHelpEditor.Views.UserControls;
 using CmdletHelpEditor.Views.UserControls.Parts;
 using CmdletHelpEditor.Views.Windows;
-using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
@@ -56,38 +54,5 @@ public static class UIManager {
 
     static Boolean CanShowModuleProperties(Object obj) {
         return (obj as ClosableModuleItem)?.Module != null;
-    }
-    public static ClosableModuleItem GenerateTab() {
-        var cti = new ClosableModuleItem {
-            Header = "untitled",
-            IsSaved = true,
-            IsClosable = true,
-        };
-        Panel content = new Grid();
-        content.Children.Add(new StartUserControl());
-        cti.Content = content;
-        cti.EditorContext = new EditorVM(cti.Module);
-        return cti;
-    }
-    public static void ShowBusy(ContentControl tab, String text) {
-        ((Grid)tab.Content).Children.Clear();
-        ((Grid)tab.Content).Children.Add(new LoadingSpinner {
-            IsShown = true,
-            Text = text
-        });
-    }
-    public static void ShowModuleList(ContentControl tab) {
-        ((Grid)tab.Content).Children.Clear();
-        ((Grid)tab.Content).Children.Add(new ModuleSelectorControl());
-    }
-    public static void ShowEditor(ClosableModuleItem tab) {
-        var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
-        mwvm.SelectedModule = null;
-        ((Grid)tab.Content).Children.Clear();
-        ((Grid)tab.Content).Children.Add(new EditorControl(tab));
-    }
-    public static void RestoreControl(ContentControl tab, UIElement element) {
-        ((Grid)tab.Content).Children.Clear();
-        ((Grid)tab.Content).Children.Add(element);
     }
 }

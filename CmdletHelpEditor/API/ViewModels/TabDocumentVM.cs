@@ -16,7 +16,7 @@ namespace CmdletHelpEditor.API.ViewModels;
 public abstract class TabDocumentVM : AsyncViewModel {
     const String UNTITLED = "untitled";
 
-    String errorInfo, path, fileName;
+    String? errorInfo, path, fileName;
     Boolean isModified, suppressModified, isSaved;
 
     protected TabDocumentVM() {
@@ -71,7 +71,7 @@ public abstract class TabDocumentVM : AsyncViewModel {
             OnPropertyChanged();
         }
     }
-    public String ErrorInfo {
+    public String? ErrorInfo {
         get => errorInfo;
         set {
             errorInfo = value;
