@@ -17,7 +17,6 @@ using PsCmdletHelpEditor.XmlRpc;
 using PsCmdletHelpEditor.XmlRpc.WordPress;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
-using XmlRpcBlogInfo = PsCmdletHelpEditor.Core.Models.XmlRpcBlogInfo;
 
 namespace CmdletHelpEditor.Views.Dialogs;
 
@@ -40,7 +39,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
         InitializeComponent();
         if (_context.Module.Provider != null) {
-            blogger = Utils.InitializeBlogger(_context.Module.Provider);
+            blogger = _context.Module.Provider.InitializeBlogger();
             Providers.Clear();
             Providers.Add(_context.Module.Provider);
             WebSites.Add(_context.Module.Provider.Blog);
@@ -116,7 +115,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         
     void ConnectClick(Object Sender, RoutedEventArgs e) {
         SetPassword();
-        blogger = Utils.InitializeBlogger(ProviderInfo);
+        blogger = ProviderInfo.InitializeBlogger();
         try {
             IEnumerable<PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
             if (blogs == null) { return; }

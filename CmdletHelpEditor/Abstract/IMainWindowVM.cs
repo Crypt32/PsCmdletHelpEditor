@@ -1,5 +1,2 @@
-﻿namespace CmdletHelpEditor.Abstract {
-    public interface IMainWindowVM {
-        
-    }
-}
+﻿namespace CmdletHelpEditor.Abstract;
+public interface IMainWindowVM;

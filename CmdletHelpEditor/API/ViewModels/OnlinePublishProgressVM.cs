@@ -55,7 +55,7 @@ class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
     public IProgressBar ProgressBar { get; }
 
     async Task publish(IScrollToView lv, ICollection<OnlinePublishEntry> cmdlets) {
-        WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
+        WpXmlRpcClient blogger = module.Provider.InitializeBlogger();
         if (blogger == null) {
             _msgBox.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
             return;

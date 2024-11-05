@@ -16,7 +16,7 @@ using Unity;
 
 namespace CmdletHelpEditor.API.ViewModels;
 
-public class OutputVM : DependencyObject, IAsyncVM {
+public class OutputVM : DependencyObject, INotifyPropertyChanged {
     readonly IMsgBox _msgBox;
     FlowDocument document;
     Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlChecked, textChecked, isBusy;

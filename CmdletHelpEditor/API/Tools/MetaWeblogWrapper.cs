@@ -16,7 +16,7 @@ namespace CmdletHelpEditor.API.Tools;
 static class MetaWeblogWrapper {
     public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, WpXmlRpcClient blogger) {
         await Task.Factory.StartNew(() => Thread.Sleep(5000));
-        blogger ??= Utils.InitializeBlogger(module.Provider);
+        blogger ??= module.Provider.InitializeBlogger();
         if (blogger == null) {
             throw new Exception(Strings.WarnBloggerNeedsMoreData);
         }
@@ -63,7 +63,7 @@ static class MetaWeblogWrapper {
     }
     public static async void PublishAll(ModuleObject module, IProgressBar pb) {
         IMsgBox msgBox = App.Container.Resolve<IMsgBox>();
-        WpXmlRpcClient blogger = Utils.InitializeBlogger(module.Provider);
+        WpXmlRpcClient blogger = module.Provider.InitializeBlogger();
         if (blogger == null) {
             msgBox.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
             return;

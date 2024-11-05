@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.Core.Services;
-using PsCmdletHelpEditor.XmlRpc;
 using Unity;
 
 namespace CmdletHelpEditor.API.Tools;
@@ -14,13 +13,13 @@ static class Utils {
     public static IEnumerable<Double> SupportedFormatVersions => [0, 1.0, 1.1];
     public static IEnumerable<ProviderInformation> EnumProviders() {
         return new ObservableCollection<ProviderInformation> {
-            new ProviderInformation {
-                ProviderName = "CodePlex",
-                ProviderURL = "https://www.codeplex.com/site/metaweblog"
-            },
-            new ProviderInformation {
-                ProviderName = "Custom"
-            }
+            new() {
+                      ProviderName = "CodePlex",
+                      ProviderURL = "https://www.codeplex.com/site/metaweblog"
+                  },
+            new() {
+                      ProviderName = "Custom"
+                  }
         };
     }
     public static IReadOnlyList<String> GetCommandTypes() {
@@ -35,16 +34,5 @@ static class Utils {
         if (psProcessor.PsVersion >= 4 && Settings.Default.ApplicationChecked) { commandTypes.Add("Application"); }
 
         return commandTypes;
-    }
-    public static WpXmlRpcClient InitializeBlogger(ProviderInformation provInfo) {
-        if (
-            String.IsNullOrEmpty(provInfo.ProviderURL) ||
-            String.IsNullOrEmpty(provInfo.UserName) ||
-            provInfo.SecurePassword == null
-        ) { return null; }
-        var xProvInfo = new XmlRpcProviderInfo(provInfo.ProviderURL, provInfo.UserName, provInfo.SecurePassword);
-        var blogger = new WpXmlRpcClient(xProvInfo);
-        xProvInfo.ProviderID = provInfo.Blog?.BlogID;
-        return blogger;
     }
 }

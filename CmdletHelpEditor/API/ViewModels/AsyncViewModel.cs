@@ -1,13 +1,12 @@
 ﻿#nullable enable
 using System;
-using CmdletHelpEditor.Abstract;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.ViewModels;
 /// <summary>
 /// Represents asynchronous base view model. This class shall be used in conjunction with LoadingSpinner WPF control.
 /// </summary>
-public abstract class AsyncViewModel : ViewModelBase, IAsyncVM {
+public abstract class AsyncViewModel : ViewModelBase {
     Boolean isBusy;
     String? spinnerText;
 

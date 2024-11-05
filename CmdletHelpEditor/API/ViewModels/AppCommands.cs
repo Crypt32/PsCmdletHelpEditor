@@ -235,7 +235,7 @@ public class AppCommands {
             MWVM = _mwvm
         };
         swapTabDocument(vm);
-        return vm.ReloadModules(true);
+        return vm.ReloadModules(true, _psProcessor);
     }
     
 

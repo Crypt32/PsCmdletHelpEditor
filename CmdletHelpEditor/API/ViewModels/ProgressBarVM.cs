@@ -13,21 +13,21 @@ class ProgressBarVM : ViewModelBase, IProgressBar {
         get => progress;
         set {
             progress = value;
-            OnPropertyChanged(nameof(Progress));
+            OnPropertyChanged();
         }
     }
     public String ProgressText {
         get => progressText;
         set {
             progressText = value;
-            OnPropertyChanged(nameof(ProgressText));
+            OnPropertyChanged();
         }
     }
     public Boolean IsRunning {
         get => isRunning;
         private set {
             isRunning = value;
-            OnPropertyChanged(nameof(IsRunning));
+            OnPropertyChanged();
         }
     }
     public void Start() {

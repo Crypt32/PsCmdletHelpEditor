@@ -8,8 +8,8 @@ using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
 using PsCmdletHelpEditor.Core.Models;
+using PsCmdletHelpEditor.Core.Services;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
-using PowerShellProcessor = PsCmdletHelpEditor.Core.Services.PowerShellProcessor;
 
 namespace CmdletHelpEditor.API.ViewModels;
 
@@ -93,10 +93,9 @@ public sealed class ModuleListDocument : TabDocumentVM {
         }
     }
 
-    public async Task ReloadModules(Boolean force) {
+    public async Task ReloadModules(Boolean force, IPowerShellProcessor psProcessor) {
         StartSpinner(Strings.InfoModuleListLoading);
         ModuleList.Clear();
-        var psProcessor = new PowerShellProcessor();
         IEnumerable<PsModuleInfo> modules = await psProcessor.EnumModulesAsync(force);
         foreach (PsModuleInfo moduleInfo in modules) {
             ModuleList.Add(moduleInfo);

@@ -1,5 +1,2 @@
-﻿namespace CmdletHelpEditor.Abstract {
-    public interface IModulePublishPropertiesVM {
-        
-    }
-}
+﻿namespace CmdletHelpEditor.Abstract;
+public interface IModulePublishPropertiesVM;

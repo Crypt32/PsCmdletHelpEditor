@@ -158,27 +158,17 @@
     </ApplicationDefinition>
     <Compile Include="Abstract\IDataSource.cs" />
     <Compile Include="Abstract\IHasPassword.cs" />
-    <Compile Include="Abstract\IMainTabContent.cs" />
     <Compile Include="Abstract\IMainWindowVM.cs" />
     <Compile Include="Abstract\IModulePublishPropertiesVM.cs" />
-    <Compile Include="Abstract\IAsyncVM.cs" />
     <Compile Include="Abstract\IMsgBox.cs" />
     <Compile Include="Abstract\IProgressBar.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
-    <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
-    <Compile Include="API\Models\XmlMwBlogInfo.cs" />
-    <Compile Include="API\Templates\XmlMamlTemplate.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>XmlMamlTemplate.resx</DependentUpon>
-    </Compile>
     <Compile Include="API\Utility\NativeDialogFactory.cs" />
     <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
-    <Compile Include="API\Utility\SavePendingEventHandler.cs" />
     <Compile Include="API\ViewModels\AppCommands.cs" />
     <Compile Include="API\Models\ProviderInformation.cs" />
     <Compile Include="API\Converters\MultiParamConverter.cs" />
@@ -187,7 +177,6 @@
     <Compile Include="API\ViewModels\AsyncViewModel.cs" />
     <Compile Include="API\ViewModels\ClosableWindowVM.cs" />
     <Compile Include="API\ViewModels\DataSource.cs" />
-    <Compile Include="API\ViewModels\FileOperations.cs" />
     <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
     <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
@@ -449,11 +438,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="API\Templates\XmlMamlTemplate.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>XmlMamlTemplate.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

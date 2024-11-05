@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Utils;
+using PsCmdletHelpEditor.XmlRpc;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
@@ -65,6 +66,17 @@ public class ProviderInformation : ViewModelBase, IXmlRpcProviderInformation {
         }
     }
 
+    public WpXmlRpcClient InitializeBlogger() {
+        if (
+            String.IsNullOrEmpty(ProviderURL) ||
+            String.IsNullOrEmpty(UserName) ||
+            SecurePassword == null
+        ) { return null; }
+        var xProvInfo = new XmlRpcProviderInfo(ProviderURL, UserName, SecurePassword);
+        var blogger = new WpXmlRpcClient(xProvInfo);
+        xProvInfo.ProviderID = Blog?.BlogID;
+        return blogger;
+    }
     public XmlRpcProviderInformation ToXmlObject() {
         return new XmlRpcProviderInformation {
             ProviderName = ProviderName,

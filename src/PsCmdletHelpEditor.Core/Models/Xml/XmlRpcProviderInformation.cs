@@ -1,4 +1,5 @@
 ﻿using System;
+using PsCmdletHelpEditor.XmlRpc;
 
 namespace PsCmdletHelpEditor.Core.Models.Xml;
 
