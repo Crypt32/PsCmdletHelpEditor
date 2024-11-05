@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
@@ -20,23 +19,14 @@ public class PsCommandParameterVM : ViewModelBase {
     }
 
     public String Name { get; set; }
-    [XmlAttribute("type")]
     public String Type { get; set; }
-    [XmlAttribute("varLen")]
     public Boolean AcceptsArray { get; set; }
-    [XmlAttribute("required")]
     public Boolean Mandatory { get; set; }
-    [XmlAttribute("dynamic")]
     public Boolean Dynamic { get; set; }
-    [XmlAttribute("pipeRemaining")]
     public Boolean RemainingArgs { get; set; }
-    [XmlAttribute("pipe")]
     public Boolean Pipeline { get; set; }
-    [XmlAttribute("pipeProp")]
     public Boolean PipelinePropertyName { get; set; }
-    [XmlAttribute("isPos")]
     public Boolean Positional { get; set; }
-    [XmlAttribute("pos")]
     public String Position { get; set; }
     public List<String> Attributes { get; set; } = [];
     public List<String> Aliases { get; set; } = [];
@@ -60,7 +50,6 @@ public class PsCommandParameterVM : ViewModelBase {
             }
         }
     }
-    [XmlAttribute("globbing")]
     public Boolean Globbing {
         get => globbing;
         set {
@@ -68,7 +57,6 @@ public class PsCommandParameterVM : ViewModelBase {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public ItemStatus Status {
         get {
             if (status is ItemStatus.Missing or ItemStatus.New) { return status; }

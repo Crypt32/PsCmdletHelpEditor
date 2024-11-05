@@ -5,16 +5,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
-using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
-[XmlInclude(typeof(PsCommandParameterVM))]
-[XmlInclude(typeof(PsCommandExampleVM))]
-[XmlInclude(typeof(PsCommandRelatedLinkVM))]
-[XmlInclude(typeof(CommandParameterSetInfo2))]
 public class CmdletObject : ViewModelBase {
     String extraHeader, extraFooter, url, articleID;
     Boolean publish;
@@ -23,11 +18,6 @@ public class CmdletObject : ViewModelBase {
     BindingList<PsCommandParameterVM> parameters;
     ObservableCollection<PsCommandExampleVM> exampleList;
     ObservableCollection<PsCommandRelatedLinkVM> linkList;
-    readonly List<String> _excludedParams = [
-        "verbose", "debug", "erroraction", "errorvariable", "outvariable", "outbuffer",
-        "warningvariable", "warningaction", "pipelinevariable", "informationaction",
-        "informationvariable"
-    ];
 
     public CmdletObject() {
         initialize();
@@ -35,22 +25,8 @@ public class CmdletObject : ViewModelBase {
         RelatedLinks = [];
     }
 
-    public CmdletObject(PSObject cmdlet, Boolean contentBasedHelp) : this() {
-        if (cmdlet == null) { return; }
-        initializeFromCmdlet(cmdlet);
-        if (contentBasedHelp) {
-            initializeFromHelp(cmdlet);
-        }
-    }
-    public CmdletObject(String name) : this() {
-        Name = name;
-        GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.Missing };
-    }
-
     public String Name { get; set; }
-    [XmlAttribute("verb")]
     public String Verb { get; set; }
-    [XmlAttribute("noun")]
     public String Noun { get; set; }
     public List<String> Syntax { get; set; } = [];
     public PsCommandGeneralDescriptionVM GeneralHelp {
@@ -65,7 +41,6 @@ public class CmdletObject : ViewModelBase {
             }
         }
     }
-    [XmlIgnore]
     public List<CommandParameterSetInfo> ParameterSets { get; set; }
     public List<CommandParameterSetInfo2> ParamSets { get; set; }
     public BindingList<PsCommandParameterVM> Parameters {
@@ -182,242 +157,6 @@ public class CmdletObject : ViewModelBase {
     }
     #endregion
 
-    void initializeFromCmdlet(PSObject cmdlet) {
-        Name = (String)cmdlet.Members["Name"].Value;
-        Verb = (String)cmdlet.Members["Verb"].Value;
-        Noun = (String)cmdlet.Members["Noun"].Value;
-        GeneralHelp = new PsCommandGeneralDescriptionVM {Status = ItemStatus.New};
-        Parameters = [];
-        ParamSets = [];
-        getParameterSets(cmdlet);
-        getParameters();
-        getOutputTypes(cmdlet);
-        getSyntax(cmdlet);
-        RelatedLinks = [];
-        Examples = [];
-        SupportInformation = new SupportInfo();
-    }
-    void initializeFromHelp(PSObject cmdlet) {
-        var help = (PSObject) cmdlet.Members["syn"].Value;
-        if (help.Members["Description"].Value == null) { return; }
-        if (String.IsNullOrEmpty((String)help.Members["Synopsis"].Value)) { return; }
-        // synopsis
-        GeneralHelp.Synopsis = (String)help.Members["Synopsis"].Value;
-        // description
-        String description = ((PSObject[]) help.Members["Description"].Value)
-            .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-        GeneralHelp.Description = description.TrimEnd();
-        // notes
-        if (help.Properties["alertSet"] != null) {
-            importNotesHelp((PSObject)help.Members["alertSet"].Value);
-        }
-        // input type
-        if (help.Properties["inputTypes"] != null) {
-            importTypes((PSObject)help.Members["inputTypes"].Value, true);
-        }
-        // return type
-        if (help.Properties["returnValues"] != null) {
-            importTypes((PSObject)help.Members["returnValues"].Value, false);
-        }
-        // parameters
-        try {
-            var param = (PSObject)help.Members["parameters"].Value;
-            importParamHelp(param);
-        } catch { }
-        // examples
-        try {
-            var examples = (PSObject)help.Members["examples"].Value;
-            importExamples(examples);
-        } catch { }
-        // related links
-        try {
-            var relinks = (PSObject)help.Members["relatedLinks"].Value;
-            importRelinks(relinks);
-        } catch { }
-    }
-    void importNotesHelp(PSObject note) {
-        GeneralHelp.Notes = (String)((PSObject[])note.Members["alert"].Value)[0].Members["Text"].Value;
-    }
-    void importTypes(PSObject types, Boolean input) {
-        var iType = new List<PSObject>();
-        if (input) {
-            if (types.Members["inputType"].Value is PSObject value) {
-                iType.Add(value);
-            } else {
-                iType = [..(PSObject[])types.Members["inputType"].Value];
-            }
-        } else {
-            if (types.Members["returnValue"].Value is PSObject value) {
-                iType.Add(value);
-            } else {
-                iType = [..(PSObject[])types.Members["returnValue"].Value];
-            }
-        }
-        
-        var links = new List<String>();
-        var urls = new List<String>();
-        var descs = new List<String>();
-
-        foreach (PSObject type in iType) {
-            var internalType = (PSObject) type.Members["type"].Value;
-            if (internalType.Properties["name"] == null) {
-                links.Add(String.Empty);
-            } else {
-                var name = (PSObject)internalType.Members["name"].Value;
-                links.Add((String)name.BaseObject);
-            }
-            if (internalType.Properties["uri"] == null) {
-                urls.Add(String.Empty);
-            } else {
-                var uri = (PSObject)internalType.Members["uri"].Value;
-                urls.Add((String)uri.BaseObject);
-            }
-
-            if (type.Properties["description"] == null) { continue; }
-            if (type.Members["description"].Value is PSObject[] descriptionBase) {
-                String description = (descriptionBase)
-                    .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-                descs.Add(String.IsNullOrEmpty(description)
-                    ? String.Empty
-                    : description.TrimEnd());
-            }
-        }
-        if (input) {
-            GeneralHelp.InputType = String.Join(";", links);
-            GeneralHelp.InputUrl = String.Join(";", urls);
-            GeneralHelp.InputTypeDescription = String.Join(";", descs);
-        } else {
-            GeneralHelp.ReturnType = String.Join(";", links);
-            GeneralHelp.ReturnUrl = String.Join(";", urls);
-            GeneralHelp.ReturnTypeDescription = String.Join(";", descs);
-        }
-    }
-    void importParamHelp(PSObject helpParameters) {
-        var paras = new List<PSObject>();
-        if (!(helpParameters.Members["parameter"].Value is PSObject)) {
-            paras = [..(PSObject[])helpParameters.Members["parameter"].Value];
-        } else {
-            paras.Add((PSObject)helpParameters.Members["parameter"].Value);
-        }
-        foreach (PSObject param in paras) {
-            String name = (String)((PSObject)param.Members["name"].Value).BaseObject;
-            String description = ((PSObject[]) param.Members["Description"].Value)
-            .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-            String defaultValue = (String)((PSObject)param.Members["defaultValue"].Value).BaseObject;
-            PsCommandParameterVM currentParam = Parameters.Single(x => x.Name == name);
-            currentParam.Description = description;
-            currentParam.DefaultValue = defaultValue;
-        }
-    }
-    void importExamples(PSObject example) {
-        var examples = new List<PSObject>();
-        if (!(example.Members["example"].Value is PSObject)) {
-            examples = [..(PSObject[])example.Members["example"].Value];
-        } else {
-            examples.Add((PSObject)example.Members["example"].Value);
-        }
-        foreach (PSObject ex in examples) {
-            String title = ((String)((PSObject)ex.Members["title"].Value).BaseObject).Replace("-", String.Empty).Trim();
-            String code = (String)((PSObject)ex.Members["code"].Value).BaseObject;
-            String description = ((PSObject[])ex.Members["remarks"].Value)
-            .Aggregate(String.Empty, (current, paragraph) => current + (paragraph.Members["Text"].Value + Environment.NewLine));
-            Examples.Add(new PsCommandExampleVM {
-                Name = title,
-                Cmd = code,
-                Description = description
-            });
-        }
-    }
-    void importRelinks(PSObject relink) {
-        var relinks = new List<PSObject>();
-        if (!(relink.Members["navigationLink"].Value is PSObject)) {
-            relinks = [..(PSObject[])relink.Members["navigationLink"].Value];
-        } else {
-            relinks.Add((PSObject)relink.Members["navigationLink"].Value);
-        }
-        foreach (PSObject link in relinks) {
-            String linkText = ((String)((PSObject)link.Members["linkText"].Value).BaseObject).Replace("-", String.Empty).Trim();
-            String uri = (String)((PSObject)link.Members["uri"].Value).BaseObject;
-            RelatedLinks.Add(new PsCommandRelatedLinkVM {
-                LinkText = linkText,
-                LinkUrl = uri
-            });
-        }
-    }
-    void getParameterSets(PSObject cmdlet) {
-        ParameterSets = [];
-        if (cmdlet.Members["ParameterSets"].Value != null) {
-            ParameterSets = [..(ReadOnlyCollection<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value];
-            foreach (CommandParameterSetInfo paramInfo in ParameterSets) {
-                var info = new CommandParameterSetInfo2 { Name = paramInfo.Name };
-                foreach (CommandParameterInfo param in paramInfo.Parameters) {
-                    info.Parameters.Add(param.Name);
-                }
-                ParamSets.Add(info);
-            }
-        }
-    }
-    void getParameters() {
-        if (ParameterSets.Count == 0) { return; }
-        foreach (CommandParameterSetInfo paramSet in ParameterSets) {
-            if (paramSet.Parameters.Count == 0) { return; }
-                foreach (CommandParameterInfo param in from param in paramSet.Parameters where !_excludedParams.Contains(param.Name.ToLower()) let para = new PsCommandParameterVM(param) where !Parameters.Contains(para) select param) {
-                    Parameters.Add(new PsCommandParameterVM(param));
-            }
-        }
-    }
-    void getOutputTypes(PSObject cmdlet) {
-        PSMemberInfo outputTypeMember = cmdlet.Members["OutputType"];
-        if (!(outputTypeMember?.Value is IEnumerable<PSTypeName> outputTypeNames)) {
-            return;
-        }
-        String joined = String.Join(";", outputTypeNames.Select(tn => tn.Name));
-        GeneralHelp.ReturnType = joined;
-    }
-    void getSyntax(PSObject cmdlet) {
-        Syntax = [];
-        foreach (CommandParameterSetInfo paramSet in ParameterSets) {
-            String syntaxItem = Convert.ToString(cmdlet.Members["name"].Value);
-            foreach (CommandParameterInfo item in paramSet.Parameters) {
-                if (_excludedParams.Contains(item.Name.ToLower())) { continue; }
-                Boolean named = item.Position < 0;
-                // fetch param type
-                String paramType = String.Empty;
-                CommandParameterInfo item1 = item;
-                foreach (PsCommandParameterVM param in Parameters.Where(param => item1.Name == param.Name)) {
-                    paramType = param.Type;
-                }
-                // fetch ValidateSet attribute
-                String validateSet = String.Empty;
-                foreach (Attribute attribute in item.Attributes) {
-                    Boolean found = false;
-                    validateSet = String.Empty;
-                    switch (attribute.TypeId.ToString()) {
-                        case "System.Management.Automation.ValidateSetAttribute":
-                            validateSet += " {";
-                            validateSet += String.Join(" | ", ((ValidateSetAttribute)attribute).ValidValues);
-                            validateSet += "} ";
-                            found = true;
-                            break;
-                    }
-                    if (found) { break; }
-                }
-                if (item.IsMandatory && named) {
-                    syntaxItem += " -" + item.Name + " <" + paramType + ">" + validateSet;
-                } else if (item.IsMandatory) {
-                    syntaxItem += " [-" + item.Name + "] <" + paramType + ">" + validateSet;
-                } else if (!named) {
-                    syntaxItem += " [[-" + item.Name + "] <" + paramType + ">" + validateSet + "]";
-                } else if (!String.IsNullOrEmpty(paramType) && paramType != "SwitchParameter") {
-                    syntaxItem += " [-" + item.Name + " <" + paramType + ">" + validateSet + "]";
-                } else {
-                    syntaxItem += " [-" + item.Name + validateSet + "]";
-                }
-            }
-            Syntax.Add(syntaxItem);
-        }
-    }
-
     public void UpdateParamSets() {
         if (ParameterSets == null) { return; }
         ParamSets.Clear();
@@ -490,6 +229,7 @@ public class CmdletObject : ViewModelBase {
         retValue.Publish = commandInfo.Publish;
         retValue.URL = commandInfo.URL;
         retValue.ArticleIDString = commandInfo.ArticleIDString;
+        retValue.SupportInformation = new SupportInfo();
         if (commandInfo.IsOrphaned) {
             retValue.GeneralHelp.Status = ItemStatus.Missing;
         }

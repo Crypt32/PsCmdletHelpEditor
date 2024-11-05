@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
@@ -94,7 +93,6 @@ public class PsCommandGeneralDescriptionVM : ViewModelBase {
             }
         }
     }
-    [XmlIgnore]
     public ItemStatus Status {
         get {
             if (status is ItemStatus.Missing or ItemStatus.New) {

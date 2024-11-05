@@ -22,62 +22,61 @@ class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
     public IAsyncCommand ConnectProviderCommand { get; set; }
     public ICommand FetchPostsCommand { get; set; }
 
-    public ObservableCollection<ProviderInformation> Providers { get; }
-        = new ObservableCollection<ProviderInformation>();
+    public ObservableCollection<ProviderInformation> Providers { get; } = [];
     public ObservableCollection<XmlRpcBlogInfo> WebSites { get; } = [];
 
     public Boolean UseSupports {
         get => useSupports;
         set {
             useSupports = value;
-            OnPropertyChanged(nameof(UseSupports));
+            OnPropertyChanged();
         }
     }
     public Boolean UseProvider {
         get => useProvider;
         set {
             useProvider = value;
-            OnPropertyChanged(nameof(UseProvider));
+            OnPropertyChanged();
         }
     }
     public Boolean ProvSelected {
         get => provSelected;
         set {
             provSelected = value;
-            OnPropertyChanged(nameof(ProvSelected));
+            OnPropertyChanged();
         }
     }
     public Boolean UrlEditable {
         get => urlEditable;
         set {
             urlEditable = value;
-            OnPropertyChanged(nameof(UrlEditable));
+            OnPropertyChanged();
         }
     }
     public Boolean UserEditable {
         get => userEditable;
         set {
             userEditable = value;
-            OnPropertyChanged(nameof(UserEditable));
+            OnPropertyChanged();
         }
     }
     public Boolean BlogsLoaded {
         get => blogsLoaded;
         set {
             blogsLoaded = value;
-            OnPropertyChanged(nameof(BlogsLoaded));
+            OnPropertyChanged();
         }
     }
     public Boolean BlogSelected {
         get => blogSelected;
         set {
             blogSelected = value;
-            OnPropertyChanged(nameof(BlogSelected));
+            OnPropertyChanged();
         }
     }
 
     Task connect(Object o, CancellationToken cancellationToken) {
-        if (!(o is IHasPassword pwd)) {
+        if (o is not IHasPassword pwd) {
             return Task.CompletedTask;
         }
         return Task.CompletedTask;

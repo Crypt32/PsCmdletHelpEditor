@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
@@ -19,21 +18,16 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         w2k22, w2k22s, w2k22d,
         w2k25, w2k25s, w2k25d;
 
-    [XmlAttribute("minPsVersion")]
     public Int32 PsVersionAsInt {
         get => (Int32)PsVersion;
         set => PsVersion = (PsVersionSupport)value;
     }
-    [XmlIgnore]
     public PsVersionSupport PsVersion { get; set; }
-    [XmlAttribute("winOsSupport")]
     public Int32 WinOsVersionAsInt {
         get => (Int32)WinOsVersion;
         set => WinOsVersion = (WinOsVersionSupport)value;
     }
-    [XmlIgnore]
     public WinOsVersionSupport WinOsVersion { get; set; }
-    [XmlAttribute(nameof(ad))]
     public Boolean RequiresAD {
         get => ad;
         set {
@@ -41,7 +35,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(rsat))]
     public Boolean RequiresRSAT {
         get => rsat;
         set {
@@ -49,7 +42,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps2))]
     public Boolean Ps2Checked {
         get => ps2;
         set {
@@ -60,7 +52,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps3))]
     public Boolean Ps3Checked {
         get => ps3;
         set {
@@ -71,7 +62,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps4))]
     public Boolean Ps4Checked {
         get => ps4;
         set {
@@ -82,7 +72,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps5))]
     public Boolean Ps5Checked {
         get => ps5;
         set {
@@ -93,7 +82,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps51))]
     public Boolean Ps51Checked {
         get => ps51;
         set {
@@ -104,7 +92,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps60))]
     public Boolean Ps60Checked {
         get => ps60;
         set {
@@ -115,7 +102,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(ps61))]
     public Boolean Ps61Checked {
         get => ps61;
         set {
@@ -126,7 +112,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(wxp))]
     public Boolean WinXpChecked {
         get => wxp;
         set {
@@ -139,7 +124,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(wv))]
     public Boolean WinVistaChecked {
         get => wv;
         set {
@@ -152,7 +136,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w7))]
     public Boolean Win7Checked {
         get => w7;
         set {
@@ -165,7 +148,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w8))]
     public Boolean Win8Checked {
         get => w8;
         set {
@@ -178,7 +160,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w81))]
     public Boolean Win81Checked {
         get => w81;
         set {
@@ -191,7 +172,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w10))]
     public Boolean Win10Checked {
         get => w10;
         set {
@@ -204,7 +184,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w11))]
     public Boolean Win11Checked {
         get => w11;
         set {
@@ -217,7 +196,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2003Checked {
         get => w2k3;
         set {
@@ -246,7 +224,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k3s))]
     public Boolean Win2003StdChecked {
         get => w2k3s;
         set {
@@ -265,7 +242,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k3e))]
     public Boolean Win2003EEChecked {
         get => w2k3e;
         set {
@@ -284,7 +260,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k3d))]
     public Boolean Win2003DCChecked {
         get => w2k3d;
         set {
@@ -303,7 +278,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2008Checked {
         get => w2k8;
         set {
@@ -332,7 +306,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k8s))]
     public Boolean Win2008StdChecked {
         get => w2k8s;
         set {
@@ -351,7 +324,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k8e))]
     public Boolean Win2008EEChecked {
         get => w2k8e;
         set {
@@ -370,7 +342,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k8d))]
     public Boolean Win2008DCChecked {
         get => w2k8d;
         set {
@@ -389,7 +360,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2008R2Checked {
         get => w2k8r2;
         set {
@@ -418,7 +388,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k8r2s))]
     public Boolean Win2008R2StdChecked {
         get => w2k8r2s;
         set {
@@ -437,7 +406,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k8r2e))]
     public Boolean Win2008R2EEChecked {
         get => w2k8r2e;
         set {
@@ -456,7 +424,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k8r2d))]
     public Boolean Win2008R2DCChecked {
         get => w2k8r2d;
         set {
@@ -475,7 +442,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2012Checked {
         get => w2k12;
         set {
@@ -502,7 +468,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k12s))]
     public Boolean Win2012StdChecked {
         get => w2k12s;
         set {
@@ -521,7 +486,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k12d))]
     public Boolean Win2012DCChecked {
         get => w2k12d;
         set {
@@ -540,7 +504,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2012R2Checked {
         get => w2k12r2;
         set {
@@ -567,7 +530,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k12r2s))]
     public Boolean Win2012R2StdChecked {
         get => w2k12r2s;
         set {
@@ -586,7 +548,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k12r2d))]
     public Boolean Win2012R2DCChecked {
         get => w2k12r2d;
         set {
@@ -605,7 +566,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2016Checked {
         get => w2k16;
         set {
@@ -632,7 +592,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k16s))]
     public Boolean Win2016StdChecked {
         get => w2k16s;
         set {
@@ -651,7 +610,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k16d))]
     public Boolean Win2016DCChecked {
         get => w2k16d;
         set {
@@ -670,7 +628,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean Win2019Checked {
         get => w2k19;
         set {
@@ -697,7 +654,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k19s))]
     public Boolean Win2019StdChecked {
         get => w2k19s;
         set {
@@ -716,7 +672,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k19d))]
     public Boolean Win2019DCChecked {
         get => w2k19d;
         set {
@@ -736,7 +691,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         }
     }
 
-    [XmlIgnore]
     public Boolean Win2022Checked {
         get => w2k22;
         set {
@@ -763,7 +717,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k22s))]
     public Boolean Win2022StdChecked {
         get => w2k22s;
         set {
@@ -782,7 +735,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k22d))]
     public Boolean Win2022DCChecked {
         get => w2k22d;
         set {
@@ -802,7 +754,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         }
     }
 
-    [XmlIgnore]
     public Boolean Win2025Checked {
         get => w2k25;
         set {
@@ -829,7 +780,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
-    [XmlAttribute(nameof(w2k25s))]
     public Boolean Win2025StdChecked {
         get => w2k25s;
         set {
@@ -848,7 +798,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-    [XmlAttribute(nameof(w2k25d))]
     public Boolean Win2025DCChecked {
         get => w2k25d;
         set {

@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.Utility;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Services.MAML;
+using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 using Unity;
 
 namespace CmdletHelpEditor.API.Models;
 
-[XmlInclude(typeof(CmdletObject))]
-public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
+public class ModuleObject : ViewModelBase, IModuleInfo {
     Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
     String projectPath, extraHeader, extraFooter;
     Int32? fetchPostCount;
@@ -28,10 +27,6 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     ProviderInformation provider;
     CmdletObject selectedCmdlet;
     ObservableCollection<CmdletObject> cmdlets = [];
-
-    public ModuleObject() {
-        
-    }
 
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
         switch (e.Action) {
@@ -55,7 +50,6 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         OnPropertyChanged("blah", true);
     }
 
-    [XmlAttribute("fVersion")]
     public Double FormatVersion {
         get => formatVersion;
         set {
@@ -64,14 +58,11 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
         }
     }
     public String Name { get; set; }
-    [XmlAttribute("type")]
     public ModuleType ModuleType { get; set; }
     public String Version { get; set; }
     public String Description { get; set; }
-    [XmlAttribute("mclass")]
     public String ModuleClass { get; set; }
     public String ModulePath { get; set; }
-    [XmlAttribute(nameof(useSupports))]
     public Boolean UseSupports {
         get => useSupports;
         set {
@@ -79,9 +70,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             OnPropertyChanged(nameof(UseSupports), true);
         }
     }
-    [XmlIgnore]
     public Boolean ImportedFromHelp { get; set; }
-    [XmlIgnore]
     public String ProjectPath {
         get => projectPath;
         set {
@@ -89,7 +78,6 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public Boolean IsOffline {
         get => isOffline;
         set {
@@ -101,12 +89,9 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             OnPropertyChanged(nameof(UpgradeRequired));
         }
     }
-    [XmlIgnore]
     public String ModuleStatus { get; set; }
-    [XmlIgnore]
     public Boolean UpgradeRequired => FormatVersion < Utils.CurrentFormatVersion && IsOffline;
     // external information
-    [XmlIgnore]
     public Boolean UseOnlineProvider {
         get => useOnlineProvider;
         set {
@@ -205,17 +190,9 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             return;
         }
         pb.Start();
-        var settings = new XmlWriterSettings {
-            Indent = false,
-            Async = true,
-            NewLineHandling = NewLineHandling.None,
-            ConformanceLevel = ConformanceLevel.Document
-        };
         try {
             var mamlService = App.Container.Resolve<IMamlService>();
-            using var writer = XmlWriter.Create(path, settings);
-            await writer.WriteStartDocumentAsync();
-            await writer.WriteRawAsync(await mamlService.ExportMamlHelp(ToXmlObject().GetCmdlets().ToList(), pb));
+            File.WriteAllText(path, await mamlService.ExportMamlHelp(ToXmlObject().GetCmdlets().ToList(), pb));
         } finally {
             pb.End();
         }
@@ -305,15 +282,10 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     #endregion
 
     void OnPropertyChanged([CallerMemberName] String propertyName = null, Boolean markUnsaved = false) {
-        PropertyChangedEventHandler handler = PropertyChanged;
-        if (handler != null) {
-            if (markUnsaved) {
-                SavePendingEventHandler handler2 = PendingSave;
-                handler2?.Invoke(this, new SavePendingEventArgs());
-            }
-            handler(this, new PropertyChangedEventArgs(propertyName));
+        base.OnPropertyChanged(propertyName);
+        if (markUnsaved) {
+            PendingSave?.Invoke(this, new SavePendingEventArgs());
         }
     }
-    public event PropertyChangedEventHandler PropertyChanged;
     public event SavePendingEventHandler PendingSave;
 }

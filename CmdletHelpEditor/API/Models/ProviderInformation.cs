@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security;
-using System.Xml.Serialization;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Utils;
@@ -56,7 +55,6 @@ public class ProviderInformation : ViewModelBase, IXmlRpcProviderInformation {
             OnPropertyChanged();
         }
     }
-    [XmlIgnore]
     public SecureString SecurePassword { get; set; }
     public Int32 FetchPostCount {
         get => postCount;
