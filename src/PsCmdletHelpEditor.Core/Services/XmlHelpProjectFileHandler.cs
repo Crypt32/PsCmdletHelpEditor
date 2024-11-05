@@ -20,7 +20,6 @@ public class XmlHelpProjectFileHandler : IPsHelpProjectFileHandler {
             ? new XmlSerializer(typeof(XmlPsModuleProject))
             : new XmlSerializer(typeof(XmlPsModuleProject), overrides);
         var module = (XmlPsModuleProject)serializer.Deserialize(fs);
-        module.ProjectPath = path;
         module.FormatVersion = version;
 
         return module;
@@ -30,7 +29,6 @@ public class XmlHelpProjectFileHandler : IPsHelpProjectFileHandler {
         // TODO: for now, argument must be XML object, although parameter accepts interface.
         var xmlObject = (XmlPsModuleProject)project;
         using var fs = new FileStream(path, FileMode.Create);
-        project.ProjectPath = path;
 
         // backup project schema version into local variable
         Double oldVersion = project.FormatVersion;
@@ -39,7 +37,6 @@ public class XmlHelpProjectFileHandler : IPsHelpProjectFileHandler {
         var serializer = new XmlSerializer(typeof(XmlPsModuleProject));
         try {
             serializer.Serialize(fs, project);
-            project.ProjectPath = path;
         } catch {
             // restore schema version if project save failed.
             xmlObject.FormatVersion = oldVersion;

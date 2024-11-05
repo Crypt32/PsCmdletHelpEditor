@@ -32,7 +32,7 @@ public class PsModuleInfo : IModuleInfo {
     /// </summary>
     public Boolean HasManifest { get; internal set; }
     /// <summary>
-    /// Gets optional module file location.
+    /// Gets optional module manifest location.
     /// </summary>
     public String? ModulePath { get; set; }
     /// <summary>

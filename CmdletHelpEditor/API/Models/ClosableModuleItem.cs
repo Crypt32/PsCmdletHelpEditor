@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.API.ViewModels;
 using SysadminsLV.WPF.OfficeTheme.Controls;
@@ -35,10 +34,10 @@ public class ClosableModuleItem : ClosableTabItem, INotifyPropertyChanged {
             OnPropertyChanged(nameof(Module));
             if (value != null) {
                 module.PendingSave += moduleOnPendingSave;
-                if (!String.IsNullOrEmpty(value.ProjectPath)) {
-                    var fi = new FileInfo(value.ProjectPath);
-                    Header = fi.Name;
-                }
+                //if (!String.IsNullOrEmpty(value.ProjectPath)) {
+                //    var fi = new FileInfo(value.ProjectPath);
+                //    Header = fi.Name;
+                //}
             }
         }
     }

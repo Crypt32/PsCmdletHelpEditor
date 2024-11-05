@@ -21,7 +21,7 @@ namespace CmdletHelpEditor.API.Models;
 
 public class ModuleObject : ViewModelBase, IModuleInfo {
     Boolean useSupports, overridePostCount, useOnlineProvider, isOffline;
-    String projectPath, extraHeader, extraFooter;
+    String extraHeader, extraFooter;
     Int32? fetchPostCount;
     Double formatVersion;
     ProviderInformation provider;
@@ -71,13 +71,6 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
         }
     }
     public Boolean ImportedFromHelp { get; set; }
-    public String ProjectPath {
-        get => projectPath;
-        set {
-            projectPath = value;
-            OnPropertyChanged();
-        }
-    }
     public Boolean IsOffline {
         get => isOffline;
         set {
@@ -243,7 +236,6 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             ModulePath = project.ModulePath,
             UseSupports = project.UseSupports,
             HasManifest = project.HasManifest,
-            ProjectPath = project.ProjectPath,
             Provider = ProviderInformation.FromProviderInfo(project.GetXmlRpcProviderInfo()),
             OverridePostCount = project.OverridePostCount,
             FetchPostCount = project.FetchPostCount,

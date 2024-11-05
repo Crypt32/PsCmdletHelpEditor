@@ -310,8 +310,8 @@ public class AppCommands {
         HelpProjectDocument helpProject = (HelpProjectDocument)_mwvm.SelectedDocument!;
         // save
         if (obj is null) {
-            if (!String.IsNullOrEmpty(helpProject.Module!.ProjectPath)) {
-                path = helpProject.Module.ProjectPath;
+            if (!String.IsNullOrEmpty(helpProject.Path)) {
+                path = helpProject.Path;
             } else {
                 if (!getSaveFileName(helpProject.Module.Name, out path)) { return; }
             }
