@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using CmdletHelpEditor.Abstract;
-using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
 using PsCmdletHelpEditor.Core.Services;
@@ -33,7 +32,6 @@ public partial class App {
     void configureServices() {
         Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
         Container.RegisterSingleton<IDataSource, DataSource>();
-        Container.RegisterSingleton<IPsProcessorLegacy, PowerShellProcessorLegacy>();
         Container.RegisterSingleton<IPowerShellProcessor, PowerShellProcessor>();
         Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
         Container.RegisterSingleton<IMsgBox, MsgBoxClass>();

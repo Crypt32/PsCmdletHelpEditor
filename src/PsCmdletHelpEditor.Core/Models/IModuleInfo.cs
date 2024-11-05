@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models;
 
@@ -7,13 +8,35 @@ namespace PsCmdletHelpEditor.Core.Models;
 /// </summary>
 public interface IModuleInfo {
     /// <summary>
+    /// Gets or sets module name.
+    /// </summary>
+    String Name { get; }
+    /// <summary>
+    /// Gets or sets module type.
+    /// </summary>
+    ModuleType ModuleType { get; }
+    /// <summary>
+    /// Gets or sets module class.
+    /// </summary>
+    String ModuleClass { get; }
+    /// <summary>
+    /// Gets or sets module version.
+    /// </summary>
+    String Version { get; }
+    /// <summary>
+    /// Gets module description.
+    /// </summary>
+    String? Description { get; }
+    /// <summary>
+    /// Indicates if module has manifest file (.psm1 and/or .psd1)
+    /// </summary>
+    Boolean HasManifest { get; }
+    /// <summary>
+    /// Gets optional module file location.
+    /// </summary>
+    String? ModulePath { get; set; }
+    /// <summary>
     /// Gets or sets value if module is offline (not installed).
     /// </summary>
     Boolean IsOffline { get; set; }
-    /// <summary>
-    /// Returns PowerShell module/snap-in command retrieval invocation string.
-    /// </summary>
-    /// <param name="commandTypes">A comma-separated string with applicable PowerShell command types, such as cmdlets, functions, etc.</param>
-    /// <returns>PowerShell invocation string.</returns>
-    String GetInvocationString(String commandTypes);
 }

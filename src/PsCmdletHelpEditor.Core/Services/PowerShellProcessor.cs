@@ -98,10 +98,11 @@ public class PowerShellProcessor : IPowerShellProcessor {
         };
     }
     
-    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
+    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
         return Task.Factory.StartNew(() => EnumCommands(moduleInfo, commandTypes, includeCBH));
     }
-    public IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
+    public IEnumerable<IPsCommandInfo> EnumCommands(IModuleInfo moduleInfo, IEnumerable<String> commandTypes,
+        Boolean includeCBH = false) {
         moduleInfo.IsOffline = false;
         using PowerShell ps = PowerShell.Create();
         ps.AddScript(moduleInfo.GetInvocationString(commandTypes));
@@ -115,10 +116,10 @@ public class PowerShellProcessor : IPowerShellProcessor {
         }
     }
 
-    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
-        return Task.Factory.StartNew(() => EnumCommands(moduleInfo, commandTypes, mamlHelpPath));
+    public Task<IEnumerable<IPsCommandInfo>> EnumCommandsFromMamlAsync(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
+        return Task.Factory.StartNew(() => EnumCommandsFromMaml(moduleInfo, commandTypes, mamlHelpPath));
     }
-    public IEnumerable<IPsCommandInfo> EnumCommands(PsModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
+    public IEnumerable<IPsCommandInfo> EnumCommandsFromMaml(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
         moduleInfo.IsOffline = false;
         using PowerShell ps = PowerShell.Create();
         ps.AddScript(moduleInfo.GetInvocationString(commandTypes));

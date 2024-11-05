@@ -24,7 +24,6 @@ namespace CmdletHelpEditor.API.ViewModels;
 
 public class AppCommands {
     readonly MainWindowVM _mwvm;
-    readonly IPsProcessorLegacy _psProcessorLegacy;
     readonly IPowerShellProcessor _psProcessor;
     readonly IPsHelpProjectFileHandler _fileService;
     readonly IProgressBar _progressBar;
@@ -32,7 +31,6 @@ public class AppCommands {
     Boolean alreadyRaised;
 
     public AppCommands(MainWindowVM parent) {
-        _psProcessorLegacy = App.Container.Resolve<IPsProcessorLegacy>();
         _psProcessor = App.Container.Resolve<IPowerShellProcessor>();
         _fileService = App.Container.Resolve<IPsHelpProjectFileHandler>();
         _progressBar = App.Container.Resolve<IProgressBar>();
@@ -90,8 +88,8 @@ public class AppCommands {
     }
     async Task loadCommandsForProject(HelpProjectDocument tab) {
         tab.StartSpinner();
-        String cmd = Utils.GetCommandTypesString();
-        if (String.IsNullOrEmpty(cmd)) {
+        IReadOnlyList<String> cmd = Utils.GetCommandTypes();
+        if (cmd.Count == 0) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
@@ -100,11 +98,11 @@ public class AppCommands {
         }
         tab.ErrorInfo = null;
         tab.EditorContext.CurrentCmdlet = null;
-        var nativeCmdlets = new List<CmdletObject>();
         try {
-            IEnumerable<CmdletObject> data = await _psProcessorLegacy.EnumCmdletsAsync(tab.Module, cmd, false);
-            nativeCmdlets.AddRange(data);
-            tab.Module.CompareCmdlets(nativeCmdlets);
+            List<CmdletObject> data = (await _psProcessor.EnumCommandsAsync(tab.Module, cmd, false))
+                .Select(CmdletObject.FromCommandInfo)
+                .ToList();
+            tab.Module.CompareCmdlets(data);
         } catch (Exception e) {
             String message = $"""
                               {e.Message}
@@ -210,7 +208,7 @@ public class AppCommands {
     void closeApp(CancelEventArgs? e) {
         if (e == null) {
             Boolean canClose = _mwvm.Documents
-                .Where(tab => tab is HelpProjectDocument && !tab.IsSaved)
+                .Where(tab => tab.SupportsSave && tab.IsModified)
                 .Cast<HelpProjectDocument>()
                 .All(testSaved);
             if (canClose) {
@@ -220,7 +218,7 @@ public class AppCommands {
         } else {
             if (!alreadyRaised) {
                 e.Cancel = !_mwvm.Documents
-                    .Where(tab => tab is HelpProjectDocument && !tab.IsSaved)
+                    .Where(tab => tab.SupportsSave && tab.IsModified)
                     .Cast<HelpProjectDocument>()
                     .All(testSaved);
             }
@@ -274,18 +272,34 @@ public class AppCommands {
             case MessageBoxResult.No:
                 return true;
             case MessageBoxResult.Yes:
-                return writeFile(tab);
+                return writeFile(tab as HelpProjectDocument);
             default:
                 return false;
         }
     }
-    // TODO: implement this
-    Boolean writeFile(TabDocumentVM tab) {
+
+    Boolean writeFile(HelpProjectDocument? helpProject) {
+        if (helpProject is null) {
+            return true;
+        }
+        try {
+            String? path = helpProject.Path;
+            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module.Name, out path)) {
+                return true;
+            }
+            _fileService.SaveProjectFile(helpProject.Module!.ToXmlObject(), path);
+            helpProject.IsModified = false;
+            helpProject.Path = path;
+        } catch (Exception ex) {
+            Console.WriteLine(ex);
+            throw;
+        }
+
         return true;
     }
     void saveProjectFile(Object? obj) {
         String path;
-         HelpProjectDocument helpProject = (HelpProjectDocument)_mwvm.SelectedDocument!;
+        HelpProjectDocument helpProject = (HelpProjectDocument)_mwvm.SelectedDocument!;
         // save
         if (obj is null) {
             if (!String.IsNullOrEmpty(helpProject.Module!.ProjectPath)) {
@@ -299,8 +313,7 @@ public class AppCommands {
         }
         helpProject.Module.ProjectPath = new FileInfo(path).Name;
         try {
-            FileProcessor.SaveProjectFile(helpProject.Module, path);
-            helpProject.IsSaved = true;
+            writeFile(helpProject);
         } catch (Exception e) {
             _msgBox.ShowError("Save error", e.Message);
             helpProject.ErrorInfo = e.Message;
@@ -368,11 +381,6 @@ public class AppCommands {
         }
         selectedDocument.StopSpinner();
     }
-    Boolean canLoadModuleList(Object? obj) {
-        return false;
-        //return ((Grid)_mwvm.SelectedTab?.Content)?.Children[0] is ModuleSelectorControl;
-    }
-
 
     // predicate
     Boolean canSave(Object? obj) {
@@ -401,7 +409,8 @@ public class AppCommands {
                 return true;
             case MessageBoxResult.No:
                 return true;
-            case MessageBoxResult.Cancel: return false;
+            case MessageBoxResult.Cancel:
+                return false;
         }
 
         return true;
@@ -426,7 +435,7 @@ public class AppCommands {
             IEnumerable<IPsCommandInfo> data;
             if (!importFromCBH && helpPath is not null) {
                 module.ImportedFromHelp = true;
-                data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, helpPath);
+                data = await _psProcessor.EnumCommandsFromMamlAsync(moduleInfo, cmd, helpPath);
             } else {
                 data = await _psProcessor.EnumCommandsAsync(moduleInfo, cmd, importFromCBH);
             }

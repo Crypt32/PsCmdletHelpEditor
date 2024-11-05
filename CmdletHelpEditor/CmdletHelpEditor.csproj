@@ -164,7 +164,6 @@
     <Compile Include="Abstract\IAsyncVM.cs" />
     <Compile Include="Abstract\IMsgBox.cs" />
     <Compile Include="Abstract\IProgressBar.cs" />
-    <Compile Include="Abstract\IPsProcessorLegacy.cs" />
     <Compile Include="Abstract\IScrollToView.cs" />
     <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
     <Compile Include="API\Models\OnlinePublishEntry.cs" />
@@ -215,7 +214,6 @@
     <Compile Include="API\Models\PsCommandRelatedLinkVM.cs" />
     <Compile Include="API\Models\SupportInfo.cs" />
     <Compile Include="API\Converters\NullToBooleanConverter.cs" />
-    <Compile Include="API\Tools\PowerShellProcessorLegacy.cs" />
     <Compile Include="API\Tools\Utils.cs" />
     <Compile Include="API\Tools\XmlProcessor.cs" />
     <Compile Include="API\ViewModels\ParamVM.cs" />

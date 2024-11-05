@@ -25,6 +25,10 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
     CmdletObject selectedCmdlet;
     ObservableCollection<CmdletObject> cmdlets = [];
 
+    public ModuleObject() {
+        
+    }
+
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
         switch (e.Action) {
             case NotifyCollectionChangedAction.Add:
@@ -192,7 +196,7 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             Cmdlets.Add(cmdlet);
         }
     }
-    public String GetInvocationString(String commandTypes) {
+    public String GetInvocationString(IEnumerable<String> commandTypes) {
         Object[] args = new Object[5];
         args[1] = Name;
         args[4] = commandTypes;

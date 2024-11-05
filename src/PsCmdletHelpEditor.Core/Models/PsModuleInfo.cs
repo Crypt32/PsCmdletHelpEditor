@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace PsCmdletHelpEditor.Core.Models;
@@ -7,19 +6,7 @@ namespace PsCmdletHelpEditor.Core.Models;
 /// <summary>
 /// Represents PowerShell module or snap-in metadata information.
 /// </summary>
-public class PsModuleInfo {
-    const String INVOCATION_STRING_TEMPLATE = """
-                                              $Error.Clear()
-                                              {0} -Name "{2}"{3} -ErrorAction Stop
-                                              if ((Get-Module -Name {1}) -eq $null) {{
-                                                  throw New-Object Exception $Error[0].Exception.Message
-                                              }}
-                                              Get-Command -Module {1} -CommandType {4} | %{{
-                                                  $_ | Add-Member -Name syn -MemberType noteproperty -Value (get-help $_) -PassThru
-                                              }}
-
-                                              """;
-
+public class PsModuleInfo : IModuleInfo {
     /// <summary>
     /// Gets or sets module name.
     /// </summary>
@@ -52,27 +39,5 @@ public class PsModuleInfo {
     /// Gets value if PowerShell module is offline. If set to <c>true</c>, then module help content
     /// is available, however there is no such module installed on a system.
     /// </summary>
-    public Boolean IsOffline { get; internal set; }
-
-    public String GetInvocationString(IEnumerable<String> commandTypes) {
-        String commandTypesString = String.Join(",", commandTypes);
-        Object?[] args = new Object[5];
-        args[1] = Name;
-        args[4] = commandTypesString;
-        if (ModuleClass is "Module" or "External") {
-            args[0] = "Import-Module";
-            args[2] = String.IsNullOrEmpty(ModulePath)
-                ? Name
-                : ModulePath;
-            args[3] = ModuleClass == "External" || !HasManifest
-                ? null
-                : " -RequiredVersion " + Version;
-            return String.Format(INVOCATION_STRING_TEMPLATE, args);
-        }
-
-        args[0] = "Add-PSSnapin";
-        args[2] = args[3] = null;
-
-        return String.Format(INVOCATION_STRING_TEMPLATE, args);
-    }
+    public Boolean IsOffline { get; set; }
 }

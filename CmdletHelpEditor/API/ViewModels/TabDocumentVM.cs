@@ -64,13 +64,6 @@ public abstract class TabDocumentVM : AsyncViewModel {
             OnPropertyChanged(nameof(Header));
         }
     }
-    public Boolean IsSaved {
-        get => isSaved;
-        set {
-            isSaved = value;
-            OnPropertyChanged();
-        }
-    }
     public String? ErrorInfo {
         get => errorInfo;
         set {
@@ -79,7 +72,7 @@ public abstract class TabDocumentVM : AsyncViewModel {
         }
     }
 
-    protected Boolean SupportsSave { get; set; }
+    public Boolean SupportsSave { get; set; }
 
 
     protected virtual void SaveTab(Object o) { }
@@ -114,6 +107,10 @@ public sealed class ModuleListDocument : TabDocumentVM {
 }
 public sealed class HelpProjectDocument : TabDocumentVM {
     ModuleObject? module;
+
+    public HelpProjectDocument() {
+        SupportsSave = true;
+    }
 
     public EditorVM EditorContext { get; private set; }
 

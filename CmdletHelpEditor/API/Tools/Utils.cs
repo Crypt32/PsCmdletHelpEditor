@@ -23,9 +23,6 @@ static class Utils {
             }
         };
     }
-    public static String GetCommandTypesString() {
-        return String.Join(",", GetCommandTypes());
-    }
     public static IReadOnlyList<String> GetCommandTypes() {
         var psProcessor = App.Container.Resolve<IPowerShellProcessor>();
         List<String> commandTypes = [];
