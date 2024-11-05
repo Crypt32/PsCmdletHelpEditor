@@ -6,12 +6,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Tools;
 using CmdletHelpEditor.API.Utility;
-using CmdletHelpEditor.Properties;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
+using PsCmdletHelpEditor.Core.Services.MAML;
+using Unity;
 
 namespace CmdletHelpEditor.API.Models;
 
@@ -196,23 +200,25 @@ public class ModuleObject : INotifyPropertyChanged, IModuleInfo {
             Cmdlets.Add(cmdlet);
         }
     }
-    public String GetInvocationString(IEnumerable<String> commandTypes) {
-        Object[] args = new Object[5];
-        args[1] = Name;
-        args[4] = commandTypes;
-        if (ModuleClass is "Module" or "External") {
-            args[0] = "Import-Module";
-            args[2] = String.IsNullOrEmpty(ModulePath)
-                ? Name
-                : ModulePath;
-            args[3] = ModuleClass == "External" || !HasManifest
-                ? null
-                : " -RequiredVersion " + Version;
-            return String.Format(Resources.ipmoTemplate, args);
+    public async Task PublishHelpFile(String path, IProgressBar pb) {
+        if (Cmdlets.Count == 0) {
+            return;
         }
-        args[0] = "Add-PSSnapin";
-        args[2] = args[3] = null;
-        return String.Format(Resources.ipmoTemplate, args);
+        pb.Start();
+        var settings = new XmlWriterSettings {
+            Indent = false,
+            Async = true,
+            NewLineHandling = NewLineHandling.None,
+            ConformanceLevel = ConformanceLevel.Document
+        };
+        try {
+            var mamlService = App.Container.Resolve<IMamlService>();
+            using var writer = XmlWriter.Create(path, settings);
+            await writer.WriteStartDocumentAsync();
+            await writer.WriteRawAsync(await mamlService.ExportMamlHelp(ToXmlObject().GetCmdlets().ToList(), pb));
+        } finally {
+            pb.End();
+        }
     }
 
     public XmlPsModuleProject ToXmlObject() {

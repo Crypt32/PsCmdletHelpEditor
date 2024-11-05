@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -278,13 +277,22 @@ public class AppCommands {
         }
     }
 
+    void writeFile(HelpProjectDocument? helpProject, String path) {
+        if (helpProject is null || String.IsNullOrEmpty(path)) {
+            return;
+        }
+
+        _fileService.SaveProjectFile(helpProject.Module!.ToXmlObject(), path);
+        helpProject.Path = path;
+        helpProject.IsModified = false;
+    }
     Boolean writeFile(HelpProjectDocument? helpProject) {
         if (helpProject is null) {
             return true;
         }
         try {
             String? path = helpProject.Path;
-            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module.Name, out path)) {
+            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module!.Name, out path)) {
                 return true;
             }
             _fileService.SaveProjectFile(helpProject.Module!.ToXmlObject(), path);
@@ -311,9 +319,8 @@ public class AppCommands {
             // save as
             if (!getSaveFileName(helpProject.Module!.Name, out path)) { return; }
         }
-        helpProject.Module.ProjectPath = new FileInfo(path).Name;
         try {
-            writeFile(helpProject);
+            writeFile(helpProject, path);
         } catch (Exception e) {
             _msgBox.ShowError("Save error", e.Message);
             helpProject.ErrorInfo = e.Message;
@@ -344,8 +351,8 @@ public class AppCommands {
     #endregion
 
     async Task publishHelpFile(Object o, CancellationToken token) {
-        ModuleObject module = ((ClosableModuleItem)o).Module;
-        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(((HelpProjectDocument)_mwvm.SelectedDocument)!.Module!.Name);
+        ModuleObject module = ((HelpProjectDocument)o).Module;
+        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module!.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             try {
@@ -385,12 +392,11 @@ public class AppCommands {
     // predicate
     Boolean canSave(Object? obj) {
         return _mwvm.SelectedDocument is HelpProjectDocument;
-        //return _mwvm.SelectedTab is { Module.UpgradeRequired: false };
     }
 
     
     static Boolean canPublish(Object? obj) {
-        return ((ClosableModuleItem)obj)?.Module != null && ((ClosableModuleItem)obj).Module.Cmdlets.Count > 0;
+        return obj is HelpProjectDocument { Module: not null } helpProject && helpProject.Module.Cmdlets.Count > 0;
     }
     Boolean canPublishOnline(Object obj) {
         return _mwvm.SelectedDocument is HelpProjectDocument { Module.Provider: not null };

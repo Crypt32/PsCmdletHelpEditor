@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.Properties;
 using CmdletHelpEditor.Views.Dialogs;
 using CmdletHelpEditor.Views.UserControls.Parts;
@@ -55,6 +54,6 @@ public static class UIManager {
     }
 
     static Boolean CanShowModuleProperties(Object obj) {
-        return (obj as ClosableModuleItem)?.Module != null;
+        return (obj as HelpProjectDocument)?.Module is not null;
     }
 }

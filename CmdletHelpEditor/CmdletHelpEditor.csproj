@@ -175,9 +175,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>XmlMamlTemplate.resx</DependentUpon>
     </Compile>
-    <Compile Include="API\Tools\MarkDownProcessor.cs" />
-    <Compile Include="API\Tools\OutputProcessor.cs" />
-    <Compile Include="API\Tools\XmlFormatConverter.cs" />
     <Compile Include="API\Utility\NativeDialogFactory.cs" />
     <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Utility\SavePendingEventArgs.cs" />
@@ -185,9 +182,7 @@
     <Compile Include="API\ViewModels\AppCommands.cs" />
     <Compile Include="API\Models\ProviderInformation.cs" />
     <Compile Include="API\Converters\MultiParamConverter.cs" />
-    <Compile Include="API\Tools\ParserType.cs" />
     <Compile Include="API\Tools\Strings.cs" />
-    <Compile Include="API\Tools\FileProcessor.cs" />
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
     <Compile Include="API\ViewModels\AsyncViewModel.cs" />
     <Compile Include="API\ViewModels\ClosableWindowVM.cs" />
@@ -215,7 +210,6 @@
     <Compile Include="API\Models\SupportInfo.cs" />
     <Compile Include="API\Converters\NullToBooleanConverter.cs" />
     <Compile Include="API\Tools\Utils.cs" />
-    <Compile Include="API\Tools\XmlProcessor.cs" />
     <Compile Include="API\ViewModels\ParamVM.cs" />
     <Compile Include="API\ViewModels\ExampleVM.cs" />
     <Compile Include="API\ViewModels\RelatedLinkVM.cs" />

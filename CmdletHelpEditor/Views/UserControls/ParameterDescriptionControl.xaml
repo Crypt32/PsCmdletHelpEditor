@@ -5,9 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
+             xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance models:ClosableModuleItem}"
+             d:DataContext="{d:DesignInstance vm:HelpProjectDocument}"
              d:DesignWidth="740">
     <UserControl.Resources>
         <converters:NullToBooleanConverter x:Key="NullToBooleanConverter"/>

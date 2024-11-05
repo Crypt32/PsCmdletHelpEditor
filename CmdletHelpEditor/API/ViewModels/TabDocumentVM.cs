@@ -17,7 +17,7 @@ public abstract class TabDocumentVM : AsyncViewModel {
     const String UNTITLED = "untitled";
 
     String? errorInfo, path, fileName;
-    Boolean isModified, suppressModified, isSaved;
+    Boolean isModified, suppressModified;
 
     protected TabDocumentVM() {
         SaveTabCommand = new RelayCommand(SaveTab, CanSaveTab);
