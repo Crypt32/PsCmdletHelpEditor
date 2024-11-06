@@ -48,6 +48,9 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
     }
 
     void OnPropertyChanged(Object Sender, PropertyChangedEventArgs ChangedEventArgs) {
+        if (ChangedEventArgs.PropertyName == "Status") {
+            return;
+        }
         OnPropertyChanged("blah", true);
     }
 
@@ -195,6 +198,22 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             File.WriteAllText(path, await mamlService.ExportMamlHelp(ToXmlObject().GetCmdlets().ToList(), pb));
         } finally {
             pb.End();
+        }
+    }
+    /// <summary>
+    /// Removes missing commands and missing command parameters.
+    /// </summary>
+    public void RemoveInvalid() {
+        IEnumerable<CmdletObject> invalidCommands = cmdlets.Where(x => x.GeneralHelp.Status == ItemStatus.Missing);
+        foreach (CmdletObject invalidCommand in invalidCommands) {
+            cmdlets.Remove(invalidCommand);
+        }
+
+        foreach (CmdletObject validCommand in cmdlets) {
+            IEnumerable<PsCommandParameterVM> invalidParams = validCommand.Parameters.Where(x => x.Status == ItemStatus.Missing);
+            foreach (PsCommandParameterVM param in invalidParams) {
+                validCommand.Parameters.Remove(param);
+            }
         }
     }
 

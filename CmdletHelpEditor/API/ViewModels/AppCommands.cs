@@ -282,6 +282,7 @@ public class AppCommands {
         }
 
         _fileService.SaveProjectFile(helpProject.Module.ToXmlObject(), path);
+        helpProject.Module.RemoveInvalid();
         helpProject.Path = path;
         helpProject.IsModified = false;
     }
@@ -294,9 +295,7 @@ public class AppCommands {
             if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module.Name, out path)) {
                 return true;
             }
-            _fileService.SaveProjectFile(helpProject.Module.ToXmlObject(), path);
-            helpProject.IsModified = false;
-            helpProject.Path = path;
+            writeFile(helpProject, path);
         } catch (Exception ex) {
             Console.WriteLine(ex);
             throw;
