@@ -111,6 +111,7 @@ public sealed class HelpProjectDocument : TabDocumentVM {
         Module = moduleObject;
         EditorContext = new EditorVM(moduleObject);
         SupportsSave = true;
+        module!.PendingSave += onModuleChanged;
     }
 
     public EditorVM EditorContext { get; private set; }
@@ -123,7 +124,6 @@ public sealed class HelpProjectDocument : TabDocumentVM {
             }
             module = value;
             OnPropertyChanged();
-            module.PendingSave += onModuleChanged;
         }
     }
     void onModuleChanged(Object source, SavePendingEventArgs e) {

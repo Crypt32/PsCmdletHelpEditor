@@ -230,6 +230,12 @@ public class CmdletObject : ViewModelBase {
         retValue.URL = commandInfo.URL;
         retValue.ArticleIDString = commandInfo.ArticleIDString;
         retValue.SupportInformation = new SupportInfo();
+        IPsCommandSupportInfo? supportInfo = commandInfo.GetSupportInfo();
+        if (supportInfo is not null) {
+            retValue.SupportInformation.RequiresAD = supportInfo.RequiresAD;
+            retValue.SupportInformation.RequiresRSAT = supportInfo.RequiresRSAT;
+            retValue.SupportInformation.SetWinOsVersion(supportInfo.WinOsVersion);
+        }
         if (commandInfo.IsOrphaned) {
             retValue.GeneralHelp.Status = ItemStatus.Missing;
         }

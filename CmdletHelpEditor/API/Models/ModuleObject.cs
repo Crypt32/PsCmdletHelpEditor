@@ -233,7 +233,6 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
         };
     }
     public static ModuleObject FromProjectInfo(IPsModuleProject project) {
-        var cmdlets = new ObservableCollection<CmdletObject>(project.GetCmdlets().Select(CmdletObject.FromCommandInfo));
         return new ModuleObject {
             Name = project.Name,
             FormatVersion = project.FormatVersion,
@@ -249,7 +248,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             FetchPostCount = project.FetchPostCount,
             ExtraHeader = project.ExtraHeader,
             ExtraFooter = project.ExtraFooter,
-            Cmdlets = cmdlets
+            Cmdlets = new ObservableCollection<CmdletObject>(project.GetCmdlets().Select(CmdletObject.FromCommandInfo))
         };
     }
 

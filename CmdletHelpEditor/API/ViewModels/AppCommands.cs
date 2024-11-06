@@ -70,8 +70,7 @@ public class AppCommands {
             try {
                 IPsModuleProject project = _fileService.ReadProjectFile(projectPath);
                 vm = new HelpProjectDocument(ModuleObject.FromProjectInfo(project)) {
-                    Path = projectPath,
-                    //Module = ModuleObject.FromProjectInfo(project)
+                    Path = projectPath
                 };
                 vm.StartSpinner();
             } catch (Exception ex) {
@@ -448,7 +447,6 @@ public class AppCommands {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
             var vm = new HelpProjectDocument(module);
-            //vm.Module = module;
             swapTabDocument(vm);
         } catch (Exception ex) {
             _msgBox.ShowError("Error while loading cmdlets", ex.Message);
