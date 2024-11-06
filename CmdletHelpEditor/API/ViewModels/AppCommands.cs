@@ -69,9 +69,9 @@ public class AppCommands {
             HelpProjectDocument? vm = null;
             try {
                 IPsModuleProject project = _fileService.ReadProjectFile(projectPath);
-                vm = new HelpProjectDocument {
+                vm = new HelpProjectDocument(ModuleObject.FromProjectInfo(project)) {
                     Path = projectPath,
-                    Module = ModuleObject.FromProjectInfo(project)
+                    //Module = ModuleObject.FromProjectInfo(project)
                 };
                 vm.StartSpinner();
             } catch (Exception ex) {
@@ -92,7 +92,7 @@ public class AppCommands {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
-        if (!_psProcessor.TestModuleExist(tab.Module!.Name)) {
+        if (!_psProcessor.TestModuleExist(tab.Module.Name)) {
             tab.Module.ModulePath = null;
         }
         tab.ErrorInfo = null;
@@ -282,7 +282,7 @@ public class AppCommands {
             return;
         }
 
-        _fileService.SaveProjectFile(helpProject.Module!.ToXmlObject(), path);
+        _fileService.SaveProjectFile(helpProject.Module.ToXmlObject(), path);
         helpProject.Path = path;
         helpProject.IsModified = false;
     }
@@ -292,10 +292,10 @@ public class AppCommands {
         }
         try {
             String? path = helpProject.Path;
-            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module!.Name, out path)) {
+            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module.Name, out path)) {
                 return true;
             }
-            _fileService.SaveProjectFile(helpProject.Module!.ToXmlObject(), path);
+            _fileService.SaveProjectFile(helpProject.Module.ToXmlObject(), path);
             helpProject.IsModified = false;
             helpProject.Path = path;
         } catch (Exception ex) {
@@ -317,7 +317,7 @@ public class AppCommands {
             }
         } else {
             // save as
-            if (!getSaveFileName(helpProject.Module!.Name, out path)) { return; }
+            if (!getSaveFileName(helpProject.Module.Name, out path)) { return; }
         }
         try {
             writeFile(helpProject, path);
@@ -352,7 +352,7 @@ public class AppCommands {
 
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((HelpProjectDocument)o).Module;
-        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module!.Name);
+        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module.Name);
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             try {
@@ -396,7 +396,7 @@ public class AppCommands {
 
     
     static Boolean canPublish(Object? obj) {
-        return obj is HelpProjectDocument { Module: not null } helpProject && helpProject.Module.Cmdlets.Count > 0;
+        return obj is HelpProjectDocument helpProject && helpProject.Module.Cmdlets.Count > 0;
     }
     Boolean canPublishOnline(Object obj) {
         return _mwvm.SelectedDocument is HelpProjectDocument { Module.Provider: not null };
@@ -404,7 +404,7 @@ public class AppCommands {
 
     // utility
     Boolean testSaved(HelpProjectDocument? tab) {
-        if (tab is not { IsModified: true } || tab.Module == null) {
+        if (tab is not { IsModified: true }) {
             return true;
         }
         _mwvm.SelectedDocument = tab;
@@ -428,7 +428,6 @@ public class AppCommands {
     }
 
     public async Task LoadCommandsAsync(String? helpPath, Boolean importFromCBH) {
-        var vm = new HelpProjectDocument();
         var cmd = Utils.GetCommandTypes();
         if (cmd.Count == 0) {
             _msgBox.ShowError("Error", Strings.E_EmptyCmds);
@@ -448,8 +447,8 @@ public class AppCommands {
             foreach (IPsCommandInfo commandInfo in data) {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
-
-            vm.Module = module;
+            var vm = new HelpProjectDocument(module);
+            //vm.Module = module;
             swapTabDocument(vm);
         } catch (Exception ex) {
             _msgBox.ShowError("Error while loading cmdlets", ex.Message);

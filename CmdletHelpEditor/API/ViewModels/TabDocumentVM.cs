@@ -107,27 +107,26 @@ public sealed class ModuleListDocument : TabDocumentVM {
 public sealed class HelpProjectDocument : TabDocumentVM {
     ModuleObject? module;
 
-    public HelpProjectDocument() {
+    public HelpProjectDocument(ModuleObject moduleObject) {
+        Module = moduleObject;
+        EditorContext = new EditorVM(moduleObject);
         SupportsSave = true;
     }
 
     public EditorVM EditorContext { get; private set; }
 
-    public ModuleObject? Module {
+    public ModuleObject Module {
         get => module;
-        set {
+        private set {
             if (module is not null) {
                 module.PendingSave -= onModuleChanged;
             }
             module = value;
             OnPropertyChanged();
-            if (module is not null) {
-                module.PendingSave += onModuleChanged;
-                EditorContext = new EditorVM(module);
-            }
+            module.PendingSave += onModuleChanged;
         }
     }
     void onModuleChanged(Object source, SavePendingEventArgs e) {
-
+        IsModified = true;
     }
 }

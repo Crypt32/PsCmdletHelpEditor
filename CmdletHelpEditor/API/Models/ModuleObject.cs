@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Tools;
-using CmdletHelpEditor.API.Utility;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using PsCmdletHelpEditor.Core.Services.MAML;
@@ -27,6 +26,8 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
     ProviderInformation provider;
     CmdletObject selectedCmdlet;
     ObservableCollection<CmdletObject> cmdlets = [];
+
+    ModuleObject() { }
 
     void cmdletsOnCollectionChanged(Object Sender, NotifyCollectionChangedEventArgs e) {
         switch (e.Action) {
@@ -135,10 +136,16 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
         set {
             if (cmdlets != null) {
                 cmdlets.CollectionChanged -= cmdletsOnCollectionChanged;
+                foreach (CmdletObject command in cmdlets) {
+                    command.PropertyChanged -= OnPropertyChanged;
+                }
             }
             cmdlets = value;
             if (cmdlets != null) {
                 cmdlets.CollectionChanged += cmdletsOnCollectionChanged;
+                foreach (CmdletObject command in cmdlets) {
+                    command.PropertyChanged += OnPropertyChanged;
+                }
             }
         }
     }
@@ -226,6 +233,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
         };
     }
     public static ModuleObject FromProjectInfo(IPsModuleProject project) {
+        var cmdlets = new ObservableCollection<CmdletObject>(project.GetCmdlets().Select(CmdletObject.FromCommandInfo));
         return new ModuleObject {
             Name = project.Name,
             FormatVersion = project.FormatVersion,
@@ -241,7 +249,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             FetchPostCount = project.FetchPostCount,
             ExtraHeader = project.ExtraHeader,
             ExtraFooter = project.ExtraFooter,
-            Cmdlets = new ObservableCollection<CmdletObject>(project.GetCmdlets().Select(CmdletObject.FromCommandInfo))
+            Cmdlets = cmdlets
         };
     }
 

@@ -35,7 +35,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         _context = context;
         _msgBox = App.Container.Resolve<IMsgBox>();
         UseProviderCommand = new RelayCommand(UseProviderChanged);
-        UseSupports = _context.Module!.UseSupports;
+        UseSupports = _context.Module.UseSupports;
         Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
         InitializeComponent();
         if (_context.Module.Provider != null) {
@@ -134,7 +134,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         BlogsLoaded = true;
     }
     async void FetchClick(Object Sender, RoutedEventArgs e) {
-        if (_context.Module!.Provider is null) {
+        if (_context.Module.Provider is null) {
             return;
         }
         //List<Post<String>> posts = await MetaWeblogWrapper.GetRecentPosts(blogger, providerInfo.FetchPostCount);
@@ -152,7 +152,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         }
     }
     void SaveClick(Object Sender, RoutedEventArgs e) {
-        _context.Module!.UseSupports = UseSupports;
+        _context.Module.UseSupports = UseSupports;
         _context.Module.Provider = UseProvider
             ? ProviderInfo
             : null;
