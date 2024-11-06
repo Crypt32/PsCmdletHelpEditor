@@ -27,7 +27,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     /// </summary>
     /// <param name="type">Requested parser type.</param>
     /// <returns>BB-code parser.</returns>
-    public abstract BBCodeParser GetParser(ParserType type);
+    protected abstract BBCodeParser GetParser(ParserType type);
     /// <summary>
     /// Generates Heading 1
     /// </summary>

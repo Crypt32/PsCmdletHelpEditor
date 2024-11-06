@@ -9,7 +9,7 @@ class MarkdownProcessor : OutputProcessor {
             '.'
         };
 
-    public override BBCodeParser GetParser(ParserType type) {
+    protected override BBCodeParser GetParser(ParserType type) {
         switch (type) {
             case ParserType.Basic:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
