@@ -186,7 +186,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     void outGenerateTypes(BBCodeParser rules, StringBuilder SB, String? typesString, String? urlsString, String? String, Boolean input) {
         SB.AppendLine(input
             ? GenerateH2("Inputs")
-        : GenerateH2("Outputs"));
+            : GenerateH2("Outputs"));
 
         var types = new List<String>(typesString?.Split(';') ?? []);
         var urls = new List<String>(urlsString?.Split(';') ?? []);
