@@ -170,7 +170,7 @@ public class CmdletObject : ViewModelBase {
     }
 
     public void CopyFromCmdlet(CmdletObject sourceCmdlet) {
-        var processed = new List<String>();
+        var processedParameters = new HashSet<String>(StringComparer.OrdinalIgnoreCase);
         // process saved parameters
         for (Int32 index = 0; index < Parameters.Count; index++) {
             Int32 sourceIndex = sourceCmdlet.Parameters.IndexOf(Parameters[index]);
@@ -181,14 +181,14 @@ public class CmdletObject : ViewModelBase {
                 sourceCmdlet.Parameters[sourceIndex].DefaultValue = Parameters[index].DefaultValue;
                 // replace parameter from source to destination cmdlet
                 Parameters[index] = sourceCmdlet.Parameters[sourceIndex];
-                processed.Add(Parameters[index].Name);
+                processedParameters.Add(Parameters[index].Name);
             } else {
                 // saved cmdlet contains orphaned parameter
                 Parameters[index].Status = ItemStatus.Missing;
             }
         }
         // process active non-processed parameters. They are new parameters
-        foreach (PsCommandParameterVM param in sourceCmdlet.Parameters.Where(param => !processed.Contains(param.Name))) {
+        foreach (PsCommandParameterVM param in sourceCmdlet.Parameters.Where(param => !processedParameters.Contains(param.Name))) {
            Parameters.Add(param);
         }
     }
@@ -230,11 +230,11 @@ public class CmdletObject : ViewModelBase {
         retValue.URL = commandInfo.URL;
         retValue.ArticleIDString = commandInfo.ArticleIDString;
         retValue.SupportInformation = new SupportInfo();
-        IPsCommandSupportInfo? supportInfo = commandInfo.GetSupportInfo();
-        if (supportInfo is not null) {
-            retValue.SupportInformation.RequiresAD = supportInfo.RequiresAD;
-            retValue.SupportInformation.RequiresRSAT = supportInfo.RequiresRSAT;
-            retValue.SupportInformation.SetWinOsVersion(supportInfo.WinOsVersion);
+        IPsCommandSupportInfo? commandSupportInfo = commandInfo.GetSupportInfo();
+        if (commandSupportInfo is not null) {
+            retValue.SupportInformation.RequiresAD = commandSupportInfo.RequiresAD;
+            retValue.SupportInformation.RequiresRSAT = commandSupportInfo.RequiresRSAT;
+            retValue.SupportInformation.SetWinOsVersion(commandSupportInfo.WinOsVersion);
         }
         if (commandInfo.IsOrphaned) {
             retValue.GeneralHelp.Status = ItemStatus.Missing;

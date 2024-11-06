@@ -354,7 +354,7 @@ public class AppCommands {
         Boolean? result = dlg.ShowDialog();
         if (result == true) {
             try {
-                await module.PublishHelpFile(dlg.FileName, _progressBar);
+                await module.PublishMamlHelpFile(dlg.FileName, _progressBar);
             } catch (Exception e) {
                 _msgBox.ShowError("XML Write error", e.Message);
             }

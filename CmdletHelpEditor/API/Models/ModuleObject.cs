@@ -188,7 +188,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             Cmdlets.Add(cmdlet);
         }
     }
-    public async Task PublishHelpFile(String path, IProgressBar pb) {
+    public async Task PublishMamlHelpFile(String path, IProgressBar pb) {
         if (Cmdlets.Count == 0) {
             return;
         }
