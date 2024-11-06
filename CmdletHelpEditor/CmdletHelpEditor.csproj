@@ -168,7 +168,7 @@
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Utility\NativeDialogFactory.cs" />
     <Compile Include="API\Utility\EnumHelper.cs" />
-    <Compile Include="API\Utility\SavePendingEventArgs.cs" />
+    <Compile Include="API\Models\SavePendingEventArgs.cs" />
     <Compile Include="API\ViewModels\AppCommands.cs" />
     <Compile Include="API\Models\ProviderInformation.cs" />
     <Compile Include="API\Converters\MultiParamConverter.cs" />
@@ -186,7 +186,6 @@
     <Compile Include="API\ViewModels\UIManager.cs" />
     <Compile Include="API\ViewModels\FormatCommands.cs" />
     <Compile Include="Controls\ListViewExtenders.cs" />
-    <Compile Include="API\Models\ClosableModuleItem.cs" />
     <Compile Include="Views\Dialogs\AboutBox.xaml.cs">
       <DependentUpon>AboutBox.xaml</DependentUpon>
     </Compile>
