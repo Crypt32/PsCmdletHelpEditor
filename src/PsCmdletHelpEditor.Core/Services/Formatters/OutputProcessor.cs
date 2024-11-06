@@ -122,8 +122,6 @@ abstract class OutputProcessor : IHelpOutputFormatter {
         htmlGenerateParams(rules, SB, cmdlets, cmdlet);
         outGenerateTypes(rules, SB, generalInfo.InputType, generalInfo.InputUrl, generalInfo.InputTypeDescription, true);
         outGenerateTypes(rules, SB, generalInfo.ReturnType, generalInfo.ReturnUrl, generalInfo.ReturnTypeDescription, false);
-        //htmlGenerateInputTypes(rules, SB, cmdlet);
-        //htmlGenerateReturnTypes(rules, SB, cmdlet);
         htmlGenerateNotes(rules, SB, cmdlet);
         htmlGenerateExamples(rules, SB, cmdlet);
         htmlGenerateRelatedLinks(rules, SB, cmdlets, cmdlet);
