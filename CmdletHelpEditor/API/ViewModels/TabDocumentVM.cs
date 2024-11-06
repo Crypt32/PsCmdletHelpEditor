@@ -116,11 +116,18 @@ public sealed class HelpProjectDocument : TabDocumentVM {
     public ModuleObject? Module {
         get => module;
         set {
+            if (module is not null) {
+                module.PendingSave -= onModuleChanged;
+            }
             module = value;
             OnPropertyChanged();
             if (module is not null) {
+                module.PendingSave += onModuleChanged;
                 EditorContext = new EditorVM(module);
             }
         }
+    }
+    void onModuleChanged(Object source, SavePendingEventArgs e) {
+
     }
 }

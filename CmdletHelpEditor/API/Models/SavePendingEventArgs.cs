@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace CmdletHelpEditor.API.Utility;
+namespace CmdletHelpEditor.API.Models;
 public class SavePendingEventArgs : EventArgs;
 public delegate void SavePendingEventHandler(Object source, SavePendingEventArgs e);
