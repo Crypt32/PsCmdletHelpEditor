@@ -20,6 +20,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
 
     protected Boolean HandleNewLine { get; set; }
     protected Boolean EscapeHtml { get; set; }
+    protected String LineBreak { get; set; } = Environment.NewLine;
 
     /// <summary>
     /// Gets BB-code parser based on requested parser type.
@@ -82,6 +83,12 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     /// <param name="param">Cmdlet parameter.</param>
     /// <returns>Markup.</returns>
     protected abstract String GenerateParamTable(IPsCommandParameter param);
+    /// <summary>
+    /// Generates warning alert panel.
+    /// </summary>
+    /// <param name="text">Text to wrap in warning alert.</param>
+    /// <returns>Markup.</returns>
+    protected abstract String GenerateWarningAlert(String text);
 
     String escape(String? content) {
         return EscapeHtml ? SecurityElement.Escape(content) : content;
@@ -97,7 +104,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
         }
 
         if (HandleNewLine) {
-            return source.Replace("\n\n", "[br]" + NL);
+            return source.Replace("\n\n", LineBreak + NL);
         }
 
         return source;
@@ -105,6 +112,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
 
     // generates pure encoded HTML string
     String generatePureHtml(IPsCommandInfo cmdlet, IReadOnlyList<IPsCommandInfo> cmdlets, StringBuilder SB, Boolean useSupports) {
+        IPsCommandGeneralDescription generalInfo = cmdlet.GetDescription();
         SB.Clear();
         BBCodeParser rules = GetParser(ParserType.Enhanced);
         htmlGenerateName(SB, cmdlet);
@@ -112,8 +120,10 @@ abstract class OutputProcessor : IHelpOutputFormatter {
         htmlGenerateSyntax(SB, cmdlet);
         htmlGenerateDescription(rules, SB, cmdlets, cmdlet);
         htmlGenerateParams(rules, SB, cmdlets, cmdlet);
-        htmlGenerateInputTypes(rules, SB, cmdlet);
-        htmlGenerateReturnTypes(rules, SB, cmdlet);
+        outGenerateTypes(rules, SB, generalInfo.InputType, generalInfo.InputUrl, generalInfo.InputTypeDescription, true);
+        outGenerateTypes(rules, SB, generalInfo.ReturnType, generalInfo.ReturnUrl, generalInfo.ReturnTypeDescription, false);
+        //htmlGenerateInputTypes(rules, SB, cmdlet);
+        //htmlGenerateReturnTypes(rules, SB, cmdlet);
         htmlGenerateNotes(rules, SB, cmdlet);
         htmlGenerateExamples(rules, SB, cmdlet);
         htmlGenerateRelatedLinks(rules, SB, cmdlets, cmdlet);
@@ -175,39 +185,31 @@ abstract class OutputProcessor : IHelpOutputFormatter {
                                          For more information, see about_CommonParameters ({link})
                                          """));
     }
-    void htmlGenerateInputTypes(BBCodeParser rules, StringBuilder SB, IPsCommandInfo cmdlet) {
-        SB.AppendLine(GenerateH2("Inputs"));
-        var inputTypes = new List<String>(cmdlet.GetDescription().InputType?.Split(';') ?? []);
-        var inputUrls = new List<String>(cmdlet.GetDescription().InputUrl?.Split(';') ?? []);
-        var inputDescription = new List<String>(cmdlet.GetDescription().InputTypeDescription?.Split(';') ?? []);
-        for (Int32 index = 0; index < inputTypes.Count; index++) {
-            if (index < inputUrls.Count) {
-                SB.AppendLine(String.IsNullOrEmpty(inputUrls[index])
-                    ? GenerateParagraph(rules.ToHtml(inputTypes[index]))
-                    : GenerateParagraph(GenerateHyperLink(inputTypes[index], inputUrls[index])));
+    void outGenerateTypes(BBCodeParser rules, StringBuilder SB, String? typesString, String? urlsString, String? String, Boolean input) {
+        SB.AppendLine(input
+            ? GenerateH2("Inputs")
+        : GenerateH2("Outputs"));
+
+        var types = new List<String>(typesString?.Split(';') ?? []);
+        var urls = new List<String>(urlsString?.Split(';') ?? []);
+        var descriptions = new List<String>(String?.Split(';') ?? []);
+
+        for (Int32 index = 0; index < types.Count; index++) {
+            if (String.IsNullOrWhiteSpace(types[index])) {
+                continue;
+            }
+            if (index < urls.Count) {
+                SB.AppendLine(String.IsNullOrEmpty(urls[index])
+                    ? GenerateParagraph(rules.ToHtml(types[index]))
+                    : GenerateParagraph(GenerateHyperLink(types[index], urls[index])));
             } else {
-                SB.AppendLine(GenerateParagraph(rules.ToHtml(inputTypes[index])));
+                SB.AppendLine(GenerateParagraph(rules.ToHtml(types[index])));
             }
-            if (index < inputDescription.Count) {
-                SB.AppendLine($"<p style=\"margin-left: 80px;\">{rules.ToHtml(inputDescription[index])}</p>");
-            }
-        }
-    }
-    void htmlGenerateReturnTypes(BBCodeParser rules, StringBuilder SB, IPsCommandInfo cmdlet) {
-        SB.AppendLine(GenerateH2("Outputs"));
-        var returnTypes = new List<String>(cmdlet.GetDescription().ReturnType?.Split(';') ?? []);
-        var returnUrls = new List<String>(cmdlet.GetDescription().ReturnUrl?.Split(';') ?? []);
-        var returnDescription = new List<String>(cmdlet.GetDescription().ReturnTypeDescription?.Split(';') ?? []);
-        for (Int32 index = 0; index < returnTypes.Count; index++) {
-            if (index < returnUrls.Count) {
-                SB.AppendLine(String.IsNullOrEmpty(returnUrls[index])
-                    ? GenerateParagraph(rules.ToHtml(returnTypes[index]))
-                    : GenerateParagraph(GenerateHyperLink(returnTypes[index], returnUrls[index])));
-            } else {
-                SB.AppendLine(GenerateParagraph(rules.ToHtml(returnTypes[index])));
-            }
-            if (index < returnDescription.Count) {
-                SB.AppendLine($"<p style=\"margin-left: 80px;\">{rules.ToHtml(returnDescription[index])}</p>");
+            if (index < descriptions.Count) {
+                String? description = descriptions[index];
+                if (!String.IsNullOrWhiteSpace(description)) {
+                    SB.AppendLine($"<p style=\"margin-left: 80px;\">{rules.ToHtml(description)}</p>");
+                }
             }
         }
     }
@@ -256,17 +258,17 @@ abstract class OutputProcessor : IHelpOutputFormatter {
             if (!String.IsNullOrEmpty(link.LinkUrl)) {
                 content.Append(GenerateHyperLink(link.LinkText, link.LinkUrl));
             }
-            content.AppendLine("<br />");
+            content.AppendLine(LineBreak);
         }
         SB.AppendLine(GenerateParagraph(content.ToString()));
     }
     void htmlGenerateSupports(IPsCommandSupportInfo supportInfo, ref StringBuilder SB) {
         var header = new StringBuilder();
         if (supportInfo.RequiresAD) {
-            header.AppendLine("<div class=\"alert alert-warning\">This command is not available in non-domain environments</div>");
+            header.AppendLine(GenerateWarningAlert("This command is not available in non-domain environments"));
         }
-        if (supportInfo.RequiresAD) {
-            header.AppendLine("<div class=\"alert alert-warning\">This command requires installed Remote Server Administration Tools (RSAT)</div>");
+        if (supportInfo.RequiresRSAT) {
+            header.AppendLine(GenerateWarningAlert("This command requires installed Remote Server Administration Tools (RSAT)"));
         }
         SB = new StringBuilder(header.ToString() + SB);
         SB.AppendLine(GenerateH2("Minimum PowerShell version support"));

@@ -7,6 +7,7 @@ namespace PsCmdletHelpEditor.Core.Services.Formatters;
 class HtmlProcessor : OutputProcessor {
     public HtmlProcessor() {
         HandleNewLine = true;
+        LineBreak = "<br/>";
     }
 
     public override BBCodeParser GetParser(ParserType type) {
@@ -19,7 +20,7 @@ class HtmlProcessor : OutputProcessor {
                     new BBTag("s", "<strike>", "</strike>")
                 ]);
             case ParserType.Enhanced:
-                return new BBCodeParser(ErrorMode.ErrorFree, null, new[] {
+                return new BBCodeParser(ErrorMode.ErrorFree, null, [
                     new BBTag("br", "<br />", String.Empty, true, false),
                     new BBTag("b", "<strong>", "</strong>"),
                     new BBTag("i", "<span style=\"font-style:italic;\">", "</span>"),
@@ -29,7 +30,7 @@ class HtmlProcessor : OutputProcessor {
                     new BBTag("pre", "<pre>", "</pre>"),
                     new BBTag("quote", "<blockquote class=\"${class}\">", "</blockquote>", new BBAttribute("class", ""), new BBAttribute("class", "class")),
                     new BBTag("color", "<span style=\"color: ${color};\">","</span>", new BBAttribute("color", ""), new BBAttribute("color", "color"))
-                });
+                ]);
             case ParserType.Clear:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
                     new BBTag("br", String.Empty, String.Empty),
@@ -103,5 +104,12 @@ class HtmlProcessor : OutputProcessor {
                   </tbody>
                 </table>
                 """;
+    }
+    protected override String GenerateWarningAlert(String text) {
+        if (String.IsNullOrEmpty(text)) {
+            return String.Empty;
+        }
+
+        return $"<div class=\"alert alert-warning\">{text}</div>";
     }
 }

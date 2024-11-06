@@ -20,12 +20,13 @@ class MarkdownProcessor : OutputProcessor {
                 ]);
             case ParserType.Enhanced:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
-                    new BBTag("br", "<br />", String.Empty, true, false),
+                    new BBTag("br", Environment.NewLine, String.Empty, true, false),
                     new BBTag("b", "**", "**"),
                     new BBTag("i", "_", "_"),
                     new BBTag("u", "<u>", "</u>"),
                     new BBTag("s", "~", "~"),
-                    new BBTag("url", "<a href=\"${href}\">", "</a>", new BBAttribute("href", ""), new BBAttribute("href", "href")),
+                    new BBTag("url", "[", "](${href})", new BBAttribute("href", ""), new BBAttribute("href", "href")),
+                    //new BBTag("url", "<a href=\"${href}\">", "</a>", new BBAttribute("href", ""), new BBAttribute("href", "href")),
                     new BBTag("pre", $"```{NL}", $"{NL}```"),
                     new BBTag("quote", $"{NL}> ", "", new BBAttribute("class", ""), new BBAttribute("class", "class")),
                     new BBTag("color", "<span style=\"color: ${color};\">","</span>", new BBAttribute("color", ""), new BBAttribute("color", "color"))
@@ -91,6 +92,17 @@ class MarkdownProcessor : OutputProcessor {
                 Default value|{param.DefaultValue ?? "&nbsp;"}
                 Accept pipeline input?|{param.Pipeline}
                 Accept wildcard characters?|{param.Globbing}
+
+                """;
+    }
+    protected override String GenerateWarningAlert(String text) {
+        if (String.IsNullOrWhiteSpace(text)) {
+            return String.Empty;
+        }
+
+        return $"""
+                > [!WARNING] 
+                > {text}
 
                 """;
     }
