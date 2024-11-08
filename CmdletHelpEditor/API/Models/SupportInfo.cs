@@ -24,7 +24,6 @@ public class SupportInfo : ViewModelBase {
         w2k22s, w2k22d,
         w2k25s, w2k25d;
 
-    //public WinOsVersionSupport WinOsVersion { get; set; }
     public Boolean RequiresAD {
         get => ad;
         set {
