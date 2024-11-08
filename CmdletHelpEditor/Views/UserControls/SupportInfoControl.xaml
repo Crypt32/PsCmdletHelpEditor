@@ -169,6 +169,14 @@
                     <CheckBox Content="Windows Server 2022 Datacenter"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022DCChecked}" />
                 </StackPanel>
+                <CheckBox Content="Windows Server 2025 Family"
+                          IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2025Checked}" />
+                <StackPanel Style="{StaticResource NestedPanel}">
+                    <CheckBox Content="Windows Server 2025 Standard"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2025StdChecked}" />
+                    <CheckBox Content="Windows Server 2025 Datacenter"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2025DCChecked}" />
+                </StackPanel>
             </StackPanel>
         </HeaderedContentControl>
     </Grid>
