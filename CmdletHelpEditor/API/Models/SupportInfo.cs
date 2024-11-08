@@ -14,15 +14,15 @@ namespace CmdletHelpEditor.API.Models;
 public class SupportInfo : ViewModelBase {
     Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
-        w2k3, w2k3s, w2k3e, w2k3d,
-        w2k8, w2k8s, w2k8e, w2k8d,
-        w2k8r2, w2k8r2s, w2k8r2e, w2k8r2d,
-        w2k12, w2k12s, w2k12d,
-        w2k12r2, w2k12r2s, w2k12r2d,
-        w2k16, w2k16s, w2k16d,
-        w2k19, w2k19s, w2k19d,
-        w2k22, w2k22s, w2k22d,
-        w2k25, w2k25s, w2k25d;
+        w2k3s, w2k3e, w2k3d,
+        w2k8s, w2k8e, w2k8d,
+        w2k8r2s, w2k8r2e, w2k8r2d,
+        w2k12s, w2k12d,
+        w2k12r2s, w2k12r2d,
+        w2k16s, w2k16d,
+        w2k19s, w2k19d,
+        w2k22s, w2k22d,
+        w2k25s, w2k25d;
 
     //public WinOsVersionSupport WinOsVersion { get; set; }
     public Boolean RequiresAD {
@@ -240,15 +240,6 @@ public class SupportInfo : ViewModelBase {
         get => w2k8r2s;
         set {
             w2k8r2s = value;
-            if (w2k8r2s) {
-                if (Win2008R2EEChecked && Win2008R2DCChecked) {
-                    w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
-                }
-            } else {
-                w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
-            }
             raisePropertyChangedWithDependants(propertyNames: [nameof(Win2008R2Checked)]);
         }
     }
