@@ -878,19 +878,20 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     }
     public XmlPsCommandSupportInfo ToXmlObject() {
         var retValue = new XmlPsCommandSupportInfo {
-            PsVersionAsInt = PsVersionAsInt,
             RequiresAD = RequiresAD,
-            RequiresRSAT = RequiresRSAT
+            RequiresRSAT = RequiresRSAT,
+            PsVersionAsInt = PsVersionAsInt,
+            WinOsVersionAsInt = WinOsVersionAsInt
         };
-        var os = WinOsVersionSupport.None;
-        foreach (PropertyInfo p in _osAttributeProps) {
-            OSVersionAttribute attr = p.GetCustomAttribute<OSVersionAttribute>();
-            if ((Boolean)p.GetValue(this)) {
-                os |= attr.OsVersion;
-            }
-        }
+        //var os = WinOsVersionSupport.None;
+        //foreach (PropertyInfo p in _osAttributeProps) {
+        //    OSVersionAttribute attr = p.GetCustomAttribute<OSVersionAttribute>();
+        //    if ((Boolean)p.GetValue(this)) {
+        //        os |= attr.OsVersion;
+        //    }
+        //}
         
-        retValue.WinOsVersionAsInt = (Int32)os;
+        //retValue.WinOsVersionAsInt = (Int32)os;
 
         return retValue;
     }
