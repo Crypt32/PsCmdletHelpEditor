@@ -13,66 +13,72 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <Style x:Key="NestedPanel" TargetType="StackPanel">
+            <Setter Property="behaviors:MarginSetter.Margin" Value="25, 5, 5, 5"/>
+        </Style>
     </UserControl.Resources>
-    <StackPanel>
-        <HeaderedContentControl>
-            <HeaderedContentControl.Header>
-                <TextBlock FontSize="14"
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <HeaderedContentControl BorderThickness="1,1,0,0">
+                <HeaderedContentControl.Header>
+                    <TextBlock FontSize="14"
                            FontWeight="Bold"
                            Text="Active Directory requirement"/>
-            </HeaderedContentControl.Header>
-            <CheckBox Content="Requires Active Directory"
-                      Margin="5,0,0,0"
-                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresAD}"/>
-        </HeaderedContentControl>
-        <HeaderedContentControl>
-            <HeaderedContentControl.Header>
-                <TextBlock FontSize="14"
+                </HeaderedContentControl.Header>
+                <StackPanel behaviors:MarginSetter.Margin="5">
+                    <CheckBox Content="Requires Active Directory"
+                              Margin="5,0,0,0"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresAD}"/>
+                </StackPanel>
+            </HeaderedContentControl>
+            <HeaderedContentControl BorderThickness="1,1,0,0">
+                <HeaderedContentControl.Header>
+                    <TextBlock FontSize="14"
                            FontWeight="Bold"
                            Text="RSAT requirement"/>
-            </HeaderedContentControl.Header>
-            <CheckBox Content="Requires Remote Server Administration Tools"
-                      Margin="5,0,0,0"
-                      IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresRSAT}" />
-        </HeaderedContentControl>
-        <HeaderedContentControl>
-            <HeaderedContentControl.Header>
-                <TextBlock FontSize="14"
+                </HeaderedContentControl.Header>
+                <StackPanel behaviors:MarginSetter.Margin="5">
+                    <CheckBox Content="Requires Remote Server Administration Tools"
+                              Margin="5,0,0,0"
+                              IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.RequiresRSAT}"/>
+                </StackPanel>
+            </HeaderedContentControl>
+            <HeaderedContentControl BorderThickness="1,1,0,1">
+                <HeaderedContentControl.Header>
+                    <TextBlock FontSize="14"
                            FontWeight="Bold"
                            Text="Minimum PowerShell version requirement"/>
-            </HeaderedContentControl.Header>
-            <StackPanel>
-                <RadioButton GroupName="PS"
-                             Margin="5,0,0,0"
-                             Content="PowerShell 2.0"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps2Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 3.0"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps3Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 4.0"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps4Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 5.0"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps5Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 5.1"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps51Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 6.0"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps60Checked}"/>
-                <RadioButton GroupName="PS"
-                             Margin="5,5,0,0"
-                             Content="PowerShell 6.1"
-                             IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps61Checked}"/>
-            </StackPanel>
-        </HeaderedContentControl>
-        <HeaderedContentControl>
+                </HeaderedContentControl.Header>
+                <StackPanel behaviors:MarginSetter.Margin="5">
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 2.0"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps2Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 3.0"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps3Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 4.0"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps4Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 5.0"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps5Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 5.1"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps51Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 6.0"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps60Checked}"/>
+                    <RadioButton GroupName="PS"
+                                 Content="PowerShell 6.1"
+                                 IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Ps61Checked}"/>
+                </StackPanel>
+            </HeaderedContentControl>
+        </StackPanel>
+        <HeaderedContentControl Grid.Column="1">
             <HeaderedContentControl.Header>
                 <TextBlock FontSize="14"
                            FontWeight="Bold"
@@ -83,8 +89,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.WinXpChecked}" />
                 <CheckBox Content="Windows Server 2003 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2003 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2003StdChecked}" />
                     <CheckBox Content="Windows Server 2003 Enterprise"
@@ -96,8 +101,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.WinVistaChecked}" />
                 <CheckBox Content="Windows Server 2008 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2008 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008StdChecked}" />
                     <CheckBox Content="Windows Server 2008 Enterprise"
@@ -109,8 +113,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win7Checked}" />
                 <CheckBox Content="Windows Server 2008 R2 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2008 R2 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2008R2StdChecked}" />
                     <CheckBox Content="Windows Server 2008 R2 Enterprise"
@@ -122,8 +125,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win8Checked}" />
                 <CheckBox Content="Windows Server 2012 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2012 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012StdChecked}" />
                     <CheckBox Content="Windows Server 2012 Datacenter"
@@ -133,8 +135,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win81Checked}" />
                 <CheckBox Content="Windows Server 2012 R2 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2012 R2 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2012R2StdChecked}" />
                     <CheckBox Content="Windows Server 2012 R2 Datacenter"
@@ -144,8 +145,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win10Checked}" />
                 <CheckBox Content="Windows Server 2016 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2016Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2016 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2016StdChecked}" />
                     <CheckBox Content="Windows Server 2016 Datacenter"
@@ -153,8 +153,7 @@
                 </StackPanel>
                 <CheckBox Content="Windows Server 2019 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2019Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2019 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2019StdChecked}" />
                     <CheckBox Content="Windows Server 2019 Datacenter"
@@ -164,8 +163,7 @@
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win11Checked}" />
                 <CheckBox Content="Windows Server 2022 Family"
                           IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022Checked}" />
-                <StackPanel Margin="25,0,0,0"
-                            behaviors:MarginSetter.Margin="25, 5, 5, 5">
+                <StackPanel Style="{StaticResource NestedPanel}">
                     <CheckBox Content="Windows Server 2022 Standard"
                               IsChecked="{Binding EditorContext.CurrentCmdlet.SupportInformation.Win2022StdChecked}" />
                     <CheckBox Content="Windows Server 2022 Datacenter"
@@ -173,5 +171,5 @@
                 </StackPanel>
             </StackPanel>
         </HeaderedContentControl>
-    </StackPanel>
+    </Grid>
 </UserControl>
