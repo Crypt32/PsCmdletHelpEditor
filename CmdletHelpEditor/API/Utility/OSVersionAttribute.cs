@@ -22,3 +22,22 @@ class OSVersionAttribute : Attribute {
     /// </summary>
     public String DisplayName { get; }
 }
+/// <summary>
+/// Represents PowerShell version support attribute applied to properties that are bound to <see cref="PsVersionSupport"/> enum.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+class PSVersionAttribute : Attribute {
+    public PSVersionAttribute(PsVersionSupport name, String displayName) {
+        PsVersion = name;
+        DisplayName = displayName;
+    }
+
+    /// <summary>
+    /// Gets PowerShell version enum value.
+    /// </summary>
+    public PsVersionSupport PsVersion { get; }
+    /// <summary>
+    /// Gets PowerShell version display name.
+    /// </summary>
+    public String DisplayName { get; }
+}

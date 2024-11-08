@@ -14,7 +14,7 @@ public enum WinOsVersionSupport {
     Win2003EE    = 4,
     [Display(Name = "Windows Server 2003 Datacenter")]
     Win2003DC    = 8,
-    [Display(Name = "Windows Server 2003 Family")]
+    [Display(Name = "Windows Server 2003 family")]
     Win2003      = Win2003Std | Win2003EE | Win2003DC,
     [Display(Name = "Windows Vista")]
     WinVista     = 0x10,
@@ -24,7 +24,7 @@ public enum WinOsVersionSupport {
     Win2008EE    = 0x40,
     [Display(Name = "Windows Server 2008 Datacenter")]
     Win2008DC    = 0x80,
-    [Display(Name = "Windows Server 2008 Family")]
+    [Display(Name = "Windows Server 2008 family")]
     Win2008      = Win2008Std | Win2008EE | Win2008DC,
     [Display(Name = "Windows 7")]
     Win7         = 0x100,
@@ -34,7 +34,7 @@ public enum WinOsVersionSupport {
     Win2008R2EE  = 0x400,
     [Display(Name = "Windows Server 2008 R2 Datacenter")]
     Win2008R2DC  = 0x800,
-    [Display(Name = "Windows Server 2008 R2 Family")]
+    [Display(Name = "Windows Server 2008 R2 family")]
     Win2008R2    = Win2008R2Std | Win2008R2EE | Win2008R2DC,
     [Display(Name = "Windows 8")]
     Win8         = 0x1000,
@@ -42,7 +42,7 @@ public enum WinOsVersionSupport {
     Win2012Std   = 0x2000,
     [Display(Name = "Windows Server 2012 Datacenter")]
     Win2012DC    = 0x4000,
-    [Display(Name = "Windows Server 2012 Family")]
+    [Display(Name = "Windows Server 2012 family")]
     Win2012      = Win2012Std | Win2012DC,
     [Display(Name = "Windows 8.1")]
     Win81        = 0x8000,
@@ -50,7 +50,7 @@ public enum WinOsVersionSupport {
     Win2012R2Std = 0x10000,
     [Display(Name = "Windows Server 2012 R2 Datacenter")]
     Win2012R2DC  = 0x20000,
-    [Display(Name = "Windows Server 2012 R2 Family")]
+    [Display(Name = "Windows Server 2012 R2 family")]
     Win2012R2    = Win2012R2Std | Win2012R2DC,
     [Display(Name = "Windows 10")]
     Win10        = 0x40000,
@@ -58,13 +58,13 @@ public enum WinOsVersionSupport {
     Win2016Std   = 0x80000,
     [Display(Name = "Windows Server 2016 Datacenter")]
     Win2016DC    = 0x100000,
-    [Display(Name = "Windows Server 2016 Family")]
+    [Display(Name = "Windows Server 2016 family")]
     Win2016      = Win2016Std | Win2016DC,
     [Display(Name = "Windows Server 2019 Standard")]
     Win2019Std   = 0x200000,
     [Display(Name = "Windows Server 2019 Datacenter")]
     Win2019DC    = 0x400000,
-    [Display(Name = "Windows Server 2019 Family")]
+    [Display(Name = "Windows Server 2019 family")]
     Win2019      = Win2019Std | Win2019DC,
     [Display(Name = "Windows 11")]
     Win11        = 0x800000,
@@ -72,11 +72,11 @@ public enum WinOsVersionSupport {
     Win2022Std   = 0x1000000,
     [Display(Name = "Windows Server 2022 Datacenter")]
     Win2022DC    = 0x2000000,
-    [Display(Name = "Windows Server 2025 Family")]
+    [Display(Name = "Windows Server 2025 family")]
     Win2022      = Win2022Std | Win2022DC,
     Win2025Std   = 0x4000000,
     [Display(Name = "Windows Server 2025 Datacenter")]
     Win2025DC    = 0x8000000,
-    [Display(Name = "Windows Server 2025 Family")]
+    [Display(Name = "Windows Server 2025 family")]
     Win2025      = Win2025Std | Win2025DC,
 }

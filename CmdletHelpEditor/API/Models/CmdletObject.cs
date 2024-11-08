@@ -234,6 +234,7 @@ public class CmdletObject : ViewModelBase {
         if (commandSupportInfo is not null) {
             retValue.SupportInformation.RequiresAD = commandSupportInfo.RequiresAD;
             retValue.SupportInformation.RequiresRSAT = commandSupportInfo.RequiresRSAT;
+            retValue.SupportInformation.SetPsVersion(commandSupportInfo.PsVersion);
             retValue.SupportInformation.SetWinOsVersion(commandSupportInfo.WinOsVersion);
         }
         if (commandInfo.IsOrphaned) {

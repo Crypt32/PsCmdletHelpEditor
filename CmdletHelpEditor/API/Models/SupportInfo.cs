@@ -46,6 +46,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps20, "Windows PowerShell 2.0")]
     public Boolean Ps2Checked {
         get => ps2;
         set {
@@ -56,6 +57,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps30, "Windows PowerShell 3.0")]
     public Boolean Ps3Checked {
         get => ps3;
         set {
@@ -66,6 +68,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps40, "Windows PowerShell 4.0")]
     public Boolean Ps4Checked {
         get => ps4;
         set {
@@ -76,6 +79,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps50, "Windows PowerShell 5.0")]
     public Boolean Ps5Checked {
         get => ps5;
         set {
@@ -86,6 +90,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps51, "Windows PowerShell 5.1")]
     public Boolean Ps51Checked {
         get => ps51;
         set {
@@ -96,6 +101,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps60, "PowerShell 6.0")]
     public Boolean Ps60Checked {
         get => ps60;
         set {
@@ -106,6 +112,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [PSVersion(PsVersionSupport.Ps61, "PowerShell 6.1")]
     public Boolean Ps61Checked {
         get => ps61;
         set {
@@ -856,6 +863,9 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         }
     }
 
+    public void SetPsVersion(PsVersionSupport psVersion) {
+        _psAttributeMap[psVersion].SetValue(this, true);
+    }
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
         WinOsVersion = winOsVersion;
         var flags = Enum.GetValues(typeof(WinOsVersionSupport))
@@ -889,16 +899,23 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     // do some caching to minimize penalty hit imposed by reflection.
     static readonly List<PropertyInfo> _osAttributeProps = [];
     static readonly Dictionary<WinOsVersionSupport, PropertyInfo> _osAttributeMap = [];
+    static readonly List<PropertyInfo> _psAttributeProps = [];
+    static readonly Dictionary<PsVersionSupport, PropertyInfo> _psAttributeMap = [];
 
     static SupportInfo() {
-        if (_osAttributeProps.Count == 0) {
-            _osAttributeProps.AddRange(typeof(SupportInfo)
-                .GetProperties()
-                .Where(p => p.GetCustomAttribute<OSVersionAttribute>(true) is not null));
-            foreach (PropertyInfo prop in _osAttributeProps) {
-                var attr = prop.GetCustomAttribute<OSVersionAttribute>();
-                _osAttributeMap[attr.OsVersion] = prop;
-            }
+        _osAttributeProps.AddRange(typeof(SupportInfo)
+            .GetProperties()
+            .Where(p => p.GetCustomAttribute<OSVersionAttribute>(true) is not null));
+        foreach (PropertyInfo prop in _osAttributeProps) {
+            var attr = prop.GetCustomAttribute<OSVersionAttribute>();
+            _osAttributeMap[attr.OsVersion] = prop;
+        }
+        _psAttributeProps.AddRange(typeof(SupportInfo)
+            .GetProperties()
+            .Where(p => p.GetCustomAttribute<PSVersionAttribute>(true) is not null));
+        foreach (PropertyInfo prop in _psAttributeProps) {
+            var attr = prop.GetCustomAttribute<PSVersionAttribute>();
+            _psAttributeMap[attr.PsVersion] = prop;
         }
     }
 
