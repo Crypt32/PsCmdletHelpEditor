@@ -6,6 +6,7 @@
         xmlns:properties="clr-namespace:CmdletHelpEditor.Properties"
         xmlns:cmd="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;assembly=Wpf.OfficeTheme"
         xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
+        xmlns:behaviors="clr-namespace:SysadminsLV.WPF.OfficeTheme.Toolkit.Behaviors;assembly=Wpf.OfficeTheme"
         Background="{StaticResource PanelBackgroundBrush}"
         mc:Ignorable="d"
         Title="Options"
@@ -28,16 +29,9 @@
                   Header="Command types to load" Foreground="Navy"
                   MinWidth="300"
                   Margin="5">
-            <StackPanel>
-                <StackPanel.Resources>
-                    <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-                        <Setter Property="Height" Value="25"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </StackPanel.Resources>
+            <StackPanel behaviors:MarginSetter.Margin="5">
                 <CheckBox Content="Function"
-                          IsChecked="{Binding FunctionChecked}"
-                          Margin="0,5,0,0"/>
+                          IsChecked="{Binding FunctionChecked}"/>
                 <CheckBox Content="Filter"
                           IsChecked="{Binding FilterChecked}"/>
                 <CheckBox Content="Cmdlet"
