@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using CmdletHelpEditor.API.Utility;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
@@ -112,6 +116,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.WinXP, "Windows XP")]
     public Boolean WinXpChecked {
         get => wxp;
         set {
@@ -124,6 +129,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.WinVista, "Windows Vista")]
     public Boolean WinVistaChecked {
         get => wv;
         set {
@@ -136,6 +142,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win7, "Windows 7")]
     public Boolean Win7Checked {
         get => w7;
         set {
@@ -148,6 +155,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win8, "Windows 8")]
     public Boolean Win8Checked {
         get => w8;
         set {
@@ -160,6 +168,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win81, "Windows 8.1")]
     public Boolean Win81Checked {
         get => w81;
         set {
@@ -172,6 +181,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win10, "Windows 10")]
     public Boolean Win10Checked {
         get => w10;
         set {
@@ -184,6 +194,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win11, "Windows 11")]
     public Boolean Win11Checked {
         get => w11;
         set {
@@ -196,6 +207,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2003, "Windows Server 2003 all editions")]
     public Boolean Win2003Checked {
         get => w2k3;
         set {
@@ -224,6 +236,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2003Std, "Windows Server 2003 Standard")]
     public Boolean Win2003StdChecked {
         get => w2k3s;
         set {
@@ -242,6 +255,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2003EE, "Windows Server 2003 Enterprise")]
     public Boolean Win2003EEChecked {
         get => w2k3e;
         set {
@@ -260,6 +274,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2003DC, "Windows Server 2003 Datacenter")]
     public Boolean Win2003DCChecked {
         get => w2k3d;
         set {
@@ -278,6 +293,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008, "Windows Server 2008 all editions")]
     public Boolean Win2008Checked {
         get => w2k8;
         set {
@@ -306,6 +322,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008Std, "Windows Server 2008 Standard")]
     public Boolean Win2008StdChecked {
         get => w2k8s;
         set {
@@ -324,6 +341,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008EE, "Windows Server 2008 Enterprise")]
     public Boolean Win2008EEChecked {
         get => w2k8e;
         set {
@@ -342,6 +360,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008DC, "Windows Server 2008 Datacenter")]
     public Boolean Win2008DCChecked {
         get => w2k8d;
         set {
@@ -360,6 +379,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008R2, "Windows Server 2008 R2 all editions")]
     public Boolean Win2008R2Checked {
         get => w2k8r2;
         set {
@@ -388,6 +408,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008R2Std, "Windows Server 2008 R2 Standard")]
     public Boolean Win2008R2StdChecked {
         get => w2k8r2s;
         set {
@@ -406,6 +427,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008R2EE, "Windows Server 2008 R2 Enterprise")]
     public Boolean Win2008R2EEChecked {
         get => w2k8r2e;
         set {
@@ -424,6 +446,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2008R2DC, "Windows Server 2008 R2 Enterprise")]
     public Boolean Win2008R2DCChecked {
         get => w2k8r2d;
         set {
@@ -442,6 +465,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012, "Windows Server 2012 all editions")]
     public Boolean Win2012Checked {
         get => w2k12;
         set {
@@ -468,6 +492,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012Std, "Windows Server 2012 Standard")]
     public Boolean Win2012StdChecked {
         get => w2k12s;
         set {
@@ -486,6 +511,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012DC, "Windows Server 2012 Datacenter")]
     public Boolean Win2012DCChecked {
         get => w2k12d;
         set {
@@ -504,6 +530,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012R2, "Windows Server 2012 R2 all editions")]
     public Boolean Win2012R2Checked {
         get => w2k12r2;
         set {
@@ -530,6 +557,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012R2Std, "Windows Server 2012 R2 Standard")]
     public Boolean Win2012R2StdChecked {
         get => w2k12r2s;
         set {
@@ -548,6 +576,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2012R2DC, "Windows Server 2012 R2 Datacenter")]
     public Boolean Win2012R2DCChecked {
         get => w2k12r2d;
         set {
@@ -566,6 +595,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2016, "Windows Server 2016 all editions")]
     public Boolean Win2016Checked {
         get => w2k16;
         set {
@@ -592,6 +622,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2016Std, "Windows Server 2016 Standard")]
     public Boolean Win2016StdChecked {
         get => w2k16s;
         set {
@@ -610,6 +641,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2016DC, "Windows Server 2016 Datacenter")]
     public Boolean Win2016DCChecked {
         get => w2k16d;
         set {
@@ -628,6 +660,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2019, "Windows Server 2019 all editions")]
     public Boolean Win2019Checked {
         get => w2k19;
         set {
@@ -654,6 +687,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2019Std, "Windows Server 2019 Standard")]
     public Boolean Win2019StdChecked {
         get => w2k19s;
         set {
@@ -672,6 +706,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2019DC, "Windows Server 2019 Datacenter")]
     public Boolean Win2019DCChecked {
         get => w2k19d;
         set {
@@ -690,7 +725,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-
+    [OSVersion(WinOsVersionSupport.Win2022, "Windows Server 2022 all editions")]
     public Boolean Win2022Checked {
         get => w2k22;
         set {
@@ -717,6 +752,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2022Std, "Windows Server 2022 Standard")]
     public Boolean Win2022StdChecked {
         get => w2k22s;
         set {
@@ -735,6 +771,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2022DC, "Windows Server 2022 Datacenter")]
     public Boolean Win2022DCChecked {
         get => w2k22d;
         set {
@@ -753,7 +790,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
-
+    [OSVersion(WinOsVersionSupport.Win2025, "Windows Server 2025 all editions")]
     public Boolean Win2025Checked {
         get => w2k25;
         set {
@@ -780,6 +817,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             }
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2025Std, "Windows Server 2025 Standard")]
     public Boolean Win2025StdChecked {
         get => w2k25s;
         set {
@@ -798,6 +836,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             OnPropertyChanged();
         }
     }
+    [OSVersion(WinOsVersionSupport.Win2025DC, "Windows Server 2025 Datacenter")]
     public Boolean Win2025DCChecked {
         get => w2k25d;
         set {
@@ -819,6 +858,13 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
 
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
         WinOsVersion = winOsVersion;
+        var flags = Enum.GetValues(typeof(WinOsVersionSupport))
+            .Cast<WinOsVersionSupport>()
+            .Where(x => x != 0 && (x & winOsVersion) == x);
+        foreach (WinOsVersionSupport enabledFlags in flags) {
+            var propInfo = _osAttributeMap[enabledFlags];
+            propInfo.SetValue(this, true);
+        }
     }
     public XmlPsCommandSupportInfo ToXmlObject() {
         var retValue = new XmlPsCommandSupportInfo {
@@ -827,92 +873,34 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
             RequiresRSAT = RequiresRSAT
         };
         var os = WinOsVersionSupport.None;
-        if (wxp) {
-            os |= WinOsVersionSupport.WinXP;
+        foreach (PropertyInfo p in _osAttributeProps) {
+            OSVersionAttribute attr = p.GetCustomAttribute<OSVersionAttribute>();
+            if ((Boolean)p.GetValue(this)) {
+                os |= attr.OsVersion;
+            }
         }
-        if (wv) {
-            os |= WinOsVersionSupport.WinVista;
-        }
-        if (w7) {
-            os |= WinOsVersionSupport.Win7;
-        }
-        if (w8) {
-            os |= WinOsVersionSupport.Win8;
-        }
-        if (w81) {
-            os |= WinOsVersionSupport.Win81;
-        }
-        if (w10) {
-            os |= WinOsVersionSupport.Win10;
-        }
-        if (w11) {
-            os |= WinOsVersionSupport.Win11;
-        }
-        if (w2k3s) {
-            os |= WinOsVersionSupport.Win2003Std;
-        }
-        if (w2k3e) {
-            os |= WinOsVersionSupport.Win2003EE;
-        }
-        if (w2k3d) {
-            os |= WinOsVersionSupport.Win2003DC;
-        }
-        if (w2k8s) {
-            os |= WinOsVersionSupport.Win2008Std;
-        }
-        if (w2k8e) {
-            os |= WinOsVersionSupport.Win2008EE;
-        }
-        if (w2k8d) {
-            os |= WinOsVersionSupport.Win2008DC;
-        }
-        if (w2k8r2s) {
-            os |= WinOsVersionSupport.Win2008R2Std;
-        }
-        if (w2k8r2e) {
-            os |= WinOsVersionSupport.Win2008R2EE;
-        }
-        if (w2k8r2d) {
-            os |= WinOsVersionSupport.Win2008R2DC;
-        }
-        if (w2k12s) {
-            os |= WinOsVersionSupport.Win2012Std;
-        }
-        if (w2k12d) {
-            os |= WinOsVersionSupport.Win2012DC;
-        }
-        if (w2k12r2s) {
-            os |= WinOsVersionSupport.Win2012R2Std;
-        }
-        if (w2k12r2d) {
-            os |= WinOsVersionSupport.Win2012R2DC;
-        }
-        if (w2k16s) {
-            os |= WinOsVersionSupport.Win2016Std;
-        }
-        if (w2k16d) {
-            os |= WinOsVersionSupport.Win2016DC;
-        }
-        if (w2k19s) {
-            os |= WinOsVersionSupport.Win2019Std;
-        }
-        if (w2k19d) {
-            os |= WinOsVersionSupport.Win2019DC;
-        }
-        if (w2k22s) {
-            os |= WinOsVersionSupport.Win2022Std;
-        }
-        if (w2k22d) {
-            os |= WinOsVersionSupport.Win2022DC;
-        }
-        if (w2k25s) {
-            os |= WinOsVersionSupport.Win2025Std;
-        }
-        if (w2k25d) {
-            os |= WinOsVersionSupport.Win2025DC;
-        }
+        
         retValue.WinOsVersionAsInt = (Int32)os;
 
         return retValue;
     }
+
+    #region Reflection helpers
+    // do some caching to minimize penalty hit imposed by reflection.
+    static readonly List<PropertyInfo> _osAttributeProps = [];
+    static readonly Dictionary<WinOsVersionSupport, PropertyInfo> _osAttributeMap = [];
+
+    static SupportInfo() {
+        if (_osAttributeProps.Count == 0) {
+            _osAttributeProps.AddRange(typeof(SupportInfo)
+                .GetProperties()
+                .Where(p => p.GetCustomAttribute<OSVersionAttribute>(true) is not null));
+            foreach (PropertyInfo prop in _osAttributeProps) {
+                var attr = prop.GetCustomAttribute<OSVersionAttribute>();
+                _osAttributeMap[attr.OsVersion] = prop;
+            }
+        }
+    }
+
+    #endregion
 }

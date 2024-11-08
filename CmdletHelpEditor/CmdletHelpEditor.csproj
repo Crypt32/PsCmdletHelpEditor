@@ -169,6 +169,7 @@
     <Compile Include="API\Utility\NativeDialogFactory.cs" />
     <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Models\SavePendingEventArgs.cs" />
+    <Compile Include="API\Utility\OSVersionAttribute.cs" />
     <Compile Include="API\ViewModels\AppCommands.cs" />
     <Compile Include="API\Models\ProviderInformation.cs" />
     <Compile Include="API\Converters\MultiParamConverter.cs" />
