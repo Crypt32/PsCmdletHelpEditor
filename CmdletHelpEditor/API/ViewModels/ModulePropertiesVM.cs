@@ -10,12 +10,10 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
 class ModulePropertiesVM : AsyncViewModel, IModulePublishPropertiesVM {
-    readonly IDataSource _dataSource;
     Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
     ProviderInformation providerInfo;
 
-    public ModulePropertiesVM(IDataSource dataSource) {
-        _dataSource = dataSource;
+    public ModulePropertiesVM() {
         ConnectProviderCommand = new AsyncCommand(connect);
     }
 

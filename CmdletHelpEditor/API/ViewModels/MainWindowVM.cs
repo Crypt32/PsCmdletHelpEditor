@@ -12,11 +12,9 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM {
     Int32? psVersion;
     TabDocumentVM? selectedDocument;
 
-    public MainWindowVM(IDataSource dataSource, IProgressBar progressBar) {
+    public MainWindowVM(IProgressBar progressBar) {
         NewTabCommand = new RelayCommand(newTab);
-        DataSource = dataSource;
         ProgressBar = progressBar;
-        DataSource.ModuleList.Add(new PsModuleItem());
         //Settings.Default.Reload();
         CommandManager = new AppCommands(this);
         NewTabCommand.Execute(null);
@@ -35,7 +33,6 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM {
 
     // data definitions
     public ObservableCollection<TabDocumentVM> Documents { get; } = [];
-    public IDataSource DataSource { get; }
     public IProgressBar ProgressBar { get; }
 
     public TabDocumentVM? SelectedDocument {

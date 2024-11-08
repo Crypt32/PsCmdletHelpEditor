@@ -31,7 +31,6 @@ public partial class App {
 
     void configureServices() {
         Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
-        Container.RegisterSingleton<IDataSource, DataSource>();
         Container.RegisterSingleton<IPowerShellProcessor, PowerShellProcessor>();
         Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
         Container.RegisterSingleton<IMsgBox, MsgBoxClass>();
