@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -152,9 +153,9 @@ public class SupportInfo : ViewModelBase {
     }
     [OSVersion(WinOsVersionSupport.Win2003, "Windows Server 2003 all editions")]
     public Boolean Win2003Checked {
-        get => w2k3;
+        get => w2k3s && w2k3e && w2k3d;
         set {
-            w2k3 = w2k3s = w2k3e = w2k3d = value;
+            w2k3s = w2k3e = w2k3d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2003Checked),
                     nameof(Win2003StdChecked),
@@ -167,16 +168,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k3s;
         set {
             w2k3s = value;
-            if (w2k3s) {
-                if (Win2003EEChecked && Win2003DCChecked) {
-                    w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
-                }
-            } else {
-                w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2003Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2003EE, "Windows Server 2003 Enterprise")]
@@ -184,16 +176,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k3e;
         set {
             w2k3e = value;
-            if (w2k3e) {
-                if (Win2003StdChecked && Win2003DCChecked) {
-                    w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
-                }
-            } else {
-                w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2003Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2003DC, "Windows Server 2003 Datacenter")]
@@ -201,23 +184,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k3d;
         set {
             w2k3d = value;
-            if (w2k3d) {
-                if (Win2003StdChecked && Win2003EEChecked) {
-                    w2k3 = true;
-                    OnPropertyChanged(nameof(Win2003Checked));
-                }
-            } else {
-                w2k3 = false;
-                OnPropertyChanged(nameof(Win2003Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2003Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008, "Windows Server 2008 all editions")]
     public Boolean Win2008Checked {
-        get => w2k8;
+        get => w2k8s && w2k8e && w2k8d;
         set {
-            w2k8 = w2k8s = w2k8e = w2k8d = value;
+            w2k8s = w2k8e = w2k8d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2008Checked),
                     nameof(Win2008StdChecked),
@@ -230,16 +204,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k8s;
         set {
             w2k8s = value;
-            if (w2k8s) {
-                if (Win2008EEChecked && Win2008DCChecked) {
-                    w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
-                }
-            } else {
-                w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2008Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008EE, "Windows Server 2008 Enterprise")]
@@ -247,16 +212,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k8e;
         set {
             w2k8e = value;
-            if (w2k8e) {
-                if (Win2008StdChecked && Win2008DCChecked) {
-                    w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
-                }
-            } else {
-                w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2008Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008DC, "Windows Server 2008 Datacenter")]
@@ -264,44 +220,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k8d;
         set {
             w2k8d = value;
-            if (w2k8d) {
-                if (Win2008StdChecked && Win2008EEChecked) {
-                    w2k8 = true;
-                    OnPropertyChanged(nameof(Win2008Checked));
-                }
-            } else {
-                w2k8 = false;
-                OnPropertyChanged(nameof(Win2008Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: nameof(Win2008Checked));
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008R2, "Windows Server 2008 R2 all editions")]
     public Boolean Win2008R2Checked {
-        get => w2k8r2;
+        get => w2k8r2s && w2k8r2e && w2k8r2d;
         set {
-            w2k8r2 = w2k8r2s = w2k8r2e = w2k8r2d = value;
-            if (w2k8r2) {
-                w2k8r2s = w2k8r2e = w2k8r2d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2008R2StdChecked),
-                                                 nameof(Win2008R2EEChecked),
-                                                 nameof(Win2008R2DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k8r2s = w2k8r2e = w2k8r2d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2008R2Checked),
-                                             nameof(Win2008R2StdChecked),
-                                             nameof(Win2008R2EEChecked),
-                                             nameof(Win2008R2DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
-
+            w2k8r2s = w2k8r2e = w2k8r2d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2008R2Checked),
                     nameof(Win2008R2StdChecked),
@@ -323,7 +249,7 @@ public class SupportInfo : ViewModelBase {
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2008R2Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008R2EE, "Windows Server 2008 R2 Enterprise")]
@@ -331,16 +257,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k8r2e;
         set {
             w2k8r2e = value;
-            if (w2k8r2e) {
-                if (Win2008R2StdChecked && Win2008R2DCChecked) {
-                    w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
-                }
-            } else {
-                w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2008R2Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008R2DC, "Windows Server 2008 R2 Enterprise")]
@@ -348,23 +265,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k8r2d;
         set {
             w2k8r2d = value;
-            if (w2k8r2d) {
-                if (Win2008R2StdChecked && Win2008R2EEChecked) {
-                    w2k8r2 = true;
-                    OnPropertyChanged(nameof(Win2008R2Checked));
-                }
-            } else {
-                w2k8r2 = false;
-                OnPropertyChanged(nameof(Win2008R2Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2008R2Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012, "Windows Server 2012 all editions")]
     public Boolean Win2012Checked {
-        get => w2k12;
+        get => w2k12s && w2k12d;
         set {
-            w2k12 = w2k12s = w2k12d = value;
+            w2k12s = w2k12d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2012Checked),
                     nameof(Win2012StdChecked),
@@ -376,16 +284,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k12s;
         set {
             w2k12s = value;
-            if (w2k12s) {
-                if (Win2012DCChecked) {
-                    w2k12 = true;
-                    OnPropertyChanged(nameof(Win2012Checked));
-                }
-            } else {
-                w2k12 = false;
-                OnPropertyChanged(nameof(Win2012Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2012Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012DC, "Windows Server 2012 Datacenter")]
@@ -393,23 +292,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k12d;
         set {
             w2k12d = value;
-            if (w2k12d) {
-                if (Win2012StdChecked) {
-                    w2k12 = true;
-                    OnPropertyChanged(nameof(Win2012Checked));
-                }
-            } else {
-                w2k12 = false;
-                OnPropertyChanged(nameof(Win2012Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2012Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012R2, "Windows Server 2012 R2 all editions")]
     public Boolean Win2012R2Checked {
-        get => w2k12r2;
+        get => w2k12r2s && w2k12r2d;
         set {
-            w2k12r2 = w2k12r2s = w2k12r2d = value;
+            w2k12r2s = w2k12r2d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2012R2Checked),
                     nameof(Win2012R2StdChecked),
@@ -421,16 +311,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k12r2s;
         set {
             w2k12r2s = value;
-            if (w2k12r2s) {
-                if (Win2012R2DCChecked) {
-                    w2k12r2 = true;
-                    OnPropertyChanged(nameof(Win2012R2Checked));
-                }
-            } else {
-                w2k12r2 = false;
-                OnPropertyChanged(nameof(Win2012R2Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2012R2Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012R2DC, "Windows Server 2012 R2 Datacenter")]
@@ -438,23 +319,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k12r2d;
         set {
             w2k12r2d = value;
-            if (w2k12r2d) {
-                if (Win2012R2StdChecked) {
-                    w2k12r2 = true;
-                    OnPropertyChanged(nameof(Win2012R2Checked));
-                }
-            } else {
-                w2k12r2 = false;
-                OnPropertyChanged(nameof(Win2012R2Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2012R2Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2016, "Windows Server 2016 all editions")]
     public Boolean Win2016Checked {
-        get => w2k16;
+        get => w2k16s && w2k16d;
         set {
-            w2k16 = w2k16s = w2k16d = value;
+            w2k16s = w2k16d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2016Checked),
                     nameof(Win2016StdChecked),
@@ -466,16 +338,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k16s;
         set {
             w2k16s = value;
-            if (w2k16s) {
-                if (Win2016DCChecked) {
-                    w2k16 = true;
-                    OnPropertyChanged(nameof(Win2016Checked));
-                }
-            } else {
-                w2k16 = false;
-                OnPropertyChanged(nameof(Win2016Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2016Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2016DC, "Windows Server 2016 Datacenter")]
@@ -483,23 +346,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k16d;
         set {
             w2k16d = value;
-            if (w2k16d) {
-                if (Win2016StdChecked) {
-                    w2k16 = true;
-                    OnPropertyChanged(nameof(Win2016Checked));
-                }
-            } else {
-                w2k16 = false;
-                OnPropertyChanged(nameof(Win2016Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2016Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2019, "Windows Server 2019 all editions")]
     public Boolean Win2019Checked {
-        get => w2k19;
+        get => w2k19s && w2k19d;
         set {
-            w2k19 = w2k19s = w2k19d = value;
+            w2k19s = w2k19d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2019Checked),
                     nameof(Win2019StdChecked),
@@ -511,16 +365,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k19s;
         set {
             w2k19s = value;
-            if (w2k19s) {
-                if (Win2019DCChecked) {
-                    w2k19 = true;
-                    OnPropertyChanged(nameof(Win2019Checked));
-                }
-            } else {
-                w2k19 = false;
-                OnPropertyChanged(nameof(Win2019Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2019Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2019DC, "Windows Server 2019 Datacenter")]
@@ -528,23 +373,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k19d;
         set {
             w2k19d = value;
-            if (w2k19d) {
-                if (Win2019StdChecked) {
-                    w2k19 = true;
-                    OnPropertyChanged(nameof(Win2019Checked));
-                }
-            } else {
-                w2k19 = false;
-                OnPropertyChanged(nameof(Win2019Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2019Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2022, "Windows Server 2022 all editions")]
     public Boolean Win2022Checked {
-        get => w2k22;
+        get => w2k22s && w2k22d;
         set {
-            w2k22 = w2k22s = w2k22d = value;
+            w2k22s = w2k22d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2022Checked),
                     nameof(Win2022StdChecked),
@@ -556,16 +392,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k22s;
         set {
             w2k22s = value;
-            if (w2k22s) {
-                if (Win2022DCChecked) {
-                    w2k22 = true;
-                    OnPropertyChanged(nameof(Win2022Checked));
-                }
-            } else {
-                w2k22 = false;
-                OnPropertyChanged(nameof(Win2022Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2022Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2022DC, "Windows Server 2022 Datacenter")]
@@ -573,23 +400,14 @@ public class SupportInfo : ViewModelBase {
         get => w2k22d;
         set {
             w2k22d = value;
-            if (w2k22d) {
-                if (Win2022StdChecked) {
-                    w2k22 = true;
-                    OnPropertyChanged(nameof(Win2022Checked));
-                }
-            } else {
-                w2k22 = false;
-                OnPropertyChanged(nameof(Win2022Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2022Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2025, "Windows Server 2025 all editions")]
     public Boolean Win2025Checked {
-        get => w2k25;
+        get => w2k25s && w2k25d;
         set {
-            w2k25 = w2k25s = w2k25d = value;
+            w2k25s = w2k25d = value;
             raisePropertyChangedWithDependants(propertyNames:
                 [nameof(Win2025Checked),
                     nameof(Win2025StdChecked),
@@ -601,16 +419,7 @@ public class SupportInfo : ViewModelBase {
         get => w2k25s;
         set {
             w2k25s = value;
-            if (w2k25s) {
-                if (Win2025DCChecked) {
-                    w2k25 = true;
-                    OnPropertyChanged(nameof(Win2025Checked));
-                }
-            } else {
-                w2k25 = false;
-                OnPropertyChanged(nameof(Win2025Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2025Checked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2025DC, "Windows Server 2025 Datacenter")]
@@ -618,20 +427,11 @@ public class SupportInfo : ViewModelBase {
         get => w2k25d;
         set {
             w2k25d = value;
-            if (w2k25d) {
-                if (Win2025StdChecked) {
-                    w2k25 = true;
-                    OnPropertyChanged(nameof(Win2025Checked));
-                }
-            } else {
-                w2k25 = false;
-                OnPropertyChanged(nameof(Win2025Checked));
-            }
-            OnPropertyChanged();
+            raisePropertyChangedWithDependants(propertyNames: [nameof(Win2025Checked)]);
         }
     }
 
-    void raisePropertyChangedWithDependants([CallerMemberName] String? propertyName = null, IEnumerable<String>? propertyNames = null) {
+    void raisePropertyChangedWithDependants([CallerMemberName] String? propertyName = null, params String[]? propertyNames) {
         if (propertyNames is not null) {
             foreach (String depPropertyName in propertyNames) {
                 OnPropertyChanged(depPropertyName);
