@@ -50,7 +50,7 @@ public class PsCommandRelatedLinkVM : ViewModelBase, IPsCommandRelatedLink {
 
     public override Boolean Equals(Object obj) {
         return !ReferenceEquals(null, obj) && (ReferenceEquals(this, obj) ||
-                                               obj.GetType() == this.GetType() && Equals((PsCommandRelatedLinkVM)obj));
+                                               obj.GetType() == GetType() && Equals((PsCommandRelatedLinkVM)obj));
     }
 
     protected Boolean Equals(PsCommandRelatedLinkVM other) {

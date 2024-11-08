@@ -206,8 +206,8 @@
     <Compile Include="API\ViewModels\EditorVM.cs" />
     <Compile Include="API\ViewModels\MainWindowVM.cs" />
     <Compile Include="API\ViewModels\OutputVM.cs" />
-    <Compile Include="Views\Dialogs\Options.xaml.cs">
-      <DependentUpon>Options.xaml</DependentUpon>
+    <Compile Include="Views\Dialogs\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BrowserBehavior.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -288,7 +288,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Dialogs\Options.xaml">
+    <Page Include="Views\Dialogs\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

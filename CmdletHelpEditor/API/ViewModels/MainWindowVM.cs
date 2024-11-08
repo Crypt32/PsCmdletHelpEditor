@@ -19,7 +19,6 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM {
         DataSource.ModuleList.Add(new PsModuleItem());
         //Settings.Default.Reload();
         CommandManager = new AppCommands(this);
-        ConfigContext = new ConfigVM();
         NewTabCommand.Execute(null);
     }
 
@@ -32,7 +31,6 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM {
     public RelatedLinkVM RelatedLinkContext { get; set; }
     public ExampleVM ExampleContext { get; set; }
     public OutputVM OutputContext { get; set; }
-    public ConfigVM ConfigContext { get; set; }
     #endregion
 
     // data definitions

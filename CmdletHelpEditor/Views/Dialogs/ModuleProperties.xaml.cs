@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
@@ -54,62 +55,62 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         get => providerInfo;
         set {
             providerInfo = value;
-            OnPropertyChanged(nameof(ProviderInfo));
+            OnPropertyChanged();
         }
     }
 
-    public ICommand UseProviderCommand { get; set; }
+    public ICommand UseProviderCommand { get; }
 
-    public ObservableCollection<ProviderInformation> Providers { get; set; } = [];
-    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; set; } = [];
+    public ObservableCollection<ProviderInformation> Providers { get; }
+    public ObservableCollection<XmlRpcBlogInfo> WebSites { get; } = [];
 
     public Boolean UseSupports {
         get => useSupports;
         set {
             useSupports = value;
-            OnPropertyChanged(nameof(UseSupports));
+            OnPropertyChanged();
         }
     }
     public Boolean UseProvider {
         get => useProvider;
         set {
             useProvider = value;
-            OnPropertyChanged(nameof(UseProvider));
+            OnPropertyChanged();
         }
     }
     public Boolean ProvSelected {
         get => provSelected;
         set {
             provSelected = value;
-            OnPropertyChanged(nameof(ProvSelected));
+            OnPropertyChanged();
         }
     }
     public Boolean UrlEditable {
         get => urlEditable;
         set {
             urlEditable = value;
-            OnPropertyChanged(nameof(UrlEditable));
+            OnPropertyChanged();
         }
     }
     public Boolean UserEditable {
         get => userEditable;
         set {
             userEditable = value;
-            OnPropertyChanged(nameof(UserEditable));
+            OnPropertyChanged();
         }
     }
     public Boolean BlogsLoaded {
         get => blogsLoaded;
         set {
             blogsLoaded = value;
-            OnPropertyChanged(nameof(BlogsLoaded));
+            OnPropertyChanged();
         }
     }
     public Boolean BlogSelected {
         get => blogSelected;
         set {
             blogSelected = value;
-            OnPropertyChanged(nameof(BlogSelected));
+            OnPropertyChanged();
         }
     }
         
@@ -117,16 +118,15 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
         SetPassword();
         blogger = ProviderInfo.InitializeBlogger();
         try {
-            IEnumerable<PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
+            IEnumerable<XmlRpcBlogInfo> blogs = Task.FromResult(blogger.GetUserBlogsAsync()).Result.Result;
             if (blogs == null) { return; }
             WebSites.Clear();
-            foreach (PsCmdletHelpEditor.XmlRpc.XmlRpcBlogInfo blog in blogs) {
-                var blogInfo = new XmlRpcBlogInfo {
+            foreach (XmlRpcBlogInfo blog in blogs) {
+                WebSites.Add(new XmlRpcBlogInfo {
                     BlogID = blog.BlogID,
                     BlogName = blog.BlogName,
                     URL = blog.URL
-                };
-                WebSites.Add(blogInfo);
+                });
             }
         } catch (Exception ex) {
             _msgBox.ShowError("Error", ex.Message);
@@ -187,7 +187,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
     }
     public SecureString Password => pwdBox.SecurePassword;
 
-    void OnPropertyChanged(String name) {
+    void OnPropertyChanged([CallerMemberName] String? name = null) {
         PropertyChangedEventHandler handler = PropertyChanged;
         handler?.Invoke(this, new PropertyChangedEventArgs(name));
     }

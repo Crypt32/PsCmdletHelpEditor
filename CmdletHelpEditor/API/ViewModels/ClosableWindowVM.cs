@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Windows.Input;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
-using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
-namespace CmdletHelpEditor.API.ViewModels {
-    public abstract class ClosableWindowVM : ViewModelBase {
-        Boolean? dialogResult;
+namespace CmdletHelpEditor.API.ViewModels;
+public abstract class ClosableWindowVM : AsyncViewModel {
+    Boolean? dialogResult;
 
-        protected ClosableWindowVM() {
-            CloseCommand = new RelayCommand(o => { DialogResult = true; });
-        }
+    protected ClosableWindowVM() {
+        CloseCommand = new RelayCommand(_ => { DialogResult = true; });
+    }
 
-        public ICommand CloseCommand { get; }
+    public ICommand CloseCommand { get; }
 
-        public Boolean? DialogResult {
-            get => dialogResult;
-            set {
-                dialogResult = value;
-                OnPropertyChanged(nameof(DialogResult));
-            }
+    public Boolean? DialogResult {
+        get => dialogResult;
+        set {
+            dialogResult = value;
+            OnPropertyChanged();
         }
     }
 }

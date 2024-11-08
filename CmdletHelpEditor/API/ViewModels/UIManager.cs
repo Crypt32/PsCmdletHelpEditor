@@ -23,7 +23,7 @@ public static class UIManager {
     }
     public static void ShowConfigure(Object obj) {
         Window mainWindow = Application.Current.MainWindow;
-        var OptDlg = new Options {
+        var OptDlg = new OptionsWindow {
             Owner = mainWindow
         };
         OptDlg.ShowDialog();
