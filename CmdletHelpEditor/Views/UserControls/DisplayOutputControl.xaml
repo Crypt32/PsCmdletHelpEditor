@@ -20,7 +20,7 @@
                              IsChecked="{Binding EditorContext.OutputContext.TextChecked}"
                              IsEnabled="False" />
                 <RadioButton GroupName="group"
-                             Content="XML"
+                             Content="MAML XML"
                              VerticalAlignment="Center"
                              Margin="10,0,0,0"
                              IsChecked="{Binding EditorContext.OutputContext.XmlChecked}" />
@@ -46,22 +46,25 @@
                         Command="{Binding EditorContext.OutputContext.GenerateOutputCommand}" />
             </StackPanel>
         </Border>
-        <controls:BindableRichTextBox x:Name="SrcRtbBox"
-                                      IsUndoEnabled="False"
-                                      UndoLimit="0"
-                                      Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
-                                      FontFamily="Consolas"
-                                      FontSize="12"
-                                      VerticalContentAlignment="Stretch"
-                                      HorizontalContentAlignment="Stretch"
-                                      HorizontalScrollBarVisibility="Auto"
-                                      VerticalScrollBarVisibility="Auto"
-                                      IsReadOnly="True"
-                                      Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                      PreviewMouseWheel="onRtbPreviewMouseWheel"/>
-        <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
-                    Visibility="{Binding EditorContext.OutputContext.HtmlChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"
-                                 Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
+        <Grid>
+            <controls:BindableRichTextBox x:Name="SrcRtbBox"
+                                          IsUndoEnabled="False"
+                                          UndoLimit="0"
+                                          Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
+                                          FontFamily="Consolas"
+                                          FontSize="12"
+                                          VerticalContentAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          IsReadOnly="True"
+                                          IsReadOnlyCaretVisible="True"
+                                          Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          PreviewMouseWheel="onRtbPreviewMouseWheel"/>
+            <WebBrowser c:BrowserBehavior.Html="{Binding EditorContext.OutputContext.HtmlText}"
+                        Visibility="{Binding EditorContext.OutputContext.HtmlChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"
+                                     Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
+        </Grid>
     </DockPanel>
 </UserControl>
