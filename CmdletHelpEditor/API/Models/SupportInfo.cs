@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using CmdletHelpEditor.API.Utility;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Models.Xml;
@@ -153,27 +154,12 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2003Checked {
         get => w2k3;
         set {
-            w2k3 = value;
-            if (w2k3) {
-                w2k3s = w2k3e = w2k3d = true;
-                foreach (String str in new[] {
-                                                  nameof(Win2003StdChecked),
-                                                  nameof(Win2003EEChecked),
-                                                  nameof(Win2003DCChecked)
-                                              }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k3s = w2k3e = w2k3d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2003Checked),
-                                             nameof(Win2003StdChecked),
-                                             nameof(Win2003EEChecked),
-                                             nameof(Win2003DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k3 = w2k3s = w2k3e = w2k3d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2003Checked),
+                    nameof(Win2003StdChecked),
+                    nameof(Win2003EEChecked),
+                    nameof(Win2003DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2003Std, "Windows Server 2003 Standard")]
@@ -231,27 +217,12 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2008Checked {
         get => w2k8;
         set {
-            w2k8 = value;
-            if (w2k8) {
-                w2k8s = w2k8e = w2k8d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2008StdChecked),
-                                                 nameof(Win2008EEChecked),
-                                                 nameof(Win2008DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k8s = w2k8e = w2k8d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2008Checked),
-                                             nameof(Win2008StdChecked),
-                                             nameof(Win2008EEChecked),
-                                             nameof(Win2008DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k8 = w2k8s = w2k8e = w2k8d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2008Checked),
+                    nameof(Win2008StdChecked),
+                    nameof(Win2008EEChecked),
+                    nameof(Win2008DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008Std, "Windows Server 2008 Standard")]
@@ -309,7 +280,7 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2008R2Checked {
         get => w2k8r2;
         set {
-            w2k8r2 = value;
+            w2k8r2 = w2k8r2s = w2k8r2e = w2k8r2d = value;
             if (w2k8r2) {
                 w2k8r2s = w2k8r2e = w2k8r2d = true;
                 foreach (String str in new[] {
@@ -330,6 +301,12 @@ public class SupportInfo : ViewModelBase {
                                          }) {
                 OnPropertyChanged(str);
             }
+
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2008R2Checked),
+                    nameof(Win2008R2StdChecked),
+                    nameof(Win2008R2EEChecked),
+                    nameof(Win2008R2DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2008R2Std, "Windows Server 2008 R2 Standard")]
@@ -387,25 +364,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2012Checked {
         get => w2k12;
         set {
-            w2k12 = value;
-            if (w2k12) {
-                w2k12s = w2k12d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2012StdChecked),
-                                                 nameof(Win2012DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k12s = w2k12d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2012Checked),
-                                             nameof(Win2012StdChecked),
-                                             nameof(Win2012DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k12 = w2k12s = w2k12d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2012Checked),
+                    nameof(Win2012StdChecked),
+                    nameof(Win2012DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012Std, "Windows Server 2012 Standard")]
@@ -446,25 +409,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2012R2Checked {
         get => w2k12r2;
         set {
-            w2k12r2 = value;
-            if (w2k12r2) {
-                w2k12r2s = w2k12r2d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2012R2StdChecked),
-                                                 nameof(Win2012R2DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k12r2s = w2k12r2d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2012R2Checked),
-                                             nameof(Win2012R2StdChecked),
-                                             nameof(Win2012R2DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k12r2 = w2k12r2s = w2k12r2d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2012R2Checked),
+                    nameof(Win2012R2StdChecked),
+                    nameof(Win2012R2DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2012R2Std, "Windows Server 2012 R2 Standard")]
@@ -505,25 +454,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2016Checked {
         get => w2k16;
         set {
-            w2k16 = value;
-            if (w2k16) {
-                w2k16s = w2k16d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2016StdChecked),
-                                                 nameof(Win2016DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k16s = w2k16d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2016Checked),
-                                             nameof(Win2016StdChecked),
-                                             nameof(Win2016DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k16 = w2k16s = w2k16d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2016Checked),
+                    nameof(Win2016StdChecked),
+                    nameof(Win2016DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2016Std, "Windows Server 2016 Standard")]
@@ -564,25 +499,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2019Checked {
         get => w2k19;
         set {
-            w2k19 = value;
-            if (w2k19) {
-                w2k19s = w2k19d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2019StdChecked),
-                                                 nameof(Win2019DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k19s = w2k19d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2019Checked),
-                                             nameof(Win2019StdChecked),
-                                             nameof(Win2019DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k19 = w2k19s = w2k19d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2019Checked),
+                    nameof(Win2019StdChecked),
+                    nameof(Win2019DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2019Std, "Windows Server 2019 Standard")]
@@ -623,25 +544,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2022Checked {
         get => w2k22;
         set {
-            w2k22 = value;
-            if (w2k22) {
-                w2k22s = w2k22d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2022StdChecked),
-                                                 nameof(Win2022DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k22s = w2k22d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2022Checked),
-                                             nameof(Win2022StdChecked),
-                                             nameof(Win2022DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k22 = w2k22s = w2k22d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2022Checked),
+                    nameof(Win2022StdChecked),
+                    nameof(Win2022DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2022Std, "Windows Server 2022 Standard")]
@@ -682,25 +589,11 @@ public class SupportInfo : ViewModelBase {
     public Boolean Win2025Checked {
         get => w2k25;
         set {
-            w2k25 = value;
-            if (w2k25) {
-                w2k25s = w2k25d = true;
-                foreach (String str in new[] {
-                                                 nameof(Win2025StdChecked),
-                                                 nameof(Win2025DCChecked)
-                                             }) {
-                    OnPropertyChanged(str);
-                }
-            } else {
-                w2k25s = w2k25d = false;
-            }
-            foreach (String str in new[] {
-                                             nameof(Win2025Checked),
-                                             nameof(Win2025StdChecked),
-                                             nameof(Win2025DCChecked)
-                                         }) {
-                OnPropertyChanged(str);
-            }
+            w2k25 = w2k25s = w2k25d = value;
+            raisePropertyChangedWithDependants(propertyNames:
+                [nameof(Win2025Checked),
+                    nameof(Win2025StdChecked),
+                    nameof(Win2025DCChecked)]);
         }
     }
     [OSVersion(WinOsVersionSupport.Win2025Std, "Windows Server 2025 Standard")]
@@ -736,6 +629,15 @@ public class SupportInfo : ViewModelBase {
             }
             OnPropertyChanged();
         }
+    }
+
+    void raisePropertyChangedWithDependants([CallerMemberName] String? propertyName = null, IEnumerable<String>? propertyNames = null) {
+        if (propertyNames is not null) {
+            foreach (String depPropertyName in propertyNames) {
+                OnPropertyChanged(depPropertyName);
+            }
+        }
+        OnPropertyChanged(propertyName);
     }
 
     public void SetPsVersion(PsVersionSupport psVersion) {
