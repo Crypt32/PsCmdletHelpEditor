@@ -20,7 +20,8 @@ public class CmdletObject : ViewModelBase {
     ObservableCollection<PsCommandRelatedLinkVM> linkList;
 
     public CmdletObject() {
-        initialize();
+        ParamSets = [];
+        Parameters = [];
         Examples = [];
         RelatedLinks = [];
     }
@@ -126,10 +127,7 @@ public class CmdletObject : ViewModelBase {
         }
     }
     void initialize() {
-        ParamSets = [];
-        Parameters = [];
-        Examples = [];
-        RelatedLinks = [];
+        
     }
 
     #region nested object event handlers
@@ -168,7 +166,6 @@ public class CmdletObject : ViewModelBase {
             ParamSets.Add(info);
         }
     }
-
     public void CopyFromCmdlet(CmdletObject sourceCmdlet) {
         var processedParameters = new HashSet<String>(StringComparer.OrdinalIgnoreCase);
         // process saved parameters
@@ -216,13 +213,13 @@ public class CmdletObject : ViewModelBase {
     }
 
     public static CmdletObject FromCommandInfo(IPsCommandInfo commandInfo) {
-        var retValue = new CmdletObject();
-        retValue.initialize();
-        retValue.Name = commandInfo.Name;
-        retValue.Verb = commandInfo.Verb;
-        retValue.Noun = commandInfo.Verb;
-        retValue.ExtraHeader = commandInfo.ExtraHeader;
-        retValue.ExtraFooter = commandInfo.ExtraFooter;
+        var retValue = new CmdletObject {
+            Name = commandInfo.Name,
+            Verb = commandInfo.Verb,
+            Noun = commandInfo.Verb,
+            ExtraHeader = commandInfo.ExtraHeader,
+            ExtraFooter = commandInfo.ExtraFooter
+        };
         retValue.Syntax.AddRange(commandInfo.GetSyntax());
         retValue.GeneralHelp = new PsCommandGeneralDescriptionVM { Status = ItemStatus.New };
         retValue.GeneralHelp.ImportFromCommandInfo(commandInfo.GetDescription());
