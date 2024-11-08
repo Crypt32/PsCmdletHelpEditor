@@ -9,7 +9,7 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
 namespace CmdletHelpEditor.API.Models;
 // TODO: need to refactor entire class
-public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
+public class SupportInfo : ViewModelBase {
     Boolean ad, rsat, ps2, ps3, ps4, ps5, ps51, ps60, ps61,
         wxp, wv, w7, w8, w81, w10, w11,
         w2k3, w2k3s, w2k3e, w2k3d,
@@ -22,16 +22,7 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         w2k22, w2k22s, w2k22d,
         w2k25, w2k25s, w2k25d;
 
-    public Int32 PsVersionAsInt {
-        get => (Int32)PsVersion;
-        set => PsVersion = (PsVersionSupport)value;
-    }
-    public PsVersionSupport PsVersion { get; set; }
-    public Int32 WinOsVersionAsInt {
-        get => (Int32)WinOsVersion;
-        set => WinOsVersion = (WinOsVersionSupport)value;
-    }
-    public WinOsVersionSupport WinOsVersion { get; set; }
+    //public WinOsVersionSupport WinOsVersion { get; set; }
     public Boolean RequiresAD {
         get => ad;
         set {
@@ -51,9 +42,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps2;
         set {
             ps2 = value;
-            if (ps2) {
-                PsVersion = PsVersionSupport.Ps20;
-            }
             OnPropertyChanged();
         }
     }
@@ -62,9 +50,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps3;
         set {
             ps3 = value;
-            if (ps3) {
-                PsVersion = PsVersionSupport.Ps30;
-            }
             OnPropertyChanged();
         }
     }
@@ -73,9 +58,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps4;
         set {
             ps4 = value;
-            if (ps4) {
-                PsVersion = PsVersionSupport.Ps40;
-            }
             OnPropertyChanged();
         }
     }
@@ -84,9 +66,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps5;
         set {
             ps5 = value;
-            if (ps5) {
-                PsVersion = PsVersionSupport.Ps50;
-            }
             OnPropertyChanged();
         }
     }
@@ -95,9 +74,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps51;
         set {
             ps51 = value;
-            if (ps51) {
-                PsVersion = PsVersionSupport.Ps51;
-            }
             OnPropertyChanged();
         }
     }
@@ -106,9 +82,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps60;
         set {
             ps60 = value;
-            if (ps60) {
-                PsVersion = PsVersionSupport.Ps60;
-            }
             OnPropertyChanged();
         }
     }
@@ -117,9 +90,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => ps61;
         set {
             ps61 = value;
-            if (ps61) {
-                PsVersion = PsVersionSupport.Ps61;
-            }
             OnPropertyChanged();
         }
     }
@@ -128,11 +98,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => wxp;
         set {
             wxp = value;
-            if (wxp) {
-                WinOsVersion |= WinOsVersionSupport.WinXP;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.WinXP;
-            }
             OnPropertyChanged();
         }
     }
@@ -141,11 +106,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => wv;
         set {
             wv = value;
-            if (wv) {
-                WinOsVersion |= WinOsVersionSupport.WinVista;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.WinVista;
-            }
             OnPropertyChanged();
         }
     }
@@ -154,11 +114,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => w7;
         set {
             w7 = value;
-            if (w7) {
-                WinOsVersion |= WinOsVersionSupport.Win7;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win7;
-            }
             OnPropertyChanged();
         }
     }
@@ -167,11 +122,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => w8;
         set {
             w8 = value;
-            if (w8) {
-                WinOsVersion |= WinOsVersionSupport.Win8;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win8;
-            }
             OnPropertyChanged();
         }
     }
@@ -180,11 +130,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => w81;
         set {
             w81 = value;
-            if (w81) {
-                WinOsVersion |= WinOsVersionSupport.Win81;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win81;
-            }
             OnPropertyChanged();
         }
     }
@@ -193,11 +138,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => w10;
         set {
             w10 = value;
-            if (w10) {
-                WinOsVersion |= WinOsVersionSupport.Win10;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win10;
-            }
             OnPropertyChanged();
         }
     }
@@ -206,11 +146,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         get => w11;
         set {
             w11 = value;
-            if (w11) {
-                WinOsVersion |= WinOsVersionSupport.Win11;
-            } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win11;
-            }
             OnPropertyChanged();
         }
     }
@@ -220,7 +155,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k3 = value;
             if (w2k3) {
-                WinOsVersion |= WinOsVersionSupport.Win2003;
                 w2k3s = w2k3e = w2k3d = true;
                 foreach (String str in new[] {
                                                   nameof(Win2003StdChecked),
@@ -230,7 +164,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2003;
                 w2k3s = w2k3e = w2k3d = false;
             }
             foreach (String str in new[] {
@@ -249,13 +182,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k3s = value;
             if (w2k3s) {
-                WinOsVersion |= WinOsVersionSupport.Win2003Std;
                 if (Win2003EEChecked && Win2003DCChecked) {
                     w2k3 = true;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2003Std;
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
@@ -268,13 +199,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k3e = value;
             if (w2k3e) {
-                WinOsVersion |= WinOsVersionSupport.Win2003EE;
                 if (Win2003StdChecked && Win2003DCChecked) {
                     w2k3 = true;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2003EE;
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
@@ -287,13 +216,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k3d = value;
             if (w2k3d) {
-                WinOsVersion |= WinOsVersionSupport.Win2003DC;
                 if (Win2003StdChecked && Win2003EEChecked) {
                     w2k3 = true;
                     OnPropertyChanged(nameof(Win2003Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2003DC;
                 w2k3 = false;
                 OnPropertyChanged(nameof(Win2003Checked));
             }
@@ -306,7 +233,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8 = value;
             if (w2k8) {
-                WinOsVersion |= WinOsVersionSupport.Win2008;
                 w2k8s = w2k8e = w2k8d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2008StdChecked),
@@ -316,7 +242,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008;
                 w2k8s = w2k8e = w2k8d = false;
             }
             foreach (String str in new[] {
@@ -335,13 +260,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8s = value;
             if (w2k8s) {
-                WinOsVersion |= WinOsVersionSupport.Win2008Std;
                 if (Win2008EEChecked && Win2008DCChecked) {
                     w2k8 = true;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008Std;
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
@@ -354,13 +277,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8e = value;
             if (w2k8e) {
-                WinOsVersion |= WinOsVersionSupport.Win2008EE;
                 if (Win2008StdChecked && Win2008DCChecked) {
                     w2k8 = true;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008EE;
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
@@ -373,13 +294,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8d = value;
             if (w2k8d) {
-                WinOsVersion |= WinOsVersionSupport.Win2008DC;
                 if (Win2008StdChecked && Win2008EEChecked) {
                     w2k8 = true;
                     OnPropertyChanged(nameof(Win2008Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008DC;
                 w2k8 = false;
                 OnPropertyChanged(nameof(Win2008Checked));
             }
@@ -392,7 +311,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8r2 = value;
             if (w2k8r2) {
-                WinOsVersion |= WinOsVersionSupport.Win2008R2;
                 w2k8r2s = w2k8r2e = w2k8r2d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2008R2StdChecked),
@@ -402,7 +320,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008R2;
                 w2k8r2s = w2k8r2e = w2k8r2d = false;
             }
             foreach (String str in new[] {
@@ -421,13 +338,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8r2s = value;
             if (w2k8r2s) {
-                WinOsVersion |= WinOsVersionSupport.Win2008R2Std;
                 if (Win2008R2EEChecked && Win2008R2DCChecked) {
                     w2k8r2 = true;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008R2Std;
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
@@ -440,13 +355,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8r2e = value;
             if (w2k8r2e) {
-                WinOsVersion |= WinOsVersionSupport.Win2008R2EE;
                 if (Win2008R2StdChecked && Win2008R2DCChecked) {
                     w2k8r2 = true;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008R2EE;
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
@@ -459,13 +372,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k8r2d = value;
             if (w2k8r2d) {
-                WinOsVersion |= WinOsVersionSupport.Win2008R2DC;
                 if (Win2008R2StdChecked && Win2008R2EEChecked) {
                     w2k8r2 = true;
                     OnPropertyChanged(nameof(Win2008R2Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2008R2DC;
                 w2k8r2 = false;
                 OnPropertyChanged(nameof(Win2008R2Checked));
             }
@@ -478,7 +389,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12 = value;
             if (w2k12) {
-                WinOsVersion |= WinOsVersionSupport.Win2012;
                 w2k12s = w2k12d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2012StdChecked),
@@ -487,7 +397,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012;
                 w2k12s = w2k12d = false;
             }
             foreach (String str in new[] {
@@ -505,13 +414,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12s = value;
             if (w2k12s) {
-                WinOsVersion |= WinOsVersionSupport.Win2012Std;
                 if (Win2012DCChecked) {
                     w2k12 = true;
                     OnPropertyChanged(nameof(Win2012Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012Std;
                 w2k12 = false;
                 OnPropertyChanged(nameof(Win2012Checked));
             }
@@ -524,13 +431,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12d = value;
             if (w2k12d) {
-                WinOsVersion |= WinOsVersionSupport.Win2012DC;
                 if (Win2012StdChecked) {
                     w2k12 = true;
                     OnPropertyChanged(nameof(Win2012Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012DC;
                 w2k12 = false;
                 OnPropertyChanged(nameof(Win2012Checked));
             }
@@ -543,7 +448,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12r2 = value;
             if (w2k12r2) {
-                WinOsVersion |= WinOsVersionSupport.Win2012R2;
                 w2k12r2s = w2k12r2d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2012R2StdChecked),
@@ -552,7 +456,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012R2;
                 w2k12r2s = w2k12r2d = false;
             }
             foreach (String str in new[] {
@@ -570,13 +473,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12r2s = value;
             if (w2k12r2s) {
-                WinOsVersion |= WinOsVersionSupport.Win2012R2Std;
                 if (Win2012R2DCChecked) {
                     w2k12r2 = true;
                     OnPropertyChanged(nameof(Win2012R2Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012R2Std;
                 w2k12r2 = false;
                 OnPropertyChanged(nameof(Win2012R2Checked));
             }
@@ -589,13 +490,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k12r2d = value;
             if (w2k12r2d) {
-                WinOsVersion |= WinOsVersionSupport.Win2012R2DC;
                 if (Win2012R2StdChecked) {
                     w2k12r2 = true;
                     OnPropertyChanged(nameof(Win2012R2Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2012R2DC;
                 w2k12r2 = false;
                 OnPropertyChanged(nameof(Win2012R2Checked));
             }
@@ -608,7 +507,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k16 = value;
             if (w2k16) {
-                WinOsVersion |= WinOsVersionSupport.Win2016;
                 w2k16s = w2k16d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2016StdChecked),
@@ -617,7 +515,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2016;
                 w2k16s = w2k16d = false;
             }
             foreach (String str in new[] {
@@ -635,13 +532,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k16s = value;
             if (w2k16s) {
-                WinOsVersion |= WinOsVersionSupport.Win2016Std;
                 if (Win2016DCChecked) {
                     w2k16 = true;
                     OnPropertyChanged(nameof(Win2016Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2016Std;
                 w2k16 = false;
                 OnPropertyChanged(nameof(Win2016Checked));
             }
@@ -654,13 +549,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k16d = value;
             if (w2k16d) {
-                WinOsVersion |= WinOsVersionSupport.Win2016DC;
                 if (Win2016StdChecked) {
                     w2k16 = true;
                     OnPropertyChanged(nameof(Win2016Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2016DC;
                 w2k16 = false;
                 OnPropertyChanged(nameof(Win2016Checked));
             }
@@ -673,7 +566,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k19 = value;
             if (w2k19) {
-                WinOsVersion |= WinOsVersionSupport.Win2019;
                 w2k19s = w2k19d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2019StdChecked),
@@ -682,7 +574,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2019;
                 w2k19s = w2k19d = false;
             }
             foreach (String str in new[] {
@@ -700,13 +591,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k19s = value;
             if (w2k19s) {
-                WinOsVersion |= WinOsVersionSupport.Win2019Std;
                 if (Win2019DCChecked) {
                     w2k19 = true;
                     OnPropertyChanged(nameof(Win2019Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2019Std;
                 w2k19 = false;
                 OnPropertyChanged(nameof(Win2019Checked));
             }
@@ -719,13 +608,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k19d = value;
             if (w2k19d) {
-                WinOsVersion |= WinOsVersionSupport.Win2019DC;
                 if (Win2019StdChecked) {
                     w2k19 = true;
                     OnPropertyChanged(nameof(Win2019Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2019DC;
                 w2k19 = false;
                 OnPropertyChanged(nameof(Win2019Checked));
             }
@@ -738,7 +625,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k22 = value;
             if (w2k22) {
-                WinOsVersion |= WinOsVersionSupport.Win2022;
                 w2k22s = w2k22d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2022StdChecked),
@@ -747,7 +633,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2022;
                 w2k22s = w2k22d = false;
             }
             foreach (String str in new[] {
@@ -765,13 +650,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k22s = value;
             if (w2k22s) {
-                WinOsVersion |= WinOsVersionSupport.Win2022Std;
                 if (Win2022DCChecked) {
                     w2k22 = true;
                     OnPropertyChanged(nameof(Win2022Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2022Std;
                 w2k22 = false;
                 OnPropertyChanged(nameof(Win2022Checked));
             }
@@ -784,13 +667,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k22d = value;
             if (w2k22d) {
-                WinOsVersion |= WinOsVersionSupport.Win2022DC;
                 if (Win2022StdChecked) {
                     w2k22 = true;
                     OnPropertyChanged(nameof(Win2022Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2022DC;
                 w2k22 = false;
                 OnPropertyChanged(nameof(Win2022Checked));
             }
@@ -803,7 +684,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k25 = value;
             if (w2k25) {
-                WinOsVersion |= WinOsVersionSupport.Win2025;
                 w2k25s = w2k25d = true;
                 foreach (String str in new[] {
                                                  nameof(Win2025StdChecked),
@@ -812,7 +692,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
                     OnPropertyChanged(str);
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2025;
                 w2k25s = w2k25d = false;
             }
             foreach (String str in new[] {
@@ -830,13 +709,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k25s = value;
             if (w2k25s) {
-                WinOsVersion |= WinOsVersionSupport.Win2025Std;
                 if (Win2025DCChecked) {
                     w2k25 = true;
                     OnPropertyChanged(nameof(Win2025Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2025Std;
                 w2k25 = false;
                 OnPropertyChanged(nameof(Win2025Checked));
             }
@@ -849,13 +726,11 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         set {
             w2k25d = value;
             if (w2k25d) {
-                WinOsVersion |= WinOsVersionSupport.Win2025DC;
                 if (Win2025StdChecked) {
                     w2k25 = true;
                     OnPropertyChanged(nameof(Win2025Checked));
                 }
             } else {
-                WinOsVersion &= ~WinOsVersionSupport.Win2025DC;
                 w2k25 = false;
                 OnPropertyChanged(nameof(Win2025Checked));
             }
@@ -867,7 +742,6 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
         _psAttributeMap[psVersion].SetValue(this, true);
     }
     public void SetWinOsVersion(WinOsVersionSupport winOsVersion) {
-        WinOsVersion = winOsVersion;
         var flags = Enum.GetValues(typeof(WinOsVersionSupport))
             .Cast<WinOsVersionSupport>()
             .Where(x => x != 0 && (x & winOsVersion) == x);
@@ -879,19 +753,25 @@ public class SupportInfo : ViewModelBase, IPsCommandSupportInfo {
     public XmlPsCommandSupportInfo ToXmlObject() {
         var retValue = new XmlPsCommandSupportInfo {
             RequiresAD = RequiresAD,
-            RequiresRSAT = RequiresRSAT,
-            PsVersionAsInt = PsVersionAsInt,
-            WinOsVersionAsInt = WinOsVersionAsInt
+            RequiresRSAT = RequiresRSAT
         };
-        //var os = WinOsVersionSupport.None;
-        //foreach (PropertyInfo p in _osAttributeProps) {
-        //    OSVersionAttribute attr = p.GetCustomAttribute<OSVersionAttribute>();
-        //    if ((Boolean)p.GetValue(this)) {
-        //        os |= attr.OsVersion;
-        //    }
-        //}
-        
-        //retValue.WinOsVersionAsInt = (Int32)os;
+        var os = WinOsVersionSupport.None;
+        foreach (PropertyInfo p in _osAttributeProps) {
+            OSVersionAttribute attr = p.GetCustomAttribute<OSVersionAttribute>();
+            if ((Boolean)p.GetValue(this)) {
+                os |= attr.OsVersion;
+            }
+        }
+        retValue.WinOsVersionAsInt = (Int32)os;
+        var ps = PsVersionSupport.Ps20;
+        foreach (PropertyInfo p in _psAttributeProps) {
+            PSVersionAttribute attr = p.GetCustomAttribute<PSVersionAttribute>();
+            if ((Boolean)p.GetValue(this)) {
+                ps = attr.PsVersion;
+                break;
+            }
+        }
+        retValue.PsVersionAsInt = (Int32)ps;
 
         return retValue;
     }
