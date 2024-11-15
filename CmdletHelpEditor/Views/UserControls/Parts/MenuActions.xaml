@@ -15,11 +15,18 @@
         </MenuItem.Icon>
     </MenuItem>
     <Separator/>
-    <MenuItem Header="Publish XML Help to file"
+    <MenuItem Header="Publish MAML Help to file"
               Command="{Binding CommandManager.PublishHelpCommand}"
               CommandParameter="{Binding SelectedDocument}">
         <MenuItem.Icon>
             <Image Source="/Images/Menu/xml_16x16.png"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Publish Markdown to folder"
+              Command="{Binding CommandManager.PublishMarkdownCommand}"
+              CommandParameter="{Binding SelectedDocument}">
+        <MenuItem.Icon>
+            <Image Source="/Images/Menu/md_16x16.png"/>
         </MenuItem.Icon>
     </MenuItem>
     <Separator/>

@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
@@ -14,10 +16,13 @@ using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.Views.Windows;
 using PsCmdletHelpEditor.Core.Models;
 using PsCmdletHelpEditor.Core.Services;
+using PsCmdletHelpEditor.Core.Services.Formatters;
 using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using Unity;
+using Application = System.Windows.Application;
+using Clipboard = System.Windows.Clipboard;
 
 namespace CmdletHelpEditor.API.ViewModels;
 
@@ -46,6 +51,7 @@ public class AppCommands {
         ImportFromCommentBasedHelpCommand = new AsyncCommand(importFromCommentBasedHelp, canImportFromHelp);
         PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
         PublishOnlineCommand = new RelayCommand(publishOnline, canPublishOnline);
+        PublishMarkdownCommand = new AsyncCommand(publishMarkdown, canSave);
         _msgBox = App.Container.Resolve<IMsgBox>();
     }
 
@@ -258,6 +264,30 @@ public class AppCommands {
 
     public ICommand PublishOnlineCommand { get; }
 
+    public IAsyncCommand PublishMarkdownCommand { get; }
+    async Task publishMarkdown(Object o, CancellationToken token) {
+        var dlg = NativeDialogFactory.CreateBrowseFolderDialog();
+        var result = dlg.ShowDialog();
+        if (result != DialogResult.OK) {
+            return;
+        }
+        var selectedDocument = (HelpProjectDocument)_mwvm.SelectedDocument!;
+        selectedDocument.StartSpinner(Strings.InfoModuleLoading);
+        try {
+            IPsModuleProject proj = selectedDocument.Module.ToXmlObject();
+            IHelpOutputFormatter formatter = OutputFormatterFactory.GetMarkdownFormatter();
+            foreach (IPsCommandInfo command in proj.GetCmdlets()) {
+                String content = await formatter.GenerateViewAsync(command, proj);
+                String filePath = Path.Combine(dlg.SelectedPath, command.Name + ".md");
+                File.WriteAllText(filePath, content);
+            }
+        } catch (Exception ex) {
+            _msgBox.ShowError("Export error", ex.Message);
+        }
+
+        selectedDocument.StopSpinner();
+    }
+
 
     // toolbar/menu commands
     public Boolean RequestFileSave(TabDocumentVM tab) {
@@ -365,7 +395,6 @@ public class AppCommands {
         dlg.Show();
     }
 
-
     async Task loadModuleFromManifest(Object? o, CancellationToken token) {
         await LoadModulesCommand.ExecuteAsync(false);
         TabDocumentVM selectedDocument = _mwvm.SelectedDocument!;
@@ -380,8 +409,8 @@ public class AppCommands {
             if (!ModuleListDocument.ModuleList.Any(x => x.Name.Equals(moduleInfo.Name))) {
                 ModuleListDocument.ModuleList.Add(moduleInfo);
             }
-        } catch (Exception e) {
-            _msgBox.ShowError("Import error", e.Message);
+        } catch (Exception ex) {
+            _msgBox.ShowError("Import error", ex.Message);
             //previousTab.ErrorInfo = e.Message;
         }
         selectedDocument.StopSpinner();

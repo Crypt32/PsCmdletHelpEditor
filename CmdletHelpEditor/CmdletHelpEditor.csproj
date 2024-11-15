@@ -132,6 +132,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -537,6 +538,7 @@
     </FileAssociation>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Menu\md_16x16.png" />
     <Content Include="_ExternalLibraries\Wpf.OfficeTheme.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

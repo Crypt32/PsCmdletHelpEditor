@@ -7,8 +7,11 @@ namespace CmdletHelpEditor.API.Utility;
 /// Contains common factory methods for Windows native dialogs.
 /// </summary>
 public static class NativeDialogFactory {
+    public static System.Windows.Forms.FolderBrowserDialog CreateBrowseFolderDialog() {
+        return new System.Windows.Forms.FolderBrowserDialog();
+    }
     /// <summary>
-    /// Creates a open file dialog with <c>.pshproj</c> filter.
+    /// Creates an open file dialog with <c>.pshproj</c> filter.
     /// </summary>
     /// <returns>An instance of dialog.</returns>
     /// <remarks>This method doesn't invoke the dialog. It is caller responsibility to call <see cref="OpenFileDialog.ShowDialog()"/></remarks>
@@ -19,7 +22,7 @@ public static class NativeDialogFactory {
         };
     }
     /// <summary>
-    /// Creates a open file dialog with <c>.psm1</c> and <c>.psd1</c> filter.
+    /// Creates an open file dialog with <c>.psm1</c> and <c>.psd1</c> filter.
     /// </summary>
     /// <returns>An instance of dialog.</returns>
     /// <remarks>This method doesn't invoke the dialog. It is caller responsibility to call <see cref="OpenFileDialog.ShowDialog()"/></remarks>
