@@ -1,25 +1,25 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
-namespace CmdletHelpEditor.Views.UserControls {
-    /// <summary>
-    /// Interaction logic for DisplayOutputControl.xaml
-    /// </summary>
-    public partial class DisplayOutputControl {
-        public DisplayOutputControl() {
-            InitializeComponent();
+namespace CmdletHelpEditor.Views.UserControls;
+/// <summary>
+/// Interaction logic for DisplayOutputControl.xaml
+/// </summary>
+public partial class DisplayOutputControl {
+    public DisplayOutputControl() {
+        InitializeComponent();
+    }
+
+    void onRtbPreviewMouseWheel(Object sender, MouseWheelEventArgs args) {
+        if (Keyboard.Modifiers != ModifierKeys.Control) {
+            return;
         }
 
-        void onRtbPreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if (Keyboard.Modifiers != ModifierKeys.Control) {
-                return;
-            }
-
-            e.Handled = true;
-            if (e.Delta > 0) {
-                ++SrcRtbBox.FontSize;
-            } else {
-                --SrcRtbBox.FontSize;
-            }
+        args.Handled = true;
+        if (args.Delta > 0) {
+            ++SrcRtbBox.FontSize;
+        } else {
+            --SrcRtbBox.FontSize;
         }
     }
 }
