@@ -41,7 +41,7 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
             .TrimEnd();
     }
     void importCbhNotesFromPsObject(PSObject cbh) {
-        if (cbh.Members["alertSet"].Value is PSObject note) {
+        if (cbh.Members["alertSet"]?.Value is PSObject note) {
             Notes = (String)((PSObject[])note.Members["alert"].Value)[0].Members["Text"].Value;
         }
     }

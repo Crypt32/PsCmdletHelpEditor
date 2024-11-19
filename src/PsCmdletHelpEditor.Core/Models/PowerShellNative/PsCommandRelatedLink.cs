@@ -14,8 +14,8 @@ class PsCommandRelatedLink : IPsCommandRelatedLink {
     public String? LinkUrl { get; }
 
     public static PsCommandRelatedLink FromCommentBasedHelp(PSObject cbh) {
-        String linkText = (String)((PSObject)cbh.Members["linkText"].Value).BaseObject ?? "Unknown";
-        String? linkUrl = (String)((PSObject)cbh.Members["uri"].Value).BaseObject;
+        String linkText = (String)((PSObject)cbh.Members["linkText"]?.Value)?.BaseObject ?? "Unknown";
+        String? linkUrl = (String)((PSObject)cbh.Members["uri"]?.Value)?.BaseObject;
 
         return new PsCommandRelatedLink(linkText, linkUrl);
     }
