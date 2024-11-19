@@ -100,7 +100,8 @@ public class PsCommandParameterVM : ViewModelBase {
             PipelinePropertyName = param.PipelinePropertyName,
             Positional = param.Positional,
             Position = param.Position,
-            Description = param.Description
+            Description = param.Description,
+            DefaultValue = param.DefaultValue
         };
         if (param.IsOrphaned) {
             retValue.Status = ItemStatus.Missing;
