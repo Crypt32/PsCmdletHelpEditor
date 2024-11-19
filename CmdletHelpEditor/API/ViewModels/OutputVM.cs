@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml.Linq;
@@ -33,12 +32,6 @@ public class OutputVM : AsyncViewModel {
     public IAsyncCommand GenerateOutputCommand { get; }
 
     public ModuleObject Tab { get; }
-
-    public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(
-        nameof(HtmlText),
-        typeof(String),
-        typeof(OutputVM),
-        new PropertyMetadata("<br/>"));
 
     public String HtmlText {
         get => htmlText;
