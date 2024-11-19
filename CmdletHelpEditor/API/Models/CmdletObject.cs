@@ -216,7 +216,7 @@ public class CmdletObject : ViewModelBase {
         var retValue = new CmdletObject {
             Name = commandInfo.Name,
             Verb = commandInfo.Verb,
-            Noun = commandInfo.Verb,
+            Noun = commandInfo.Noun,
             ExtraHeader = commandInfo.ExtraHeader,
             ExtraFooter = commandInfo.ExtraFooter
         };
