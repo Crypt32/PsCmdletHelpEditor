@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,9 +16,10 @@ using Unity;
 
 namespace CmdletHelpEditor.API.ViewModels;
 
-public class OutputVM : DependencyObject, INotifyPropertyChanged {
+public class OutputVM : AsyncViewModel {
     static readonly MarkdownPipeline _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
     readonly IMsgBox _msgBox;
+    String htmlText;
     FlowDocument document;
     Boolean xmlChecked, htmlViewChecked, textChecked, isBusy, mdViewChecked;
 
@@ -35,7 +34,6 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
 
     public ModuleObject Tab { get; }
 
-    // dependency property is required for HtmlText property
     public static readonly DependencyProperty HtmlTextProperty = DependencyProperty.Register(
         nameof(HtmlText),
         typeof(String),
@@ -43,13 +41,9 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         new PropertyMetadata("<br/>"));
 
     public String HtmlText {
-        get => (String)GetValue(HtmlTextProperty);
-        set => SetValue(HtmlTextProperty, value);
-    }
-    public Boolean IsBusy {
-        get => isBusy;
+        get => htmlText;
         set {
-            isBusy = value;
+            htmlText = value;
             OnPropertyChanged();
         }
     }
@@ -102,7 +96,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
             _msgBox.ShowWarning("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.");
             return;
         }
-        IsBusy = true;
+        StartSpinner();
         String rawSource;
         if (HtmlViewChecked) {
             rawSource = await generateHtmlSource(cmd, Tab);
@@ -119,7 +113,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
             renderXSource(rawSource);
         }
 
-        IsBusy = false;
+        StopSpinner();
     }
     Boolean canGenerateView(Object obj) {
         return !IsBusy;
@@ -181,11 +175,4 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         }
         return blocks;
     }
-
-    void OnPropertyChanged([CallerMemberName] String name = null) {
-        PropertyChangedEventHandler handler = PropertyChanged;
-        handler?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
 }
