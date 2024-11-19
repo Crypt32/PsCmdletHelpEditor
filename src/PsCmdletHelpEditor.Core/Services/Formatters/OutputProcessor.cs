@@ -16,11 +16,12 @@ namespace PsCmdletHelpEditor.Core.Services.Formatters;
 /// Represents abstract class for HTML-based help source generator
 /// </summary>
 abstract class OutputProcessor : IHelpOutputFormatter {
-    protected readonly String NL = Environment.NewLine;
+    readonly Dictionary<String, String> _commandUrls = [];
 
     protected Boolean HandleNewLine { get; set; }
     protected Boolean EscapeHtml { get; set; }
     protected String LineBreak { get; set; } = Environment.NewLine;
+    protected String NL { get; } = Environment.NewLine;
 
     /// <summary>
     /// Gets BB-code parser based on requested parser type.
@@ -95,11 +96,12 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     }
     String generateHtmlLink(String source, IEnumerable<IPsCommandInfo>? cmdlets) {
         if (cmdlets != null) {
-            foreach (IPsCommandInfo cmdlet in cmdlets
-                         .Select(x => new { cmdlet = x, regex = new Regex(@"\b" + x.Name + @"\b") })
-                         .Where(x => x.regex.IsMatch(source) == !String.IsNullOrEmpty(x.cmdlet.URL))
-                         .Select(x => x.cmdlet)) {
-                source = source.Replace(cmdlet.Name, $"[url={cmdlet.URL}]{cmdlet.Name}[/url]");
+            foreach (KeyValuePair<String, String> commandUrlEntry in _commandUrls
+                         .Select(x => new {Entry = x, regex = new Regex(@"\b" + x.Key + @"\b") })
+                         .Where(x => x.regex.IsMatch(source))
+                         .Select(x => x.Entry)
+            ) {
+                source = source.Replace(commandUrlEntry.Key, $"[url={commandUrlEntry.Value}]{commandUrlEntry.Key}[/url]");
             }
         }
 
@@ -109,9 +111,27 @@ abstract class OutputProcessor : IHelpOutputFormatter {
 
         return source;
     }
+    // populates a dictionary where key is command name and value is command URL, which is retrieved
+    // either from command's metaweblog provider URL or from 'online version' related link.
+    void preProcess(IReadOnlyList<IPsCommandInfo> commands) {
+        foreach (IPsCommandInfo commandInfo in commands) {
+            if (!String.IsNullOrWhiteSpace(commandInfo.URL)) {
+                _commandUrls[commandInfo.Name] = commandInfo.URL!;
+
+                return;
+            }
+            var regex = new Regex("online version:", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            IPsCommandRelatedLink? relatedLink = commandInfo.GetRelatedLinks()
+                .FirstOrDefault(x => regex.IsMatch(x.LinkText ?? String.Empty) && !String.IsNullOrWhiteSpace(x.LinkUrl));
+            if (relatedLink != null) {
+                _commandUrls[commandInfo.Name] = relatedLink.LinkUrl!;
+            }
+        }
+    }
 
     // generates pure encoded HTML string
     String generatePureHtml(IPsCommandInfo cmdlet, IReadOnlyList<IPsCommandInfo> cmdlets, StringBuilder SB, Boolean useSupports) {
+        preProcess(cmdlets);
         IPsCommandGeneralDescription generalInfo = cmdlet.GetDescription();
         SB.Clear();
         BBCodeParser rules = GetParser(ParserType.Enhanced);
