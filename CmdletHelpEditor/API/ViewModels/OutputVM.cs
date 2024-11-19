@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +10,7 @@ using System.Windows.Media;
 using System.Xml.Linq;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
+using Markdig;
 using PsCmdletHelpEditor.Core.Services.Formatters;
 using PsCmdletHelpEditor.Core.Services.MAML;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
@@ -17,9 +19,10 @@ using Unity;
 namespace CmdletHelpEditor.API.ViewModels;
 
 public class OutputVM : DependencyObject, INotifyPropertyChanged {
+    static readonly MarkdownPipeline _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
     readonly IMsgBox _msgBox;
     FlowDocument document;
-    Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlChecked, textChecked, isBusy;
+    Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlWebViewChecked, textChecked, isBusy, mdWebViewChecked;
 
     public OutputVM(ModuleObject parent) {
         _msgBox = App.Container.Resolve<IMsgBox>();
@@ -47,56 +50,71 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         get => isBusy;
         set {
             isBusy = value;
-            OnPropertyChanged(nameof(IsBusy));
+            OnPropertyChanged();
         }
     }
     public Boolean XmlChecked {
         get => xmlChecked;
         set {
             xmlChecked = value;
-            OnPropertyChanged(nameof(XmlChecked));
+            OnPropertyChanged();
             OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
         }
     }
     public Boolean HtmlSourceChecked {
         get => htmlSourceChecked;
         set {
             htmlSourceChecked = value;
-            OnPropertyChanged(nameof(HtmlSourceChecked));
+            OnPropertyChanged();
             OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
         }
     }
     public Boolean MdSourceChecked {
         get => mdSourceChecked;
         set {
             mdSourceChecked = value;
-            OnPropertyChanged(nameof(MdSourceChecked));
+            OnPropertyChanged();
             OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
         }
     }
-    public Boolean HtmlChecked {
-        get => htmlChecked;
+    public Boolean HtmlWebViewChecked {
+        get => htmlWebViewChecked;
         set {
-            htmlChecked = value;
-            OnPropertyChanged(nameof(HtmlChecked));
+            htmlWebViewChecked = value;
+            OnPropertyChanged();
             OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
+        }
+    }
+    public Boolean MdWebViewChecked {
+        get => mdWebViewChecked;
+        set {
+            mdWebViewChecked = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
         }
     }
     public Boolean TextChecked {
         get => textChecked;
         set {
             textChecked = value;
-            OnPropertyChanged(nameof(TextChecked));
+            OnPropertyChanged();
             OnPropertyChanged(nameof(RtbChecked));
+            OnPropertyChanged(nameof(WebViewChecked));
         }
     }
     public Boolean RtbChecked => XmlChecked || HtmlSourceChecked || MdSourceChecked;
+    public Boolean WebViewChecked => HtmlWebViewChecked || MdWebViewChecked;
 
     public FlowDocument Document {
         get => document;
         set {
             document = value;
-            OnPropertyChanged(nameof(Document));
+            OnPropertyChanged();
         }
     }
 
@@ -109,8 +127,10 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         }
         IsBusy = true;
 
-        if (HtmlChecked) {
+        if (HtmlWebViewChecked) {
             await renderHtml(cmd, Tab);
+        } else if (MdWebViewChecked) {
+            await renderMdHtml(cmd, Tab);
         } else if (MdSourceChecked) {
             var t = OutputFormatterFactory.GetMarkdownFormatter();
             String rawMd = await t.GenerateViewAsync(cmd.ToXmlObject(), Tab.ToXmlObject());
@@ -144,8 +164,13 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
     }
     async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
         var htmlProcessor = OutputFormatterFactory.GetHtmlFormatter();
-        HtmlText = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
-        HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, HtmlText, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
+        String rawSource = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
+        HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, rawSource, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
+    }
+    async Task renderMdHtml(CmdletObject command, ModuleObject module) {
+        var mdProcessor = OutputFormatterFactory.GetMarkdownFormatter();
+        String rawSource = await mdProcessor.GenerateViewAsync(command.ToXmlObject(), module.ToXmlObject());
+        HtmlText = Markdown.ToHtml(rawSource, _pipeline);
     }
     static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {
         var blocks = new List<Run>();
@@ -164,7 +189,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         return blocks;
     }
 
-    void OnPropertyChanged(String name) {
+    void OnPropertyChanged([CallerMemberName] String name = null) {
         PropertyChangedEventHandler handler = PropertyChanged;
         handler?.Invoke(this, new PropertyChangedEventArgs(name));
     }
