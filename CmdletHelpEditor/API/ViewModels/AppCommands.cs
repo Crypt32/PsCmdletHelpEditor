@@ -40,7 +40,6 @@ public class AppCommands {
         _progressBar = App.Container.Resolve<IProgressBar>();
         _mwvm = parent;
 
-        NewProjectCommand = new RelayCommand(newProject);
         OpenProjectCommand = new AsyncCommand(openProject);
         SaveProjectCommand = new RelayCommand(saveProjectFile, canSave);
         CloseTabCommand = new RelayCommand(closeTab, canCloseTab);
@@ -55,14 +54,9 @@ public class AppCommands {
         _msgBox = App.Container.Resolve<IMsgBox>();
     }
 
-    #region New Tab command
+    #region New Project command
 
-    public ICommand NewProjectCommand { get; }
-    void newProject(Object? o) {
-        var vm = new BlankDocumentVM();
-        _mwvm.Documents.Add(vm);
-        _mwvm.SelectedDocument = vm;
-    }
+    public IAsyncCommand NewProjectCommand => LoadModulesCommand;
 
     #endregion
 
@@ -83,7 +77,7 @@ public class AppCommands {
                 _msgBox.ShowError("Read error", ex.Message);
             }
             if (_mwvm.SelectedDocument is not BlankDocumentVM) {
-                newProject(null);
+                _mwvm.NewTabCommand.Execute(null);
             }
             swapTabDocument(vm);
             await loadCommandsForProject(vm);
@@ -462,6 +456,8 @@ public class AppCommands {
         }
 
         try {
+            TabDocumentVM doc = _mwvm.SelectedDocument!;
+            doc.StartSpinner(Strings.InfoCmdletsLoading);
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
             ModuleObject? module = ModuleObject.FromPsModuleInfo(moduleInfo);
             IEnumerable<IPsCommandInfo> data;
@@ -475,6 +471,7 @@ public class AppCommands {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
             var vm = new HelpProjectDocument(module);
+            doc.StopSpinner();
             swapTabDocument(vm);
         } catch (Exception ex) {
             _msgBox.ShowError("Error while loading cmdlets", ex.Message);
