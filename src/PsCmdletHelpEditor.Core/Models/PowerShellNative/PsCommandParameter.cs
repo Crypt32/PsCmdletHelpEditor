@@ -103,9 +103,11 @@ class PsCommandParameter : IPsCommandParameter {
     }
 
     public void ImportCommentBasedHelp(PSObject cbh) {
-        Description = ((PSObject[])cbh.Members["Description"].Value)
-            .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine)
-            .TrimEnd();
+        if (cbh.Members["Description"]?.Value is PSObject[] descr) {
+            Description = (descr)
+                .Aggregate(String.Empty, (current, paragraph) => current + paragraph.Members["Text"].Value + Environment.NewLine)
+                .TrimEnd();
+        }
         DefaultValue = (String)((PSObject)cbh.Members["defaultValue"].Value).BaseObject;
     }
     public void ImportMamlHelp(MamlXmlNode commandNode) {
