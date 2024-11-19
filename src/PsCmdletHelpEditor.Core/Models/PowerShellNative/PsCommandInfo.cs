@@ -50,6 +50,7 @@ class PsCommandInfo : IPsCommandInfo {
 
     public void ImportCommentBasedHelp(PSObject cbh) {
         generalDescription!.ImportCommentBasedHelp(cbh);
+        _params.ImportCommentBasedHelp(cbh);
         _examples.ImportCommentBasedHelp(cbh);
         _relatedLinks.ImportCommentBasedHelp(cbh);
     }
