@@ -113,7 +113,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
             await renderHtml(cmd, Tab);
         } else if (MdSourceChecked) {
             var t = OutputFormatterFactory.GetMarkdownFormatter();
-            var rawMd = await t.GenerateViewAsync(cmd.ToXmlObject(), Tab.ToXmlObject());
+            String rawMd = await t.GenerateViewAsync(cmd.ToXmlObject(), Tab.ToXmlObject());
             var para = new Paragraph();
             para.Inlines.Add(new Run(rawMd));
             Document = new FlowDocument();
