@@ -88,8 +88,7 @@
                     <wv2:WebView2 utility:BrowserBehavior2.Html="{Binding EditorContext.OutputContext.HtmlText}"/>
                 </Grid>
             </Grid>
-            <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"
-                                     Text="{x:Static tools:Strings.InfoOutputGenerating}"/>
+            <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"/>
         </Grid>
     </DockPanel>
 </UserControl>

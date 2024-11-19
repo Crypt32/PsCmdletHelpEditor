@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Xml.Linq;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
+using CmdletHelpEditor.API.Tools;
 using Markdig;
 using PsCmdletHelpEditor.Core.Services.Formatters;
 using PsCmdletHelpEditor.Core.Services.MAML;
@@ -89,7 +90,7 @@ public class OutputVM : AsyncViewModel {
             _msgBox.ShowWarning("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.");
             return;
         }
-        StartSpinner();
+        StartSpinner(Strings.InfoOutputGenerating);
         String rawSource;
         if (HtmlViewChecked) {
             rawSource = await generateHtmlSource(cmd, Tab);
