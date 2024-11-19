@@ -250,13 +250,13 @@ abstract class OutputProcessor : IHelpOutputFormatter {
 
         var content = new StringBuilder();
         foreach (IPsCommandRelatedLink? link in cmdlet.GetRelatedLinks().Where(x => !String.Equals(x.LinkText, "online version:", StringComparison.OrdinalIgnoreCase))) {
-            content.Append(rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets)));
-            if (!String.IsNullOrEmpty(link.LinkUrl)) {
-                content.Append(GenerateHyperLink(link.LinkText, link.LinkUrl));
-            }
-            content.AppendLine(LineBreak);
+            String linkEntry = String.IsNullOrEmpty(link.LinkUrl)
+                ? rules.ToHtml(generateHtmlLink(link.LinkText, cmdlets))
+                : GenerateHyperLink(link.LinkText, link.LinkUrl);
+            linkEntry = GenerateListItem(linkEntry);
+            content.AppendLine(linkEntry);
         }
-        SB.AppendLine(GenerateParagraph(content.ToString()));
+        SB.AppendLine(GenerateList(content.ToString()));
     }
     void htmlGenerateSupports(IPsCommandSupportInfo supportInfo, ref StringBuilder SB) {
         var header = new StringBuilder();
