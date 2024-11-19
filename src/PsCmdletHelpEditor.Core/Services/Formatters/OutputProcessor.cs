@@ -148,11 +148,9 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     }
     void htmlGenerateSyntax(StringBuilder SB, IPsCommandInfo cmdlet) {
         SB.AppendLine(GenerateH2("Syntax"));
-        var preContent = new StringBuilder();
         foreach (String syntaxItem in cmdlet.GetSyntax()) {
-            preContent.AppendLine(syntaxItem + " [<CommonParameters>]");
+            SB.AppendLine(GeneratePre(syntaxItem + " [<CommonParameters>]"));
         }
-        SB.AppendLine(GeneratePre(preContent.ToString()));
     }
     void htmlGenerateDescription(BBCodeParser rules, StringBuilder SB, IReadOnlyList<IPsCommandInfo> cmdlets, IPsCommandInfo cmdlet) {
         SB.AppendLine(GenerateH2("Description"));
