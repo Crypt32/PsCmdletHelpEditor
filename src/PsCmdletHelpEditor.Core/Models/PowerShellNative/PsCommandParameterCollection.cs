@@ -11,10 +11,11 @@ class PsCommandParameterCollection : PsCommandParameterCollectionBase<PsCommandP
 
     public void ImportCommentBasedHelp(PSObject cbh) {
         if (cbh.Members["parameters"] is not null) {
-            var cbhParams = new List<PSObject>();
-            if (cbh.Members["parameter"].Value is PSObject singleValue) {
+            List<PSObject> cbhParams = [];
+            PSObject parameters = (PSObject)cbh.Members["parameters"].Value;
+            if (parameters.Members["parameter"]?.Value is PSObject singleValue) {
                 cbhParams.Add(singleValue);
-            } else if (cbh.Members["parameter"].Value is PSObject[] multiValue) {
+            } else if (parameters.Members["parameter"]?.Value is PSObject[] multiValue) {
                 cbhParams.AddRange(multiValue);
             }
 
