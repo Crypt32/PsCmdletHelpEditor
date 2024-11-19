@@ -26,25 +26,15 @@
                              Margin="10,0,0,0"
                              IsChecked="{Binding EditorContext.OutputContext.XmlChecked}" />
                 <RadioButton GroupName="group"
-                             Content="HTML Source"
-                             VerticalAlignment="Center"
-                             Margin="10,0,0,0"
-                             IsChecked="{Binding EditorContext.OutputContext.HtmlSourceChecked}" />
-                <RadioButton GroupName="group"
                              Content="Web HTML"
                              VerticalAlignment="Center"
                              Margin="10,0,0,0"
-                             IsChecked="{Binding EditorContext.OutputContext.HtmlWebViewChecked}" />
+                             IsChecked="{Binding EditorContext.OutputContext.HtmlViewChecked}" />
                 <RadioButton GroupName="group"
-                             Content="MD Source"
+                             Content="MD HTML"
                              VerticalAlignment="Center"
                              Margin="10,0,0,0"
-                             IsChecked="{Binding EditorContext.OutputContext.MdSourceChecked}" />
-                <RadioButton GroupName="group"
-                             Content="MD Html"
-                             VerticalAlignment="Center"
-                             Margin="10,0,0,0"
-                             IsChecked="{Binding EditorContext.OutputContext.MdWebViewChecked}" />
+                             IsChecked="{Binding EditorContext.OutputContext.MdViewChecked}" />
                 <Button Content="Generate"
                         Margin="10,0,0,0"
                         Height="23"
@@ -53,23 +43,51 @@
             </StackPanel>
         </Border>
         <Grid>
-            <controls:BindableRichTextBox x:Name="SrcRtbBox"
-                                          IsUndoEnabled="False"
-                                          UndoLimit="0"
-                                          Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
-                                          FontFamily="Consolas"
-                                          FontSize="12"
-                                          VerticalContentAlignment="Stretch"
-                                          HorizontalContentAlignment="Stretch"
-                                          HorizontalScrollBarVisibility="Auto"
-                                          VerticalScrollBarVisibility="Auto"
-                                          IsReadOnly="True"
-                                          IsReadOnlyCaretVisible="True"
-                                          Visibility="{Binding EditorContext.OutputContext.RtbChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                          PreviewMouseWheel="onRtbPreviewMouseWheel"/>
-            <Grid Background="White"
-                  Visibility="{Binding EditorContext.OutputContext.WebViewChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <wv2:WebView2 utility:BrowserBehavior2.Html="{Binding EditorContext.OutputContext.HtmlText}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition>
+                        <ColumnDefinition.Style>
+                            <Style TargetType="ColumnDefinition">
+                                <Setter Property="Width" Value="*"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding EditorContext.OutputContext.WebViewChecked}" Value="True">
+                                        <Setter Property="Width" Value="1*"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ColumnDefinition.Style>
+                    </ColumnDefinition>
+                    <ColumnDefinition>
+                        <ColumnDefinition.Style>
+                            <Style TargetType="ColumnDefinition">
+                                <Setter Property="Width" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding EditorContext.OutputContext.WebViewChecked}" Value="True">
+                                        <Setter Property="Width" Value="1*"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ColumnDefinition.Style>
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <controls:BindableRichTextBox x:Name="SrcRtbBox"
+                                              Grid.Column="0"
+                                              IsUndoEnabled="False"
+                                              UndoLimit="0"
+                                              Document="{Binding EditorContext.OutputContext.Document, Mode=TwoWay}"
+                                              FontFamily="Consolas"
+                                              FontSize="12"
+                                              VerticalContentAlignment="Stretch"
+                                              HorizontalContentAlignment="Stretch"
+                                              HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto"
+                                              IsReadOnly="True"
+                                              IsReadOnlyCaretVisible="True"
+                                              PreviewMouseWheel="onRtbPreviewMouseWheel"/>
+                <Grid Grid.Column="1"
+                      Background="White">
+                    <wv2:WebView2 utility:BrowserBehavior2.Html="{Binding EditorContext.OutputContext.HtmlText}"/>
+                </Grid>
             </Grid>
             <controls:LoadingSpinner IsShown="{Binding EditorContext.OutputContext.IsBusy}"
                                      Text="{x:Static tools:Strings.InfoOutputGenerating}"/>

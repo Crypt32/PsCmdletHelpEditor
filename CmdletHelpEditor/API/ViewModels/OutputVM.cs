@@ -22,7 +22,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
     static readonly MarkdownPipeline _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
     readonly IMsgBox _msgBox;
     FlowDocument document;
-    Boolean xmlChecked, htmlSourceChecked, mdSourceChecked, htmlWebViewChecked, textChecked, isBusy, mdWebViewChecked;
+    Boolean xmlChecked, htmlViewChecked, textChecked, isBusy, mdViewChecked;
 
     public OutputVM(ModuleObject parent) {
         _msgBox = App.Container.Resolve<IMsgBox>();
@@ -40,7 +40,7 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         nameof(HtmlText),
         typeof(String),
         typeof(OutputVM),
-        new PropertyMetadata("<br />"));
+        new PropertyMetadata("<br/>"));
 
     public String HtmlText {
         get => (String)GetValue(HtmlTextProperty);
@@ -58,44 +58,23 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         set {
             xmlChecked = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
+            resetViewControls();
         }
     }
-    public Boolean HtmlSourceChecked {
-        get => htmlSourceChecked;
+    public Boolean HtmlViewChecked {
+        get => htmlViewChecked;
         set {
-            htmlSourceChecked = value;
+            htmlViewChecked = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
+            resetViewControls();
         }
     }
-    public Boolean MdSourceChecked {
-        get => mdSourceChecked;
+    public Boolean MdViewChecked {
+        get => mdViewChecked;
         set {
-            mdSourceChecked = value;
+            mdViewChecked = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
-        }
-    }
-    public Boolean HtmlWebViewChecked {
-        get => htmlWebViewChecked;
-        set {
-            htmlWebViewChecked = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
-        }
-    }
-    public Boolean MdWebViewChecked {
-        get => mdWebViewChecked;
-        set {
-            mdWebViewChecked = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
+            resetViewControls();
         }
     }
     public Boolean TextChecked {
@@ -103,12 +82,10 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
         set {
             textChecked = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(RtbChecked));
-            OnPropertyChanged(nameof(WebViewChecked));
+            resetViewControls();
         }
     }
-    public Boolean RtbChecked => XmlChecked || HtmlSourceChecked || MdSourceChecked;
-    public Boolean WebViewChecked => HtmlWebViewChecked || MdWebViewChecked;
+    public Boolean WebViewChecked => HtmlViewChecked || MdViewChecked;
 
     public FlowDocument Document {
         get => document;
@@ -126,52 +103,68 @@ public class OutputVM : DependencyObject, INotifyPropertyChanged {
             return;
         }
         IsBusy = true;
-
-        if (HtmlWebViewChecked) {
-            await renderHtml(cmd, Tab);
-        } else if (MdWebViewChecked) {
-            await renderMdHtml(cmd, Tab);
-        } else if (MdSourceChecked) {
-            var t = OutputFormatterFactory.GetMarkdownFormatter();
-            String rawMd = await t.GenerateViewAsync(cmd.ToXmlObject(), Tab.ToXmlObject());
-            var para = new Paragraph();
-            para.Inlines.Add(new Run(rawMd));
-            Document = new FlowDocument();
-            Document.Blocks.Add(para);
-        } else {
-            IEnumerable<XmlToken> data = XmlChecked
+        String rawSource;
+        if (HtmlViewChecked) {
+            rawSource = await generateHtmlSource(cmd, Tab);
+            renderXSource(rawSource);
+            renderHtml(rawSource, cmd);
+        } else if (MdViewChecked) {
+            rawSource = await generateMdSource(cmd, Tab);
+            renderMdSource(rawSource);
+            renderMdHtml(rawSource);
+        } else if (XmlChecked) {
+            rawSource = XmlChecked
                 ? await generateXml(cmd, Tab)
                 : await generateHtmlSource(cmd, Tab);
-            var para = new Paragraph();
-            para.Inlines.AddRange(colorizeSource(data));
-            Document = new FlowDocument();
-            Document.Blocks.Add(para);
+            renderXSource(rawSource);
         }
+
         IsBusy = false;
     }
     Boolean canGenerateView(Object obj) {
         return !IsBusy;
     }
-    static async Task<IEnumerable<XmlToken>> generateXml(CmdletObject cmdlet, ModuleObject module) {
+    static Task<String> generateXml(CmdletObject command, ModuleObject module) {
         var mamlService = App.Container.Resolve<IMamlService>();
-        String rawXml = await mamlService.ExportMamlHelp([cmdlet.ToXmlObject()], null);
-        return XmlTokenizer.LoopTokenize(XElement.Parse(rawXml).ToString());
+        return mamlService.ExportMamlHelp([command.ToXmlObject()], null);
     }
-    static async Task<IEnumerable<XmlToken>> generateHtmlSource(CmdletObject cmdlet, ModuleObject module) {
-        var htmlProcessor = OutputFormatterFactory.GetHtmlFormatter();
-        String rawHtml = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
-        return XmlTokenizer.LoopTokenize(XElement.Parse("<div>" + rawHtml + "</div>").ToString());
+
+    static async Task<String> generateHtmlSource(CmdletObject command, ModuleObject module) {
+        IHelpOutputFormatter formatter = OutputFormatterFactory.GetHtmlFormatter();
+        return "<div>" + await formatter.GenerateViewAsync(command.ToXmlObject(), module.ToXmlObject()) + "</div>";
     }
-    async Task renderHtml(CmdletObject cmdlet, ModuleObject module) {
-        var htmlProcessor = OutputFormatterFactory.GetHtmlFormatter();
-        String rawSource = await htmlProcessor.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject());
-        HtmlText = String.Format(Properties.Resources.HtmlTemplate, cmdlet.Name, rawSource, cmdlet.ExtraHeader, cmdlet.ExtraFooter);
+    void renderXSource(String rawSource) {
+        IEnumerable<XmlToken> tokens = XmlTokenizer.LoopTokenize(XElement.Parse(rawSource).ToString());
+        var para = new Paragraph();
+        para.Inlines.AddRange(colorizeSource(tokens));
+        Document = new FlowDocument();
+        Document.Blocks.Add(para);
     }
-    async Task renderMdHtml(CmdletObject command, ModuleObject module) {
-        var mdProcessor = OutputFormatterFactory.GetMarkdownFormatter();
-        String rawSource = await mdProcessor.GenerateViewAsync(command.ToXmlObject(), module.ToXmlObject());
+    void renderHtml(String rawSource, CmdletObject command) {
+        HtmlText = String.Format(Properties.Resources.HtmlTemplate, command.Name, rawSource, command.ExtraHeader, command.ExtraFooter);
+    }
+
+
+    static Task<String> generateMdSource(CmdletObject command, ModuleObject module) {
+        IHelpOutputFormatter formatter = OutputFormatterFactory.GetMarkdownFormatter();
+        return formatter.GenerateViewAsync(command.ToXmlObject(), module.ToXmlObject());
+    }
+    void renderMdSource(String rawSource) {
+        var para = new Paragraph();
+        para.Inlines.Add(new Run(rawSource));
+        Document = new FlowDocument();
+        Document.Blocks.Add(para);
+    }
+    void renderMdHtml(String rawSource) {
         HtmlText = Markdown.ToHtml(rawSource, _pipeline);
     }
+
+    void resetViewControls() {
+        Document = new FlowDocument();
+        HtmlText = "<br/>";
+        OnPropertyChanged(nameof(WebViewChecked));
+    }
+
     static IEnumerable<Run> colorizeSource(IEnumerable<XmlToken> data) {
         var blocks = new List<Run>();
         foreach (XmlToken token in data) {
