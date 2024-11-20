@@ -16,10 +16,11 @@ public class EditorVM : ViewModelBase {
         OutputContext = new OutputVM(selectedModule);
     }
 
-    public ParamVM ParamContext { get; set; }
-    public RelatedLinkVM RelatedLinkContext { get; set; }
-    public ExampleVM ExampleContext { get; set; }
-    public OutputVM OutputContext { get; private set; }
+    public ParamVM ParamContext { get; }
+    public RelatedLinkVM RelatedLinkContext { get; }
+    public ExampleVM ExampleContext { get; }
+    public OutputVM OutputContext { get; }
+
     public CmdletObject CurrentCmdlet {
         get => currentCmdlet;
         set {
