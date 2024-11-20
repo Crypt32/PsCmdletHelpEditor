@@ -21,7 +21,7 @@ public class OutputVM : AsyncViewModel {
     readonly IMsgBox _msgBox;
     String htmlText;
     FlowDocument document;
-    Boolean xmlChecked, htmlViewChecked, textChecked, isBusy, mdViewChecked;
+    Boolean xmlChecked, htmlViewChecked, textChecked, mdViewChecked;
 
     public OutputVM(ModuleObject parent) {
         _msgBox = App.Container.Resolve<IMsgBox>();
