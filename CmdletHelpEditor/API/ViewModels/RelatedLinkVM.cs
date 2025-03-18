@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Utils;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
@@ -57,21 +58,13 @@ public class RelatedLinkVM : ViewModelBase {
         return CurrentRelink != null;
     }
     void upLink(Object obj) {
-        Int32 old = cmdlet.RelatedLinks.IndexOf(CurrentRelink);
-        PsCommandRelatedLinkVM temp = cmdlet.RelatedLinks[old - 1];
-        cmdlet.RelatedLinks[old - 1] = CurrentRelink;
-        cmdlet.RelatedLinks[old] = temp;
-        CurrentRelink = cmdlet.RelatedLinks[old - 1];
+        CurrentRelink = cmdlet.RelatedLinks.MoveUp(CurrentRelink);
     }
     Boolean canUpLink(Object obj) {
         return canRemoveLink(null) && cmdlet.RelatedLinks.IndexOf(CurrentRelink) > 0;
     }
     void downLink(Object obj) {
-        Int32 old = cmdlet.RelatedLinks.IndexOf(CurrentRelink);
-        PsCommandRelatedLinkVM temp = cmdlet.RelatedLinks[old + 1];
-        cmdlet.RelatedLinks[old + 1] = CurrentRelink;
-        cmdlet.RelatedLinks[old] = temp;
-        CurrentRelink = cmdlet.RelatedLinks[old + 1];
+        CurrentRelink = cmdlet.RelatedLinks.MoveDown(CurrentRelink);
     }
     Boolean canDownLink(Object obj) {
         if (!canNewLink(null)) { return false; }

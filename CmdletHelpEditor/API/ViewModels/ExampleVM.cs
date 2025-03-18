@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using CmdletHelpEditor.API.Models;
+using PsCmdletHelpEditor.Core.Utils;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.ViewModels;
 
@@ -58,21 +59,13 @@ public class ExampleVM : ViewModelBase {
         return CurrentExample != null;
     }
     void upExample(Object obj) {
-        Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
-        PsCommandExampleVM temp = cmdlet.Examples[old - 1];
-        cmdlet.Examples[old - 1] = CurrentExample;
-        cmdlet.Examples[old] = temp;
-        CurrentExample = cmdlet.Examples[old - 1];
+        CurrentExample = cmdlet.Examples.MoveUp(CurrentExample);
     }
     Boolean canUpExample(Object obj) {
         return canRemoveExample(null) && cmdlet.Examples.IndexOf(CurrentExample) > 0;
     }
     void downExample(Object obj) {
-        Int32 old = cmdlet.Examples.IndexOf(CurrentExample);
-        PsCommandExampleVM temp = cmdlet.Examples[old + 1];
-        cmdlet.Examples[old + 1] = CurrentExample;
-        cmdlet.Examples[old] = temp;
-        CurrentExample = cmdlet.Examples[old + 1];
+        CurrentExample = cmdlet.Examples.MoveDown(CurrentExample);
     }
     Boolean canDownExample(Object obj) {
         if (!canNewExample(null)) {
