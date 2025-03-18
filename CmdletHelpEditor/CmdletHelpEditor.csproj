@@ -193,7 +193,6 @@
     <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
     <Compile Include="API\Utility\BrowserBehavior2.cs" />
     <Compile Include="API\Utility\NativeDialogFactory.cs" />
-    <Compile Include="API\Utility\EnumHelper.cs" />
     <Compile Include="API\Models\SavePendingEventArgs.cs" />
     <Compile Include="API\Utility\OSVersionAttribute.cs" />
     <Compile Include="API\ViewModels\AppCommands.cs" />
