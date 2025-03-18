@@ -18,10 +18,10 @@
                         Margin="10">
                 <Button Content="New"
                         Width="75"
-                        Command="{Binding EditorContext.ExampleContext.NewExampleCommand}"/>
+                        Command="{Binding EditorContext.ExampleContext.NewItemCommand}"/>
                 <Button Content="Remove"
                         Width="75"
-                        Command="{Binding EditorContext.ExampleContext.RemoveExampleCommand}"
+                        Command="{Binding EditorContext.ExampleContext.RemoveItemCommand}"
                         Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -30,7 +30,7 @@
                          Height="150"
                          VerticalAlignment="Top"
                          Width="200"
-                         SelectedItem="{Binding EditorContext.ExampleContext.CurrentExample}"
+                         SelectedItem="{Binding EditorContext.ExampleContext.SelectedItem}"
                          ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
                          DisplayMemberPath="Name"/>
                 <Grid>
@@ -42,21 +42,21 @@
                     <Button Grid.Row="0"
                             VerticalAlignment="Bottom"
                             Width="24"
-                            Command="{Binding EditorContext.ExampleContext.UpExampleCommand}"
+                            Command="{Binding EditorContext.ExampleContext.UpItemCommand}"
                             ToolTip="Move example up">
                         <Image Source="/Images/up_32x32.png"/>
                     </Button>
                     <Button Grid.Row="2"
                             VerticalAlignment="Top"
                             Width="24"
-                            Command="{Binding EditorContext.ExampleContext.DownExampleCommand}"
+                            Command="{Binding EditorContext.ExampleContext.DownItemCommand}"
                             ToolTip="Move example down">
                         <Image Source="/Images/down_32x32.png"/>
                     </Button>
                 </Grid>
             </StackPanel>
         </StackPanel>
-        <StackPanel IsEnabled="{Binding EditorContext.ExampleContext.ExampleTextBoxEnabled}">
+        <StackPanel IsEnabled="{Binding EditorContext.ExampleContext.NameTextBoxEnabled}">
             <HeaderedContentControl>
                 <HeaderedContentControl.Header>
                     <TextBlock>
@@ -68,25 +68,25 @@
                 </HeaderedContentControl.Header>
                 <TextBox MinLines="1"
                          MaxLines="1"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Example command:">
                 <TextBox MinLines="10"
                          MaxLines="10"
                          FontFamily="Consolas"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Example description:">
                 <TextBox MinLines="10"
                          MaxLines="10"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Description, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Description, UpdateSourceTrigger=PropertyChanged}"
                          Tag="AllowFormat"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Example output:">
                 <TextBox MinLines="10"
                          MaxLines="10"
                          FontFamily="Consolas"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Output, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Output, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
         </StackPanel>
     </DockPanel>

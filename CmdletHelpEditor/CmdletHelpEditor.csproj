@@ -202,6 +202,7 @@
     <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
     <Compile Include="API\ViewModels\AsyncViewModel.cs" />
     <Compile Include="API\ViewModels\ClosableWindowVM.cs" />
+    <Compile Include="API\ViewModels\ExampleRelatedLinkVM.cs" />
     <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
     <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
     <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
