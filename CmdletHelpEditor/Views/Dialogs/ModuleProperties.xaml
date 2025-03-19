@@ -12,7 +12,7 @@
         Width="500"
         ResizeMode="NoResize"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
-        Foreground="Navy"
+        Foreground="{StaticResource Panel.FgBrush}"
         ShowInTaskbar="False"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
