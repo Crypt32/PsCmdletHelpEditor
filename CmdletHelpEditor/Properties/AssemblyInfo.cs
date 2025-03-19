@@ -1,20 +1,10 @@
-﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Windows;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PowerShell Cmdlet Help Editor")]
-[assembly: AssemblyDescription("Allows to create and edit PowerShell cmdlet (or user defined functions) help topics")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sysadmins LV")]
-[assembly: AssemblyProduct("CmdletHelpEditor")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2018")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -51,6 +41,3 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.4.3.20")]
-[assembly: AssemblyFileVersion("3.4.3.20")]
-[assembly: GuidAttribute("ad2db9e9-9adb-4cf8-8eee-4e252acfce5d")]
