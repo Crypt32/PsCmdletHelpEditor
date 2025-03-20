@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
 using CmdletHelpEditor.API.Tools;
@@ -12,10 +13,10 @@ namespace CmdletHelpEditor.API.ViewModels;
 public static class MetaWeblogCommands {
     static Boolean working;
 
-    public static ICommand PublishArticleCommand => new RelayCommand(publishSingle, canPublish);
-    public static ICommand PublishAllCommand => new RelayCommand(publishAll, canPublish);
+    public static IAsyncCommand PublishArticleCommand => new AsyncCommand(publishSingle, canPublish);
+    public static IAsyncCommand PublishAllCommand => new AsyncCommand(publishAll, canPublish);
 
-    static async void publishSingle(Object obj) {
+    static async Task publishSingle(Object obj, CancellationToken token = default) {
         if (obj == null) {
             return;
         }
@@ -30,12 +31,12 @@ public static class MetaWeblogCommands {
         }
         working = false;
     }
-    static void publishAll(Object obj) {
+    static async Task publishAll(Object obj, CancellationToken token = default) {
         working = true;
         IProgressBar pb = App.Container.Resolve<IProgressBar>();
         var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
         pb.Start();
-        MetaWeblogWrapper.PublishAll(((HelpProjectDocument)mwvm.SelectedDocument)!.Module, pb);
+        await MetaWeblogWrapper.PublishAll(((HelpProjectDocument)mwvm.SelectedDocument)!.Module, pb);
         pb.End();
         working = false;
     }

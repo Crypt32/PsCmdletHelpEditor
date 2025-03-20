@@ -61,7 +61,7 @@ static class MetaWeblogWrapper {
         //    } catch (Exception ex) { }
         //}
     }
-    public static async void PublishAll(ModuleObject module, IProgressBar pb) {
+    public static async Task PublishAll(ModuleObject module, IProgressBar pb) {
         IMsgBox msgBox = App.Container.Resolve<IMsgBox>();
         WpXmlRpcClient blogger = module.Provider.InitializeBlogger();
         if (blogger == null) {
