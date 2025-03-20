@@ -15,17 +15,17 @@ class HtmlProcessor : OutputProcessor {
             case ParserType.Basic:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
                     new BBTag("b", "<strong>", "</strong>"),
-                    new BBTag("i", "<span style=\"font-style:italic;\">", "</span>"),
-                    new BBTag("u", "<span style=\"text-decoration:underline;\">", "</span>"),
-                    new BBTag("s", "<strike>", "</strike>")
+                    new BBTag("i", "<i>", "</i>"),
+                    new BBTag("u", "<u>", "</u>"),
+                    new BBTag("s", "<s>", "</s>")
                 ]);
             case ParserType.Enhanced:
                 return new BBCodeParser(ErrorMode.ErrorFree, null, [
                     new BBTag("br", "<br />", String.Empty, true, false),
                     new BBTag("b", "<strong>", "</strong>"),
-                    new BBTag("i", "<span style=\"font-style:italic;\">", "</span>"),
+                    new BBTag("i", "<i>", "</i>"),
                     new BBTag("u", "<span style=\"text-decoration:underline;\">", "</span>"),
-                    new BBTag("s", "<strike>", "</strike>"),
+                    new BBTag("s", "<s>", "</s>"),
                     new BBTag("url", "<a href=\"${href}\">", "</a>", new BBAttribute("href", ""), new BBAttribute("href", "href")),
                     new BBTag("pre", "<pre>", "</pre>"),
                     new BBTag("quote", "<blockquote class=\"${class}\">", "</blockquote>", new BBAttribute("class", ""), new BBAttribute("class", "class")),
