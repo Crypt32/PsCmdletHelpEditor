@@ -15,7 +15,7 @@ namespace CmdletHelpEditor.API.Tools;
 
 static class MetaWeblogWrapper {
     public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, WpXmlRpcClient blogger) {
-        await Task.Factory.StartNew(() => Thread.Sleep(5000));
+        await Task.Run(() => Thread.Sleep(5000));
         blogger ??= module.Provider.InitializeBlogger();
         if (blogger == null) {
             throw new Exception(Strings.WarnBloggerNeedsMoreData);

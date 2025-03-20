@@ -421,6 +421,6 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     }
     // generates HTML for web browser control
     public Task<String> GenerateViewAsync(IPsCommandInfo cmdlet, IPsModuleProject moduleObject) {
-        return Task<String>.Factory.StartNew(() => GenerateView(cmdlet, moduleObject));
+        return Task<String>.Run(() => GenerateView(cmdlet, moduleObject));
     }
 }

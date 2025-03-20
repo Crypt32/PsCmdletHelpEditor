@@ -23,7 +23,7 @@ public class PowerShellProcessor : IPowerShellProcessor {
     public Int32? PsVersion { get; private set; }
 
     public Task<Int32?> GetPsVersionAsync() {
-        return Task.Factory.StartNew(GetPsVersion);
+        return Task.Run(GetPsVersion);
     }
     public Int32? GetPsVersion() {
         using PowerShell ps = PowerShell.Create();
@@ -33,7 +33,7 @@ public class PowerShellProcessor : IPowerShellProcessor {
         return PsVersion;
     }
     public Task<IEnumerable<PsModuleInfo>> EnumModulesAsync(Boolean force) {
-        return Task.Factory.StartNew(() => EnumModules(force));
+        return Task.Run(() => EnumModules(force));
     }
     public IEnumerable<PsModuleInfo> EnumModules(Boolean force) {
         if (!force || _moduleList.Count > 0) {
@@ -82,7 +82,7 @@ public class PowerShellProcessor : IPowerShellProcessor {
         });
     }
     public Task<PsModuleInfo> GetModuleInfoFromFileAsync(String path) {
-        return Task.Factory.StartNew(() => GetModuleInfoFromFile(path));
+        return Task.Run(() => GetModuleInfoFromFile(path));
     }
     public PsModuleInfo GetModuleInfoFromFile(String path) {
         using PowerShell ps = PowerShell.Create();
@@ -99,7 +99,7 @@ public class PowerShellProcessor : IPowerShellProcessor {
     }
     
     public Task<IEnumerable<IPsCommandInfo>> EnumCommandsAsync(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, Boolean includeCBH = false) {
-        return Task.Factory.StartNew(() => EnumCommands(moduleInfo, commandTypes, includeCBH));
+        return Task.Run(() => EnumCommands(moduleInfo, commandTypes, includeCBH));
     }
     public IEnumerable<IPsCommandInfo> EnumCommands(IModuleInfo moduleInfo, IEnumerable<String> commandTypes,
         Boolean includeCBH = false) {
@@ -117,7 +117,7 @@ public class PowerShellProcessor : IPowerShellProcessor {
     }
 
     public Task<IEnumerable<IPsCommandInfo>> EnumCommandsFromMamlAsync(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
-        return Task.Factory.StartNew(() => EnumCommandsFromMaml(moduleInfo, commandTypes, mamlHelpPath));
+        return Task.Run(() => EnumCommandsFromMaml(moduleInfo, commandTypes, mamlHelpPath));
     }
     public IEnumerable<IPsCommandInfo> EnumCommandsFromMaml(IModuleInfo moduleInfo, IEnumerable<String> commandTypes, String mamlHelpPath) {
         moduleInfo.IsOffline = false;

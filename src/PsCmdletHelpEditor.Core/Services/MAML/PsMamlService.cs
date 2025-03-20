@@ -76,7 +76,7 @@ public class PsMamlService : IMamlService {
         return sb.ToString();
     }
     static Task xmlGenerateBodyAsync(BBCodeParser bbRules, StringBuilder sb, IPsCommandInfo cmdlet) {
-        return Task.Factory.StartNew(() => xmlGenerateBody(bbRules, sb, cmdlet));
+        return Task.Run(() => xmlGenerateBody(bbRules, sb, cmdlet));
     }
     static void xmlGenerateBody(BBCodeParser bbRules, StringBuilder sb, IPsCommandInfo cmdlet) {
         sb.Append("<command:command xmlns:maml=\"http://schemas.microsoft.com/maml/2004/10\" xmlns:command=\"http://schemas.microsoft.com/maml/dev/command/2004/10\" xmlns:dev=\"http://schemas.microsoft.com/maml/dev/2004/10\" xmlns:MSHelp=\"http://msdn.microsoft.com/mshelp\">");

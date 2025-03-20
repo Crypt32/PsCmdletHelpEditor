@@ -16,7 +16,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         }
 
         public Task<XmlRpcBlogInfo[]> GetUserBlogsAsync() {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.GetUsersBlogs(
                     String.Empty,
                     _provInfo.UserName,
@@ -24,7 +24,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                 );
         }
         public Task<List<WpPost>> GetRecentPostsAsync(Int32 postCount = 5) {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.GetWpRecentPosts(
                     _provInfo.ProviderID,
                     _provInfo.UserName,
@@ -33,7 +33,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                 );
         }
         public Task<WpGetPost> GetPostAsync(Int32 postId) {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.GetWpPost(
                     _provInfo.UserName,
                     _provInfo.Password.ToPlainString(),
@@ -42,7 +42,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
         }
 
         public Task<String> AddPostAsync(WpPostCreate post, Boolean publish = true) {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.AddWpPost(
                     Convert.ToInt32(_provInfo.ProviderID),
                     _provInfo.UserName,
@@ -51,7 +51,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                 );
         }
         public Task<Boolean> UpdatePostAsync(WpPostUpdate post, Int32 postId, Boolean publish = true) {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.UpdateWpPost(
                     Convert.ToInt32(_provInfo.ProviderID),
                     _provInfo.UserName,
@@ -61,7 +61,7 @@ namespace PsCmdletHelpEditor.XmlRpc {
                 );
         }
         public Task<Boolean> DeletePostAsync(XmlRpcPost post, Boolean publish = false) {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
                 _mwProvider.DeletePost(
                     String.Empty,
                     post.PostId,
