@@ -352,7 +352,7 @@ public class AppCommands {
     public IAsyncCommand ImportFromMamlCommand { get; }
     public IAsyncCommand ImportFromCommentBasedHelpCommand { get; }
     Task importFromMamlHelp(Object? o, CancellationToken token) {
-        var module = (ModuleObject)o!;
+        var module = (PsModuleInfo)o!;
 
         if (_uiMessenger.CreateSaveHelpAsXmlDialog(out String? fileName, module.Name)) {
             return LoadCommandsAsync(fileName!, false);
