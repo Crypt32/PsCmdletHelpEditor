@@ -26,7 +26,7 @@ namespace CmdletHelpEditor.Views.Dialogs;
 /// </summary>
 public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
     readonly HelpProjectDocument _context;
-    readonly IMsgBox _msgBox;
+    readonly IUIMessenger _uiMessenger;
 
     Boolean useSupports, useProvider, urlEditable, provSelected, userEditable, blogsLoaded, blogSelected;
     ProviderInformation providerInfo;
@@ -34,7 +34,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
 
     public ModuleProperties(HelpProjectDocument context) {
         _context = context;
-        _msgBox = App.Container.Resolve<IMsgBox>();
+        _uiMessenger = App.Container.Resolve<IUIMessenger>();
         UseProviderCommand = new RelayCommand(UseProviderChanged);
         UseSupports = _context.Module.UseSupports;
         Providers = new ObservableCollection<ProviderInformation>(Utils.EnumProviders());
@@ -129,7 +129,7 @@ public partial class ModuleProperties : INotifyPropertyChanged, IHasPassword {
                 });
             }
         } catch (Exception ex) {
-            _msgBox.ShowError("Error", ex.Message);
+            _uiMessenger.ShowError("Error", ex.Message);
         }
         BlogsLoaded = true;
     }

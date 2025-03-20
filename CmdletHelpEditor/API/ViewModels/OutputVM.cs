@@ -18,13 +18,13 @@ namespace CmdletHelpEditor.API.ViewModels;
 
 public class OutputVM : AsyncViewModel {
     static readonly MarkdownPipeline _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-    readonly IMsgBox _msgBox;
+    readonly IUIMessenger _uiMessenger;
     String htmlText;
     FlowDocument document;
     Boolean xmlChecked, htmlViewChecked, textChecked, mdViewChecked;
 
     public OutputVM(ModuleObject parent) {
-        _msgBox = App.Container.Resolve<IMsgBox>();
+        _uiMessenger = App.Container.Resolve<IUIMessenger>();
         XmlChecked = true;
         Tab = parent;
         GenerateOutputCommand = new AsyncCommand(generateOutput, canGenerateView);
@@ -87,7 +87,7 @@ public class OutputVM : AsyncViewModel {
         CmdletObject cmd = Tab.SelectedCmdlet;
         if (cmd == null) { return; }
         if (XmlChecked && Tab.UpgradeRequired) {
-            _msgBox.ShowWarning("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.");
+            _uiMessenger.ShowWarning("Warning", "The module is offline and requires upgrade. Upgrade the project to allow XML view.");
             return;
         }
         StartSpinner(Strings.InfoOutputGenerating);

@@ -16,15 +16,15 @@ public interface IOnlinePublishProgressVM {
     void SetModule(ModuleObject moduleObject);
 }
 class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
-    readonly IMsgBox _msgBox;
+    readonly IUIMessenger _uiMessenger;
 
     Boolean stopRequested;
     String publishCaption;
     ModuleObject module;
     OnlinePublishEntry selectedEntry;
 
-    public OnlinePublishProgressVM(IProgressBar progressBar, IMsgBox msgBox) {
-        _msgBox = msgBox;
+    public OnlinePublishProgressVM(IProgressBar progressBar, IUIMessenger uiMessenger) {
+        _uiMessenger = uiMessenger;
         ProgressBar = progressBar;
         PublishCommand = new AsyncCommand(publish);
         RetryCommand = new AsyncCommand(retry);
@@ -57,7 +57,7 @@ class OnlinePublishProgressVM : AsyncViewModel, IOnlinePublishProgressVM {
     async Task publish(IScrollToView lv, ICollection<OnlinePublishEntry> cmdlets) {
         WpXmlRpcClient blogger = module.Provider.InitializeBlogger();
         if (blogger == null) {
-            _msgBox.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
+            _uiMessenger.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
             return;
         }
         Double duration = 100.0 / cmdlets.Count;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using CmdletHelpEditor.Abstract;
+using CmdletHelpEditor.API.Utility;
 using CmdletHelpEditor.API.ViewModels;
 using CmdletHelpEditor.Views.Windows;
 using PsCmdletHelpEditor.Core.Services;
@@ -33,7 +34,7 @@ public partial class App {
         Container.RegisterSingleton<IMainWindowVM, MainWindowVM>();
         Container.RegisterSingleton<IPowerShellProcessor, PowerShellProcessor>();
         Container.RegisterSingleton<IProgressBar, ProgressBarVM>();
-        Container.RegisterSingleton<IMsgBox, MsgBoxClass>();
+        Container.RegisterSingleton<IUIMessenger, UIMessenger>();
         Container.RegisterType<IOnlinePublishProgressVM, OnlinePublishProgressVM>();
         Container.RegisterType<IPsHelpProjectFileHandler, XmlHelpProjectFileHandler>();
         Container.RegisterType<IMamlService, PsMamlService>();

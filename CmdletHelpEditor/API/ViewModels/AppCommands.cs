@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using CmdletHelpEditor.Abstract;
 using CmdletHelpEditor.API.Models;
@@ -31,7 +30,7 @@ public class AppCommands {
     readonly IPowerShellProcessor _psProcessor;
     readonly IPsHelpProjectFileHandler _fileService;
     readonly IProgressBar _progressBar;
-    readonly IMsgBox _msgBox;
+    readonly IUIMessenger _uiMessenger;
     Boolean alreadyRaised;
 
     public AppCommands(MainWindowVM parent) {
@@ -51,7 +50,7 @@ public class AppCommands {
         PublishHelpCommand = new AsyncCommand(publishHelpFile, canPublish);
         PublishOnlineCommand = new RelayCommand(publishOnline, canPublishOnline);
         PublishMarkdownCommand = new AsyncCommand(publishMarkdown, canSave);
-        _msgBox = App.Container.Resolve<IMsgBox>();
+        _uiMessenger = App.Container.Resolve<IUIMessenger>();
     }
 
     #region New Project command
@@ -74,7 +73,7 @@ public class AppCommands {
                 };
                 vm.StartSpinner();
             } catch (Exception ex) {
-                _msgBox.ShowError("Read error", ex.Message);
+                _uiMessenger.ShowError("Read error", ex.Message);
             }
             if (_mwvm.SelectedDocument is not BlankDocumentVM) {
                 _mwvm.NewTabCommand.Execute(null);
@@ -88,7 +87,7 @@ public class AppCommands {
         tab.StartSpinner();
         IReadOnlyList<String> cmd = Utils.GetCommandTypes();
         if (cmd.Count == 0) {
-            _msgBox.ShowError("Error", Strings.E_EmptyCmds);
+            _uiMessenger.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
         if (!_psProcessor.TestModuleExist(tab.Module.Name)) {
@@ -109,7 +108,7 @@ public class AppCommands {
                               However certain functionality may not be available.
 
                               """;
-            _msgBox.ShowError("Error while loading cmdlets", message);
+            _uiMessenger.ShowError("Error while loading cmdlets", message);
             tab.ErrorInfo = e.Message;
             foreach (CmdletObject cmdlet in tab.Module.Cmdlets) {
                 cmdlet.GeneralHelp.Status = ItemStatus.Missing;
@@ -260,11 +259,10 @@ public class AppCommands {
 
     public IAsyncCommand PublishMarkdownCommand { get; }
     async Task publishMarkdown(Object o, CancellationToken token) {
-        var dlg = NativeDialogFactory.CreateBrowseFolderDialog();
-        var result = dlg.ShowDialog();
-        if (result != DialogResult.OK) {
-            return;
+        if (!_uiMessenger.TryGetBrowseFolderDialog(out String folderPath)) {
+
         }
+        
         var selectedDocument = (HelpProjectDocument)_mwvm.SelectedDocument!;
         selectedDocument.StartSpinner(Strings.InfoModuleLoading);
         try {
@@ -272,11 +270,11 @@ public class AppCommands {
             IHelpOutputFormatter formatter = OutputFormatterFactory.GetMarkdownFormatter();
             foreach (IPsCommandInfo command in proj.GetCmdlets()) {
                 String content = await formatter.GenerateViewAsync(command, proj);
-                String filePath = Path.Combine(dlg.SelectedPath, command.Name + ".md");
+                String filePath = Path.Combine(folderPath!, command.Name + ".md");
                 File.WriteAllText(filePath, content);
             }
         } catch (Exception ex) {
-            _msgBox.ShowError("Export error", ex.Message);
+            _uiMessenger.ShowError("Export error", ex.Message);
         }
 
         selectedDocument.StopSpinner();
@@ -316,7 +314,7 @@ public class AppCommands {
         }
         try {
             String? path = helpProject.Path;
-            if (String.IsNullOrEmpty(helpProject.Path) && !getSaveFileName(helpProject.Module.Name, out path)) {
+            if (String.IsNullOrEmpty(helpProject.Path) && !_uiMessenger.CreateSaveHelpProjectDialog(out path, helpProject.Module.Name)) {
                 return true;
             }
             writeFile(helpProject, path);
@@ -335,16 +333,16 @@ public class AppCommands {
             if (!String.IsNullOrEmpty(helpProject.Path)) {
                 path = helpProject.Path;
             } else {
-                if (!getSaveFileName(helpProject.Module.Name, out path)) { return; }
+                if (!_uiMessenger.CreateSaveHelpProjectDialog(out path, helpProject.Module.Name)) { return; }
             }
         } else {
             // save as
-            if (!getSaveFileName(helpProject.Module.Name, out path)) { return; }
+            if (!_uiMessenger.CreateSaveHelpProjectDialog(out path, helpProject.Module.Name)) { return; }
         }
         try {
             writeFile(helpProject, path);
         } catch (Exception e) {
-            _msgBox.ShowError("Save error", e.Message);
+            _uiMessenger.ShowError("Save error", e.Message);
             helpProject.ErrorInfo = e.Message;
         }
     }
@@ -355,13 +353,13 @@ public class AppCommands {
     public IAsyncCommand ImportFromCommentBasedHelpCommand { get; }
     Task importFromMamlHelp(Object? o, CancellationToken token) {
         var module = (ModuleObject)o!;
-        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module.Name);
-        Boolean? result = dlg.ShowDialog();
-        if (result == true) {
-        } else {
-            return Task.CompletedTask;
+
+        if (_uiMessenger.CreateSaveHelpAsXmlDialog(out String? fileName, module.Name)) {
+            return LoadCommandsAsync(fileName!, false);
         }
-        return LoadCommandsAsync(dlg.FileName, false);
+
+        return Task.CompletedTask;
+
     }
     Task importFromCommentBasedHelp(Object? o, CancellationToken token) {
         return LoadCommandsAsync(null, true);
@@ -374,13 +372,12 @@ public class AppCommands {
 
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((HelpProjectDocument)o).Module;
-        var dlg = NativeDialogFactory.CreateSaveHelpAsXmlDialog(module.Name);
-        Boolean? result = dlg.ShowDialog();
-        if (result == true) {
+
+        if (_uiMessenger.CreateSaveHelpAsXmlDialog(out String? fileName, module.Name)) {
             try {
-                await module.PublishMamlHelpFile(dlg.FileName, _progressBar);
+                await module.PublishMamlHelpFile(fileName, _progressBar);
             } catch (Exception e) {
-                _msgBox.ShowError("XML Write error", e.Message);
+                _uiMessenger.ShowError("XML Write error", e.Message);
             }
         }
     }
@@ -392,19 +389,18 @@ public class AppCommands {
     async Task loadModuleFromManifest(Object? o, CancellationToken token) {
         await LoadModulesCommand.ExecuteAsync(false);
         TabDocumentVM selectedDocument = _mwvm.SelectedDocument!;
-        var dlg = NativeDialogFactory.CreateOpenPsManifestDialog();
-        Boolean? result = dlg.ShowDialog();
-        if (result != true) {
+        if (!_uiMessenger.CreateOpenPsManifestDialog(out String? fileName)) {
             return;
         }
+        
         selectedDocument.StartSpinner(Strings.InfoModuleLoading);
         try {
-            PsModuleInfo moduleInfo = await _psProcessor.GetModuleInfoFromFileAsync(dlg.FileName);
+            PsModuleInfo moduleInfo = await _psProcessor.GetModuleInfoFromFileAsync(fileName!);
             if (!ModuleListDocument.ModuleList.Any(x => x.Name.Equals(moduleInfo.Name))) {
                 ModuleListDocument.ModuleList.Add(moduleInfo);
             }
         } catch (Exception ex) {
-            _msgBox.ShowError("Import error", ex.Message);
+            _uiMessenger.ShowError("Import error", ex.Message);
             //previousTab.ErrorInfo = e.Message;
         }
         selectedDocument.StopSpinner();
@@ -451,7 +447,7 @@ public class AppCommands {
     public async Task LoadCommandsAsync(String? helpPath, Boolean importFromCBH) {
         var cmd = Utils.GetCommandTypes();
         if (cmd.Count == 0) {
-            _msgBox.ShowError("Error", Strings.E_EmptyCmds);
+            _uiMessenger.ShowError("Error", Strings.E_EmptyCmds);
             return;
         }
 
@@ -474,7 +470,7 @@ public class AppCommands {
             doc.StopSpinner();
             swapTabDocument(vm);
         } catch (Exception ex) {
-            _msgBox.ShowError("Error while loading cmdlets", ex.Message);
+            _uiMessenger.ShowError("Error while loading cmdlets", ex.Message);
             _mwvm.SelectedDocument!.ErrorInfo = ex.Message;
         }
     }
@@ -490,31 +486,13 @@ public class AppCommands {
         }
         _mwvm.SelectedDocument = newDocument;
     }
-    static Boolean getOpenProjectFilePath(String? suggestedPath, out String? path) {
+    Boolean getOpenProjectFilePath(String? suggestedPath, out String? path) {
         if (suggestedPath is not null) {
             path = suggestedPath;
             return true;
         }
-        path = null;
-        var dlg = NativeDialogFactory.CreateOpenHelpProjectDialog();
-        Boolean? result = dlg.ShowDialog();
-        if (result == true) {
-            path = dlg.FileName;
-        }
 
-        return result ?? false;
-    }
-    static Boolean getSaveFileName(String filePrefix, out String? path) {
-        var dlg = NativeDialogFactory.CreateSaveHelpProjectDialog(filePrefix);
-        Boolean? result = dlg.ShowDialog();
-        if (result == true) {
-            path = dlg.FileName;
-
-            return true;
-        }
-        path = null;
-
-        return false;
+        return _uiMessenger.CreateOpenHelpProjectDialog(out path);
     }
 
     #endregion

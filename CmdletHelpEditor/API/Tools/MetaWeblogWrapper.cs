@@ -62,10 +62,10 @@ static class MetaWeblogWrapper {
         //}
     }
     public static async Task PublishAll(ModuleObject module, IProgressBar pb) {
-        IMsgBox msgBox = App.Container.Resolve<IMsgBox>();
+        IUIMessenger uiMessenger = App.Container.Resolve<IUIMessenger>();
         WpXmlRpcClient blogger = module.Provider.InitializeBlogger();
         if (blogger == null) {
-            msgBox.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
+            uiMessenger.ShowWarning("Warning", Strings.WarnBloggerNeedsMoreData);
             return;
         }
         List<CmdletObject> cmdletsToProcess = module.Cmdlets.Where(x => x.Publish).ToList();
@@ -76,7 +76,7 @@ static class MetaWeblogWrapper {
             pb.Progress += duration;
         }
 
-        msgBox.ShowInfo("Success", new Win32Exception(0).Message);
+        uiMessenger.ShowInformation("Success", new Win32Exception(0).Message);
         pb.Progress = 100;
     }
 }

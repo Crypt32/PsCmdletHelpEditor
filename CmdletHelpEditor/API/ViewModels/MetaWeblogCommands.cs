@@ -20,14 +20,14 @@ public static class MetaWeblogCommands {
         if (obj == null) {
             return;
         }
-        IMsgBox msgBox = App.Container.Resolve<IMsgBox>();
+        IUIMessenger uiMessenger = App.Container.Resolve<IUIMessenger>();
         working = true;
         var mwvm = (MainWindowVM)Application.Current.MainWindow.DataContext;
         try {
             await MetaWeblogWrapper.PublishSingle((CmdletObject)obj, ((HelpProjectDocument)mwvm.SelectedDocument)!.Module, null);
-            msgBox.ShowInfo("Success", "The operation completed successfully.");
+            uiMessenger.ShowInformation("Success", "The operation completed successfully.");
         } catch (Exception e) {
-            msgBox.ShowError("Error", e.Message);
+            uiMessenger.ShowError("Error", e.Message);
         }
         working = false;
     }
