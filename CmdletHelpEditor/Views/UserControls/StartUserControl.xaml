@@ -14,7 +14,7 @@
         <FlowDocument>
             <Paragraph FontSize="24" BorderThickness="0,0,0,1" BorderBrush="Gray">
                 Welcome to the
-                <Run FontWeight="Bold" Text="PowerShell Cmdlet Help Editor"/> !
+                <Run FontWeight="Bold" Text="PowerShell Cmdlet Help Editor"/>!
             </Paragraph>
             <Paragraph FontSize="15">
                 To start work with the editor, you can start new or open existing project.
