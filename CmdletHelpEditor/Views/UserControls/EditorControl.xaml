@@ -36,7 +36,8 @@
                   SelectionMode="Single"
                   ItemsSource="{Binding Module.Cmdlets}"
                   SelectedItem="{Binding EditorContext.CurrentCmdlet}"
-                  ItemContainerStyle="{StaticResource ResourceKey=ItemContStyle}">
+                  ItemContainerStyle="{StaticResource ResourceKey=ItemContStyle}"
+                  BorderThickness="0,1,0,0">
             <ListView.ContextMenu>
                 <ContextMenu StaysOpen="true">
                     <MenuItem Header="Copy command name to clipboard"
@@ -48,7 +49,9 @@
         <GridSplitter Grid.Column="1"
                       ResizeBehavior="PreviousAndNext"
                       ResizeDirection="Columns"/>
-        <TabControl Grid.Column="2" Background="{StaticResource PanelBackgroundBrush}">
+        <TabControl Grid.Column="2"
+                    Background="{StaticResource PanelBackgroundBrush}"
+                    BorderThickness="1,1,1,0">
             <TabItem Header="General">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <uc:GeneralControl VerticalAlignment="Top"
