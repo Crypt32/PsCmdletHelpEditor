@@ -40,7 +40,8 @@ class UIMessenger : IUIMessenger {
         String? defaultExtension = null) {
         filePath = null;
         var dlg = new SaveFileDialog {
-            FileName = "",
+            FileName = suggestedFileName ?? String.Empty,
+            DefaultExt = defaultExtension ?? ".*",
             Filter = !String.IsNullOrEmpty(fileType)
                 ? fileType
                 : "All files (*.*)|*.*"
@@ -56,8 +57,8 @@ class UIMessenger : IUIMessenger {
         String? defaultExtension = null) {
         filePath = null;
         var dlg = new OpenFileDialog {
-            FileName = "",
-            DefaultExt = ".*",
+            FileName = suggestedFileName ?? String.Empty,
+            DefaultExt = defaultExtension ?? ".*",
             Filter = !String.IsNullOrEmpty(fileType)
                 ? fileType
                 : "All files (*.*)|*.*"
