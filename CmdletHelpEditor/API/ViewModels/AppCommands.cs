@@ -452,8 +452,8 @@ public class AppCommands {
             return;
         }
 
+        TabDocumentVM doc = _mwvm.SelectedDocument!;
         try {
-            TabDocumentVM doc = _mwvm.SelectedDocument!;
             doc.StartSpinner(Strings.InfoCmdletsLoading);
             var moduleInfo = ((ModuleListDocument)_mwvm.SelectedDocument!).SelectedModule;
             ModuleObject? module = ModuleObject.FromPsModuleInfo(moduleInfo);
@@ -468,11 +468,12 @@ public class AppCommands {
                 module.Cmdlets.Add(CmdletObject.FromCommandInfo(commandInfo));
             }
             var vm = new HelpProjectDocument(module);
-            doc.StopSpinner();
             swapTabDocument(vm);
         } catch (Exception ex) {
             _uiMessenger.ShowError("Error while loading cmdlets", ex.Message);
             _mwvm.SelectedDocument!.ErrorInfo = ex.Message;
+        } finally {
+            doc.StopSpinner();
         }
     }
 
