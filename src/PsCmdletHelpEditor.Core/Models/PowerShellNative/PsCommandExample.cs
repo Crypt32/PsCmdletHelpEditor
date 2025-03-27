@@ -66,7 +66,7 @@ class PsCommandExample : IPsCommandExample {
         }
 
         return new PsCommandExample {
-            Name = name,
+            Name = name.Trim(),
             Cmd = cmd,
             Description = description,
             Output = output
