@@ -45,9 +45,9 @@ class PsCommandExample : IPsCommandExample {
         }
         // Example description
         tempNode = node.SelectSingleNode("dev:remarks");
-        if (tempNode != null) {
+        if (tempNode?.ChildNodes.Count > 0) {
             Int32 NodeCount = 0;
-            foreach (MamlXmlNode descriptionNode in tempNode) {
+            foreach (MamlXmlNode descriptionNode in tempNode.ChildNodes) {
                 switch (NodeCount) {
                     case 0:
                         description = descriptionNode.ChildNodes.ReadMamlParagraphs();

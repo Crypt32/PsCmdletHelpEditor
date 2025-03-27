@@ -135,12 +135,12 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
             }
             String descriptionNodes = String.Empty;
             tempNode = typeNode.SelectSingleNode("dev:type/maml:description");
-            if (tempNode != null) {
+            if (tempNode?.ChildNodes != null) {
                 descriptionNodes += tempNode.ChildNodes.ReadMamlParagraphs();
             }
             tempNode = typeNode.SelectSingleNode("maml:description");
             if (tempNode != null) {
-                descriptionNodes += tempNode.ChildNodes;
+                descriptionNodes += tempNode.ChildNodes.ReadMamlParagraphs();
             }
             descriptions.Add(descriptionNodes);
         }
