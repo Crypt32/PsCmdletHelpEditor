@@ -44,7 +44,7 @@ class PsCommandParameterCollection : PsCommandParameterCollectionBase<PsCommandP
                 param = PsCommandParameter.FromMaml(name, node);
                 InternalList.Add(param);
             } else {
-                param.ImportMamlHelp(commandNode);
+                param.ImportMamlHelp(node);
             }
         }
     }
