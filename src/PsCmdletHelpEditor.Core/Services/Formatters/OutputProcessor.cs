@@ -51,8 +51,9 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     /// Generates preformatted code block.
     /// </summary>
     /// <param name="content">Code block content.</param>
+    /// <param name="languageIdentifier"></param>
     /// <returns>Markup.</returns>
-    protected abstract String GeneratePre(String content);
+    protected abstract String GeneratePre(String content, String? languageIdentifier = null);
     /// <summary>
     /// Generates indented paragraph.
     /// </summary>
@@ -249,7 +250,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
                     ? $"PS C:\\> {example.Cmd}"
                     : example.Cmd;
 
-                SB.AppendLine(GeneratePre(cmd));
+                SB.AppendLine(GeneratePre(cmd, "PowerShell"));
             }
 
             if (!String.IsNullOrEmpty(example.Output)) {

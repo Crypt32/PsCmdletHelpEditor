@@ -61,7 +61,7 @@ class HtmlProcessor : OutputProcessor {
     protected override String GenerateH3(String content) {
         return "<h3>" + content + "</h3>";
     }
-    protected override String GeneratePre(String content) {
+    protected override String GeneratePre(String content, String? languageIdentifier = null) {
         return "<pre>" + SecurityElement.Escape(content) + "</pre>";
     }
     protected override String GenerateParagraph(String content) {
