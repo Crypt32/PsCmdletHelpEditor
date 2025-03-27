@@ -11,6 +11,9 @@
         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Margin" Value="-1"/>
         </Style>
+        <Style TargetType="HeaderedContentControl" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+        </Style>
     </UserControl.Resources>
     <StackPanel Margin="0">
         <HeaderedContentControl Header="Synopsis:">

@@ -57,7 +57,7 @@
             </StackPanel>
         </StackPanel>
         <StackPanel IsEnabled="{Binding EditorContext.ExampleContext.NameTextBoxEnabled}">
-            <HeaderedContentControl>
+            <HeaderedContentControl BorderThickness="1,1,1,0">
                 <HeaderedContentControl.Header>
                     <TextBlock>
                         <Run Text="Example name:"/>
@@ -70,13 +70,15 @@
                          MaxLines="1"
                          Text="{Binding EditorContext.ExampleContext.SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-            <HeaderedContentControl Header="Example command:">
+            <HeaderedContentControl Header="Example command:"
+                                    BorderThickness="1,1,1,0">
                 <TextBox MinLines="10"
                          MaxLines="10"
                          FontFamily="Consolas"
                          Text="{Binding EditorContext.ExampleContext.SelectedItem.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-            <HeaderedContentControl Header="Example description:">
+            <HeaderedContentControl Header="Example description:"
+                                    BorderThickness="1,1,1,0">
                 <TextBox MinLines="10"
                          MaxLines="10"
                          Text="{Binding EditorContext.ExampleContext.SelectedItem.Description, UpdateSourceTrigger=PropertyChanged}"

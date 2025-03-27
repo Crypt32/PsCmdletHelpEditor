@@ -15,7 +15,8 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     IsEnabled="{Binding EditorContext.RelatedLinkContext.NameTextBoxEnabled}">
-            <HeaderedContentControl Header="Related link:">
+            <HeaderedContentControl Header="Related link:"
+                                    BorderThickness="1,1,1,0">
                 <TextBox MaxLines="1"
                          Text="{Binding EditorContext.RelatedLinkContext.SelectedItem.LinkText, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>

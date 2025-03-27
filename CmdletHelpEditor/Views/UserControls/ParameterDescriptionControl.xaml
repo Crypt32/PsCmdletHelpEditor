@@ -45,6 +45,7 @@
             </Grid.RowDefinitions>
             <HeaderedContentControl Grid.Row="0"
                                     Grid.Column="0"
+                                    BorderThickness="1,1,0,1"
                                     Header="Parameter name:">
                 <TextBox MaxLines="1"
                          IsReadOnly="True"
@@ -93,8 +94,10 @@
             </StackPanel>
             <HeaderedContentControl Grid.Row="2"
                                     Grid.Column="0"
-                                    Header="Parameter attributes:">
+                                    Header="Parameter attributes:"
+                                    BorderThickness="1,1,0,0">
                 <ListBox Background="#FAFAFA"
+                         BorderThickness="0"
                          ItemsSource="{Binding EditorContext.ParamContext.CurrentParam.Attributes}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -105,8 +108,10 @@
             </HeaderedContentControl>
             <HeaderedContentControl Grid.Row="2"
                                     Grid.Column="1"
-                                    Header="Aliases:">
+                                    Header="Aliases:"
+                                    BorderThickness="1,1,0,0">
                 <ListBox Background="#FAFAFA"
+                         BorderThickness="0"
                          ItemsSource="{Binding EditorContext.ParamContext.CurrentParam.Aliases}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -118,6 +123,7 @@
             <HeaderedContentControl Grid.Row="3"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
+                                    BorderThickness="1,1,1,0"
                                     Header="Parameter description:">
                 <TextBox MinLines="11"
                          MaxLines="11"
@@ -127,6 +133,7 @@
             <HeaderedContentControl Grid.Row="4"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
+                                    BorderThickness="1,1,1,0"
                                     Header="Default value:">
                 <TextBox MaxLines="1"
                          ToolTip="Specifies the default value for the parameter"
@@ -135,6 +142,7 @@
             <HeaderedContentControl Grid.Row="5"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="2"
+                                    BorderThickness="1,1,1,0"
                                     Header="Wildcard support:">
                 <CheckBox Margin="10" ToolTip="Indicates whether the parameter accepts wildcards"
                           IsChecked="{Binding EditorContext.ParamContext.CurrentParam.Globbing}"/>
@@ -146,7 +154,8 @@
                       ItemsSource="{Binding EditorContext.CurrentCmdlet.Parameters}"
                       SelectedItem="{Binding EditorContext.ParamContext.CurrentParam}"
                       SelectedIndex="{Binding EditorContext.ParamIndex}"
-                      ItemContainerStyle="{StaticResource ParamItemContStyle}">
+                      ItemContainerStyle="{StaticResource ParamItemContStyle}"
+                      BorderThickness="0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" Width="200">
