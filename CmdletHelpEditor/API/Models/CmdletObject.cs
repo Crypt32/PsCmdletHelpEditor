@@ -126,9 +126,6 @@ public class CmdletObject : ViewModelBase {
             OnPropertyChanged();
         }
     }
-    void initialize() {
-        
-    }
 
     #region nested object event handlers
     void OnBindingListChanged(Object Sender, ListChangedEventArgs ChangedEventArgs) {
@@ -154,9 +151,12 @@ public class CmdletObject : ViewModelBase {
         OnPropertyChanged("nested");
     }
     #endregion
-
+    
     public void UpdateParamSets() {
-        if (ParameterSets == null) { return; }
+        // TODO: need to find out when this property is not null.
+        if (ParameterSets == null) {
+            return;
+        }
         ParamSets.Clear();
         foreach (CommandParameterSetInfo paramInfo in ParameterSets) {
             var info = new CommandParameterSetInfo2 { Name = paramInfo.Name };
