@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -100,6 +100,7 @@ class MamlXmlNode(XmlNode Node, XmlNamespaceManager? Ns) : IEnumerable {
 class MamlXmlNodeList : IEnumerable<MamlXmlNode> {
     readonly List<MamlXmlNode> _nodeList = [];
     readonly XmlNodeList _xmlNodeList;
+    readonly StringBuilder _sb = new();
 
     public MamlXmlNodeList(XmlNodeList xmlNodeList, XmlNamespaceManager? ns) {
         _xmlNodeList = xmlNodeList;
@@ -117,11 +118,14 @@ class MamlXmlNodeList : IEnumerable<MamlXmlNode> {
         if (_xmlNodeList.Count == 0) {
             return String.Empty;
         }
-        String retValue = _xmlNodeList
-            .Cast<XmlNode>()
-            .Aggregate(String.Empty, (current, node) => current + Regex.Replace(node.InnerText, "(?<!\r)\n", "\r\n"));
+        _sb.Clear();
+        foreach (XmlNode node in _xmlNodeList) {
+            _sb.AppendLine(Regex.Replace(node.InnerText, "(?<!\r)\n", "\r\n"));
+            _sb.AppendLine();
+        }
 
-        return retValue.TrimEnd();
+
+        return _sb.ToString().TrimEnd();
     }
     IEnumerator<MamlXmlNode> IEnumerable<MamlXmlNode>.GetEnumerator() {
         return _nodeList.GetEnumerator();
