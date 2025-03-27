@@ -117,7 +117,7 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
     void importTypesFromMaml(MamlXmlNode commandNode, Boolean input) {
         String topNodeName = input ? "inputType" : "returnValue";
 
-        MamlXmlNodeList? nodes = commandNode.SelectNodes($"command:inputTypes/command:{topNodeName}");
+        MamlXmlNodeList? nodes = commandNode.SelectNodes($"command:{topNodeName}s/command:{topNodeName}");
         if (nodes is null) {
             return;
         }
