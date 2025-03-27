@@ -111,7 +111,7 @@ class PsCommandGeneralDescription : IPsCommandGeneralDescription{
     void importNotesFromMaml(MamlXmlNode commandNode) {
         MamlXmlNode? tempNode = commandNode.SelectSingleNode("maml:alertSet/maml:alert");
         if (tempNode is not null) {
-            Description = tempNode.ChildNodes.ReadMamlParagraphs();
+            Notes = tempNode.ChildNodes.ReadMamlParagraphs();
         }
     }
     void importTypesFromMaml(MamlXmlNode commandNode, Boolean input) {
