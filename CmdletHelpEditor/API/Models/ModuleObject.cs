@@ -174,6 +174,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
             if (activeCmdletIndex >= 0) {
                 // update syntax, parameter sets and parameter information from active cmdlet to project
                 cmdlet.Syntax = cmdlets[activeCmdletIndex].Syntax;
+                cmdlet.ParamSets = cmdlets[activeCmdletIndex].ParamSets;
                 cmdlet.ParameterSets = cmdlets[activeCmdletIndex].ParameterSets;
                 cmdlet.UpdateParamSets();
                 cmdlet.CopyFromCmdlet(cmdlets[activeCmdletIndex]);
