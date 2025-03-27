@@ -204,7 +204,7 @@ public class ModuleObject : ViewModelBase, IModuleInfo {
     /// Removes missing commands and missing command parameters.
     /// </summary>
     public void RemoveInvalid() {
-        IEnumerable<CmdletObject> invalidCommands = cmdlets.Where(x => x.GeneralHelp.Status == ItemStatus.Missing);
+        IEnumerable<CmdletObject> invalidCommands = cmdlets.Where(x => x.GeneralHelp.Status == ItemStatus.Missing).ToList();
         foreach (CmdletObject invalidCommand in invalidCommands) {
             cmdlets.Remove(invalidCommand);
         }
