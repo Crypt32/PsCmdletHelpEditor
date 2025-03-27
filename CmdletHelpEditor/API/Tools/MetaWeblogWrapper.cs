@@ -15,6 +15,7 @@ namespace CmdletHelpEditor.API.Tools;
 
 static class MetaWeblogWrapper {
     public static async Task PublishSingle(CmdletObject cmdlet, ModuleObject module, WpXmlRpcClient blogger) {
+        // rate limiting timer.
         await Task.Run(() => Thread.Sleep(5000));
         blogger ??= module.Provider.InitializeBlogger();
         if (blogger == null) {
@@ -26,7 +27,6 @@ static class MetaWeblogWrapper {
                 Title = cmdlet.Name,
                 PageName = cmdlet.Name,
                 PostType = "page",
-                PostParent = 16520,
                 HTML = await htmlGenerator.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject())
             };
             // assuming that article does not exist
@@ -35,11 +35,10 @@ static class MetaWeblogWrapper {
             var post = new WpPostUpdate {
                 Title = cmdlet.Name,
                 PostType = "page",
-                PostParent = 16520,
                 HTML = await htmlGenerator.GenerateViewAsync(cmdlet.ToXmlObject(), module.ToXmlObject())
             };
             try {
-                // assuming that article exist, so we just change it
+                // assuming that article exists, so we just update it
                 await blogger.UpdatePostAsync(post, Convert.ToInt32(cmdlet.ArticleIDString));
             } catch (Exception e) {
                 // 0x80131600 connect succeeds, but the post is deleted. Remove postid
