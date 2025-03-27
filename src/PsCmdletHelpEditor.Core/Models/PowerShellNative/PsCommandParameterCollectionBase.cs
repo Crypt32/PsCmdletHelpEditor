@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace PsCmdletHelpEditor.Core.Models.PowerShellNative;
 
 abstract class PsCommandParameterCollectionBase<T> : ReadOnlyCollectionBase<T> {
-    protected static List<String> ExcludedParameters = [
+    static readonly List<String> _excludedParameters = [
         "Verbose",
         "Debug",
         "ErrorAction",
@@ -17,4 +17,6 @@ abstract class PsCommandParameterCollectionBase<T> : ReadOnlyCollectionBase<T> {
         "InformationAction",
         "InformationVariable"
     ];
+
+    protected IReadOnlyCollection<String> ExcludedParameters => _excludedParameters;
 }

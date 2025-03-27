@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using System.Text;
 
@@ -18,8 +19,8 @@ class PsCommandParameterSetCollection : PsCommandParameterCollectionBase<PsComma
         var sb = new StringBuilder();
         foreach (PsCommandParameterSet paramSet in InternalList) {
             sb.Clear();
-            foreach (String paramSetParameter in paramSet.GetParameters()) {
-                var paramInfo = _dictionary[paramSetParameter];
+            foreach (String paramSetParameterName in paramSet.GetParameters().Where(_dictionary.ContainsKey)) {
+                var paramInfo = _dictionary[paramSetParameterName];
                 sb.Append(paramInfo.GetCommandSyntax());
             }
             retValue.Add(sb.ToString());
@@ -33,7 +34,7 @@ class PsCommandParameterSetCollection : PsCommandParameterCollectionBase<PsComma
         if (cmdlet.Members["ParameterSets"].Value != null) {
             var paramSets = (IEnumerable<CommandParameterSetInfo>)cmdlet.Members["ParameterSets"].Value;
             foreach (CommandParameterSetInfo paramSet in paramSets) {
-                foreach (CommandParameterInfo paramInfo in paramSet.Parameters) {
+                foreach (CommandParameterInfo paramInfo in paramSet.Parameters.Where(x => !ExcludedParameters.Contains(x.Name))) {
                     _dictionary[paramInfo.Name] = paramInfo;
                 }
                 InternalList.Add(PsCommandParameterSet.FromCmdlet(paramSet));
