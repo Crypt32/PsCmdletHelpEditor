@@ -341,6 +341,7 @@ public class AppCommands {
         }
         try {
             writeFile(helpProject, path);
+            helpProject.ErrorInfo = null;
         } catch (Exception e) {
             _uiMessenger.ShowError("Save error", e.Message);
             helpProject.ErrorInfo = e.Message;
