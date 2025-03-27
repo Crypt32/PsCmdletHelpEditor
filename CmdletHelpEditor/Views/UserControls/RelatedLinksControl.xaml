@@ -12,30 +12,36 @@
             <Setter Property="Margin" Value="-1"/>
         </Style>
     </UserControl.Resources>
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-                    IsEnabled="{Binding EditorContext.RelatedLinkContext.NameTextBoxEnabled}">
-            <HeaderedContentControl Header="Related link:"
-                                    BorderThickness="1,1,1,0">
-                <TextBox MaxLines="1"
-                         Text="{Binding EditorContext.RelatedLinkContext.SelectedItem.LinkText, UpdateSourceTrigger=PropertyChanged}"/>
-            </HeaderedContentControl>
-            <HeaderedContentControl Header="URL (optional):">
-                <TextBox MinLines="3"
-                         MaxLines="3"
-                         AcceptsReturn="False"
-                         AcceptsTab="False"
-                         Text="{Binding EditorContext.RelatedLinkContext.SelectedItem.LinkUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            </HeaderedContentControl>
+    <StackPanel>
+        <HeaderedContentControl Header="Related link:"
+                                BorderThickness="1,1,1,0"
+                                IsEnabled="{Binding EditorContext.RelatedLinkContext.NameTextBoxEnabled}">
+            <TextBox MaxLines="1"
+                     Text="{Binding EditorContext.RelatedLinkContext.SelectedItem.LinkText, UpdateSourceTrigger=PropertyChanged}"/>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="URL (optional):">
+            <TextBox MinLines="3"
+                     MaxLines="3"
+                     AcceptsReturn="False"
+                     AcceptsTab="False"
+                     Text="{Binding EditorContext.RelatedLinkContext.SelectedItem.LinkUrl, UpdateSourceTrigger=PropertyChanged}"/>
+        </HeaderedContentControl>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Button Content="New"
+                    Width="75"
+                    Command="{Binding EditorContext.RelatedLinkContext.NewItemCommand}"/>
+            <Button Content="Remove"
+                    Width="75"
+                    Command="{Binding EditorContext.RelatedLinkContext.RemoveItemCommand}" Margin="10,0,0,0"/>
         </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
             <ListView x:Name="lvLinks"
                       Margin="10,0,10,0"
                       SelectedItem="{Binding EditorContext.RelatedLinkContext.SelectedItem}"
                       ItemsSource="{Binding EditorContext.CurrentCmdlet.RelatedLinks}"
                       SelectionMode="Single"
                       Width="670"
-                      Height="150">
+                      Height="150" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name"
@@ -68,14 +74,6 @@
                     <Image Source="/Images/down_32x32.png"/>
                 </Button>
             </Grid>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10">
-            <Button Content="New"
-                    Width="75"
-                    Command="{Binding EditorContext.RelatedLinkContext.NewItemCommand}"/>
-            <Button Content="Remove"
-                    Width="75"
-                    Command="{Binding EditorContext.RelatedLinkContext.RemoveItemCommand}" Margin="10,0,0,0"/>
-        </StackPanel>
-    </DockPanel>
+        </StackPanel>        
+    </StackPanel>
 </UserControl>

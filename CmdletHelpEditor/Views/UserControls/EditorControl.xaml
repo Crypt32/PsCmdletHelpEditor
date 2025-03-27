@@ -3,14 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
              xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              xmlns:uc="clr-namespace:CmdletHelpEditor.Views.UserControls"
              mc:Ignorable="d"
              Background="{StaticResource PanelBackgroundBrush}"
              d:DataContext="{d:DesignInstance vm:HelpProjectDocument}">
     <UserControl.Resources>
-        <converters:NullToBooleanConverter x:Key="ToBooleanConverter"/>
         <Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding GeneralHelp.Status}" Value="Missing">
@@ -54,31 +52,22 @@
                     BorderThickness="1,1,1,0">
             <TabItem Header="General">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <uc:GeneralControl VerticalAlignment="Top"
-                                       HorizontalAlignment="Stretch"
-                                       Foreground="Navy"
-                                       IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"/>
+                    <uc:GeneralControl IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource NullToBooleanConverter}}"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Parameters">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <uc:ParameterDescriptionControl VerticalAlignment="Top"
-                                                    HorizontalAlignment="Stretch"
-                                                    Foreground="Navy"/>
+                    <uc:ParameterDescriptionControl/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Examples">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <uc:ExampleControl VerticalAlignment="Top"
-                                       HorizontalAlignment="Stretch"
-                                       Foreground="Navy"/>
+                    <uc:ExampleControl/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Related Links">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <uc:RelatedLinksControl VerticalAlignment="Top"
-                                            HorizontalAlignment="Stretch"
-                                            Foreground="Navy"/>
+                    <uc:RelatedLinksControl/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Support Information">
@@ -90,30 +79,22 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Module.UseSupports}" Value="True" />
-                                        <Condition Binding="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}" Value="True" />
+                                        <Condition Binding="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource NullToBooleanConverter}}" Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ScrollViewer.Style>
-                    <uc:SupportInfoControl VerticalAlignment="Top"
-                                           HorizontalAlignment="Stretch"
-                                           Foreground="Navy"/>
+                    <uc:SupportInfoControl/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Output">
-                <uc:DisplayOutputControl IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"
-                                         VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch"
-                                         Foreground="Navy"/>
+                <uc:DisplayOutputControl IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource NullToBooleanConverter}}"/>
             </TabItem>
             <TabItem Header="Advanced">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <uc:AdvancedCmdletUC IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource ToBooleanConverter}}"
-                                         VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch"
-                                         Foreground="Navy"/>
+                    <uc:AdvancedCmdletUC IsEnabled="{Binding EditorContext.CurrentCmdlet, Converter={StaticResource NullToBooleanConverter}}"/>
                 </ScrollViewer>
             </TabItem>
         </TabControl>
