@@ -32,6 +32,20 @@ public static class UIMessengerExtensions {
             defaultExtension: ".psm1");
     }
     /// <summary>
+    /// Creates an open file dialog with <c>.Help.xml</c> filter.
+    /// </summary>
+    /// <returns>An instance of dialog.</returns>
+    /// <remarks>This method doesn't invoke the dialog. It is caller responsibility to call <see cref="OpenFileDialog.ShowDialog()"/></remarks>
+    public static Boolean CreateOpenMamlHelpDialog(this IUIMessenger uiMessenger, out String? fileName, String fileNamePrefix) {
+        String suggestedFileName = fileNamePrefix + ".Help.xml";
+
+        return uiMessenger.TryGetOpenFileName(
+            out fileName,
+            "PowerShell Help Xml files (.xml)|*.xml",
+            suggestedFileName,
+            defaultExtension: ".xml");
+    }
+    /// <summary>
     /// Creates a save file dialog with <c>.pshproj</c> filter.
     /// </summary>
     /// <returns>An instance of dialog.</returns>
@@ -50,7 +64,7 @@ public static class UIMessengerExtensions {
     /// </summary>
     /// <returns>An instance of dialog.</returns>
     /// <remarks>This method doesn't invoke the dialog. It is caller responsibility to call <see cref="OpenFileDialog.ShowDialog()"/></remarks>
-    public static Boolean CreateSaveHelpAsXmlDialog(this IUIMessenger uiMessenger, out String? fileName, String fileNamePrefix) {
+    public static Boolean CreateSaveMamlHelpDialog(this IUIMessenger uiMessenger, out String? fileName, String fileNamePrefix) {
         String suggestedFileName = fileNamePrefix + ".Help.xml";
 
         return uiMessenger.TryGetSaveFileName(

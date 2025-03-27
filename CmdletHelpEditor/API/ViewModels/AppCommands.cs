@@ -355,7 +355,7 @@ public class AppCommands {
     Task importFromMamlHelp(Object? o, CancellationToken token) {
         var module = (PsModuleInfo)o!;
 
-        if (_uiMessenger.CreateSaveHelpAsXmlDialog(out String? fileName, module.Name)) {
+        if (_uiMessenger.CreateOpenMamlHelpDialog(out String? fileName, module.Name)) {
             return LoadCommandsAsync(fileName!, false);
         }
 
@@ -374,7 +374,7 @@ public class AppCommands {
     async Task publishHelpFile(Object o, CancellationToken token) {
         ModuleObject module = ((HelpProjectDocument)o).Module;
 
-        if (_uiMessenger.CreateSaveHelpAsXmlDialog(out String? fileName, module.Name)) {
+        if (_uiMessenger.CreateSaveMamlHelpDialog(out String? fileName, module.Name)) {
             try {
                 await module.PublishMamlHelpFile(fileName, _progressBar);
             } catch (Exception e) {
