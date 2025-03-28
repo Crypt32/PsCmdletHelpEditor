@@ -6,6 +6,7 @@ using CmdletHelpEditor.Views.Windows;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 
 namespace CmdletHelpEditor.API.ViewModels;
+
 public static class FormatCommands {
     static FormatCommands() {
         SetCommonFormatCommand = new RelayCommand(SetFormat, CanFormat);
@@ -23,11 +24,13 @@ public static class FormatCommands {
 
         Int32 index = textBox.CaretIndex;
         textBox.SelectedText = ((Button)param[1]).Name switch {
-            "Bold"      => "[b]" + textBox.SelectedText + "[/b]",
-            "Italic"    => "[i]" + textBox.SelectedText + "[/i]",
-            "Underline" => "[u]" + textBox.SelectedText + "[/u]",
-            "Strike"    => "[s]" + textBox.SelectedText + "[/s]",
-            _           => textBox.SelectedText
+            "Bold"       => "[b]" + textBox.SelectedText + "[/b]",
+            "Italic"     => "[i]" + textBox.SelectedText + "[/i]",
+            "Underline"  => "[u]" + textBox.SelectedText + "[/u]",
+            "Strike"     => "[s]" + textBox.SelectedText + "[/s]",
+            "InlineCode" => "[c]" + textBox.SelectedText + "[/c]",
+            "BlockCode" => "[pre]" + textBox.SelectedText + "[/pre]",
+            _            => textBox.SelectedText
         };
         textBox.CaretIndex = index + 3;
     }

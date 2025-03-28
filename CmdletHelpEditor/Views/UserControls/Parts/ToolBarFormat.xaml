@@ -1,64 +1,91 @@
 ﻿<ToolBar x:Class="CmdletHelpEditor.Views.UserControls.Parts.ToolBarFormat"
-		 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
          xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
          xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
          mc:Ignorable="d"
-		 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
-		 FontWeight="Bold"
-		 FontFamily="Times New Roman"
-		 FontSize="14">
-	<ToolBar.Resources>
-		<converters:MultiParamConverter x:Key="MultiParamConverter" />
-	</ToolBar.Resources>
-	<Button x:Name="Bold"
-			ToolTip="Bold (Ctrl + B)"
-			MinWidth="21"
-			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
-		<Button.CommandParameter>
-			<MultiBinding Converter="{StaticResource MultiParamConverter}">
-				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-				<Binding RelativeSource="{RelativeSource Self}"/>
-			</MultiBinding>
-		</Button.CommandParameter>
-		<TextBlock Text="B"/>
-	</Button>
-	<Button x:Name="Italic"
-			ToolTip="Italic (Ctrl + I)"
-			MinWidth="21"
-			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
-		<Button.CommandParameter>
-			<MultiBinding Converter="{StaticResource MultiParamConverter}">
-				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-				<Binding RelativeSource="{RelativeSource Self}"/>
-			</MultiBinding>
-		</Button.CommandParameter>
-		<TextBlock Text="I" FontStyle="Italic"/>
-	</Button>
-	<Button x:Name="Underline"
-			ToolTip="Underline (Ctrl + U)"
-			MinWidth="21"
-			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
-		<Button.CommandParameter>
-			<MultiBinding Converter="{StaticResource MultiParamConverter}">
-				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-				<Binding RelativeSource="{RelativeSource Self}"/>
-			</MultiBinding>
-		</Button.CommandParameter>
-		<TextBlock Text="U" TextDecorations="Underline"/>
-	</Button>
-	<Button x:Name="Strike"
-			ToolTip="Strikethrough (Ctrl + H)"
-			MinWidth="21"
-			Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
-		<Button.CommandParameter>
-			<MultiBinding Converter="{StaticResource MultiParamConverter}">
-				<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-				<Binding RelativeSource="{RelativeSource Self}"/>
-			</MultiBinding>
-		</Button.CommandParameter>
-		<TextBlock Text="S" TextDecorations="Strikethrough"/>
-	</Button>
+         d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
+         FontWeight="Bold"
+         FontFamily="Times New Roman"
+         FontSize="14">
+    <ToolBar.Resources>
+        <converters:MultiParamConverter x:Key="MultiParamConverter" />
+        <Style TargetType="Image" BasedOn="{StaticResource {x:Type Image}}">
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Width" Value="16"/>
+        </Style>
+    </ToolBar.Resources>
+    <Button x:Name="Bold"
+            ToolTip="Bold (Ctrl + B)"
+            MinWidth="21"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <TextBlock Text="B"/>
+    </Button>
+    <Button x:Name="Italic"
+            ToolTip="Italic (Ctrl + I)"
+            MinWidth="21"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <TextBlock Text="I" FontStyle="Italic"/>
+    </Button>
+    <Button x:Name="Underline"
+            ToolTip="Underline (Ctrl + U)"
+            MinWidth="21"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <TextBlock Text="U" TextDecorations="Underline"/>
+    </Button>
+    <Button x:Name="Strike"
+            ToolTip="Strikethrough (Ctrl + H)"
+            MinWidth="21"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <TextBlock Text="S" TextDecorations="Strikethrough"/>
+    </Button>
+    <Separator/>
+    <Button x:Name="InlineCode"
+            ToolTip="Inline code"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <Image Source="/Images/Menu/code_16x16.png"/>
+    </Button>
+    <Button x:Name="BlockCode"
+            ToolTip="Block code"
+            Command="{x:Static viewModels:FormatCommands.SetCommonFormatCommand}">
+        <Button.CommandParameter>
+            <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
+                <Binding RelativeSource="{RelativeSource Self}"/>
+            </MultiBinding>
+        </Button.CommandParameter>
+        <Image Source="/Images/Menu/pre_16x16.png"/>
+    </Button>
 </ToolBar>

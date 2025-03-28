@@ -61,6 +61,8 @@
     <Resource Include="Images\down_32x32.png" />
     <Resource Include="Images\logo.png" />
     <Resource Include="Images\up_32x32.png" />
+    <Resource Include="Images\Menu\code_16x16.png" />
+    <Resource Include="Images\Menu\pre_16x16.png" />
   </ItemGroup>
 
   <ItemGroup>
