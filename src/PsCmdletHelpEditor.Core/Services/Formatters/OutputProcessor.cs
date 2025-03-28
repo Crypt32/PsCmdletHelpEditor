@@ -18,7 +18,6 @@ namespace PsCmdletHelpEditor.Core.Services.Formatters;
 abstract class OutputProcessor : IHelpOutputFormatter {
     readonly Dictionary<String, String> _commandUrls = [];
 
-    protected Boolean EscapeHtml { get; set; }
     protected String NL { get; } = Environment.NewLine;
 
     /// <summary>
@@ -91,7 +90,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
     protected abstract String GenerateWarningAlert(String text);
 
     String escape(String? content) {
-        return EscapeHtml ? SecurityElement.Escape(content) : content;
+        return SecurityElement.Escape(content)!;
     }
     String generateHtmlLink(String source, IEnumerable<IPsCommandInfo>? cmdlets) {
         if (cmdlets != null) {
