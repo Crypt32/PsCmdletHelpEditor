@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="CmdletHelpEditor/CmdletHelpEditor.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="Release|Any CPU" Project="x86" />
+    <Platform Solution="Release|x86" Project="x86" />
+    <Deploy Solution="Release|Any CPU" />
+  </Project>
+  <Project Path="src/CodeKicker.BBCode/CodeKicker.BBCode.csproj" />
+  <Project Path="src/PsCmdletHelpEditor.Core/PsCmdletHelpEditor.Core.csproj" />
+  <Project Path="src/PsCmdletHelpEditor.XmlRpc/PsCmdletHelpEditor.XmlRpc.csproj" />
+</Solution>
