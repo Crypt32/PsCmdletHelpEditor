@@ -83,7 +83,6 @@ class MarkdownProcessor : OutputProcessor {
         }
 
         return sb.ToString();
-        return NL + _paragraphRegex.Replace(content.TrimEnd(), "\\\n") + NL;// $"<p style=\"margin-left: 40px;\">{content}</p>";
     }
     protected override String GenerateHyperLink(String linkText, String linkUrl) {
         return $"[{linkText}]({linkUrl})";
