@@ -122,7 +122,12 @@ public class OutputVM : AsyncViewModel {
         return "<div>" + await formatter.GenerateViewAsync(command.ToXmlObject(), module.ToXmlObject()) + "</div>";
     }
     void renderXSource(String rawSource) {
-        IEnumerable<XmlToken> tokens = XmlTokenizer.LoopTokenize(XElement.Parse(rawSource).ToString());
+        // handle non-breaking space, which is not supported by XElement.Parse
+        // replace &nbsp; with its char representation (U+00A0)
+        rawSource = rawSource.Replace("&nbsp;", "&#160;");
+        // parse HTML/XML and replace U+00A0 back to "&nbsp;"
+        rawSource = XElement.Parse(rawSource).ToString().Replace(Convert.ToChar(160).ToString(), "&nbsp;");
+        IEnumerable<XmlToken> tokens = XmlTokenizer.LoopTokenize(rawSource);
         var para = new Paragraph();
         para.Inlines.AddRange(colorizeSource(tokens));
         Document = new FlowDocument();
