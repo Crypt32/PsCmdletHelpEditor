@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net472</TargetFrameworks>
+    <Version>1.0.0</Version>
+    <Title>Metaweblog Provider</Title>
+    <Description>Interacts with Metaweblog PAI</Description>
+    <Company>Sysadmins LV</Company>
+    <Copyright>© Sysadmins LV 2012-2025</Copyright>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xmlrpcnet" Version="3.0.0.266"/>
+  </ItemGroup>
+</Project>

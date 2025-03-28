@@ -1,551 +1,93 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1193A898-7B3B-4C3F-9594-7E71BA36F030}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CmdletHelpEditor</RootNamespace>
-    <AssemblyName>PsCmdletHelpEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <TargetFramework>net472</TargetFramework>
+    <Version>4.0.0</Version>
+    <Platforms>AnyCPU;x86;x64</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <Title>PowerShell Cmdlet Help Editor</Title>
+    <Description>Allows to create and edit PowerShell cmdlet (or user defined functions) help topics</Description>
+    <Company>Sysadmins LV</Company>
+    <Copyright>© Sysadmins LV 2012-2025</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>D3030EF6EDEB7E520E71A7F01A7A26A1D37FE74A</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestTimestampUrl>http://timestamp.verisign.com/scripts/timstamp.dll</ManifestTimestampUrl>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>CmdletHelpEditor.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <WarningLevel>0</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
-      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-      <Private>True</Private>
+    <PackageReference Include="Markdig" Version="0.40.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3124.44" />
+    <PackageReference Include="Unity.Abstractions" Version="5.11.7" />
+    <PackageReference Include="Unity.Container" Version="5.11.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\PsCmdletHelpEditor.Core\PsCmdletHelpEditor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Management.Automation">
+      <HintPath>C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationFramework.Aero">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Management.Automation" />
-    <Reference Include="System" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="Wpf.OfficeTheme, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\WpfTheme\WpfTheme\bin\Release\Wpf.OfficeTheme.dll</HintPath>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Wpf.OfficeTheme">
+      <HintPath>_ExternalLibraries\Wpf.OfficeTheme.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="API\MetaWeblog\BloggerClient.cs" />
-    <Compile Include="API\MetaWeblog\MediaObject.cs" />
-    <Compile Include="API\MetaWeblog\MediaObjectInfo.cs" />
-    <Compile Include="API\Models\CommandParameterInfo2.cs" />
-    <Compile Include="API\Models\CommandParameterSetInfo2.cs" />
-    <Compile Include="API\Models\OnlinePublishEntry.cs" />
-    <Compile Include="API\Models\OnlinePublishStatusEnum.cs" />
-    <Compile Include="API\Converters\BooleanToVisibilityReverse.cs" />
-    <Compile Include="API\Tools\MarkDownProcessor.cs" />
-    <Compile Include="API\Tools\XmlFormatConverter.cs" />
-    <Compile Include="API\Utility\SavePendingEventArgs.cs" />
-    <Compile Include="API\Utility\SavePendingEventHandler.cs" />
-    <Compile Include="API\ViewModels\AppCommands.cs" />
-    <Compile Include="API\Models\ProviderInformation.cs" />
-    <Compile Include="API\Converters\MultiParamConverter.cs" />
-    <Compile Include="API\Tools\ParserType.cs" />
-    <Compile Include="API\Tools\Strings.cs" />
-    <Compile Include="API\Tools\Crypt.cs" />
-    <Compile Include="API\Tools\FileProcessor.cs" />
-    <Compile Include="API\Tools\MetaWeblogWrapper.cs" />
-    <Compile Include="API\ViewModels\MetaWeblogCommands.cs" />
-    <Compile Include="API\ViewModels\ModulePropertiesVM.cs" />
-    <Compile Include="API\ViewModels\OnlinePublishProgressVM.cs" />
-    <Compile Include="API\ViewModels\UIManager.cs" />
-    <Compile Include="API\ViewModels\FormatCommands.cs" />
-    <Compile Include="API\ViewModels\ViewModelBase.cs" />
-    <Compile Include="Controls\ListViewExtenders.cs" />
-    <Compile Include="API\Models\ClosableModuleItem.cs" />
-    <Compile Include="Views\Dialogs\AboutBox.xaml.cs">
-      <DependentUpon>AboutBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="API\Models\CmdletObject.cs" />
-    <Compile Include="API\Models\Example.cs" />
-    <Compile Include="API\Models\GeneralDescription.cs" />
-    <Compile Include="API\Models\ItemStatus.cs" />
-    <Compile Include="API\Models\ModuleObject.cs" />
-    <Compile Include="API\Models\ParameterDescription.cs" />
-    <Compile Include="API\Models\RelatedLink.cs" />
-    <Compile Include="API\Models\SupportInfo.cs" />
-    <Compile Include="API\Tools\HtmlProcessor.cs" />
-    <Compile Include="API\Converters\NullToBooleanConverter.cs" />
-    <Compile Include="API\Tools\PowerShellProcessor.cs" />
-    <Compile Include="API\Tools\Utils.cs" />
-    <Compile Include="API\Tools\XmlProcessor.cs" />
-    <Compile Include="API\Tools\XmlToken.cs" />
-    <Compile Include="API\Tools\XmlTokenEnum.cs" />
-    <Compile Include="API\Tools\XmlTokenizer.cs" />
-    <Compile Include="API\MetaWeblog\Blogger.cs" />
-    <Compile Include="API\MetaWeblog\CategoryInfo.cs" />
-    <Compile Include="API\MetaWeblog\IMetaWeblogProvider.cs" />
-    <Compile Include="API\MetaWeblog\BlogInfo.cs" />
-    <Compile Include="API\MetaWeblog\Post.cs" />
-    <Compile Include="API\MetaWeblog\UserInfo.cs" />
-    <Compile Include="API\MetaWeblog\XmlRpcFaultInfo.cs" />
-    <Compile Include="API\ViewModels\ParamVM.cs" />
-    <Compile Include="API\ViewModels\ExampleVM.cs" />
-    <Compile Include="API\ViewModels\RelatedLinkVM.cs" />
-    <Compile Include="API\ViewModels\ConfigVM.cs" />
-    <Compile Include="API\ViewModels\EditorVM.cs" />
-    <Compile Include="API\ViewModels\MainWindowVM.cs" />
-    <Compile Include="API\ViewModels\OutputVM.cs" />
-    <Compile Include="Views\Dialogs\Options.xaml.cs">
-      <DependentUpon>Options.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BrowserBehavior.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Resource Include="Images\Menu\copy_16x16.png" />
+    <Resource Include="Images\Menu\cut_16x16.png" />
+    <Resource Include="Images\Menu\help_16x16.png" />
+    <Resource Include="Images\Menu\info_16x16.png" />
+    <Resource Include="Images\Menu\md_16x16.png" />
+    <Resource Include="Images\Menu\new_16x16.png" />
+    <Resource Include="Images\Menu\open_16x16.png" />
+    <Resource Include="Images\Menu\paste_16x16.png" />
+    <Resource Include="Images\Menu\print_16x16.png" />
+    <Resource Include="Images\Menu\printpreview_16x16.png" />
+    <Resource Include="Images\Menu\properties_16x16.png" />
+    <Resource Include="Images\Menu\psise_16x16.png" />
+    <Resource Include="Images\Menu\redo_16x16.png" />
+    <Resource Include="Images\Menu\refresh_16x16.png" />
+    <Resource Include="Images\Menu\save_16x16.png" />
+    <Resource Include="Images\Menu\settings_16x16.png" />
+    <Resource Include="Images\Menu\undo_16x16.png" />
+    <Resource Include="Images\Menu\web_16x16.png" />
+    <Resource Include="Images\Menu\xml_16x16.png" />
+    <Resource Include="Images\Statuses\bad_16x16.png" />
+    <Resource Include="Images\Statuses\ok_16x16.png" />
+    <Resource Include="Images\Statuses\warn_16x16.png" />
+    <Resource Include="Images\down_32x32.png" />
+    <Resource Include="Images\logo.png" />
+    <Resource Include="Images\up_32x32.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\ModuleProperties.xaml.cs">
-      <DependentUpon>ModuleProperties.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\AdvancedCmdletUC.xaml.cs">
-      <DependentUpon>AdvancedCmdletUC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\BusyUC.xaml.cs">
-      <DependentUpon>BusyUC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\DisplayOutputControl.xaml.cs">
-      <DependentUpon>DisplayOutputControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\EditorControl.xaml.cs">
-      <DependentUpon>EditorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\ExampleControl.xaml.cs">
-      <DependentUpon>ExampleControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\GeneralControl.xaml.cs">
-      <DependentUpon>GeneralControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\MainTabViewUC.xaml.cs">
-      <DependentUpon>MainTabViewUC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\ModuleSelectorControl.xaml.cs">
-      <DependentUpon>ModuleSelectorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\ParameterDescriptionControl.xaml.cs">
-      <DependentUpon>ParameterDescriptionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuActions.xaml.cs">
-      <DependentUpon>MenuActions.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuEdit.xaml.cs">
-      <DependentUpon>MenuEdit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuFile.xaml.cs">
-      <DependentUpon>MenuFile.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuHelp.xaml.cs">
-      <DependentUpon>MenuHelp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuTools.xaml.cs">
-      <DependentUpon>MenuTools.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\MenuView.xaml.cs">
-      <DependentUpon>MenuView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\StatusBarMain.xaml.cs">
-      <DependentUpon>StatusBarMain.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\ToolBarEdit.xaml.cs">
-      <DependentUpon>ToolBarEdit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\ToolBarFormat.xaml.cs">
-      <DependentUpon>ToolBarFormat.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\ToolBarModuleProps.xaml.cs">
-      <DependentUpon>ToolBarModuleProps.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Parts\ToolBarStd.xaml.cs">
-      <DependentUpon>ToolBarStd.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\RelatedLinksControl.xaml.cs">
-      <DependentUpon>RelatedLinksControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\StartUserControl.xaml.cs">
-      <DependentUpon>StartUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\SupportInfoControl.xaml.cs">
-      <DependentUpon>SupportInfoControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\OnlinePublishProgressWindow.xaml.cs">
-      <DependentUpon>OnlinePublishProgressWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Views\Dialogs\AboutBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\Options.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\AdvancedCmdletUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\MainTabViewUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuActions.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuFile.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuHelp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuTools.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\MenuView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\StatusBarMain.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\ToolBarEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\ToolBarFormat.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\ToolBarModuleProps.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\Parts\ToolBarStd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\Dialogs\ModuleProperties.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\BusyUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\DisplayOutputControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\EditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\ExampleControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\GeneralControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\ModuleSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\ParameterDescriptionControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\RelatedLinksControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\StartUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControls\SupportInfoControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\OnlinePublishProgressWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="packages.config" />
-    <None Include="Properties\app.manifest" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\DataSources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
-    <Resource Include="Images\loading.png" />
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\info_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\down_32x32.png" />
-    <Resource Include="Images\up_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\copy_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\cut_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\help_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\new_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\open_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\paste_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\printpreview_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\print_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\redo_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\refresh_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\save_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\undo_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\settings_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\psise_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Statuses\bad_16x16.png" />
-    <Resource Include="Images\Statuses\ok_16x16.png" />
-    <Resource Include="Images\Statuses\warn_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeKicker.BBCode\CodeKicker.BBCode.csproj">
-      <Project>{1c8a5fb6-633a-43bd-b1b7-75a0ddc308f5}</Project>
-      <Name>CodeKicker.BBCode</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\xml_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\web_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Menu\properties_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <FileAssociation Include=".pshproj">
-      <Visible>False</Visible>
-      <Description>Cmdlet Help Editor project file</Description>
-      <Progid>pshproj</Progid>
-      <DefaultIcon>icon.ico</DefaultIcon>
-    </FileAssociation>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="_ExternalLibraries\Wpf.OfficeTheme.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

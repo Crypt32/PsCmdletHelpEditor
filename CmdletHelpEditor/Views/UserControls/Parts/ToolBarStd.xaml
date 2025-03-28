@@ -7,15 +7,15 @@
 		 mc:Ignorable="d"
 		 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
 	<Button Name="newMenu"
-			Command="{Binding CommandManager.NewCommand}"
+			Command="{Binding CommandManager.NewProjectCommand}"
 			ToolTip="New project (Ctrl+N)">
 		<Image Source="/Images/Menu/new_16x16.png"/>
 	</Button>
-	<Button Command="{Binding CommandManager.OpenCommand}"
+	<Button Command="{Binding CommandManager.OpenProjectCommand}"
 			ToolTip="Open project (Ctrl+O)">
 		<Image Source="/Images/Menu/open_16x16.png"/>
 	</Button>
-	<Button Command="{Binding CommandManager.SaveCommand}"
+	<Button Command="{Binding CommandManager.SaveProjectCommand}"
 			ToolTip="Save project (Ctrl+S)">
 		<Image Source="/Images/Menu/save_16x16.png"/>
 	</Button>

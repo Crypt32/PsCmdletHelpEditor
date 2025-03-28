@@ -14,29 +14,29 @@
 		</MenuItem.Icon>
 	</MenuItem>
 	<Separator/>
-	<MenuItem Header="_New"
+	<MenuItem Header="_New Project"
 			  InputGestureText="Ctrl+N"
-			  Command="{Binding CommandManager.NewCommand}">
+			  Command="{Binding CommandManager.NewProjectCommand}">
 		<MenuItem.Icon>
 			<Image Source="/Images/Menu/new_16x16.png"/>
 		</MenuItem.Icon>
 	</MenuItem>
-	<MenuItem Header="_Open"
+	<MenuItem Header="_Open Project"
 			  InputGestureText="Ctrl+O"
-			  Command="{Binding CommandManager.OpenCommand}">
+			  Command="{Binding CommandManager.OpenProjectCommand}">
 		<MenuItem.Icon>
 			<Image Source="/Images/Menu/open_16x16.png"/>
 		</MenuItem.Icon>
 	</MenuItem>
-	<MenuItem Header="_Save"
+	<MenuItem Header="_Save Project"
 			  InputGestureText="Ctrl+S"
-			  Command="{Binding CommandManager.SaveCommand}">
+			  Command="{Binding CommandManager.SaveProjectCommand}">
 		<MenuItem.Icon>
 			<Image Source="/Images/Menu/save_16x16.png"/>
 		</MenuItem.Icon>
 	</MenuItem>
-	<MenuItem Header="_Save As..."
-			  Command="{Binding CommandManager.SaveCommand}"
+	<MenuItem Header="_Save Project As..."
+			  Command="{Binding CommandManager.SaveProjectCommand}"
 			  CommandParameter="1"/>
 	<Separator/>
 	<MenuItem Header="E_xit"

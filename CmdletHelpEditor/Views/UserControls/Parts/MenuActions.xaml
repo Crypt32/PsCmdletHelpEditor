@@ -3,14 +3,10 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:converters="clr-namespace:CmdletHelpEditor.API.Converters"
-          xmlns:viewModels="clr-namespace:CmdletHelpEditor.API.ViewModels"
+          xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
           mc:Ignorable="d"
-          d:DataContext="{d:DesignInstance viewModels:MainWindowVM}"
+          d:DataContext="{d:DesignInstance vm:MainWindowVM}"
           Header="_Actions">
-    <MenuItem.Resources>
-        <converters:MultiParamConverter x:Key="MultiParamConverter" />
-    </MenuItem.Resources>
     <MenuItem Header="_Reload Modules"
               InputGestureText="F5"
               Command="{Binding CommandManager.LoadModulesCommand}">
@@ -19,23 +15,25 @@
         </MenuItem.Icon>
     </MenuItem>
     <Separator/>
-    <MenuItem Header="Publish XML Help to file"
-              Command="{Binding CommandManager.PublishHelpCommand}">
-        <MenuItem.CommandParameter>
-            <MultiBinding Converter="{StaticResource MultiParamConverter}">
-                <Binding Path="SelectedTab"/>
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
-            </MultiBinding>
-        </MenuItem.CommandParameter>
+    <MenuItem Header="Publish MAML Help to file"
+              Command="{Binding CommandManager.PublishHelpCommand}"
+              CommandParameter="{Binding SelectedDocument}">
         <MenuItem.Icon>
             <Image Source="/Images/Menu/xml_16x16.png"/>
         </MenuItem.Icon>
     </MenuItem>
+    <MenuItem Header="Publish Markdown to folder"
+              Command="{Binding CommandManager.PublishMarkdownCommand}"
+              CommandParameter="{Binding SelectedDocument}">
+        <MenuItem.Icon>
+            <Image Source="/Images/Menu/md_16x16.png"/>
+        </MenuItem.Icon>
+    </MenuItem>
     <Separator/>
     <MenuItem Header="Import from comment-based help"
-              Command="{Binding CommandManager.ImportFromCBHelpCommand}"
-              CommandParameter="{Binding SelectedModule}"/>
+              Command="{Binding CommandManager.ImportFromCommentBasedHelpCommand}"
+              CommandParameter="{Binding SelectedDocument.SelectedModule, FallbackValue={x:Null}}"/>
     <MenuItem Header="Import from XML Help file"
-              Command="{Binding CommandManager.ImportFromXmlHelpCommand}"
-              CommandParameter="{Binding SelectedModule}"/>
+              Command="{Binding CommandManager.ImportFromMamlCommand}"
+              CommandParameter="{Binding SelectedDocument.SelectedModule, FallbackValue={x:Null}}"/>
 </MenuItem>

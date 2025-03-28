@@ -142,14 +142,4 @@
     &lt;/body&gt;
 &lt;/html&gt;</value>
   </data>
-  <data name="ipmoTemplate" xml:space="preserve">
-    <value>$Error.Clear()
-{0} -Name "{2}"{3} -ErrorAction Stop
-if ((Get-Module -Name {1}) -eq $null) {{
-	throw New-Object Exception $Error[0].Exception.Message
-}}
-Get-Command -Module {1} -CommandType {4} | %{{
-	$_ | Add-Member -Name syn -MemberType noteproperty -Value (get-help $_) -PassThru
-}}</value>
-  </data>
 </root>

@@ -19,7 +19,7 @@ namespace CmdletHelpEditor.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -79,22 +79,6 @@ namespace CmdletHelpEditor.Properties {
         internal static string HtmlTemplate {
             get {
                 return ResourceManager.GetString("HtmlTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to $Error.Clear()
-        ///{0} -Name &quot;{2}&quot;{3} -ErrorAction Stop
-        ///if ((Get-Module -Name {1}) -eq $null) {{
-        ///	throw New-Object Exception $Error[0].Exception.Message
-        ///}}
-        ///Get-Command -Module {1} -CommandType {4} | %{{
-        ///	$_ | Add-Member -Name syn -MemberType noteproperty -Value (get-help $_) -PassThru
-        ///}}.
-        /// </summary>
-        internal static string ipmoTemplate {
-            get {
-                return ResourceManager.GetString("ipmoTemplate", resourceCulture);
             }
         }
     }

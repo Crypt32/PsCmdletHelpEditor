@@ -4,13 +4,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:models="clr-namespace:CmdletHelpEditor.API.Models"
+             xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance models:ClosableModuleItem}">
+             d:DataContext="{d:DesignInstance vm:HelpProjectDocument}">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="-1"/>
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-                    IsEnabled="{Binding EditorContext.ExampleContext.ExampleTextBoxEnabled}">
-            <HeaderedContentControl>
+        <StackPanel DockPanel.Dock="Right">
+            <StackPanel Orientation="Horizontal"
+                        Margin="10">
+                <Button Content="New"
+                        Width="75"
+                        Command="{Binding EditorContext.ExampleContext.NewItemCommand}"/>
+                <Button Content="Remove"
+                        Width="75"
+                        Command="{Binding EditorContext.ExampleContext.RemoveItemCommand}"
+                        Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ListBox Margin="10,0,10,0"
+                         HorizontalAlignment="Left"
+                         Height="150"
+                         VerticalAlignment="Top"
+                         Width="200"
+                         SelectedItem="{Binding EditorContext.ExampleContext.SelectedItem}"
+                         ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
+                         DisplayMemberPath="Name"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0"
+                            VerticalAlignment="Bottom"
+                            Width="24"
+                            Command="{Binding EditorContext.ExampleContext.UpItemCommand}"
+                            ToolTip="Move example up">
+                        <Image Source="/Images/up_32x32.png"/>
+                    </Button>
+                    <Button Grid.Row="2"
+                            VerticalAlignment="Top"
+                            Width="24"
+                            Command="{Binding EditorContext.ExampleContext.DownItemCommand}"
+                            ToolTip="Move example down">
+                        <Image Source="/Images/down_32x32.png"/>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel IsEnabled="{Binding EditorContext.ExampleContext.NameTextBoxEnabled}">
+            <HeaderedContentControl BorderThickness="1,1,1,0">
                 <HeaderedContentControl.Header>
                     <TextBlock>
                         <Run Text="Example name:"/>
@@ -21,68 +68,28 @@
                 </HeaderedContentControl.Header>
                 <TextBox MinLines="1"
                          MaxLines="1"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-            <HeaderedContentControl Header="Example command:">
+            <HeaderedContentControl Header="Example command:"
+                                    BorderThickness="1,1,1,0">
                 <TextBox MinLines="10"
                          MaxLines="10"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
+                         FontFamily="Consolas"
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Cmd, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-            <HeaderedContentControl Header="Example description:">
+            <HeaderedContentControl Header="Example description:"
+                                    BorderThickness="1,1,1,0">
                 <TextBox MinLines="10"
                          MaxLines="10"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Description, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Description, UpdateSourceTrigger=PropertyChanged}"
                          Tag="AllowFormat"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Example output:">
                 <TextBox MinLines="10"
                          MaxLines="10"
-                         Text="{Binding EditorContext.ExampleContext.CurrentExample.Output, UpdateSourceTrigger=PropertyChanged}"/>
+                         FontFamily="Consolas"
+                         Text="{Binding EditorContext.ExampleContext.SelectedItem.Output, UpdateSourceTrigger=PropertyChanged}"/>
             </HeaderedContentControl>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-        <ListBox Margin="10,0,10,0"
-                 Name="lbExamples"
-                 HorizontalAlignment="Left"
-                 Height="150"
-                 VerticalAlignment="Top"
-                 Width="350"
-                 SelectedItem="{Binding EditorContext.ExampleContext.CurrentExample}"
-                 ItemsSource="{Binding EditorContext.CurrentCmdlet.Examples}"
-                 DisplayMemberPath="Name"
-                 x:FieldModifier="private" />
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0"
-                        VerticalAlignment="Bottom"
-                        Width="24"
-                        Command="{Binding EditorContext.ExampleContext.UpExampleCommand}"
-                        ToolTip="Move example up">
-                    <Image Source="/Images/up_32x32.png"/>
-                </Button>
-                <Button Grid.Row="2"
-                        VerticalAlignment="Top"
-                        Width="24"
-                        Command="{Binding EditorContext.ExampleContext.DownExampleCommad}"
-                        ToolTip="Move example down">
-                    <Image Source="/Images/down_32x32.png"/>
-                </Button>
-            </Grid>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom"
-                    Orientation="Horizontal"
-                    Margin="10">
-            <Button Content="New"
-                    Width="75"
-                    Command="{Binding EditorContext.ExampleContext.NewExampleCommand}"/>
-            <Button Content="Remove"
-                    Width="75"
-                    Command="{Binding EditorContext.ExampleContext.RemoveExampleCommand}"
-                    Margin="10,0,0,0"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

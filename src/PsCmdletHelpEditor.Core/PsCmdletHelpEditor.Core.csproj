@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Version>1.0.0</Version>
+    <Title>PowerShell Cmdlet Help Editor</Title>
+    <Description>Allows to create and edit PowerShell cmdlet (or user defined functions) help topics</Description>
+    <Company>Sysadmins LV</Company>
+    <Copyright>© Sysadmins LV 2012-2025</Copyright>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Services\MAML\MamlCommandDetailsTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandErrorsTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandExampleTeamplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandInputTypesTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandNotesTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandParamTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandParamValueTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandRelatedLinkTemplate.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandReturnTypes.hbs" />
+    <EmbeddedResource Include="Services\MAML\MamlCommandSyntaxTemplate.hbs"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeKicker.BBCode\CodeKicker.BBCode.csproj" />
+    <ProjectReference Include="..\PsCmdletHelpEditor.XmlRpc\PsCmdletHelpEditor.XmlRpc.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management.Automation">
+      <HintPath>C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

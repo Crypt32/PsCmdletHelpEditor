@@ -3,18 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d">
+             xmlns:vm="clr-namespace:CmdletHelpEditor.API.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:ModuleListDocument}">
     <ListView x:Name="ml"
-              ItemsSource="{Binding Modules}"
+              ItemsSource="{Binding ModuleList}"
               MouseDoubleClick="lvModulesMouseDoubleClick"
               SelectedItem="{Binding SelectedModule}">
         <ListView.View>
             <GridView>
-                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200" />
-                <GridViewColumn Header="Module Type" DisplayMemberBinding="{Binding ModuleType}" Width="90" />
-                <GridViewColumn Header="Version" DisplayMemberBinding="{Binding Version}" Width="60"/>
-                <GridViewColumn Header="Module Class" DisplayMemberBinding="{Binding ModuleClass}" Width="90"/>
-                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}"/>
+                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name, Mode=OneTime}" Width="200" />
+                <GridViewColumn Header="Module Type" DisplayMemberBinding="{Binding ModuleType, Mode=OneTime}" Width="90" />
+                <GridViewColumn Header="Version" DisplayMemberBinding="{Binding Version, Mode=OneTime}" Width="60"/>
+                <GridViewColumn Header="Module Class" DisplayMemberBinding="{Binding ModuleClass, Mode=OneTime}" Width="90"/>
+                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description, Mode=OneTime}"/>
             </GridView>
         </ListView.View>
     </ListView>
