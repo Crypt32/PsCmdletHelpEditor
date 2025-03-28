@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 using CodeKicker.BBCode;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace PsCmdletHelpEditor.Core.Services.Formatters;
 class MarkdownProcessor : OutputProcessor {
+    static readonly Regex _paragraphRegex = new Regex(@"(?<!\n)\n", RegexOptions.Compiled);
     static readonly Char[] _escapeChars = new[] {
             '#', '{', '}', '[', ']', '<', '>', '*', '+', '-', '|', '\\', '`', '_',
             '.'
@@ -71,7 +74,16 @@ class MarkdownProcessor : OutputProcessor {
                 """;
     }
     protected override String GenerateParagraph(String content) {
-        return NL + content + NL;// $"<p style=\"margin-left: 40px;\">{content}</p>";
+        var sb = new StringBuilder();
+        String[] paragraphs = content.Split(["\n\n"], StringSplitOptions.RemoveEmptyEntries);
+        foreach (String paragraph in paragraphs) {
+            sb.Append(NL)
+                .Append(_paragraphRegex.Replace(paragraph.TrimEnd(), "\\\n"))
+                .Append(NL);
+        }
+
+        return sb.ToString();
+        return NL + _paragraphRegex.Replace(content.TrimEnd(), "\\\n") + NL;// $"<p style=\"margin-left: 40px;\">{content}</p>";
     }
     protected override String GenerateHyperLink(String linkText, String linkUrl) {
         return $"[{linkText}]({linkUrl})";

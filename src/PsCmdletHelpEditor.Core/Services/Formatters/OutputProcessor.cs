@@ -18,9 +18,7 @@ namespace PsCmdletHelpEditor.Core.Services.Formatters;
 abstract class OutputProcessor : IHelpOutputFormatter {
     readonly Dictionary<String, String> _commandUrls = [];
 
-    protected Boolean HandleNewLine { get; set; }
     protected Boolean EscapeHtml { get; set; }
-    protected String LineBreak { get; set; } = Environment.NewLine;
     protected String NL { get; } = Environment.NewLine;
 
     /// <summary>
@@ -106,9 +104,9 @@ abstract class OutputProcessor : IHelpOutputFormatter {
             }
         }
 
-        if (HandleNewLine) {
-            return source.Replace("\n\n", LineBreak + NL);
-        }
+        //if (HandleNewLine) {
+        //    return source.Replace("\n\n", LineBreak + NL);
+        //}
 
         return source;
     }
@@ -194,11 +192,10 @@ abstract class OutputProcessor : IHelpOutputFormatter {
         // Common parameters
         SB.AppendLine(GenerateH3("&lt;CommonParameters&gt;"));
         String link = GenerateHyperLink("https://go.microsoft.com/fwlink/?LinkID=113216", "https://go.microsoft.com/fwlink/?LinkID=113216");
-        String br = HandleNewLine ? "<br/>" : String.Empty;
         SB.AppendLine(GenerateParagraph($"""
-                                         This cmdlet supports the common parameters: Verbose, Debug,{br}
-                                         ErrorAction, ErrorVariable, InformationAction, InformationVariable,{br}
-                                         WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.{br}
+                                         This cmdlet supports the common parameters: Verbose, Debug,
+                                         ErrorAction, ErrorVariable, InformationAction, InformationVariable,
+                                         WarningAction, WarningVariable, OutBuffer, PipelineVariable and OutVariable.
                                          For more information, see about_CommonParameters ({link})
                                          """));
     }

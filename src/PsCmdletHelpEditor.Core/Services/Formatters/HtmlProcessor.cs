@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Security;
+using System.Text;
 using CodeKicker.BBCode;
 using PsCmdletHelpEditor.Core.Models;
 
 namespace PsCmdletHelpEditor.Core.Services.Formatters;
 class HtmlProcessor : OutputProcessor {
-    public HtmlProcessor() {
-        HandleNewLine = true;
-        LineBreak = "<br/>";
-    }
+    const String LINE_BREAK = "<br/>";
 
     protected override BBCodeParser GetParser(ParserType type) {
         switch (type) {
@@ -65,7 +63,12 @@ class HtmlProcessor : OutputProcessor {
         return "<pre>" + SecurityElement.Escape(content) + "</pre>";
     }
     protected override String GenerateParagraph(String content) {
-        return "<p style=\"margin-left: 40px;\">" + content + "</p>";
+        var sb = new StringBuilder();
+        String[] paragraphs = content.Split(["\n\n"], StringSplitOptions.RemoveEmptyEntries);
+        foreach (String paragraph in paragraphs) {
+            sb.Append("<p style =\"margin-left: 40px;\">" + paragraph.Replace("\n", LINE_BREAK) + "</p>");
+        }
+        return sb.ToString();
     }
     protected override String GenerateHyperLink(String linkText, String linkUrl) {
         return $"<a href=\"{linkUrl}\">{linkText}</a>";
@@ -91,7 +94,7 @@ class HtmlProcessor : OutputProcessor {
                     </tr>
                     <tr>
                       <td>Default value</td>
-                      <td>{param.DefaultValue ?? "&nbsp;"}</td>
+                      <td>{param.DefaultValue}</td>
                     </tr>
                     <tr>
                       <td>Accept pipeline input?</td>
