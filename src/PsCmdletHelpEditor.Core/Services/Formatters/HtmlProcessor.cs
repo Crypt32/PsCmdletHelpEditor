@@ -64,7 +64,7 @@ class HtmlProcessor : OutputProcessor {
     }
     protected override String GenerateParagraph(String content) {
         var sb = new StringBuilder();
-        content = content.Replace("\r", null);
+        content = content.Trim().Replace("\r", null);
         String[] paragraphs = content.Split(["\n\n"], StringSplitOptions.RemoveEmptyEntries);
         foreach (String paragraph in paragraphs) {
             sb.Append("<p style =\"margin-left: 40px;\">" + paragraph.Replace("\n", LINE_BREAK) + "</p>");
@@ -72,7 +72,7 @@ class HtmlProcessor : OutputProcessor {
         return sb.ToString();
     }
     protected override String GenerateHyperLink(String linkText, String linkUrl) {
-        return $"<a href=\"{linkUrl}\">{linkText}</a>";
+        return $"<a href=\"{linkUrl.Trim()}\">{linkText.Trim()}</a>";
     }
     protected override String GenerateList(String listItems) {
         return "<ul>" + NL + listItems + "</ul>";
