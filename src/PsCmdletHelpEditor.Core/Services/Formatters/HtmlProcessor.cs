@@ -64,6 +64,7 @@ class HtmlProcessor : OutputProcessor {
     }
     protected override String GenerateParagraph(String content) {
         var sb = new StringBuilder();
+        content = content.Replace("\r", null);
         String[] paragraphs = content.Split(["\n\n"], StringSplitOptions.RemoveEmptyEntries);
         foreach (String paragraph in paragraphs) {
             sb.Append("<p style =\"margin-left: 40px;\">" + paragraph.Replace("\n", LINE_BREAK) + "</p>");
@@ -81,7 +82,6 @@ class HtmlProcessor : OutputProcessor {
     }
     protected override String GenerateParamTable(IPsCommandParameter param) {
         return $"""
-
                 <table style="margin-left: 40px;width: auto;" class="table table-condensed table-bordered">
                   <tbody>
                     <tr>

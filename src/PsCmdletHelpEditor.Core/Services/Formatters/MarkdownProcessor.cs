@@ -75,6 +75,7 @@ class MarkdownProcessor : OutputProcessor {
     }
     protected override String GenerateParagraph(String content) {
         var sb = new StringBuilder();
+        content = content.Replace("\r", null);
         String[] paragraphs = content.Split(["\n\n"], StringSplitOptions.RemoveEmptyEntries);
         foreach (String paragraph in paragraphs) {
             sb.Append(NL)
