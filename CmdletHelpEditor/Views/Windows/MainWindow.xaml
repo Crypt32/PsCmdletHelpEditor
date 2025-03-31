@@ -15,6 +15,7 @@
         Width="800"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow"
+        Icon="/icon.ico"
         ScrollViewer.HorizontalScrollBarVisibility="Visible"
         ScrollViewer.CanContentScroll="True"
         Initialized="WindowInitialized"
