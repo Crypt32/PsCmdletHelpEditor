@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="icon.ico" />
     <Resource Include="Images\Menu\copy_16x16.png" />
     <Resource Include="Images\Menu\cut_16x16.png" />
     <Resource Include="Images\Menu\help_16x16.png" />
