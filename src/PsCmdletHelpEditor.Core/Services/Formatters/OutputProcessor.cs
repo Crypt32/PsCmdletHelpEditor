@@ -116,7 +116,7 @@ abstract class OutputProcessor : IHelpOutputFormatter {
             if (!String.IsNullOrWhiteSpace(commandInfo.URL)) {
                 _commandUrls[commandInfo.Name] = commandInfo.URL!;
 
-                return;
+                continue;
             }
             var regex = new Regex("online version:", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             IPsCommandRelatedLink? relatedLink = commandInfo.GetRelatedLinks()
