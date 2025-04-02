@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472</TargetFrameworks>
-    <Version>1.0.0</Version>
+    <Version>4.1.0</Version>
     <Title>Metaweblog Provider</Title>
     <Description>Interacts with Metaweblog PAI</Description>
     <Company>Sysadmins LV</Company>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>1.0.0</Version>
+    <Version>4.1.0</Version>
     <Title>PowerShell Cmdlet Help Editor</Title>
     <Description>Allows to create and edit PowerShell cmdlet (or user defined functions) help topics</Description>
     <Company>Sysadmins LV</Company>
